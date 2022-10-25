@@ -1,0 +1,331 @@
+﻿{
+  "labels": {
+    "labelConnection": "Connection",
+    "labelModBusAddress": "ModBus address",
+    "labelRunning": "Running:",
+    "labelTx": "Tx",
+    "labelRx": "Rx",
+    "labelSerialRtu": "Serial RTU",
+    "labelTcp": "TCP",
+    "labelPort": "Port:",
+    "labelBaudRate": "Baud rate:",
+    "labelParity": "Parity:",
+    "labelStopBits": "Stop bits:",
+    "labelIp": "Ip:",
+    "labelPort1": "Port:",
+    "labelCoils_0": "Registers:",
+    "labelCoils_1": "Offset",
+    "labelCoils_2": "Read Coil Status (FC01):",
+    "labelCoils_3": "Address:",
+    "labelCoils_4": "Nr. of coils:",
+    "labelCoils_5": "Read Coil Range:",
+    "labelCoils_6": "Add. start:",
+    "labelCoils_7": "stop:",
+    "labelCoils_8": "Force Single Coil (FC05):",
+    "labelCoils_9": "Address:",
+    "labelCoils_10": "Value:",
+    "labelCoils_11": "Address:",
+    "labelCoils_12": "Value:",
+    "labelCoils_13": "Force Multiple Coils (FC15):",
+    "labelCoils_14": "Address start:",
+    "labelCoils_15": "Nr. of coils",
+    "labelCoils_16": "Value:",
+    "labelGoToCoils": "Go to Coil address:",
+    "labelInputs_0": "Registers:",
+    "labelInputs_1": "Offset:",
+    "labelInputs_2": "Read Input Status (FC02):",
+    "labelInputs_3": "Address:",
+    "labelInputs_4": "Nr. of inputs:",
+    "labelInputs_5": "Read Input Range:",
+    "labelInputs_6": "Add. start:",
+    "labelInputs_7": "stop:",
+    "labelInputRegisters_0": "Registers:",
+    "labelInputRegisters_1": "Values:",
+    "labelInputRegisters_2": "Offset:",
+    "labelInputRegisters_3": "Read Input Register (FC04):",
+    "labelInputRegisters_4": "Address:",
+    "labelInputRegisters_5": "Nr. of registers:",
+    "labelInputRegisters_6": "Read Input Register Range:",
+    "labelInputRegisters_7": "Add. start:",
+    "labelInputRegisters_8": "Stop:",
+    "labelGoToInputRegister": "Go to Input Register address:",
+    "labelHoldingRegisters_0": "Registers:",
+    "labelHoldingRegisters_1": "Values:",
+    "labelHoldingRegisters_2": "Offset:",
+    "labelHoldingRegisters_3": "Read Holding Register (FC03):",
+    "labelHoldingRegisters_4": "Address:",
+    "labelHoldingRegisters_5": "Nr. of reg.:",
+    "labelHoldingRegisters_6": "Read Holding Register Range:",
+    "labelHoldingRegisters_7": "Add. start:",
+    "labelHoldingRegisters_8": "Stop:",
+    "labelHoldingRegisters_9": "Preset Single Register (FC06):",
+    "labelHoldingRegisters_10": "Address:",
+    "labelHoldingRegisters_11": "Value:",
+    "labelHoldingRegisters_12": "Address:",
+    "labelHoldingRegisters_13": "Value:",
+    "labelHoldingRegisters_14": "Preset Multiple Registers (FC16):",
+    "labelHoldingRegisters_15": "Address start:",
+    "labelHoldingRegisters_16": "Nr. of regs:",
+    "labelHoldingRegisters_17": "Value:",
+    "labelGoToHolding": "Go to Holding address:",
+    "labelDiagnostic_0": "Diagnostic functions (FC08):",
+    "labelDiagnostic_1": "Default SubFunction:",
+    "labelDiagnostic_2": "Response:",
+    "labelDiagnostic_3": "Data",
+    "labelDiagnostic_4": "Send manual packet:",
+    "labelDiagnostic_5": "Manual query:",
+    "labelDiagnostic_6": "Response:",
+    "labelDiagnostic_7": "Example TCP: 00 01 00 00 00 06 01 03 00 02 00 04",
+    "labelDiagnostic_8": "Id:01 FC:03 Starting Address: 02 Number of registers: 04",
+    "labelDiagnostic_9": "Example RTU: 01 03 00 02 00 04 E5 C9 ",
+    "labelDiagnostic_10": "CRC: E5 C9",
+    "labelLog_0": "Sent:",
+    "labelLog_1": "Received:",
+    "labelSettings_0": "SETTINGS:",
+    "labelSettings_1": "Restart the application to apply changes in this page",
+    "labelSettings_2": "General Settings:",
+    "labelSettings_3": "Loop polling interval [ms]:",
+    "labelSettings_4": "Current language:",
+    "labelSaveProfile": "Create new profile:",
+    "labelSaveProfile_0": "Label:",
+    "labelLoadProfile": "Load profile:",
+    "labelOffsetHiddenCoils": "Offset hidden in table",
+    "labelOffsetHiddenInput": "Offset hidden in table",
+    "labelOffsetHiddenInputRegister": "Offset hidden in table",
+    "labelOffsetHiddenHolding": "Offset hidden in table",
+    "labelProfileSelected": "Selected profile:",
+    "labelColorCellRead": "Read cells color:",
+    "labelColorCellWrote": "Wrote cells color:",
+    "labelColorCellError": "Cells which raised an error:"
+  },
+  "radioButtons": {
+    "radioButtonModeSerial": {
+      "label": "Serial",
+      "toolTip": "Ctrl+M"
+    },
+    "radioButtonModeTcp": {
+      "label": "TCP",
+      "toolTip": "Ctrl+M"
+    }
+  },
+  "checkBoxes": {
+    "CheckBoxPinWIndow": "Pin window",
+    "CheckBoxSendValuesOnEditCoillsTable": "Live edit (sends automatically commands FC05)",
+    "CheckBoxSendValuesOnEditHoldingTable": "Live edit (sends automatically commands FC06)",
+    "checkBoxCreateTableAtBoot": "Use whole tables (not only read cells)",
+    "checkBoxUseOffsetInTextBox": "Automatically correct offset modbus addresses\n(off sends any address inserted in the box)",
+    "checkBoxFollowModbusProtocol": "Limit modbus addresses to 9998 (according to protocol)",
+    "checkBoxCellColorMode": "Color cells with value > 0 / Alternating color",
+    "checkBoxViewTableWithoutOffset": "Hide user offset in tables",
+    "checkBoxCloseConsolAfterBoot": "Close console on startup",
+    "checkBoxOffBit": "Disable bit automatically",
+    "checkBoxDisablePictureBoxCommands": "Disable pictureBox commands"
+  },
+  "buttons": {
+    "buttonUpdateSerialList": "Update",
+    "buttonAnnulla": "Cancel",
+    "buttonReadCoils01": {
+      "label": "Read",
+      "toolTip": "Ctrl+R"
+    },
+    "buttonLoopCoils01": {
+      "label": "Loop",
+      "toolTip": "Ctrl+P"
+    },
+    "buttonReadCoilsRange": {
+      "label": "Read",
+      "toolTip": "Ctrl+E"
+    },
+    "buttonLoopCoilsRange": {
+      "label": "Loop",
+      "toolTip": "Ctrl+K"
+    },
+    "buttonWriteCoils05": "Write",
+    "buttonWriteCoils05_B": "Write",
+    "buttonWriteCoils15": "Write",
+    "buttonGoToCoilAddress": "Go",
+    "buttonReadInput02": {
+      "label": "Read",
+      "toolTip": "Ctrl+R"
+    },
+    "buttonLoopInput02": {
+      "label": "Loop",
+      "toolTip": "Ctrl+P"
+    },
+    "buttonReadInputRange": {
+      "label": "Read",
+      "toolTip": "Ctrl+E"
+    },
+    "buttonLoopInputRange": {
+      "label": "Loop",
+      "toolTip": "Ctrl+K"
+    },
+    "buttonGoToInputAddress": "Go",
+    "buttonReadInputRegister04": {
+      "label": "Read",
+      "toolTip": "Ctrl+R"
+    },
+    "buttonLoopInputRegister04": {
+      "label": "Loop",
+      "toolTip": "Ctrl+P"
+    },
+    "buttonReadInputRegisterRange": {
+      "label": "Read",
+      "toolTip": "Ctrl+E"
+    },
+    "buttonLoopInputRegisterRange": {
+      "label": "Loop",
+      "toolTip": "Ctrl+K"
+    },
+    "buttonGoToInputRegisterAddress": "Go",
+    "buttonReadHolding03": {
+      "label": "Read",
+      "toolTip": "Ctrl+R"
+    },
+    "buttonLoopHolding03": {
+      "label": "Loop",
+      "toolTip": "Ctrl+P"
+    },
+    "buttonReadHoldingRange": {
+      "label": "Read",
+      "toolTip": "Ctrl+E"
+    },
+    "buttonLoopHoldingRange": {
+      "label": "Loop",
+      "toolTip": "Ctrl+K"
+    },
+    "buttonWriteHolding06": "Write",
+    "buttonWriteHolding06_b": "Write",
+    "buttonWriteHolding16": "Write",
+    "buttonGoToHoldingAddress": "Go",
+    "buttonExportSentPackets": "Export",
+    "buttonExportReceivedPackets": "Export",
+    "buttonColorCellRead": "Color",
+    "buttonCellWrote": "Color",
+    "buttonColorCellError": "Color",
+    "buttonOpenFileLocation": "Open directory",
+    "buttonPingIp":{
+      "label":"Ping",
+      "toolTip":"Ctrl+P"
+    }
+  },
+  "textBlocks": {
+    "textBlockClearSerialStatus": "Clear",
+    "textBlockClearCoils": "Clear",
+    "textBlockClearInputReg": "Clear",
+    "textBlockClearReceived": "Clear",
+    "textBlockClearAll": "Clear",
+    "textBlockSerialActive": "Connect",
+    "textBlockTcpActive": "Connect",
+    "textBlockClearSent": "Clear",
+    "textBlockClearInput": "Clear",
+    "textBlockClearHoldingReg": "Clear"
+  },
+  "tabItems": {
+    "tabItem0": "Connection",
+    "tabItem1": "Coils (1bit)",
+    "tabItem2": "Inputs (1 bit)",
+    "tabItem3": "Input registers (1 word)",
+    "tabItem4": "Holding registers (1 word)",
+    "tabItem5": "Diagnostic (FC08)",
+    "tabItem6": "Log",
+    "tabItem7": "Settings"
+  },
+  "menuItems": {
+    "salvaToolStripMenuItem":{
+      "label":"Save configuration",
+      "toolTip":"Ctrl+S"
+    },
+    "caricaToolStripMenuItem": "Load configuration",
+    "apriConsoleToolStripMenuItem": {
+      "label":"Open console",
+      "toolTip":"Ctrl+Shift+S"
+    },
+    "chiudiConsoleToolStripMenuItem": {
+      "label":"Close console",
+      "toolTip":"Ctrl+Shift+S"
+    },
+    "impostazioniToolStripMenuItem": "Settings",
+    "salvaConfigurazioneNelDatabaseToolStripMenuItem": {
+      "label":"Save configuration to database",
+      "toolTip":"Ctrl+Shift+S"
+    },
+    "caricaConfigurazioneDalDatabaseToolStripMenuItem": {
+      "label":"Load configuration from database",
+      "toolTip":"Ctrl+O"
+    },
+    "apriTemplateEditor": {
+      "label":"Open template editor",
+      "toolTip":"Ctrl+T"
+    },
+    "gestisciDatabaseToolStripMenuItem": {
+      "label":"Manage database",
+      "toolTip":"Ctrl+D"
+    },
+    "menuItemToolBit": "Tool comamnd bit",
+    "menuItemToolByte": "Tool command byte",
+    "menuItemToolWord": "Tool command word",
+    "licenseToolStripMenuItem": "License",
+    "guidaToolStripMenuItem": "Guide",
+    "infoToolStripMenuItem1": {
+      "label":"Info",
+      "toolTip":"Ctrl+I"
+    },
+    "logToolStripMenu": {
+      "label":"Packets log",
+      "toolTip":"Ctrl+L"
+    },
+    "modificaToolStripMenuItem": "Edit",
+    "menuItemToolRegistri": "Tool registri",
+    "menuItemExportCoils": "Export coils table",
+    "menuItemExportInputs": "Export inputs table",
+    "menuItemExportInputRegisters": "Export input registers table",
+    "menuItemExportHoldingRegisters": "Export holding registers table",
+    "menuItemExportRegistri": "Export",
+    "languageToolStripMenu": "Language",
+    "viewToolStripMenuItem": "View",
+
+    "viewTabCoils": "Coils table",
+    "viewTabInputs": "Inputs table",
+    "viewTabInputRgisters": "Input Registers table",
+    "viewTabHoldingRgisters": "Holding Registers table",
+
+    "viewTabCoilsRegisters": "Registers",
+    "viewTabCoilsValues": "Values",
+    "viewTabCoilsNotes": "Notes",
+
+    "viewTabInputsRegisters": "Registers",
+    "viewTabInputsValues": "Values",
+    "viewTabInputsNotes": "Notes",
+
+    "viewTabInputRegistersRegisters": "Registers",
+    "viewTabInputRegistersValues": "Values",
+    "viewTabInputRegistersBinaryValues": "Binary Values",
+    "viewTabInputRegistersConvertedValues": "Converted Values",
+    "viewTabInputRegistersNotes": "Notes",
+    "viewTabInputRegistersMappings": "Mappings",
+
+    "viewTabHoldingRegistersRegisters": "Registers",
+    "viewTabHoldingRegistersValues": "Values",
+    "viewTabHoldingRegistersBinaryValues": "Binary Values",
+    "viewTabHoldingRegistersConvertedValues": "Converted Values",
+    "viewTabHoldingRegistersNotes": "Notes",
+    "viewTabHoldingRegistersMappings": "Mappings"
+  },
+  "strings": {
+    "connect": "Connect",
+    "disconnect": "Disconnect",
+    "connected": "Connected",
+    "disconnected": "Disconnected",
+    "connectedTo": "Connected to",
+    "failedToConnect": "Failed to connect to",
+    "maxRegNumber": "Number of registers too bit",
+    "errSetReg": "Error writing register",
+    "infoSaveConfig": "Configuration saved successfully. Current configuration will be loaded on next startup.",
+    "logIsAlreadyOpen": "Log window is already open",
+    "saveFileCoils": "Save coils table",
+    "saveFileInputs": "Save inputs table",
+    "saveFileInputRegisters": "Save input registers table",
+    "saveFileHoldingRegisters": "Save holding registers table"
+  }
+}

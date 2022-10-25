@@ -1,0 +1,426 @@
+﻿{
+  "labels": {
+    "labelConnection": "Connessione",
+    "labelModBusAddress": "ModBus address",
+    "labelRunning": "Running:",
+    "labelTx": "Tx",
+    "labelRx": "Rx",
+    "labelSerialRtu": "Seriale RTU",
+    "labelTcp": "TCP",
+    "labelPort": "Porta:",
+    "labelBaudRate": "Baud rate:",
+    "labelParity": "Parità:",
+    "labelStopBits": "Bit di stop:",
+    "labelIp": "Ip:",
+    "labelPort1": "Porta:",
+    "labelCoils_0": "Registri:",
+    "labelCoils_1": "Offset",
+    "labelCoils_2": "Read Coil Status (FC01):",
+    "labelCoils_3": "Address:",
+    "labelCoils_4": "Nr. of coils:",
+    "labelCoils_5": "Read Coil Range:",
+    "labelCoils_6": "Add. start:",
+    "labelCoils_7": "stop:",
+    "labelCoils_8": "Force Single Coil (FC05):",
+    "labelCoils_9": "Address:",
+    "labelCoils_10": "Value:",
+    "labelCoils_11": "Address:",
+    "labelCoils_12": "Value:",
+    "labelCoils_13": "Force Multiple Coils (FC15):",
+    "labelCoils_14": "Address start:",
+    "labelCoils_15": "Nr. di coils",
+    "labelCoils_16": "Value:",
+    "labelGoToCoils": "Go to Coil address:",
+    "labelInputs_0": "Registers:",
+    "labelInputs_1": "Offset:",
+    "labelInputs_2": "Read Input Status (FC02):",
+    "labelInputs_3": "Address:",
+    "labelInputs_4": "Nr. of inputs:",
+    "labelInputs_5": "Read Input Range:",
+    "labelInputs_6": "Add. start:",
+    "labelInputs_7": "stop:",
+    "labelInputRegisters_0": "Registers:",
+    "labelInputRegisters_1": "Values:",
+    "labelInputRegisters_2": "Offset:",
+    "labelInputRegisters_3": "Read Input Register (FC04):",
+    "labelInputRegisters_4": "Address:",
+    "labelInputRegisters_5": "Nr. of registers:",
+    "labelInputRegisters_6": "Read Input Register Range:",
+    "labelInputRegisters_7": "Add. start:",
+    "labelInputRegisters_8": "Stop:",
+    "labelGoToInputRegister": "Go to Input Register address:",
+    "labelHoldingRegisters_0": "Registers:",
+    "labelHoldingRegisters_1": "Values:",
+    "labelHoldingRegisters_2": "Offset:",
+    "labelHoldingRegisters_3": "Read Holding Register (FC03):",
+    "labelHoldingRegisters_4": "Address:",
+    "labelHoldingRegisters_5": "Nr. of reg.:",
+    "labelHoldingRegisters_6": "Read Holding Register Range:",
+    "labelHoldingRegisters_7": "Add. start:",
+    "labelHoldingRegisters_8": "Stop:",
+    "labelHoldingRegisters_9": "Preset Single Register (FC06):",
+    "labelHoldingRegisters_10": "Address:",
+    "labelHoldingRegisters_11": "Value:",
+    "labelHoldingRegisters_12": "Address:",
+    "labelHoldingRegisters_13": "Value:",
+    "labelHoldingRegisters_14": "Preset Multiple Registers (FC16):",
+    "labelHoldingRegisters_15": "Address start:",
+    "labelHoldingRegisters_16": "Nr. di word:",
+    "labelHoldingRegisters_17": "Value:",
+    "labelGoToHolding": "Go to Holding address:",
+    "labelDiagnostic_0": "Diagnostic functions (FC08):",
+    "labelDiagnostic_1": "Default SubFunction:",
+    "labelDiagnostic_2": "Response:",
+    "labelDiagnostic_3": "Data",
+    "labelDiagnostic_4": "Send manual packet:",
+    "labelDiagnostic_5": "Manual query:",
+    "labelDiagnostic_6": "Response:",
+    "labelDiagnostic_7": "Esempio TCP: 00 01 00 00 00 06 01 03 00 02 00 04",
+    "labelDiagnostic_8": "Id:01 FC:03 Starting Address: 02 Number of registers: 04",
+    "labelDiagnostic_9": "Esempio RTU: 01 03 00 02 00 04 E5 C9 ",
+    "labelDiagnostic_10": "CRC: E5 C9",
+    "labelLog_0": "Inviati:",
+    "labelLog_1": "Ricevuti:",
+    "labelSettings_0": "IMPOSTAZIONI:",
+    "labelSettings_1": "Riavviare l'applicazione per applicare le modifiche applicate in questa pagina",
+    "labelSettings_2": "Impostazioni generali:",
+    "labelSettings_3": "Loop polling interval [ms]:",
+    "labelSettings_4": "Lingua corrente:",
+    "labelSaveProfile": "Crea nuovo profilo:",
+    "labelSaveProfile_0": "Etichetta:",
+    "labelLoadProfile": "Carica profilo:",
+    "labelOffsetHiddenCoils": "Offset nascosto nella tabella",
+    "labelOffsetHiddenInput": "Offset nascosto nella tabella",
+    "labelOffsetHiddenInputRegister": "Offset nascosto nella tabella",
+    "labelOffsetHiddenHolding": "Offset nascosto nella tabella",
+    "labelProfileSelected": "Profilo selezionato:",
+    "labelColorCellRead": "Colore celle lette:",
+    "labelColorCellWrote": "Colore celle scritte:",
+    "labelColorCellError": "Colore celle che hanno generato un errore:"
+  },
+  "radioButtons": {
+    "radioButtonModeSerial": {
+      "label": "Seriale",
+      "toolTip": "Ctrl+M"
+    },
+    "radioButtonModeTcp": {
+      "label": "TCP",
+      "toolTip": "Ctrl+M"
+    }
+  },
+  "checkBoxes": {
+    "CheckBoxPinWIndow": "Pin finestra",
+    "CheckBoxSendValuesOnEditCoillsTable": "Invia mofifiche live tabella (comandi FC05)",
+    "CheckBoxSendValuesOnEditHoldingTable": "Invia modifiche live tabella (comandi FC06)",
+    "checkBoxCreateTableAtBoot": "Usa tabelle intere (e non solo elementi letti)",
+    "checkBoxUseOffsetInTextBox": "Correggi automaticamente offset indirizzi modbus textBox\n(se off invia qualsiasi indirizzo immesso nella textBox)",
+    "checkBoxFollowModbusProtocol": "Limita gli indirizzi modbus a 9998 (come da protocollo)",
+    "checkBoxCellColorMode": "Colora celle > 0 / Colorazione alternata",
+    "checkBoxViewTableWithoutOffset": "Nascondi offset utente nelle tabelle",
+    "checkBoxCloseConsolAfterBoot": "Chiudi console al termine dell'avvio",
+    "checkBoxOffBit": "Disattiva automaticamente bit",
+    "checkBoxDisablePictureBoxCommands": "Disattiva comandi pictureBox"
+  },
+  "buttons": {
+    "buttonUpdateSerialList": "Aggiorna",
+    "buttonAnnulla": "Cancella",
+    "buttonReadCoils01": {
+      "label": "Read",
+      "toolTip": "Ctrl+R"
+    },
+    "buttonLoopCoils01": {
+      "label": "Loop",
+      "toolTip":"Ctrl+P" 
+    },
+    "buttonReadCoilsRange": {
+      "label":"Read",
+      "toolTip":"Ctrl+E"
+    },
+    "buttonLoopCoilsRange": {
+      "label":"Loop",
+      "toolTip":"Ctrl+K"
+    },
+      "buttonWriteCoils05": "Write",
+      "buttonWriteCoils05_B": "Write",
+      "buttonWriteCoils15": "Write",
+      "buttonGoToCoilAddress": "Vai",
+      "buttonReadInput02": {
+        "label":"Read",
+        "toolTip":"Ctrl+R"
+      },
+      "buttonLoopInput02": {
+        "label":"Loop",
+        "toolTip":"Ctrl+P"
+      },
+      "buttonReadInputRange": {
+        "label":"Read",
+        "toolTip":"Ctrl+E"
+      },
+      "buttonLoopInputRange": {
+        "label":"Loop",
+        "toolTip":"Ctrl+K"
+      },
+      "buttonGoToInputAddress": "Vai",
+      "buttonReadInputRegister04": {
+        "label":"Read",
+        "toolTip":"Ctrl+R"
+      },
+      "buttonLoopInputRegister04": {
+        "label":"Loop",
+        "toolTip":"Ctrl+P"
+      },
+      "buttonReadInputRegisterRange": {
+        "label":"Read",
+        "toolTip":"Ctrl+E"
+      },
+      "buttonLoopInputRegisterRange": {
+        "label":"Loop",
+        "toolTip":"Ctrl+K"
+      },
+      "buttonGoToInputRegisterAddress": "Vai",
+      "buttonReadHolding03": {
+        "label":"Read",
+        "toolTip":"Ctrl+R"
+      },
+      "buttonLoopHolding03": {
+        "label":"Loop",
+        "toolTip":"Ctrl+P"
+      },
+      "buttonReadHoldingRange": {
+        "label":"Read",
+        "toolTip":"Ctrl+E"
+      },
+      "buttonLoopHoldingRange": {
+        "label":"Loop",
+        "toolTip":"Ctrl+K"
+      },
+      "buttonWriteHolding06": "Write",
+      "buttonWriteHolding06_b": "Write",
+      "buttonWriteHolding16": "Write",
+      "buttonGoToHoldingAddress": "Vai",
+      "buttonExportSentPackets": "Export",
+      "buttonExportReceivedPackets": "Export",
+      "buttonColorCellRead": "Color",
+      "buttonCellWrote": "Color",
+      "buttonColorCellError": "Color",
+      "buttonOpen": "Carica",
+      "buttonSave": "Salva",
+      "buttonOpenFileLocation": "Apri cartella",
+      "buttonPingIp":{
+        "label":"Ping",
+        "toolTip":"Ctrl+P"
+      }
+    },
+  "textBoxes": {
+    "textBoxTcpClientIpAddress": {
+      "toolTip": "Inserire l'IP del server ModBus"
+    },
+    "textBoxTcpClientPort": {
+      "toolTip": "Inserire la porta (default ModBus 502)"
+    },
+    "textBoxCoilsOffset": {
+      "toolTip": "Valore di offset aggiunto al'indirizzo dei registri nella tabella"
+    },
+    "textBoxInputsOffset": {
+      "toolTip": "Valore di offset aggiunto al'indirizzo dei registri nella tabella"
+    },
+    "textBoxInputsRegOffset": {
+      "toolTip": "Valore di offset aggiunto al'indirizzo dei registri nella tabella"
+    },
+    "textBoxHoldingsOffset": {
+      "toolTip": "Valore di offset aggiunto al'indirizzo dei registri nella tabella"
+    },
+    "textBoxModbusAddress": {
+      "toolTip": "Slave ID ModBus"
+    }
+  },
+  "textBlocks": {
+    "textBlockClearSerialStatus": "Cancella",
+    "textBlockClearCoils": {
+      "label":"Clear",
+      "toolTip":"Canc"
+    },
+    "textBlockClearInput": {
+      "label":"Clear",
+      "toolTip":"Canc"
+    },
+    "textBlockClearInputReg": {
+      "label":"Clear",
+      "toolTip":"Canc"
+    },
+    "textBlockClearHoldingReg": {
+      "label":"Clear",
+      "toolTip":"Canc"
+    },
+    "textBlockClearSent": {
+      "label":"Clear",
+      "toolTip":"Canc"
+    },
+    "textBlockClearReceived": {
+      "label":"Clear",
+      "toolTip":"Canc"
+    },
+    "textBlockClearAll": {
+      "label":"Clear",
+      "toolTip":"Canc"
+    },
+    "textBlockSerialActive": "Connetti",
+    "textBlockTcpActive": "Connetti"
+  },
+  "comboBoxes": {
+    "comboBoxCoilsRegisters": {
+      "toolTip": "Formato indirizzo\nDEC: decimale\nHEX: esadecimale (inserire il valore senza 0x)"
+    },
+    "comboBoxCoilsOffset": {
+      "toolTip": "Formato indirizzo\nDEC: decimale\nHEX: esadecimale (inserire il valore senza 0x)"
+    },
+    "comboBoxInputsRegisters": {
+      "toolTip": "Formato indirizzo\nDEC: decimale\nHEX: esadecimale (inserire il valore senza 0x)"
+    },
+    "comboBoxInputsOffset": {
+      "toolTip": "Formato indirizzo\nDEC: decimale\nHEX: esadecimale (inserire il valore senza 0x)"
+    },
+    "comboBoxInputsRegRegisters": {
+      "toolTip": "Formato indirizzo\nDEC: decimale\nHEX: esadecimale (inserire il valore senza 0x)"
+    },
+    "comboBoxInputsRegValues": {
+      "toolTip": "Formato indirizzo\nDEC: decimale\nHEX: esadecimale (inserire il valore senza 0x)"
+    },
+    "comboBoxInputsRegOffset": {
+      "toolTip": "Formato indirizzo\nDEC: decimale\nHEX: esadecimale (inserire il valore senza 0x)"
+    },
+    "comboBoxHoldingsRegisters": {
+      "toolTip": "Formato indirizzo\nDEC: decimale\nHEX: esadecimale (inserire il valore senza 0x)"
+    },
+    "comboBoxHoldingsValues": {
+      "toolTip": "Formato indirizzo\nDEC: decimale\nHEX: esadecimale (inserire il valore senza 0x)"
+    },
+    "comboBoxHoldingsOffset": {
+      "toolTip": "Formato indirizzo\nDEC: decimale\nHEX: esadecimale (inserire il valore senza 0x)"
+    }
+  },
+  "pictureBoxes": {
+    "pictureBoxRunningAs": {
+      "toolTip": "Verde quando il client è attivo"
+    },
+    "pictureBoxIsSending": {
+      "toolTip": "Giallo quando il client sta ricevendo un pacchetto"
+    },
+    "pictureBoxIsResponding": {
+      "toolTip": "Giallo quando il client sta inviando un pacchetto"
+    }
+  },
+  "tabItems": {
+    "tabItem0": "Connessione",
+    "tabItem1": "Coils (1bit)",
+    "tabItem2": "Inputs (1 bit)",
+    "tabItem3": "Input registers (1 word)",
+    "tabItem4": "Holding registers (1 word)",
+    "tabItem5": "Diagnostic (FC08)",
+    "tabItem6": "Log",
+    "tabItem7": "Settings"
+  },
+  "menuItems": {
+    "salvaToolStripMenuItem":{
+      "label":"Salva configurazione",
+      "toolTip":"Ctrl+S"
+    },
+    "caricaToolStripMenuItem": "Carica configurazione",
+    "apriConsoleToolStripMenuItem": {
+      "label":"Apri console",
+      "toolTip":"Ctrl+Shift+S"
+    },
+    "chiudiConsoleToolStripMenuItem": {
+      "label":"Chiudi console",
+      "toolTip":"Ctrl+Shift+S"
+    },
+    "impostazioniToolStripMenuItem": "Impostazioni",
+    "salvaConfigurazioneNelDatabaseToolStripMenuItem": {
+      "label":"Salva configurazione sul database",
+      "toolTip":"Ctrl+Shift+S"
+    },
+    "caricaConfigurazioneDalDatabaseToolStripMenuItem": {
+      "label":"Carica configurazione dal database",
+      "toolTip":"Ctrl+O"
+    },
+    "apriTemplateEditor": {
+      "label":"Apri template editor",
+      "toolTip":"Ctrl+T"
+    },
+    "gestisciDatabaseToolStripMenuItem": {
+      "label":"Gestisci database",
+      "toolTip":"Ctrl+D"
+    },
+    "menuItemToolBit": "Tool comandi bit",
+    "menuItemToolByte": "Tool comandi byte",
+    "menuItemToolWord": "Tool comandi word",
+    "licenseToolStripMenuItem": "Licenza",
+    "guidaToolStripMenuItem": "Guida",
+    "infoToolStripMenuItem1": {
+      "label":"Info",
+      "toolTip":"Ctrl+I"
+    },
+    "viewToolStripMenuItem": "Visualizza",
+    "languageToolStripMenu": "Lingua",
+    "logToolStripMenu": {
+      "label":"Log pacchetti",
+      "toolTip":"Ctrl+L"
+    },
+    "modificaToolStripMenuItem": "Modifica",
+    "menuItemToolRegistri": "Tool registri",
+    "menuItemExportCoils": "Esporta tabella coils",
+    "menuItemExportInputs": "Esporta tabella inputs",
+    "menuItemExportInputRegisters": "Esporta tabella input registers",
+    "menuItemExportHoldingRegisters": "Esporta tabella holding registers",
+    "menuItemExportRegistri": "Esporta",
+    "viewTabCoils": "Tabella Coils",
+    "viewTabInputs": "Tabella Inputs",
+    "viewTabInputRgisters": "Tabella Input Registers",
+    "viewTabHoldingRgisters": "Tabella Holding Registers",
+
+    "viewTabCoilsRegisters": "Registers",
+    "viewTabCoilsValues": "Values",
+    "viewTabCoilsNotes": "Notes",
+
+    "viewTabInputsRegisters": "Registers",
+    "viewTabInputsValues": "Values",
+    "viewTabInputsNotes": "Notes",
+
+    "viewTabInputRegistersRegisters": "Registers",
+    "viewTabInputRegistersValues": "Values",
+    "viewTabInputRegistersBinaryValues": "Binary Values",
+    "viewTabInputRegistersConvertedValues": "Converted Values",
+    "viewTabInputRegistersNotes": "Notes",
+    "viewTabInputRegistersMappings": "Mappings",
+
+    "viewTabHoldingRegistersRegisters": "Registers",
+    "viewTabHoldingRegistersValues": "Values",
+    "viewTabHoldingRegistersBinaryValues": "Binary Values",
+    "viewTabHoldingRegistersConvertedValues": "Converted Values",
+    "viewTabHoldingRegistersNotes": "Notes",
+    "viewTabHoldingRegistersMappings": "Mappings"
+  },
+  "toolTips": {
+    "labelConnection": "ciao",
+    "tabItem7": "ciao",
+    "buttonSerialActive": "ciao",
+    "CheckBoxPinWIndow": "ciao",
+    "radioButtonModeTcp": "ciao"
+  },
+  "strings": {
+    "connect": "Connetti",
+    "disconnect": "Disconnetti",
+    "connected": "Connesso",
+    "disconnected": "Disconnesso",
+    "connectedTo": "Connesso a",
+    "failedToConnect": "Fallita connessione a",
+    "maxRegNumber": "Numero di registri troppo elevato",
+    "errSetReg": "Errore nel settaggio del registro",
+    "infoSaveConfig": "Salvataggio configurazione avvenuto. Al prossimo avvio verrà caricata la configurazione corrente.",
+    "logIsAlreadyOpen": "La finestra di log è già aperta",
+    "saveFileCoils": "Salva tabella coils",
+    "saveFileInputs": "Salva tabella inputs",
+    "saveFileInputRegisters": "Salva tabella input registers",
+    "saveFileHoldingRegisters": "Salva tabella holding registers"
+  }
+}
