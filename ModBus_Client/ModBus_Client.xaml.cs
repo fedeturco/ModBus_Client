@@ -1212,7 +1212,7 @@ namespace ModBus_Client
                 // Tabella inputs
                 for (int i = 0; i < template.dataGridViewInput.Count(); i++)
                 {
-                    if (template.comboBoxCoilsRegistri_ == "HEX")
+                    if (template.comboBoxInputRegistri_ == "HEX")
                     {
                         template.dataGridViewInput[i].Register = int.Parse(template.dataGridViewInput[i].Register, System.Globalization.NumberStyles.HexNumber).ToString();
                     }
@@ -1223,7 +1223,7 @@ namespace ModBus_Client
                 // Tabella input registers
                 for (int i = 0; i < template.dataGridViewInputRegister.Count(); i++)
                 {
-                    if (template.comboBoxCoilsRegistri_ == "HEX")
+                    if (template.comboBoxInputRegRegistri_ == "HEX")
                     {
                         template.dataGridViewInputRegister[i].Register = int.Parse(template.dataGridViewInputRegister[i].Register, System.Globalization.NumberStyles.HexNumber).ToString();
                     }
@@ -1234,7 +1234,7 @@ namespace ModBus_Client
                 // Tabella holdings
                 for (int i = 0; i < template.dataGridViewHolding.Count(); i++)
                 {
-                    if (template.comboBoxCoilsRegistri_ == "HEX")
+                    if (template.comboBoxHoldingRegistri_ == "HEX")
                     {
                         template.dataGridViewHolding[i].Register = int.Parse(template.dataGridViewHolding[i].Register, System.Globalization.NumberStyles.HexNumber).ToString();
                     }
@@ -2460,7 +2460,7 @@ namespace ModBus_Client
                     try
                     {
                         // Se trovo una corrispondenza esco dal for (list_template_inputsTable.Register,template_inputsOffset,offsetValue sono già in DEC, list_inputsTable[a].Register dipende DEC o HEX)
-                        if ((int.Parse(list_template_coilsTable[i].Register) + template_coilsOffset) == (int.Parse(list_coilsTable[a].Register, registerFormat) + offsetValue))
+                        if ((int.Parse(list_template_coilsTable[i].Register) + template_coilsOffset) == (int.Parse(list_coilsTable[a].Register.Replace("0x", ""), registerFormat) + offsetValue))
                         {
                             list_coilsTable[a].Notes = list_template_coilsTable[i].Notes;
                             break;
@@ -2488,7 +2488,7 @@ namespace ModBus_Client
                     try
                     {
                         // Se trovo una corrispondenza esco dal for (list_template_inputsTable.Register,template_inputsOffset,offsetValue sono già in DEC, list_inputsTable[a].Register dipende DEC o HEX)
-                        if ((int.Parse(list_template_inputsTable[i].Register) + template_inputsOffset) == (int.Parse(list_inputsTable[a].Register, registerFormat) + offsetValue))
+                        if ((int.Parse(list_template_inputsTable[i].Register) + template_inputsOffset) == (int.Parse(list_inputsTable[a].Register.Replace("0x", ""), registerFormat) + offsetValue))
                         {
                             list_inputsTable[a].Notes = list_template_inputsTable[i].Notes;
                             break;
@@ -2519,7 +2519,7 @@ namespace ModBus_Client
                     try
                     {
                         // Se trovo una corrispondenza esco dal for (list_template_inputRegistersTable.Register,template_inputRegistersOffset,offsetValue sono già in DEC, list_inputRegistersTable[a].Register dipende DEC o HEX)
-                        if ((int.Parse(list_template_inputRegistersTable[i].Register) + template_inputRegistersOffset) == (int.Parse(list_inputRegistersTable[a].Register, registerFormat) + offsetValue))
+                        if ((int.Parse(list_template_inputRegistersTable[i].Register) + template_inputRegistersOffset) == (int.Parse(list_inputRegistersTable[a].Register.Replace("0x", ""), registerFormat) + offsetValue))
                         {
                             found = true;
                             list_inputRegistersTable[a].Notes = list_template_inputRegistersTable[i].Notes;
@@ -2570,7 +2570,7 @@ namespace ModBus_Client
                     try
                     {
                         // Se trovo una corrispondenza esco dal for (list_template_inputRegistersTable.Register,template_inputRegistersOffset,offsetValue sono già in DEC, list_inputRegistersTable[a].Register dipende DEC o HEX)
-                        if ((int.Parse(list_template_holdingRegistersTable[i].Register) + template_HoldingOffset) == (int.Parse(list_holdingRegistersTable[a].Register, registerFormat) + offsetValue))
+                        if ((int.Parse(list_template_holdingRegistersTable[i].Register) + template_HoldingOffset) == (int.Parse(list_holdingRegistersTable[a].Register.Replace("0x", ""), registerFormat) + offsetValue))
                         {
                             // Applico descrizione risorsa
                             list_holdingRegistersTable[a].Notes = list_template_holdingRegistersTable[i].Notes;
@@ -6100,7 +6100,7 @@ namespace ModBus_Client
                 // Tabella inputs
                 for (int i = 0; i < template.dataGridViewInput.Count(); i++)
                 {
-                    if (template.comboBoxCoilsRegistri_ == "HEX")
+                    if (template.comboBoxInputRegistri_ == "HEX")
                     {
                         template.dataGridViewInput[i].Register = int.Parse(template.dataGridViewInput[i].Register, System.Globalization.NumberStyles.HexNumber).ToString();
                     }
@@ -6111,7 +6111,7 @@ namespace ModBus_Client
                 // Tabella input registers
                 for (int i = 0; i < template.dataGridViewInputRegister.Count(); i++)
                 {
-                    if (template.comboBoxCoilsRegistri_ == "HEX")
+                    if (template.comboBoxInputRegRegistri_ == "HEX")
                     {
                         template.dataGridViewInputRegister[i].Register = int.Parse(template.dataGridViewInputRegister[i].Register, System.Globalization.NumberStyles.HexNumber).ToString();
                     }
@@ -6122,7 +6122,7 @@ namespace ModBus_Client
                 // Tabella holdings
                 for (int i = 0; i < template.dataGridViewHolding.Count(); i++)
                 {
-                    if (template.comboBoxCoilsRegistri_ == "HEX")
+                    if (template.comboBoxHoldingRegistri_ == "HEX")
                     {
                         template.dataGridViewHolding[i].Register = int.Parse(template.dataGridViewHolding[i].Register, System.Globalization.NumberStyles.HexNumber).ToString();
                     }
