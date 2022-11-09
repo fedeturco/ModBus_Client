@@ -320,50 +320,26 @@ namespace ModBus_Client
 
         private void ButtonExportCsvCoils_Click(object sender, RoutedEventArgs e)
         {
-            string offset = textBoxCoilsOffset.Text;
-
-            if(comboBoxCoilsOffset.SelectedIndex == 1)
-            {
-                offset = "0x" + offset;
-            }
-
-            exportCsv(list_coilsTable, "_Coils", offset, comboBoxCoilsOffset.SelectedIndex == 1);
+            string offset = comboBoxCoilsOffset.SelectedIndex == 1 ? "0x" : "" + textBoxCoilsOffset.Text;
+            exportCsv(list_coilsTable, "_Coils", offset, comboBoxCoilsRegistri.SelectedIndex == 1);
         }
 
         private void ButtonExportCsvInputs_Click(object sender, RoutedEventArgs e)
         {
-            string offset = textBoxInputOffset.Text;
-
-            if (comboBoxInputOffset.SelectedIndex == 1)
-            {
-                offset = "0x" + offset;
-            }
-
-            exportCsv(list_inputsTable, "_Inputs", offset, comboBoxInputOffset.SelectedIndex == 1);
+            string offset = comboBoxInputOffset.SelectedIndex == 1 ? "0x" : "" + textBoxInputOffset.Text;
+            exportCsv(list_inputsTable, "_Inputs", offset, comboBoxInputRegistri.SelectedIndex == 1);
         }
 
         private void ButtonExportCsvInputRegisters_Click(object sender, RoutedEventArgs e)
         {
-            string offset = textBoxInputRegOffset.Text;
-
-            if (comboBoxInputRegOffset.SelectedIndex == 1)
-            {
-                offset = "0x" + offset;
-            }
-
-            exportCsv(list_inputRegistersTable, "_InputRegisters", offset, comboBoxInputRegOffset.SelectedIndex == 1);
+            string offset = comboBoxInputRegOffset.SelectedIndex == 1 ? "0x" : "" + textBoxInputRegOffset.Text;
+            exportCsv(list_inputRegistersTable, "_InputRegisters", offset, comboBoxInputRegRegistri.SelectedIndex == 1);
         }
 
         private void ButtonExportCsvHoldingRegisters_Click(object sender, RoutedEventArgs e)
         {
-            string offset = textBoxHoldingOffset.Text;
-
-            if (comboBoxHoldingOffset.SelectedIndex == 1)
-            {
-                offset = "0x" + offset;
-            }
-
-            exportCsv(list_holdingRegistersTable, "_HoldingRegisters", offset, comboBoxHoldingOffset.SelectedIndex == 1);
+            string offset = comboBoxHoldingOffset.SelectedIndex == 1 ? "0x": "" + textBoxHoldingOffset.Text;
+            exportCsv(list_holdingRegistersTable, "_HoldingRegisters", offset, comboBoxHoldingRegistri.SelectedIndex == 1);
         }
 
         public void exportCsv(ObservableCollection<ModBus_Item> collection, String append, String offset, bool registerHex)
@@ -384,14 +360,7 @@ namespace ModBus_Client
                     {
                         if (item != null)
                         {
-                            if (registerHex)
-                            {
-                                content += offset + ",0x" + item.Register + "," + item.Value + "," + item.Notes + "," + item.Mappings + "\n";
-                            }
-                            else
-                            {
-                                content += offset + "," + item.Register + "," + item.Value + "," + item.Notes + "," + item.Mappings + "\n";
-                            }
+                            content += offset + (registerHex ? ",0x" : ",") + item.Register + "," + item.Value + "," + item.Notes + "," + item.Mappings + "\n";
                         }
                     }
 
@@ -440,7 +409,6 @@ namespace ModBus_Client
                                 item.Register = item.Register.Substring(2);
                             }
 
-                            //item.Value = splitted[i].Split(',')[2];
                             item.Notes = splitted[i].Split(',')[3];
                             item.Mappings = splitted[i].Split(',')[4];
 
@@ -449,7 +417,6 @@ namespace ModBus_Client
                     }
                     catch
                     {
-                        //Console.WriteLine(err);
                     }
                 }
             }

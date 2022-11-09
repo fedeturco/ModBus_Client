@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ModBus_Client"
         mc:Ignorable="d"
-        Title="Info" Height="220" Width="390" Loaded="Window_Loaded" KeyUp="Window_KeyUp">
+        Title="Info" Height="257.657" Width="390" Loaded="Window_Loaded" KeyUp="Window_KeyUp">
     <Grid>
         <Label Content="Author:" HorizontalAlignment="Left" Margin="27,22,0,0" VerticalAlignment="Top" FontSize="14"/>
         <Label Content="Version:" HorizontalAlignment="Left" Margin="27,48,0,0" VerticalAlignment="Top" FontSize="14"/>
@@ -15,5 +15,7 @@
         <Label x:Name="labelVersion" Content="Versione" HorizontalAlignment="Left" Margin="104,48,0,0" VerticalAlignment="Top" FontSize="14"/>
         <Label x:Name="labelBuildNumber" Content="Build Number" HorizontalAlignment="Left" Margin="127,95,0,0" VerticalAlignment="Top" FontSize="14"/>
         <Label x:Name="LabelBuildDate" Content="Build Date" HorizontalAlignment="Left" Margin="127,126,0,0" VerticalAlignment="Top" FontSize="14"/>
+        <Label x:Name="LabelLinkRepository" Content="https://github.com/Fedex1515" HorizontalAlignment="Left" Margin="127,170,0,0" VerticalAlignment="Top" FontSize="14" MouseUp="LabelLinkRepository_MouseUp" Foreground="#FF0E72B8"/>
+        <Label Content="Repository:" HorizontalAlignment="Left" Margin="27,170,0,0" VerticalAlignment="Top" FontSize="14"/>
     </Grid>
 </Window>

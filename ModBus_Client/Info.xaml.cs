@@ -57,5 +57,10 @@ namespace ModBus_Client
                 this.Close();
             }
         }
+
+        private void LabelLinkRepository_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://github.com/Fedex1515");
+        }
     }
 }
