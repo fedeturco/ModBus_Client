@@ -285,7 +285,7 @@
                             <ComboBoxItem Content="HEX"/>
                         </ComboBox>
                         <TextBox x:Name="textBoxCoilsRange_B" TextWrapping="Wrap" Width="50"  Height="25" Margin="10,0,0,0" FontSize="12" VerticalContentAlignment="Center" TextChanged="textBoxCoilsRange_B_TextChanged"/>
-                        <Button x:Name="buttonReadCoilsRange" Content="Read" Width="55" Height="25" Margin="10,0,0,0" Click="buttonReadCoilsRange_Click" FontSize="12" RenderTransformOrigin="0.501,0.5"/>
+                        <Button x:Name="buttonReadCoilsRange" Content="Read" Width="55" Height="25" Margin="10,0,0,0" Click="buttonReadCoilsRange_Click" FontSize="12" RenderTransformOrigin="0.5,0.5"/>
                         <Button x:Name="buttonLoopCoilsRange" Content="Loop" Width="55" Height="25" Margin="10,0,0,0" FontSize="12" RenderTransformOrigin="0.501,0.5" Click="buttonLoopCoilsRange_Click"/>
                     </StackPanel>
                     <Label x:Name="labelCoils_8" Content="Force Single Coil (FC05):" Height="26" Margin="0,187,286.429,0" VerticalAlignment="Top" FontSize="12" HorizontalAlignment="Right" Width="200"/>

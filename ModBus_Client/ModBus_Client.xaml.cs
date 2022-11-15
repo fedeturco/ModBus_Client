@@ -1519,10 +1519,10 @@ namespace ModBus_Client
             {
                 uint address_start = P.uint_parser(textBoxCoilsOffset_, comboBoxCoilsOffset_) + P.uint_parser(textBoxCoilsRange_A_, comboBoxCoilsRange_A_);
                 uint coil_len = P.uint_parser(textBoxCoilsOffset_, comboBoxCoilsOffset_) + P.uint_parser(textBoxCoilsRange_B_, comboBoxCoilsRange_B_) - address_start + 1;
+                uint read_len = uint.Parse(textBoxCoilNumber.Text);
+                uint repeatQuery = coil_len / read_len;
 
-                uint repeatQuery = coil_len / 120;
-
-                if (coil_len % 120 != 0)
+                if (coil_len % read_len != 0)
                 {
                     repeatQuery += 1;
                 }
@@ -1531,9 +1531,9 @@ namespace ModBus_Client
 
                 for (int i = 0; i < repeatQuery; i++)
                 {
-                    if (i == (repeatQuery - 1) && coil_len % 120 != 0)
+                    if (i == (repeatQuery - 1) && coil_len % read_len != 0)
                     {
-                        UInt16[] read = ModBus.readCoilStatus_01(byte.Parse(textBoxModbusAddress_), address_start + (uint)(120 * i), coil_len % 120, readTimeout);
+                        UInt16[] read = ModBus.readCoilStatus_01(byte.Parse(textBoxModbusAddress_), address_start + (uint)(read_len * i), coil_len % read_len, readTimeout);
 
                         // Timeout
                         if (read is null)
@@ -1547,13 +1547,13 @@ namespace ModBus_Client
                             SetTableCrcError(list_coilsTable);
                         }
 
-                        Array.Copy(read, 0, response, 120 * i, coil_len % 120);
+                        Array.Copy(read, 0, response, read_len * i, coil_len % read_len);
                     }
                     else
                     {
-                        UInt16[] read = ModBus.readCoilStatus_01(byte.Parse(textBoxModbusAddress_), address_start + (uint)(120 * i), 120, readTimeout);
+                        UInt16[] read = ModBus.readCoilStatus_01(byte.Parse(textBoxModbusAddress_), address_start + (uint)(read_len * i), read_len, readTimeout);
 
-                        Array.Copy(read, 0, response, 120 * i, 120);
+                        Array.Copy(read, 0, response, read_len * i, read_len);
                     }
                 }
 
@@ -1988,10 +1988,10 @@ namespace ModBus_Client
                     address_start = address_start - 10001;
                 }
 
-                // Anche se le coils le leggo a bit e non byte, tengo 120 coils per lettura per ora, prox release si può incrementare
-                uint repeatQuery = input_len / 120;
+                uint read_len = uint.Parse(textBoxInputNumber.Text);
+                uint repeatQuery = input_len / read_len;
 
-                if (input_len % 120 != 0)
+                if (input_len % read_len != 0)
                 {
                     repeatQuery += 1;
                 }
@@ -2000,9 +2000,9 @@ namespace ModBus_Client
 
                 for (int i = 0; i < repeatQuery; i++)
                 {
-                    if (i == (repeatQuery - 1) && input_len % 120 != 0)
+                    if (i == (repeatQuery - 1) && input_len % read_len != 0)
                     {
-                        UInt16[] read = ModBus.readInputStatus_02(byte.Parse(textBoxModbusAddress_), address_start + (uint)(120 * i), input_len % 120, readTimeout);
+                        UInt16[] read = ModBus.readInputStatus_02(byte.Parse(textBoxModbusAddress_), address_start + (uint)(read_len * i), input_len % read_len, readTimeout);
 
                         // Timeout
                         if (read is null)
@@ -2018,13 +2018,13 @@ namespace ModBus_Client
                             return;
                         }
 
-                        Array.Copy(read, 0, response, 120 * i, input_len % 120);
+                        Array.Copy(read, 0, response, read_len * i, input_len % read_len);
                     }
                     else
                     {
-                        UInt16[] read = ModBus.readInputStatus_02(byte.Parse(textBoxModbusAddress_), address_start + (uint)(120 * i), 120, readTimeout);
+                        UInt16[] read = ModBus.readInputStatus_02(byte.Parse(textBoxModbusAddress_), address_start + (uint)(read_len * i), read_len, readTimeout);
 
-                        Array.Copy(read, 0, response, 120 * i, 120);
+                        Array.Copy(read, 0, response, read_len * i, read_len);
                     }
                 }
 
@@ -2225,9 +2225,10 @@ namespace ModBus_Client
                     address_start = address_start - 30001;
                 }
 
-                uint repeatQuery = register_len / 120;
+                uint read_len = uint.Parse(textBoxInputRegisterNumber.Text);
+                uint repeatQuery = register_len / read_len;
 
-                if (register_len % 120 != 0)
+                if (register_len % read_len != 0)
                 {
                     repeatQuery += 1;
                 }
@@ -2236,9 +2237,9 @@ namespace ModBus_Client
 
                 for (int i = 0; i < repeatQuery; i++)
                 {
-                    if (i == (repeatQuery - 1) && register_len % 120 != 0)
+                    if (i == (repeatQuery - 1) && register_len % read_len != 0)
                     {
-                        UInt16[] read = ModBus.readInputRegister_04(byte.Parse(textBoxModbusAddress_), address_start + (uint)(120 * i), register_len % 120, readTimeout);
+                        UInt16[] read = ModBus.readInputRegister_04(byte.Parse(textBoxModbusAddress_), address_start + (uint)(read_len * i), register_len % read_len, readTimeout);
 
                         // Timeout
                         if (read is null)
@@ -2254,13 +2255,13 @@ namespace ModBus_Client
                             return;
                         }
 
-                        Array.Copy(read, 0, response, 120 * i, register_len % 120);
+                        Array.Copy(read, 0, response, read_len * i, register_len % read_len);
                     }
                     else
                     {
-                        UInt16[] read = ModBus.readInputRegister_04(byte.Parse(textBoxModbusAddress_), address_start + (uint)(120 * i), 120, readTimeout);
+                        UInt16[] read = ModBus.readInputRegister_04(byte.Parse(textBoxModbusAddress_), address_start + (uint)(read_len * i), read_len, readTimeout);
 
-                        Array.Copy(read, 0, response, 120 * i, 120);
+                        Array.Copy(read, 0, response, read_len * i, read_len);
                     }
                 }
 
@@ -3337,9 +3338,10 @@ namespace ModBus_Client
                     address_start = address_start - 40001;
                 }
 
-                uint repeatQuery = register_len / 120;
+                uint read_len = uint.Parse(textBoxHoldingRegisterNumber.Text);
+                uint repeatQuery = register_len / read_len;
 
-                if (register_len % 120 != 0)
+                if (register_len % read_len != 0)
                 {
                     repeatQuery += 1;
                 }
@@ -3348,9 +3350,9 @@ namespace ModBus_Client
 
                 for (int i = 0; i < repeatQuery; i++)
                 {
-                    if (i == (repeatQuery - 1) && register_len % 120 != 0)
+                    if (i == (repeatQuery - 1) && register_len % read_len != 0)
                     {
-                        UInt16[] read = ModBus.readHoldingRegister_03(byte.Parse(textBoxModbusAddress_), address_start + (uint)(120 * i), register_len % 120, readTimeout);
+                        UInt16[] read = ModBus.readHoldingRegister_03(byte.Parse(textBoxModbusAddress_), address_start + (uint)(read_len * i), register_len % read_len, readTimeout);
 
                         // Timeout
                         if (read is null)
@@ -3366,11 +3368,11 @@ namespace ModBus_Client
                             return;
                         }
 
-                        Array.Copy(read, 0, response, 120 * i, register_len % 120);
+                        Array.Copy(read, 0, response, read_len * i, register_len % read_len);
                     }
                     else
                     {
-                        UInt16[] read = ModBus.readHoldingRegister_03(byte.Parse(textBoxModbusAddress_), address_start + (uint)(120 * i), 120, readTimeout);
+                        UInt16[] read = ModBus.readHoldingRegister_03(byte.Parse(textBoxModbusAddress_), address_start + (uint)(read_len * i), read_len, readTimeout);
 
                         // Timeout
                         if (read is null)
@@ -3386,7 +3388,7 @@ namespace ModBus_Client
                             return;
                         }
 
-                        Array.Copy(read, 0, response, 120 * i, 120);
+                        Array.Copy(read, 0, response, read_len * i, read_len);
                     }
                 }
 
