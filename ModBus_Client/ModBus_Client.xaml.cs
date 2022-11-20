@@ -1519,7 +1519,7 @@ namespace ModBus_Client
             {
                 uint address_start = P.uint_parser(textBoxCoilsOffset_, comboBoxCoilsOffset_) + P.uint_parser(textBoxCoilsRange_A_, comboBoxCoilsRange_A_);
                 uint coil_len = P.uint_parser(textBoxCoilsOffset_, comboBoxCoilsOffset_) + P.uint_parser(textBoxCoilsRange_B_, comboBoxCoilsRange_B_) - address_start + 1;
-                uint read_len = uint.Parse(textBoxCoilNumber.Text);
+                uint read_len = uint.Parse(textBoxCoilNumber_);
                 uint repeatQuery = coil_len / read_len;
 
                 if (coil_len % read_len != 0)
@@ -1988,7 +1988,7 @@ namespace ModBus_Client
                     address_start = address_start - 10001;
                 }
 
-                uint read_len = uint.Parse(textBoxInputNumber.Text);
+                uint read_len = uint.Parse(textBoxInputNumber_);
                 uint repeatQuery = input_len / read_len;
 
                 if (input_len % read_len != 0)
@@ -2225,7 +2225,7 @@ namespace ModBus_Client
                     address_start = address_start - 30001;
                 }
 
-                uint read_len = uint.Parse(textBoxInputRegisterNumber.Text);
+                uint read_len = uint.Parse(textBoxInputRegisterNumber_);
                 uint repeatQuery = register_len / read_len;
 
                 if (register_len % read_len != 0)
@@ -3338,7 +3338,7 @@ namespace ModBus_Client
                     address_start = address_start - 40001;
                 }
 
-                uint read_len = uint.Parse(textBoxHoldingRegisterNumber.Text);
+                uint read_len = uint.Parse(textBoxHoldingRegisterNumber_);
                 uint repeatQuery = register_len / read_len;
 
                 if (register_len % read_len != 0)
