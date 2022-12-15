@@ -226,7 +226,7 @@
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
-                    <DataGrid x:Name="dataGridViewCoils" Margin="10,50,491,10" AutoGenerateColumns="False" HorizontalGridLinesBrush="LightGray" VerticalGridLinesBrush="LightGray" BorderThickness="1" FontSize="14" KeyUp="dataGridViewCoils_KeyUp"  RowBackground="#FFF1F1F1">
+                    <DataGrid x:Name="dataGridViewCoils" Margin="10,50,491,10" AutoGenerateColumns="False" HorizontalGridLinesBrush="LightGray" VerticalGridLinesBrush="LightGray" BorderThickness="1" FontSize="14" CellEditEnding="dataGridViewCoils_KeyUp"  RowBackground="#FFF1F1F1">
                         <DataGrid.Columns>
                             <DataGridTextColumn x:Name="dataGridTabCoilsRegisters" Header="Register" Binding="{Binding Register}" Width="100" Visibility="Collapsed">
                                 <DataGridTextColumn.ElementStyle>
@@ -648,7 +648,7 @@
             </TabItem>
             <TabItem x:Name="tabItem4" Header="Holding registers (1 word)" FontSize="12">
                 <Grid Background="#FFE5E5E5">
-                    <DataGrid x:Name="dataGridViewHolding" Margin="10,50,491,10" AutoGenerateColumns="False"  HorizontalGridLinesBrush="LightGray" VerticalGridLinesBrush="LightGray" BorderThickness="1" FontSize="14" KeyUp="dataGridViewHolding_KeyUp" RowBackground="#FFF1F1F1">
+                    <DataGrid x:Name="dataGridViewHolding" Margin="10,50,491,10" AutoGenerateColumns="False"  HorizontalGridLinesBrush="LightGray" VerticalGridLinesBrush="LightGray" BorderThickness="1" FontSize="14" CellEditEnding="dataGridViewHolding_KeyUp" RowBackground="#FFF1F1F1">
                         <DataGrid.RowStyle>
                             <Style TargetType="DataGridRow">
                                 <Setter Property="ToolTip">

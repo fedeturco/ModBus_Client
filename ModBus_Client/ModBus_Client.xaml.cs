@@ -4379,30 +4379,39 @@ namespace ModBus_Client
             this.Topmost = (bool)CheckBoxPinWIndow.IsChecked;
         }
 
-        private void dataGridViewHolding_KeyUp(object sender, KeyEventArgs e)
+        private void dataGridViewHolding_KeyUp(object sender, DataGridCellEditEndingEventArgs e)
         {
-            if (e.Key == Key.Enter && (bool)CheckBoxSendValuesOnEditHoldingTable.IsChecked)
+            if ((bool)CheckBoxSendValuesOnEditHoldingTable.IsChecked)
             {
-                Thread t = new Thread(new ThreadStart(writeRegisterDatagrid));
-                t.Start();
+                try
+                {
+                    var tmp = e.EditingElement as TextBox;
+                    dataGridViewHolding.SelectedItem = (ModBus_Item)e.Row.Item;
+
+                    UInt16 out_;
+                    if(UInt16.TryParse(tmp.Text, out out_))
+                    {
+                        Thread t = new Thread(new ParameterizedThreadStart(writeRegisterDatagrid));
+                        t.Start(tmp.Text);
+                    }
+                }
+                catch (Exception err)
+                {
+                    Console.WriteLine(err);
+                }
             }
         }
 
-        public void writeRegisterDatagrid()
+        public void writeRegisterDatagrid(object obj)
         {
             try
             {
-                //dataGridViewHolding.CommitEdit();
                 ModBus_Item currentItem = new ModBus_Item();
-                int index = 0;
 
                 this.Dispatcher.Invoke((Action)delegate
                 {
                     currentItem = (ModBus_Item)dataGridViewHolding.SelectedItem;
-                    index = list_holdingRegistersTable.IndexOf(currentItem) - 1;
-
-                    // Se eventualmente fosse da utilizzare il registro precedente usare la seguente
-                    currentItem = list_holdingRegistersTable[list_holdingRegistersTable.IndexOf(currentItem) - 1];
+                    currentItem.Value = obj.ToString();
                 });
 
                 // Debug
@@ -4428,8 +4437,8 @@ namespace ModBus_Client
 
                         this.Dispatcher.Invoke((Action)delegate
                         {
-                            list_holdingRegistersTable[index].ValueBin = Convert.ToString(value_ >> 8, 2).PadLeft(8, '0') + " " + Convert.ToString((UInt16)(value_ << 8) >> 8, 2).PadLeft(8, '0'); ;
-                            list_holdingRegistersTable[index].Color = colorDefaultWriteCell.ToString();
+                            currentItem.ValueBin = Convert.ToString(value_ >> 8, 2).PadLeft(8, '0') + " " + Convert.ToString((UInt16)(value_ << 8) >> 8, 2).PadLeft(8, '0'); ;
+                            currentItem.Color = colorDefaultWriteCell.ToString();
                         });
                     }
                     else
@@ -4445,7 +4454,7 @@ namespace ModBus_Client
                 this.Dispatcher.Invoke((Action)delegate
                 {
                     dataGridViewHolding.Items.Refresh();
-                    dataGridViewHolding.SelectedIndex = index + 1;
+                    dataGridViewHolding.SelectedItem = currentItem;
                 });
             }
             catch(Exception err)
@@ -4472,16 +4481,30 @@ namespace ModBus_Client
             //lang.loadLanguageTemplate(currMenuItem.Header.ToString());
         }
 
-        private void dataGridViewCoils_KeyUp(object sender, KeyEventArgs e)
+        private void dataGridViewCoils_KeyUp(object sender, DataGridCellEditEndingEventArgs e)
         {
-            if (e.Key == Key.Enter && (bool)CheckBoxSendValuesOnEditCoillsTable.IsChecked)
+            if ((bool)CheckBoxSendValuesOnEditCoillsTable.IsChecked)
             {
-                Thread t = new Thread(new ThreadStart(writeCoilDataGrid));
-                t.Start();
+                try
+                {
+                    var tmp = e.EditingElement as TextBox;
+                    dataGridViewHolding.SelectedItem = (ModBus_Item)e.Row.Item;
+
+                    UInt16 out_;
+                    if (UInt16.TryParse(tmp.Text, out out_))
+                    {
+                        Thread t = new Thread(new ParameterizedThreadStart(writeCoilDataGrid));
+                        t.Start(tmp.Text);
+                    }
+                }
+                catch(Exception err)
+                {
+                    Console.WriteLine(err);
+                }
             }
         }
 
-        public void writeCoilDataGrid()
+        public void writeCoilDataGrid(object obj)
         {
             try
             {
@@ -4491,8 +4514,7 @@ namespace ModBus_Client
                 this.Dispatcher.Invoke((Action)delegate
                 {
                     currentItem = (ModBus_Item)dataGridViewCoils.SelectedItem;
-                    index = list_coilsTable.IndexOf(currentItem) - 1;
-                    currentItem = list_coilsTable[index];
+                    currentItem.Value = obj as String;
                 });
 
                 // Debug
@@ -4510,7 +4532,7 @@ namespace ModBus_Client
                     {
                         this.Dispatcher.Invoke((Action)delegate
                         {
-                            list_coilsTable[index].Color = colorDefaultWriteCell.ToString();
+                            currentItem.Color = colorDefaultWriteCell.ToString();
 
                             /*if(index + 1 < dataGridViewCoils.Items.Count)
                                 dataGridViewCoils.SelectedItem = list_coilsTable[index + 1];*/
@@ -4527,9 +4549,16 @@ namespace ModBus_Client
                 {
                     SetTableTimeoutError(list_coilsTable);
                 }
+
+                this.Dispatcher.Invoke((Action)delegate
+                {
+                    dataGridViewCoils.Items.Refresh();
+                    dataGridViewCoils.SelectedItem = currentItem;
+                });
             }
             catch(Exception err)
             {
+                SetTableInternalError(list_coilsTable);
                 Console.WriteLine(err);
             }
         }
