@@ -1668,8 +1668,16 @@ namespace ModBus_Client
 
             tmp.Register = "ErrCode:";
             tmp.Value = err.ToString().Split('-')[0].Split(':')[2];
-            tmp.ValueBin = err.ToString().Split('-')[1].Split('\n')[0].Replace("\r","");
-            tmp.Color = Brushes.OrangeRed.ToString();
+
+            tmp.Notes = err.ToString().Split('-')[1].Split('\n')[0].Replace("\r","");
+            tmp.ValueBin = err.ToString().Split('-')[1].Split('\n')[0].Replace("\r", "");
+
+            /*if(UseNotes)
+                tmp.Notes = err.ToString().Split('-')[1].Split('\n')[0].Replace("\r", "");
+            else
+                tmp.ValueBin = err.ToString().Split('-')[1].Split('\n')[0].Replace("\r","");*/
+
+              tmp.Color = Brushes.OrangeRed.ToString();
 
             this.Dispatcher.Invoke((Action)delegate
             {
@@ -2984,7 +2992,7 @@ namespace ModBus_Client
                         }
                     }
 
-                    for (int i = 0; i < 16; i++)
+                    for (int i = 15; i >= 0; i--)
                     {
                         if ((values_[3] & (1 << i)) > 0)
                         {
@@ -3009,7 +3017,7 @@ namespace ModBus_Client
                             }
                         }
 
-                        if (i < 15)
+                        if (i > 0)
                         {
                             result += "\n";
                         }
@@ -3027,11 +3035,11 @@ namespace ModBus_Client
                         }
                     }
 
-                    for (int i = 0; i < 2; i++)
+                    for (int i = 1; i >= 0; i--)
                     {
                         result += "byte " + i.ToString() + ": " + ((values_[3] >> (i*8)) & 0xFF).ToString() + " - " + labels[i];
 
-                        if (i == 0)
+                        if (i == 1)
                         {
                             result += "\n";
                         }
@@ -3188,11 +3196,11 @@ namespace ModBus_Client
 
                 UInt16[] buffer = new UInt16[word_count];
 
-                if (comboBoxHoldingAddress16_B_ == "HEX")
+                if (comboBoxHoldingValue16_ == "HEX")
                 {
                     if (textBoxHoldingValue16_.Split(' ').Length != (word_count * 2))
                     {
-                        MessageBox.Show("Formato stringa inserito non corretto", "Alert", MessageBoxButton.OK, MessageBoxImage.Error);
+                        MessageBox.Show("Formato stringa inserito non corretto" + word_count.ToString(), "Alert", MessageBoxButton.OK, MessageBoxImage.Error);
                     }
                     else
                     {
@@ -3622,15 +3630,15 @@ namespace ModBus_Client
                 {
                     if (err.Message.IndexOf("Timed out") != -1)
                     {
-                        SetTableTimeoutError(list_holdingRegistersTable);
+                        textBoxDiagnosticData.Text = "Timeout";
                     }
                     if (err.Message.IndexOf("ModBus ErrCode") != -1)
                     {
-                        SetTableModBusError(list_holdingRegistersTable, err);
+                        textBoxDiagnosticResponse.Text = "ErrCode: " + err.ToString().Split('-')[0].Split(':')[2] + " - " + err.ToString().Split('-')[1].Split('\n')[0].Replace("\r", "");
                     }
                     if (err.Message.IndexOf("CRC Error") != -1)
                     {
-                        SetTableCrcError(list_holdingRegistersTable);
+                        textBoxDiagnosticData.Text = "CRC Error";
                     }
 
                     Console.WriteLine(err);
@@ -3884,15 +3892,15 @@ namespace ModBus_Client
             {
                 if (err.Message.IndexOf("Timed out") != -1)
                 {
-                    SetTableTimeoutError(list_holdingRegistersTable);
+                    SetTableTimeoutError(list_coilsTable);
                 }
                 if (err.Message.IndexOf("ModBus ErrCode") != -1)
                 {
-                    SetTableModBusError(list_holdingRegistersTable, err);
+                    SetTableModBusError(list_coilsTable, err);
                 }
                 if (err.Message.IndexOf("CRC Error") != -1)
                 {
-                    SetTableCrcError(list_holdingRegistersTable);
+                    SetTableCrcError(list_coilsTable);
                 }
 
                 Console.WriteLine(err);
@@ -6327,11 +6335,15 @@ namespace ModBus_Client
         private void comboBoxHoldingAddress16_B_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             comboBoxHoldingAddress16_B_ = comboBoxHoldingAddress16_B.SelectedIndex == 0 ? "DEC" : "HEX";
+
+            textBoxHoldingAddress16_B_TextChanged(null, null);
         }
 
         private void comboBoxHoldingValue16_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             comboBoxHoldingValue16_ = comboBoxHoldingValue16.SelectedIndex == 0 ? "DEC" : "HEX";
+
+            textBoxHoldingAddress16_B_TextChanged(null, null);
         }
 
         private void textBoxHoldingValue16_TextChanged(object sender, TextChangedEventArgs e)
