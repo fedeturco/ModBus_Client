@@ -94,7 +94,7 @@ namespace ModBus_Client
         //-----------------------------------------------------
 
         public String version = "beta";    // Eventuale etichetta, major.minor lo recupera dall'assembly
-        public String title = "ModBus C#";
+        public String title = "ModBus Client";
 
         String defaultPathToConfiguration = "Generico";
         public String pathToConfiguration;
@@ -4465,10 +4465,43 @@ namespace ModBus_Client
                     dataGridViewHolding.SelectedItem = currentItem;
                 });
             }
-            catch(Exception err)
+            catch (ModbusException err)
+            {
+                if (err.Message.IndexOf("Timed out") != -1)
+                {
+                    SetTableTimeoutError(list_holdingRegistersTable);
+                }
+                if (err.Message.IndexOf("ModBus ErrCode") != -1)
+                {
+                    SetTableModBusError(list_holdingRegistersTable, err);
+                }
+                if (err.Message.IndexOf("CRC Error") != -1)
+                {
+                    SetTableCrcError(list_holdingRegistersTable);
+                }
+
+                Console.WriteLine(err);
+
+                this.Dispatcher.Invoke((Action)delegate
+                {
+                    buttonWriteHolding06_b.IsEnabled = true;
+
+                    dataGridViewHolding.ItemsSource = null;
+                    dataGridViewHolding.ItemsSource = list_holdingRegistersTable;
+                });
+            }
+            catch (Exception err)
             {
                 SetTableInternalError(list_holdingRegistersTable);
                 Console.WriteLine(err);
+
+                this.Dispatcher.Invoke((Action)delegate
+                {
+                    buttonWriteHolding06_b.IsEnabled = true;
+
+                    dataGridViewHolding.ItemsSource = null;
+                    dataGridViewHolding.ItemsSource = list_holdingRegistersTable;
+                });
             }
         }
 
@@ -4564,10 +4597,44 @@ namespace ModBus_Client
                     dataGridViewCoils.SelectedItem = currentItem;
                 });
             }
-            catch(Exception err)
+            catch (ModbusException err)
+            {
+                if (err.Message.IndexOf("Timed out") != -1)
+                {
+                    SetTableTimeoutError(list_coilsTable);
+                }
+                if (err.Message.IndexOf("ModBus ErrCode") != -1)
+                {
+                    SetTableModBusError(list_coilsTable, err);
+                }
+                if (err.Message.IndexOf("CRC Error") != -1)
+                {
+                    SetTableCrcError(list_coilsTable);
+                }
+
+                Console.WriteLine(err);
+
+                this.Dispatcher.Invoke((Action)delegate
+                {
+                    buttonWriteCoils05_B.IsEnabled = true;
+
+                    dataGridViewCoils.ItemsSource = null;
+                    dataGridViewCoils.ItemsSource = list_coilsTable;
+                });
+            }
+            catch (Exception err)
             {
                 SetTableInternalError(list_coilsTable);
+
                 Console.WriteLine(err);
+
+                this.Dispatcher.Invoke((Action)delegate
+                {
+                    buttonWriteCoils05_B.IsEnabled = true;
+
+                    dataGridViewCoils.ItemsSource = null;
+                    dataGridViewCoils.ItemsSource = list_coilsTable;
+                });
             }
         }
 

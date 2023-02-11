@@ -31,6 +31,8 @@ namespace ModBus_Client
 
             this.Left = (screenWidth / 2) - (windowWidth / 2);
             this.Top = (screenHeight / 2) - (windowHeight / 2);
+
+            this.TextBlockAuthor.Text = " Copyright (c) " + DateTime.UtcNow.ToString("yyyy") + " Federico Turco";
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)

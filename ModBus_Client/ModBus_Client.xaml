@@ -88,7 +88,7 @@
             <ToolBar Band="1" BandIndex="1" FontSize="14" Margin="0,0,0,0" Height="35" HorizontalAlignment="Left" Width="Auto">
                 <StackPanel Orientation="Horizontal">
                     <Label x:Name="labelConnection" Content="Connection:" FontSize="12"></Label>
-                    <RadioButton x:Name="radioButtonModeSerial" Content="Serial" Margin="0,7,0,0" Checked="radioButtonModeSerial_CheckedChanged" Unchecked="radioButtonModeSerial_CheckedChanged" FontSize="12"/>
+                    <RadioButton x:Name="radioButtonModeSerial" Content="RTU" Margin="0,7,0,0" Checked="radioButtonModeSerial_CheckedChanged" Unchecked="radioButtonModeSerial_CheckedChanged" FontSize="12"/>
                     <RadioButton x:Name="radioButtonModeTcp" Content="TCP" Margin="20,7,0,0" FontSize="12"></RadioButton>
                     <Label x:Name="labelModBusAddress" Content="ModBus Address:" Margin="20,1,0,-1" FontSize="12"></Label>
                     <TextBox x:Name="textBoxModbusAddress" Width="65px" Height="25px" Text="255" FontSize="12" Margin="0,3,0,2" VerticalContentAlignment="Center" TextChanged="textBoxModbusAddress_TextChanged"></TextBox>
@@ -112,7 +112,7 @@
                         <ColumnDefinition></ColumnDefinition>
                     </Grid.ColumnDefinitions>
                     <Border x:Name="pictureBoxSerial" Margin="19,20,0,0" Height="25" VerticalAlignment="Top" HorizontalAlignment="Left" Width="25"/>
-                    <Label x:Name="labelSerialRtu" Content="Serial RTU" HorizontalAlignment="Left" Margin="49,16,0,0" VerticalAlignment="Top" FontSize="18" Grid.Column="0"/>
+                    <Label x:Name="labelSerialRtu" Content="RTU" HorizontalAlignment="Left" Margin="49,16,0,0" VerticalAlignment="Top" FontSize="18" Grid.Column="0"/>
                     <Label x:Name="labelTcp" Content="TCP" HorizontalAlignment="Left" Margin="49,16,0,0" VerticalAlignment="Top" FontSize="18" Grid.Column="1"/>
                     <Label x:Name="labelBaudRate" Content="Baud rate:" HorizontalAlignment="Left" Margin="10,94,0,0" VerticalAlignment="Top" FontSize="14" Grid.Column="0"/>
                     <Label HorizontalAlignment="Left" Margin="10,68,0,0" VerticalAlignment="Top" FontSize="18" Grid.Column="0"/>
