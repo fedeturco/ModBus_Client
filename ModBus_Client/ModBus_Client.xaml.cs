@@ -189,6 +189,8 @@ namespace ModBus_Client
         bool useOffsetInTable = false;
         bool correctModbusAddressAuto = false;
         bool colorMode = false;
+        bool darkMode = false;
+
         String textBoxModbusAddress_ = "";
         String comboBoxCoilsRegistri_ = "";
         String textBoxCoilsOffset_ = "";
@@ -261,7 +263,22 @@ namespace ModBus_Client
         String comboBoxHoldingValue16_ = "";
         String textBoxHoldingValue16_ = "";
 
+        // Dark mode
+        public SolidColorBrush ForeGroundDark = new SolidColorBrush(Color.FromArgb(255, (byte)241, (byte)241, (byte)241));
+        public SolidColorBrush BackGroundDark = new SolidColorBrush(Color.FromArgb(255, (byte)60, (byte)60, (byte)60));
+        public SolidColorBrush BackGroundDark2 = new SolidColorBrush(Color.FromArgb(255, (byte)90, (byte)90, (byte)90));
 
+        public string ForeGroundDarkStr;
+        public string BackGroundDarkStr;
+
+        // Light mode
+        public SolidColorBrush ForeGroundLight = new SolidColorBrush(Color.FromArgb(255, (byte)10, (byte)10, (byte)10));
+        public SolidColorBrush BackGroundLight = new SolidColorBrush(Color.FromArgb(255, (byte)229, (byte)229, (byte)229));
+        public SolidColorBrush BackGroundLight2 = new SolidColorBrush(Color.FromArgb(255, (byte)255, (byte)255, (byte)255));
+
+        public string ForeGroundLightStr;
+        public string BackGroundLightStr;
+        public string BackGroundLight2Str;
         public MainWindow()
         {
             InitializeComponent();
@@ -1332,12 +1349,7 @@ namespace ModBus_Client
 
             ip_address = textBoxTcpClientIpAddress.Text;
             port = textBoxTcpClientPort.Text;
-
-
             
-
-
-
             if (pictureBoxTcp.Background == Brushes.LightGray)
             {
                 try
@@ -1621,7 +1633,8 @@ namespace ModBus_Client
 
             tmp.Register = "Internal";
             tmp.Value = "Error";
-            tmp.Color = Brushes.Red.ToString();
+            tmp.Foreground = ForeGroundLight.ToString();
+            tmp.Background = Brushes.Red.ToString();
 
             this.Dispatcher.Invoke((Action)delegate
             {
@@ -1636,7 +1649,8 @@ namespace ModBus_Client
 
             tmp.Register = "CRC";
             tmp.Value = "Error";
-            tmp.Color = Brushes.Tomato.ToString();
+            tmp.Foreground = ForeGroundLight.ToString();
+            tmp.Background = Brushes.Tomato.ToString();
 
             this.Dispatcher.Invoke((Action)delegate
             {
@@ -1651,7 +1665,8 @@ namespace ModBus_Client
 
             tmp.Register = "Timeout";
             tmp.Value = "";
-            tmp.Color = Brushes.Violet.ToString();
+            tmp.Foreground = ForeGroundLight.ToString();
+            tmp.Background = Brushes.Violet.ToString();
 
             this.Dispatcher.Invoke((Action)delegate
             {
@@ -1669,7 +1684,8 @@ namespace ModBus_Client
             tmp.Register = "ErrCode:";
             tmp.Value = err.ToString().Split('-')[0].Split(':')[2];
             tmp.ValueBin = err.ToString().Split('-')[1].Split('\n')[0].Replace("\r","");
-            tmp.Color = Brushes.OrangeRed.ToString();
+            tmp.Foreground = ForeGroundLight.ToString();
+            tmp.Background = Brushes.OrangeRed.ToString();
 
             this.Dispatcher.Invoke((Action)delegate
             {
@@ -3221,7 +3237,8 @@ namespace ModBus_Client
                         else
                         {
                             MessageBox.Show(lang.languageTemplate["strings"]["errSetReg"], "Alert");
-                            list_holdingRegistersTable[(int)(address_start)].Color = Brushes.Red.ToString();
+                            list_holdingRegistersTable[(int)(address_start)].Foreground = ForeGroundLight.ToString();
+                            list_holdingRegistersTable[(int)(address_start)].Background = Brushes.Red.ToString();
                         }
 
                         applyTemplateHoldingRegister();
@@ -3259,7 +3276,8 @@ namespace ModBus_Client
                         else
                         {
                             MessageBox.Show(lang.languageTemplate["strings"]["errSetReg"], "Alert");
-                            list_holdingRegistersTable[(int)(address_start)].Color = Brushes.Red.ToString();
+                            list_holdingRegistersTable[(int)(address_start)].Foreground = ForeGroundLight.ToString();
+                            list_holdingRegistersTable[(int)(address_start)].Background = Brushes.Red.ToString();
                         }
 
                         applyTemplateHoldingRegister();
@@ -3555,19 +3573,20 @@ namespace ModBus_Client
                         {
                             this.Dispatcher.Invoke((Action)delegate
                             {
-                                row.Color = cellBackGround.ToString();
+                                row.Foreground = ForeGroundLight.ToString();
+                                row.Background = cellBackGround.ToString();
                             });
                         }
                     }
                     else
                     {
-                        if (i % 2 == 0)
+                        /*if (i % 2 == 0)
                         {
                             this.Dispatcher.Invoke((Action)delegate
                             {
                                 row.Color = cellBackGround.ToString();
                             });
-                        }
+                        }*/
                     }
 
                     // Il valore in binario lo metto sempre tanto poi nelle coils ed inputs è nascosto
@@ -3590,7 +3609,8 @@ namespace ModBus_Client
 
                         row.Register = (address_start + i).ToString();
                         row.Value = response[i].ToString();
-                        row.Color = cellBackGround.ToString();
+                        row.Foreground = ForeGroundLight.ToString();
+                        row.Background = cellBackGround.ToString();
                         row.ValueBin = (response[i]).ToString("X");
 
                         //row.Cells[3].Value = (address_start + i).ToString("X");
@@ -4438,7 +4458,8 @@ namespace ModBus_Client
                         this.Dispatcher.Invoke((Action)delegate
                         {
                             currentItem.ValueBin = Convert.ToString(value_ >> 8, 2).PadLeft(8, '0') + " " + Convert.ToString((UInt16)(value_ << 8) >> 8, 2).PadLeft(8, '0'); ;
-                            currentItem.Color = colorDefaultWriteCell.ToString();
+                            currentItem.Foreground = ForeGroundLight.ToString();
+                            currentItem.Background = colorDefaultWriteCell.ToString();
                         });
                     }
                     else
@@ -4532,7 +4553,8 @@ namespace ModBus_Client
                     {
                         this.Dispatcher.Invoke((Action)delegate
                         {
-                            currentItem.Color = colorDefaultWriteCell.ToString();
+                            currentItem.Foreground = ForeGroundLight.ToString();
+                            currentItem.Background = colorDefaultWriteCell.ToString();
 
                             /*if(index + 1 < dataGridViewCoils.Items.Count)
                                 dataGridViewCoils.SelectedItem = list_coilsTable[index + 1];*/
@@ -6577,6 +6599,157 @@ namespace ModBus_Client
         private void checkBoxUseOffsetInTextBox_Checked(object sender, RoutedEventArgs e)
         {
             correctModbusAddressAuto = (bool)checkBoxUseOffsetInTextBox.IsChecked;
+        }
+
+        private void CheckBoxDarkMode_Checked(object sender, RoutedEventArgs e)
+        {
+            darkMode = (bool)CheckBoxDarkMode.IsChecked;
+
+            // BorderBrush
+            Setter SetBorderBrush = new Setter();
+            SetBorderBrush.Property = BorderBrushProperty;
+            SetBorderBrush.Value = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight2;
+
+            // Background
+            Setter SetBackgroundProperty = new Setter();
+            SetBackgroundProperty.Property = BackgroundProperty;
+            SetBackgroundProperty.Value = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight2;
+
+            // Stile custom per cella standard
+            Style NewStyle = new Style();
+            NewStyle.Setters.Add(SetBorderBrush);
+            NewStyle.Setters.Add(SetBackgroundProperty);
+
+            // Coils
+            dataGridTabCoilsRegisters.Foreground = (bool)CheckBoxDarkMode.IsChecked ? ForeGroundDark : ForeGroundLight;
+            dataGridTabCoilsValues.Foreground = (bool)CheckBoxDarkMode.IsChecked ? ForeGroundDark : ForeGroundLight; ;
+            dataGridTabCoilsNotes.Foreground = (bool)CheckBoxDarkMode.IsChecked ? ForeGroundDark : ForeGroundLight; ;
+
+            dataGridTabCoilsRegisters.CellStyle = NewStyle;
+            dataGridTabCoilsValues.CellStyle = NewStyle;
+            dataGridTabCoilsNotes.CellStyle = NewStyle;
+
+            // Inputs
+            dataGridTabInputsRegisters.Foreground = (bool)CheckBoxDarkMode.IsChecked ? ForeGroundDark : ForeGroundLight;
+            dataGridTabInputsValues.Foreground = (bool)CheckBoxDarkMode.IsChecked ? ForeGroundDark : ForeGroundLight; ;
+            dataGridTabInputsNotes.Foreground = (bool)CheckBoxDarkMode.IsChecked ? ForeGroundDark : ForeGroundLight; ;
+
+            dataGridTabInputsRegisters.CellStyle = NewStyle;
+            dataGridTabInputsValues.CellStyle = NewStyle;
+            dataGridTabInputsNotes.CellStyle = NewStyle;
+
+            // Input register
+            dataGridTabInputRegistersRegisters.Foreground = (bool)CheckBoxDarkMode.IsChecked ? ForeGroundDark : ForeGroundLight;
+            dataGridTabInputRegistersValues.Foreground = (bool)CheckBoxDarkMode.IsChecked ? ForeGroundDark : ForeGroundLight; ;
+            dataGridTabInputRegistersBinaryValues.Foreground = (bool)CheckBoxDarkMode.IsChecked ? ForeGroundDark : ForeGroundLight; ;
+            dataGridTabInputRegistersConvertedValues.Foreground = (bool)CheckBoxDarkMode.IsChecked ? ForeGroundDark : ForeGroundLight; ;
+            dataGridTabInputRegistersNotes.Foreground = (bool)CheckBoxDarkMode.IsChecked ? ForeGroundDark : ForeGroundLight; ;
+            dataGridTabInputRegistersMappings.Foreground = (bool)CheckBoxDarkMode.IsChecked ? ForeGroundDark : ForeGroundLight; ;
+
+            dataGridTabInputRegistersRegisters.CellStyle = NewStyle;
+            dataGridTabInputRegistersValues.CellStyle = NewStyle;
+            dataGridTabInputRegistersBinaryValues.CellStyle = NewStyle;
+            dataGridTabInputRegistersConvertedValues.CellStyle = NewStyle;
+            dataGridTabInputRegistersNotes.CellStyle = NewStyle;
+            dataGridTabInputRegistersMappings.CellStyle = NewStyle;
+
+            // Holding register
+            dataGridTabHoldingRegistersRegisters.Foreground = (bool)CheckBoxDarkMode.IsChecked ? ForeGroundDark : ForeGroundLight;
+            dataGridTabHoldingRegistersValues.Foreground = (bool)CheckBoxDarkMode.IsChecked ? ForeGroundDark : ForeGroundLight; ;
+            dataGridTabHoldingRegistersBinaryValues.Foreground = (bool)CheckBoxDarkMode.IsChecked ? ForeGroundDark : ForeGroundLight; ;
+            dataGridTabHoldingRegistersConvertedValues.Foreground = (bool)CheckBoxDarkMode.IsChecked ? ForeGroundDark : ForeGroundLight; ;
+            dataGridTabHoldingRegistersNotes.Foreground = (bool)CheckBoxDarkMode.IsChecked ? ForeGroundDark : ForeGroundLight; ;
+            dataGridTabHoldingRegistersMappings.Foreground = (bool)CheckBoxDarkMode.IsChecked ? ForeGroundDark : ForeGroundLight; ;
+
+            dataGridTabHoldingRegistersRegisters.CellStyle = NewStyle;
+            dataGridTabHoldingRegistersValues.CellStyle = NewStyle;
+            dataGridTabHoldingRegistersBinaryValues.CellStyle = NewStyle;
+            dataGridTabHoldingRegistersConvertedValues.CellStyle = NewStyle;
+            dataGridTabHoldingRegistersNotes.CellStyle = NewStyle;
+            dataGridTabHoldingRegistersMappings.CellStyle = NewStyle;
+
+            this.Background = darkMode ? ForeGroundDark : ForeGroundLight;
+
+            // Menu
+            menuStrip.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
+            menuStrip.Background = darkMode ? BackGroundDark : BackGroundLight;
+
+            // Controlli
+            textBoxCoilsOffset.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
+            textBoxCoilsOffset.Background = darkMode ? BackGroundDark2 : BackGroundLight;
+            textBoxCoilsAddress01.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
+            textBoxCoilsAddress01.Background = darkMode ? BackGroundDark2 : BackGroundLight;
+            textBoxCoilNumber.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
+            textBoxCoilNumber.Background = darkMode ? BackGroundDark2 : BackGroundLight;
+            textBoxCoilsRange_A.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
+            textBoxCoilsRange_A.Background = darkMode ? BackGroundDark2 : BackGroundLight;
+            textBoxCoilsRange_B.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
+            textBoxCoilsRange_B.Background = darkMode ? BackGroundDark2 : BackGroundLight;
+            textBoxCoilsAddress05.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
+            textBoxCoilsAddress05.Background = darkMode ? BackGroundDark2 : BackGroundLight;
+            textBoxCoilsValue05.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
+            textBoxCoilsValue05.Background = darkMode ? BackGroundDark2 : BackGroundLight;
+            textBoxCoilsAddress05_b.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
+            textBoxCoilsAddress05_b.Background = darkMode ? BackGroundDark2 : BackGroundLight;
+            textBoxCoilsValue05_b.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
+            textBoxCoilsValue05_b.Background = darkMode ? BackGroundDark2 : BackGroundLight;
+            textBoxCoilsAddress15_A.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
+            textBoxCoilsAddress15_A.Background = darkMode ? BackGroundDark2 : BackGroundLight;
+            textBoxCoilsAddress15_B.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
+            textBoxCoilsAddress15_B.Background = darkMode ? BackGroundDark2 : BackGroundLight;
+            textBoxCoilsValue15.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
+            textBoxCoilsValue15.Background = darkMode ? BackGroundDark2 : BackGroundLight;
+            textBoxGoToCoilAddress.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
+            textBoxGoToCoilAddress.Background = darkMode ? BackGroundDark2 : BackGroundLight;
+
+            textBoxInputOffset.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
+            textBoxInputOffset.Background = darkMode ? BackGroundDark2 : BackGroundLight;
+            textBoxInputAddress02.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
+            textBoxInputAddress02.Background = darkMode ? BackGroundDark2 : BackGroundLight;
+            textBoxInputNumber.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
+            textBoxInputNumber.Background = darkMode ? BackGroundDark2 : BackGroundLight;
+            textBoxInputRange_A.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
+            textBoxInputRange_A.Background = darkMode ? BackGroundDark2 : BackGroundLight;
+            textBoxInputRange_B.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
+            textBoxInputRange_B.Background = darkMode ? BackGroundDark2 : BackGroundLight;
+
+            textBoxInputRegOffset.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
+            textBoxInputRegOffset.Background = darkMode ? BackGroundDark2 : BackGroundLight;
+            textBoxInputRegisterAddress04.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
+            textBoxInputRegisterAddress04.Background = darkMode ? BackGroundDark2 : BackGroundLight;
+            textBoxInputRegisterNumber.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
+            textBoxInputRegisterNumber.Background = darkMode ? BackGroundDark2 : BackGroundLight;
+            textBoxInputRegisterRange_A.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
+            textBoxInputRegisterRange_A.Background = darkMode ? BackGroundDark2 : BackGroundLight;
+            textBoxInputRegisterRange_B.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
+            textBoxInputRegisterRange_B.Background = darkMode ? BackGroundDark2 : BackGroundLight;
+
+            textBoxHoldingOffset.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
+            textBoxHoldingOffset.Background = darkMode ? BackGroundDark2 : BackGroundLight;
+            textBoxHoldingAddress03.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
+            textBoxHoldingAddress03.Background = darkMode ? BackGroundDark2 : BackGroundLight;
+            textBoxHoldingRegisterNumber.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
+            textBoxHoldingRegisterNumber.Background = darkMode ? BackGroundDark2 : BackGroundLight;
+            textBoxHoldingRange_A.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
+            textBoxHoldingRange_A.Background = darkMode ? BackGroundDark2 : BackGroundLight;
+            textBoxHoldingRange_B.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
+            textBoxHoldingRange_B.Background = darkMode ? BackGroundDark2 : BackGroundLight;
+            textBoxHoldingAddress06.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
+            textBoxHoldingAddress06.Background = darkMode ? BackGroundDark2 : BackGroundLight;
+            textBoxHoldingValue06.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
+            textBoxHoldingValue06.Background = darkMode ? BackGroundDark2 : BackGroundLight;
+            textBoxHoldingAddress06_b.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
+            textBoxHoldingAddress06_b.Background = darkMode ? BackGroundDark2 : BackGroundLight;
+            textBoxHoldingValue06_b.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
+            textBoxHoldingValue06_b.Background = darkMode ? BackGroundDark2 : BackGroundLight;
+            textBoxHoldingAddress16_A.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
+            textBoxHoldingAddress16_A.Background = darkMode ? BackGroundDark2 : BackGroundLight;
+            textBoxHoldingAddress16_B.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
+            textBoxHoldingAddress16_B.Background = darkMode ? BackGroundDark2 : BackGroundLight;
+            textBoxHoldingValue16.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
+            textBoxHoldingValue16.Background = darkMode ? BackGroundDark2 : BackGroundLight;
+            textBoxGoToHoldingAddress.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
+            textBoxGoToHoldingAddress.Background = darkMode ? BackGroundDark2 : BackGroundLight;
         }
     }
 

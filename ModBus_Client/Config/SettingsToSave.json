@@ -54,7 +54,8 @@
       "checkBoxUseOffsetInTextBox": {},
       "checkBoxFollowModbusProtocol": {},
       "checkBoxCellColorMode": {},
-      "checkBoxViewTableWithoutOffset": {}
+      "checkBoxViewTableWithoutOffset": {},
+      "CheckBoxDarkMode": {}
     },
     "menuItems": {
       "viewTabCoilsRegisters": {},

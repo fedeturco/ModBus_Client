@@ -691,7 +691,8 @@ namespace ModBus_Client
         public string ValueConverted { get; set; }
         public string Notes { get; set; }
         public string Mappings { get; set; }
-        public string Color { get; set; }
+        public string Foreground { get; set; }
+        public string Background { get; set; }
     }
 
     public class MOD_SlaveProfile

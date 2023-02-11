@@ -231,14 +231,16 @@
                             <DataGridTextColumn x:Name="dataGridTabCoilsRegisters" Header="Register" Binding="{Binding Register}" Width="100" Visibility="Collapsed">
                                 <DataGridTextColumn.ElementStyle>
                                     <Style TargetType="TextBlock">
-                                        <Setter Property="Background" Value="{Binding Color}"/>
+                                        <Setter Property="Foreground" Value="{Binding Foreground}"/>
+                                        <Setter Property="Background" Value="{Binding Background}"/>
                                     </Style>
                                 </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>
                             <DataGridTextColumn x:Name="dataGridTabCoilsValues" Header="Value" Binding="{Binding Value}" Width="100" Visibility="Collapsed">
                                 <DataGridTextColumn.ElementStyle>
                                     <Style TargetType="TextBlock">
-                                        <Setter Property="Background" Value="{Binding Color}"/>
+                                        <Setter Property="Foreground" Value="{Binding Foreground}"/>
+                                        <Setter Property="Background" Value="{Binding Background}"/>
                                     </Style>
                                 </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>
@@ -394,14 +396,16 @@
                             <DataGridTextColumn x:Name="dataGridTabInputsRegisters" Header="Register" Binding="{Binding Register}" Width="100" Visibility="Collapsed">
                                 <DataGridTextColumn.ElementStyle>
                                     <Style TargetType="TextBlock">
-                                        <Setter Property="Background" Value="{Binding Color}"/>
+                                        <Setter Property="Foreground" Value="{Binding Foreground}"/>
+                                        <Setter Property="Background" Value="{Binding Background}"/>
                                     </Style>
                                 </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>
                             <DataGridTextColumn x:Name="dataGridTabInputsValues" Header="Value" Binding="{Binding Value}" Width="100" Visibility="Collapsed">
                                 <DataGridTextColumn.ElementStyle>
                                     <Style TargetType="TextBlock">
-                                        <Setter Property="Background" Value="{Binding Color}"/>
+                                        <Setter Property="Foreground" Value="{Binding Foreground}"/>
+                                        <Setter Property="Background" Value="{Binding Background}"/>
                                     </Style>
                                 </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>
@@ -521,21 +525,24 @@
                             <DataGridTextColumn x:Name="dataGridTabInputRegistersRegisters" Header="Register" Binding="{Binding Register}" Width="80" Visibility="Collapsed">
                                 <DataGridTextColumn.ElementStyle>
                                     <Style TargetType="TextBlock">
-                                        <Setter Property="Background" Value="{Binding Color}"/>
+                                        <Setter Property="Foreground" Value="{Binding Foreground}"/>
+                                        <Setter Property="Background" Value="{Binding Background}"/>
                                     </Style>
                                 </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>
                             <DataGridTextColumn x:Name="dataGridTabInputRegistersValues" Header="Value" Binding="{Binding Value}" Width="80" Visibility="Collapsed">
                                 <DataGridTextColumn.ElementStyle>
                                     <Style TargetType="TextBlock">
-                                        <Setter Property="Background" Value="{Binding Color}"/>
+                                        <Setter Property="Foreground" Value="{Binding Foreground}"/>
+                                        <Setter Property="Background" Value="{Binding Background}"/>
                                     </Style>
                                 </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>
                             <DataGridTextColumn x:Name="dataGridTabInputRegistersBinaryValues" Header="Binary value" Binding="{Binding ValueBin}" Width="170" Visibility="Collapsed">
                                 <DataGridTextColumn.ElementStyle>
                                     <Style TargetType="TextBlock">
-                                        <Setter Property="Background" Value="{Binding Color}"/>
+                                        <Setter Property="Foreground" Value="{Binding Foreground}"/>
+                                        <Setter Property="Background" Value="{Binding Background}"/>
                                     </Style>
                                 </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>
@@ -662,21 +669,24 @@
                             <DataGridTextColumn x:Name="dataGridTabHoldingRegistersRegisters" Header="Register" Binding="{Binding Register}" Width="80" Visibility="Collapsed">
                                 <DataGridTextColumn.ElementStyle>
                                     <Style TargetType="TextBlock">
-                                        <Setter Property="Background" Value="{Binding Color}"/>
+                                        <Setter Property="Foreground" Value="{Binding Foreground}"/>
+                                        <Setter Property="Background" Value="{Binding Background}"/>
                                     </Style>
                                 </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>
                             <DataGridTextColumn x:Name="dataGridTabHoldingRegistersValues" Header="Value" Binding="{Binding Value}" Width="80" Visibility="Collapsed">
                                 <DataGridTextColumn.ElementStyle>
                                     <Style TargetType="TextBlock">
-                                        <Setter Property="Background" Value="{Binding Color}"/>
+                                        <Setter Property="Foreground" Value="{Binding Foreground}"/>
+                                        <Setter Property="Background" Value="{Binding Background}"/>
                                     </Style>
                                 </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>
                             <DataGridTextColumn x:Name="dataGridTabHoldingRegistersBinaryValues" Header="Binary value" Binding="{Binding ValueBin}" Width="170" Visibility="Collapsed">
                                 <DataGridTextColumn.ElementStyle>
                                     <Style TargetType="TextBlock">
-                                        <Setter Property="Background" Value="{Binding Color}"/>
+                                        <Setter Property="Foreground" Value="{Binding Foreground}"/>
+                                        <Setter Property="Background" Value="{Binding Background}"/>
                                     </Style>
                                 </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>
@@ -969,6 +979,7 @@
                     <TextBox x:Name="textBoxReadTimeout" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="234.714,301.857,0,0" Grid.Row="1" TextWrapping="Wrap" Text="1000" VerticalAlignment="Top" Width="69" TextChanged="TextBoxReadTimeout_TextChanged"/>
                     <TextBox x:Name="textBoxCurrentLanguage" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="235,368,0,0" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Width="69" TextChanged="TextBoxCurrentLanguage_TextChanged" IsEnabled="False"/>
                     <Label x:Name="labelSettings_4" Content="Current Language:" HorizontalAlignment="Left" Margin="28,365,0,0" Grid.Row="1" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
+                    <CheckBox x:Name="CheckBoxDarkMode" Content="Dark Mode" HorizontalAlignment="Left" Margin="28,182,0,0" Grid.Row="1" VerticalAlignment="Top" Grid.ColumnSpan="2" Checked="CheckBoxDarkMode_Checked" Unchecked="CheckBoxDarkMode_Checked"/>
                 </Grid>
             </TabItem>
         </TabControl>
