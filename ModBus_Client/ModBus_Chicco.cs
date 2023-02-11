@@ -120,7 +120,7 @@ namespace ModBusMaster_Chicco
         10 Gateway Path Unavailable
         11 Gateway Target Device Failed to Respond
          */
-        public string[] ModbusErrorCodes = { "Illegal Function", "Illegal Data Address", "Illegal Data Value", "Slave Device Failure", "Acknowledge", "Slave Device Busy", "Negative Acknowledge", "Memory Parity Error", "", "Gateway Path Unavailable", "Gateway Target Device Failed to Respond" };
+        public string[] ModbusErrorCodes = { "", "Illegal Function", "Illegal Data Address", "Illegal Data Value", "Slave Device Failure", "Acknowledge", "Slave Device Busy", "Negative Acknowledge", "Memory Parity Error", "", "Gateway Path Unavailable", "Gateway Target Device Failed to Respond" };
 
         public ModBus_Chicco(SerialPort serialPort_, String ip_address_, String port_, String type_)
         {

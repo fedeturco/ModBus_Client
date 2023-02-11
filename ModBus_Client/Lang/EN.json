@@ -5,7 +5,7 @@
     "labelRunning": "Running:",
     "labelTx": "Tx",
     "labelRx": "Rx",
-    "labelSerialRtu": "Serial RTU",
+    "labelSerialRtu": "RTU",
     "labelTcp": "TCP",
     "labelPort": "Port:",
     "labelBaudRate": "Baud rate:",
@@ -100,7 +100,7 @@
   },
   "radioButtons": {
     "radioButtonModeSerial": {
-      "label": "Serial",
+      "label": "RTU",
       "toolTip": "Ctrl+M"
     },
     "radioButtonModeTcp": {
@@ -276,7 +276,7 @@
       "toolTip":"Ctrl+L"
     },
     "modificaToolStripMenuItem": "Edit",
-    "menuItemToolRegistri": "Tool registri",
+    "menuItemToolRegistri": "Tool registers",
     "menuItemExportCoils": "Export coils table",
     "menuItemExportInputs": "Export inputs table",
     "menuItemExportInputRegisters": "Export input registers table",

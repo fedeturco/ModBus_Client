@@ -5,7 +5,7 @@
     "labelRunning": "Running:",
     "labelTx": "Tx",
     "labelRx": "Rx",
-    "labelSerialRtu": "Seriale RTU",
+    "labelSerialRtu": "RTU",
     "labelTcp": "TCP",
     "labelPort": "Porta:",
     "labelBaudRate": "Baud rate:",
@@ -100,7 +100,7 @@
   },
   "radioButtons": {
     "radioButtonModeSerial": {
-      "label": "Seriale",
+      "label": "RTU",
       "toolTip": "Ctrl+M"
     },
     "radioButtonModeTcp": {
