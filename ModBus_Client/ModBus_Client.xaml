@@ -15,77 +15,76 @@
         <DockPanel>
             <Menu x:Name="menuStrip" DockPanel.Dock="Top" Grid.Row="0" FontSize="14">
                 <MenuItem x:Name="fileToolStripMenuItem" Header="File">
-                    <MenuItem x:Name="salvaToolStripMenuItem" Header="Save configuration" Click="salvaToolStripMenuItem_Click" />
-                    <MenuItem x:Name="caricaToolStripMenuItem" Header="Reload configuration" Click="caricaToolStripMenuItem_Click" />
-                    <MenuItem x:Name="apriConsoleToolStripMenuItem" Header="Open console" Click="apriConsoleToolStripMenuItem_Click" />
-                    <MenuItem x:Name="chiudiConsoleToolStripMenuItem" Header="Close console" Click="chiudiConsoleToolStripMenuItem_Click" />
+                    <MenuItem x:Name="salvaToolStripMenuItem" Header="Save configuration" Click="salvaToolStripMenuItem_Click" Foreground="#2d2d30"/>
+                    <MenuItem x:Name="caricaToolStripMenuItem" Header="Reload configuration" Click="caricaToolStripMenuItem_Click" Foreground="#2d2d30"/>
+                    <MenuItem x:Name="apriConsoleToolStripMenuItem" Header="Open console" Click="apriConsoleToolStripMenuItem_Click" Foreground="#2d2d30"/>
+                    <MenuItem x:Name="chiudiConsoleToolStripMenuItem" Header="Close console" Click="chiudiConsoleToolStripMenuItem_Click" Foreground="#2d2d30"/>
                     <Separator />
-                    <MenuItem x:Name="esciToolStripMenuItem" Header="Exit" Click="esciToolStripMenuItem_Click" />
+                    <MenuItem x:Name="esciToolStripMenuItem" Header="Exit" Click="esciToolStripMenuItem_Click" Foreground="#2d2d30"/>
                 </MenuItem>
 
                 <MenuItem x:Name="viewToolStripMenuItem" Header="View">
-                    <MenuItem x:Name="languageToolStripMenu" Header="Language"/>
-                    <MenuItem x:Name="logToolStripMenu" Header="Log pacchetti" Click="logToolStripMenu_Click"/>
-                    <MenuItem x:Name="viewTabCoils" Header="Coils">
-                        <MenuItem x:Name="viewTabCoilsRegisters" Header="Register" IsCheckable="True" Checked="changeColumnVisibility" Unchecked="changeColumnVisibility"></MenuItem>
-                        <MenuItem x:Name="viewTabCoilsValues" Header="Values" IsCheckable="True" Checked="changeColumnVisibility" Unchecked="changeColumnVisibility"></MenuItem>
-                        <MenuItem x:Name="viewTabCoilsNotes" Header="Notes" IsCheckable="True" Checked="changeColumnVisibility" Unchecked="changeColumnVisibility"></MenuItem>
+                    <MenuItem x:Name="languageToolStripMenu" Header="Language" Foreground="#2d2d30"/>
+                    <MenuItem x:Name="logToolStripMenu" Header="Log pacchetti" Click="logToolStripMenu_Click" Foreground="#2d2d30"/>
+                    <MenuItem x:Name="viewTabCoils" Header="Coils" Foreground="#2d2d30">
+                        <MenuItem x:Name="viewTabCoilsRegisters" Header="Register" IsCheckable="True" Checked="changeColumnVisibility" Unchecked="changeColumnVisibility" Foreground="#2d2d30"></MenuItem>
+                        <MenuItem x:Name="viewTabCoilsValues" Header="Values" IsCheckable="True" Checked="changeColumnVisibility" Unchecked="changeColumnVisibility" Foreground="#2d2d30"></MenuItem>
+                        <MenuItem x:Name="viewTabCoilsNotes" Header="Notes" IsCheckable="True" Checked="changeColumnVisibility" Unchecked="changeColumnVisibility" Foreground="#2d2d30"></MenuItem>
                     </MenuItem>
-                    <MenuItem x:Name="viewTabInputs" Header="Inputs">
-                        <MenuItem x:Name="viewTabInputsRegisters" Header="Register" IsCheckable="True" Checked="changeColumnVisibility" Unchecked="changeColumnVisibility"></MenuItem>
-                        <MenuItem x:Name="viewTabInputsValues" Header="Values" IsCheckable="True" Checked="changeColumnVisibility" Unchecked="changeColumnVisibility"></MenuItem>
-                        <MenuItem x:Name="viewTabInputsNotes" Header="Notes" IsCheckable="True" Checked="changeColumnVisibility" Unchecked="changeColumnVisibility"></MenuItem>
+                    <MenuItem x:Name="viewTabInputs" Header="Inputs" Foreground="#2d2d30">
+                        <MenuItem x:Name="viewTabInputsRegisters" Header="Register" IsCheckable="True" Checked="changeColumnVisibility" Unchecked="changeColumnVisibility" Foreground="#2d2d30"></MenuItem>
+                        <MenuItem x:Name="viewTabInputsValues" Header="Values" IsCheckable="True" Checked="changeColumnVisibility" Unchecked="changeColumnVisibility" Foreground="#2d2d30"></MenuItem>
+                        <MenuItem x:Name="viewTabInputsNotes" Header="Notes" IsCheckable="True" Checked="changeColumnVisibility" Unchecked="changeColumnVisibility" Foreground="#2d2d30"></MenuItem>
                     </MenuItem>
-                    <MenuItem x:Name="viewTabInputRgisters" Header="Input Registers">
-                        <MenuItem x:Name="viewTabInputRegistersRegisters" Header="Register" IsCheckable="True" Checked="changeColumnVisibility" Unchecked="changeColumnVisibility"></MenuItem>
-                        <MenuItem x:Name="viewTabInputRegistersValues" Header="Values" IsCheckable="True" Checked="changeColumnVisibility" Unchecked="changeColumnVisibility"></MenuItem>
-                        <MenuItem x:Name="viewTabInputRegistersBinaryValues" Header="Binary Values" IsCheckable="True" Checked="changeColumnVisibility" Unchecked="changeColumnVisibility"></MenuItem>
-                        <MenuItem x:Name="viewTabInputRegistersConvertedValues" Header="Converted Values" IsCheckable="True" Checked="changeColumnVisibility" Unchecked="changeColumnVisibility"></MenuItem>
-                        <MenuItem x:Name="viewTabInputRegistersNotes" Header="Notes" IsCheckable="True" Checked="changeColumnVisibility" Unchecked="changeColumnVisibility"></MenuItem>
-                        <MenuItem x:Name="viewTabInputRegistersMappings" Header="Mappings" IsCheckable="True" Checked="changeColumnVisibility" Unchecked="changeColumnVisibility"></MenuItem>
+                    <MenuItem x:Name="viewTabInputRgisters" Header="Input Registers" Foreground="#2d2d30">
+                        <MenuItem x:Name="viewTabInputRegistersRegisters" Header="Register" IsCheckable="True" Checked="changeColumnVisibility" Unchecked="changeColumnVisibility" Foreground="#2d2d30"></MenuItem>
+                        <MenuItem x:Name="viewTabInputRegistersValues" Header="Values" IsCheckable="True" Checked="changeColumnVisibility" Unchecked="changeColumnVisibility" Foreground="#2d2d30"></MenuItem>
+                        <MenuItem x:Name="viewTabInputRegistersBinaryValues" Header="Binary Values" IsCheckable="True" Checked="changeColumnVisibility" Unchecked="changeColumnVisibility" Foreground="#2d2d30"></MenuItem>
+                        <MenuItem x:Name="viewTabInputRegistersConvertedValues" Header="Converted Values" IsCheckable="True" Checked="changeColumnVisibility" Unchecked="changeColumnVisibility" Foreground="#2d2d30"></MenuItem>
+                        <MenuItem x:Name="viewTabInputRegistersNotes" Header="Notes" IsCheckable="True" Checked="changeColumnVisibility" Unchecked="changeColumnVisibility" Foreground="#2d2d30"></MenuItem>
+                        <MenuItem x:Name="viewTabInputRegistersMappings" Header="Mappings" IsCheckable="True" Checked="changeColumnVisibility" Unchecked="changeColumnVisibility" Foreground="#2d2d30"></MenuItem>
                     </MenuItem>
-                    <MenuItem x:Name="viewTabHoldingRgisters" Header="Holding Registers">
-                        <MenuItem x:Name="viewTabHoldingRegistersRegisters" Header="Register" IsCheckable="True" Checked="changeColumnVisibility" Unchecked="changeColumnVisibility"></MenuItem>
-                        <MenuItem x:Name="viewTabHoldingRegistersValues" Header="Values" IsCheckable="True" Checked="changeColumnVisibility" Unchecked="changeColumnVisibility"></MenuItem>
-                        <MenuItem x:Name="viewTabHoldingRegistersBinaryValues" Header="Binary Values" IsCheckable="True" Checked="changeColumnVisibility" Unchecked="changeColumnVisibility"></MenuItem>
-                        <MenuItem x:Name="viewTabHoldingRegistersConvertedValues" Header="Converted Values" IsCheckable="True" Checked="changeColumnVisibility" Unchecked="changeColumnVisibility"></MenuItem>
-                        <MenuItem x:Name="viewTabHoldingRegistersNotes" Header="Notes" IsCheckable="True" Checked="changeColumnVisibility" Unchecked="changeColumnVisibility"></MenuItem>
-                        <MenuItem x:Name="viewTabHoldingRegistersMappings" Header="Mappings" IsCheckable="True" Checked="changeColumnVisibility" Unchecked="changeColumnVisibility"></MenuItem>
+                    <MenuItem x:Name="viewTabHoldingRgisters" Header="Holding Registers" Foreground="#2d2d30">
+                        <MenuItem x:Name="viewTabHoldingRegistersRegisters" Header="Register" IsCheckable="True" Checked="changeColumnVisibility" Unchecked="changeColumnVisibility" Foreground="#2d2d30"></MenuItem>
+                        <MenuItem x:Name="viewTabHoldingRegistersValues" Header="Values" IsCheckable="True" Checked="changeColumnVisibility" Unchecked="changeColumnVisibility" Foreground="#2d2d30"></MenuItem>
+                        <MenuItem x:Name="viewTabHoldingRegistersBinaryValues" Header="Binary Values" IsCheckable="True" Checked="changeColumnVisibility" Unchecked="changeColumnVisibility" Foreground="#2d2d30"></MenuItem>
+                        <MenuItem x:Name="viewTabHoldingRegistersConvertedValues" Header="Converted Values" IsCheckable="True" Checked="changeColumnVisibility" Unchecked="changeColumnVisibility" Foreground="#2d2d30"></MenuItem>
+                        <MenuItem x:Name="viewTabHoldingRegistersNotes" Header="Notes" IsCheckable="True" Checked="changeColumnVisibility" Unchecked="changeColumnVisibility" Foreground="#2d2d30"></MenuItem>
+                        <MenuItem x:Name="viewTabHoldingRegistersMappings" Header="Mappings" IsCheckable="True" Checked="changeColumnVisibility" Unchecked="changeColumnVisibility" Foreground="#2d2d30"></MenuItem>
                     </MenuItem>
-
                 </MenuItem>
 
                 <MenuItem x:Name="modificaToolStripMenuItem" Header="Edit">
-                    <MenuItem x:Name="impostazioniToolStripMenuItem" Header="Settings" Click="impostazioniToolStripMenuItem_Click" />
+                    <MenuItem x:Name="impostazioniToolStripMenuItem" Header="Settings" Click="impostazioniToolStripMenuItem_Click" Foreground="#2d2d30"/>
                 </MenuItem>
                 <MenuItem x:Name="databaseToolStripMenuItem" Header="Database">
-                    <MenuItem x:Name="salvaConfigurazioneNelDatabaseToolStripMenuItem" Header="Save configuration to database" Click="salvaConfigurazioneAttualeNelDatabaseToolStripMenuItem_Click" />
-                    <MenuItem x:Name="caricaConfigurazioneDalDatabaseToolStripMenuItem" Header="Load configuration from database" Click="caricaConfigurazioneDaDatabaseToolStripMenuItem_Click" />
+                    <MenuItem x:Name="salvaConfigurazioneNelDatabaseToolStripMenuItem" Header="Save configuration to database" Click="salvaConfigurazioneAttualeNelDatabaseToolStripMenuItem_Click" Foreground="#2d2d30"/>
+                    <MenuItem x:Name="caricaConfigurazioneDalDatabaseToolStripMenuItem" Header="Load configuration from database" Click="caricaConfigurazioneDaDatabaseToolStripMenuItem_Click" Foreground="#2d2d30"/>
                     <Separator />
-                    <MenuItem x:Name="gestisciDatabaseToolStripMenuItem" Header="Manage database" Click="gestisciDatabaseToolStripMenuItem_Click" />
+                    <MenuItem x:Name="gestisciDatabaseToolStripMenuItem" Header="Manage database" Click="gestisciDatabaseToolStripMenuItem_Click" Foreground="#2d2d30"/>
                     <Separator />
-                    <MenuItem x:Name="apriTemplateEditor" Header="Open template editor" Click="apriTemplateEditor_Click"/>
+                    <MenuItem x:Name="apriTemplateEditor" Header="Open template editor" Click="apriTemplateEditor_Click" Foreground="#2d2d30"/>
                 </MenuItem>
                 <MenuItem x:Name="menuItemToolRegistri" Header="Registers">
-                    <MenuItem x:Name="menuItemToolBit" Header="Tool command bit" Click="menuItemToolBit_Click" />
-                    <MenuItem x:Name="menuItemToolByte" Header="Tool command byte" Click="menuItemToolByte_Click"/>
-                    <MenuItem x:Name="menuItemToolWord" Header="Tool command word" Click="menuItemToolWord_Click"/>
+                    <MenuItem x:Name="menuItemToolBit" Header="Tool command bit" Click="menuItemToolBit_Click" Foreground="#2d2d30"/>
+                    <MenuItem x:Name="menuItemToolByte" Header="Tool command byte" Click="menuItemToolByte_Click" Foreground="#2d2d30"/>
+                    <MenuItem x:Name="menuItemToolWord" Header="Tool command word" Click="menuItemToolWord_Click" Foreground="#2d2d30"/>
                 </MenuItem>
                 <MenuItem x:Name="menuItemExportRegistri" Header="Export">
-                    <MenuItem x:Name="menuItemExportCoils" Header="Export coils table" Click="buttonExportCoils_Click"/>
-                    <MenuItem x:Name="menuItemExportInputs" Header="Export inputs table" Click="buttonExportInput_Click"/>
-                    <MenuItem x:Name="menuItemExportInputRegisters" Header="Export input registers table" Click="buttonExportInputReg_Click"/>
-                    <MenuItem x:Name="menuItemExportHoldingRegisters" Header="Export holding registers table" Click="buttonExportHoldingReg_Click"/>
+                    <MenuItem x:Name="menuItemExportCoils" Header="Export coils table" Click="buttonExportCoils_Click" Foreground="#2d2d30"/>
+                    <MenuItem x:Name="menuItemExportInputs" Header="Export inputs table" Click="buttonExportInput_Click" Foreground="#2d2d30"/>
+                    <MenuItem x:Name="menuItemExportInputRegisters" Header="Export input registers table" Click="buttonExportInputReg_Click" Foreground="#2d2d30"/>
+                    <MenuItem x:Name="menuItemExportHoldingRegisters" Header="Export holding registers table" Click="buttonExportHoldingReg_Click" Foreground="#2d2d30"/>
                 </MenuItem>
                 <MenuItem x:Name="infoToolStripMenuItem" Header="Info">
-                    <MenuItem x:Name="licenseToolStripMenuItem" Header="License" Click="licenseToolStripMenuItem_Click" />
-                    <MenuItem x:Name="guidaToolStripMenuItem" Header="Guide" Click="guidaToolStripMenuItem_Click" />
-                    <MenuItem x:Name="infoToolStripMenuItem1" Header="Info" Click="infoToolStripMenuItem1_Click" />
+                    <MenuItem x:Name="licenseToolStripMenuItem" Header="License" Click="licenseToolStripMenuItem_Click" Foreground="#2d2d30"/>
+                    <MenuItem x:Name="guidaToolStripMenuItem" Header="Guide" Click="guidaToolStripMenuItem_Click" Foreground="#2d2d30"/>
+                    <MenuItem x:Name="infoToolStripMenuItem1" Header="Info" Click="infoToolStripMenuItem1_Click" Foreground="#2d2d30"/>
                 </MenuItem>
             </Menu>
         </DockPanel>
-        <ToolBarTray Background="White" Grid.Row="1" Margin="0,0,0,0">
-            <ToolBar Band="1" BandIndex="1" FontSize="14" Margin="0,0,0,0" Height="35" HorizontalAlignment="Left" Width="Auto">
+        <ToolBarTray x:Name="ToolBarTrayMain" Background="White" Grid.Row="1" Margin="0,0,0,0">
+            <ToolBar x:Name="ToolBarMain" Band="1" BandIndex="1" FontSize="14" Margin="0,0,0,0" Height="35" HorizontalAlignment="Left" Width="Auto">
                 <StackPanel Orientation="Horizontal">
                     <Label x:Name="labelConnection" Content="Connection:" FontSize="12"></Label>
                     <RadioButton x:Name="radioButtonModeSerial" Content="RTU" Margin="0,7,0,0" Checked="radioButtonModeSerial_CheckedChanged" Unchecked="radioButtonModeSerial_CheckedChanged" FontSize="12"/>
@@ -106,7 +105,7 @@
         <StackPanel HorizontalAlignment="Left" Height="100" Margin="267,46.429,0,-145.857" Grid.Row="2" VerticalAlignment="Top" Width="100"/>
         <TabControl x:Name="tabControlMain" Margin="10,9.857,10.286,10.429" Grid.Row="2" FontSize="14">
             <TabItem x:Name="tabItem0" Header="Connection" FontSize="12">
-                <Grid Background="#FFE5E5E5" Margin="1,1,1,1">
+                <Grid x:Name="GridConnection" Background="#FFE5E5E5" Margin="1,1,1,1">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition></ColumnDefinition>
                         <ColumnDefinition></ColumnDefinition>
@@ -222,11 +221,11 @@
                 </Grid>
             </TabItem>
             <TabItem x:Name="tabItem1" Header="Coils (1bit)" FontSize="12">
-                <Grid Background="#FFE5E5E5">
+                <Grid x:Name="GridCoils" Background="#FFE5E5E5">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
-                    <DataGrid x:Name="dataGridViewCoils" Margin="10,50,491,10" AutoGenerateColumns="False" HorizontalGridLinesBrush="LightGray" VerticalGridLinesBrush="LightGray" BorderThickness="1" FontSize="14" CellEditEnding="dataGridViewCoils_KeyUp"  RowBackground="#FFF1F1F1">
+                    <DataGrid x:Name="dataGridViewCoils" Margin="10,50,415,10" AutoGenerateColumns="False" HorizontalGridLinesBrush="LightGray" VerticalGridLinesBrush="LightGray" BorderThickness="1" FontSize="14" CellEditEnding="dataGridViewCoils_KeyUp"  RowBackground="#FFF1F1F1">
                         <DataGrid.Columns>
                             <DataGridTextColumn x:Name="dataGridTabCoilsRegisters" Header="Register" Binding="{Binding Register}" Width="100" Visibility="Collapsed">
                                 <DataGridTextColumn.ElementStyle>
@@ -244,7 +243,7 @@
                                     </Style>
                                 </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>
-                            <DataGridTextColumn x:Name="dataGridTabCoilsNotes" Header="Notes" Binding="{Binding Notes}" Width="400" Visibility="Collapsed"/>
+                            <DataGridTextColumn x:Name="dataGridTabCoilsNotes" Header="Notes" Binding="{Binding Notes}" Width="600" Visibility="Collapsed"/>
                         </DataGrid.Columns>
                     </DataGrid>
                     <ComboBox x:Name="comboBoxCoilsRegistri" HorizontalAlignment="Left" Margin="74,10,0,0" VerticalAlignment="Top" Width="55" FontSize="12" Height="25" SelectionChanged="comboBoxCoilsRegistri_SelectionChanged">
@@ -260,38 +259,34 @@
                     <TextBox x:Name="textBoxCoilsOffset" HorizontalAlignment="Left" Height="25" Margin="255,10,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="65" FontSize="12" VerticalContentAlignment="Center" TextChanged="textBoxCoilsOffset_TextChanged"/>
                     <Label x:Name="labelOffsetHiddenCoils" Content="Offset hidden in table" HorizontalAlignment="Left" Margin="335,10,0,0" VerticalAlignment="Top" FontSize="12" Height="26" Width="219"/>
 
-                    <Label x:Name="labelCoils_2" Content="Read Coil Status (FC01):" Height="26" Margin="0,50,286.429,0" VerticalAlignment="Top" FontSize="12" HorizontalAlignment="Right" Width="200"/>
-                    <StackPanel Margin="0,76,10,0" Background="AliceBlue" Height="40" Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Right" Width="476">
+                    <Label x:Name="labelCoils_2" Content="Read Coil Status (FC01):" Height="26" Margin="0,50,210,0" VerticalAlignment="Top" FontSize="12" HorizontalAlignment="Right" Width="200"/>
+                    <StackPanel x:Name="StackPanelCoils0" Margin="0,76,10,0" Background="AliceBlue" Height="40" Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Right" Width="400">
                         <Label x:Name="labelCoils_3" Content="Address:" Height="25" FontSize="12"/>
                         <ComboBox x:Name="comboBoxCoilsAddress01" Width="55" Height="25" FontSize="12" SelectionChanged="comboBoxCoilsAddress01_SelectionChanged">
                             <ComboBoxItem Content="DEC"/>
                             <ComboBoxItem Content="HEX"/>
                         </ComboBox>
                         <TextBox x:Name="textBoxCoilsAddress01" TextWrapping="Wrap" Width="50"  Height="25" Margin="10,0,0,0" FontSize="12" VerticalContentAlignment="Center" TextChanged="textBoxCoilsAddress01_TextChanged"/>
-                        <Label x:Name="labelCoils_4" Content="Nr. of coils:" Height="25" FontSize="12"/>
-                        <TextBox x:Name="textBoxCoilNumber" TextWrapping="Wrap" Width="50"  Height="25" Margin="10,0,0,0" FontSize="12" VerticalContentAlignment="Center" TextChanged="textBoxCoilNumber_TextChanged"/>
+                        <Label x:Name="labelCoils_4" Content="Num.:" Height="25" FontSize="12"/>
+                        <TextBox x:Name="textBoxCoilNumber" TextWrapping="Wrap" Width="50"  Height="25" Margin="0,0,0,0" FontSize="12" VerticalContentAlignment="Center" TextChanged="textBoxCoilNumber_TextChanged"/>
                         <Button x:Name="buttonReadCoils01" Content="Read" Width="55" Height="25" Margin="10,0,0,0" Click="buttonReadCoils01_Click" FontSize="12"/>
                         <Button x:Name="buttonLoopCoils01" Content="Loop" Width="55" Height="25" Margin="10,0,0,0" FontSize="12" Click="buttonLoopCoils01_Click"/>
                     </StackPanel>
-                    <Label x:Name="labelCoils_5" Content="Read Coil Range:" Height="26" Margin="0,121,286.429,0" VerticalAlignment="Top" FontSize="12" HorizontalAlignment="Right" Width="200"/>
-                    <StackPanel Margin="0,147,10,0" Background="AliceBlue" Height="40" Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Right" Width="476">
-                        <Label x:Name="labelCoils_6" Content="Add. start:" Height="30" FontSize="12"/>
+                    <Label x:Name="labelCoils_5" Content="Read Coil Range:" Height="26" Margin="0,121,210,0" VerticalAlignment="Top" FontSize="12" HorizontalAlignment="Right" Width="200"/>
+                    <StackPanel x:Name="StackPanelCoils1" Margin="0,148,10,0" Background="AliceBlue" Height="40" Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Right" Width="400">
+                        <Label x:Name="labelCoils_6" Content="Start:" Height="30" FontSize="12"/>
                         <ComboBox x:Name="comboBoxCoilsRange_A" Width="55" Height="25" FontSize="12" SelectionChanged="comboBoxCoilsRange_A_SelectionChanged">
                             <ComboBoxItem Content="DEC"/>
                             <ComboBoxItem Content="HEX"/>
                         </ComboBox>
                         <TextBox x:Name="textBoxCoilsRange_A" TextWrapping="Wrap" Width="50"  Height="25" Margin="10,0,0,0" FontSize="12" VerticalContentAlignment="Center" TextChanged="textBoxCoilsRange_A_TextChanged"/>
                         <Label x:Name="labelCoils_7" Content="stop:" Height="30" FontSize="12"/>
-                        <ComboBox x:Name="comboBoxCoilsRange_B" Width="55" Height="25" FontSize="12" SelectionChanged="comboBoxCoilsRange_B_SelectionChanged">
-                            <ComboBoxItem Content="DEC"/>
-                            <ComboBoxItem Content="HEX"/>
-                        </ComboBox>
-                        <TextBox x:Name="textBoxCoilsRange_B" TextWrapping="Wrap" Width="50"  Height="25" Margin="10,0,0,0" FontSize="12" VerticalContentAlignment="Center" TextChanged="textBoxCoilsRange_B_TextChanged"/>
+                        <TextBox x:Name="textBoxCoilsRange_B" TextWrapping="Wrap" Width="50"  Height="25" Margin="0,0,0,0" FontSize="12" VerticalContentAlignment="Center" TextChanged="textBoxCoilsRange_B_TextChanged"/>
                         <Button x:Name="buttonReadCoilsRange" Content="Read" Width="55" Height="25" Margin="10,0,0,0" Click="buttonReadCoilsRange_Click" FontSize="12" RenderTransformOrigin="0.5,0.5"/>
                         <Button x:Name="buttonLoopCoilsRange" Content="Loop" Width="55" Height="25" Margin="10,0,0,0" FontSize="12" RenderTransformOrigin="0.501,0.5" Click="buttonLoopCoilsRange_Click"/>
                     </StackPanel>
-                    <Label x:Name="labelCoils_8" Content="Force Single Coil (FC05):" Height="26" Margin="0,187,286.429,0" VerticalAlignment="Top" FontSize="12" HorizontalAlignment="Right" Width="200"/>
-                    <StackPanel Margin="0,213,10,0" Background="AliceBlue" Height="40" Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Right" Width="476">
+                    <Label x:Name="labelCoils_8" Content="Force Single Coil (FC05):" Height="26" Margin="0,193,210,0" VerticalAlignment="Top" FontSize="12" HorizontalAlignment="Right" Width="200" RenderTransformOrigin="0.105,0.692"/>
+                    <StackPanel x:Name="StackPanelCoils2" Margin="0,219,10,0" Background="AliceBlue" Height="40" Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Right" Width="400">
                         <Label x:Name="labelCoils_9" Content="Address:" Height="25" FontSize="12"/>
                         <ComboBox x:Name="comboBoxCoilsAddress05" Width="55" Height="25" FontSize="12" SelectionChanged="comboBoxCoilsAddress05_SelectionChanged">
                             <ComboBoxItem Content="DEC"/>
@@ -299,30 +294,30 @@
                         </ComboBox>
                         <TextBox x:Name="textBoxCoilsAddress05" TextWrapping="Wrap" Width="50"  Height="25" Margin="10,0,0,0" FontSize="12" VerticalContentAlignment="Center" TextChanged="textBoxCoilsAddress05_TextChanged"/>
                         <Label x:Name="labelCoils_10" Content="Value:" Height="25" FontSize="12"/>
-                        <TextBox x:Name="textBoxCoilsValue05" TextWrapping="Wrap" Width="50"  Height="25" Margin="10,0,0,0" FontSize="12" VerticalContentAlignment="Center" TextChanged="textBoxCoilsValue05_TextChanged"/>
+                        <TextBox x:Name="textBoxCoilsValue05" TextWrapping="Wrap" Width="50"  Height="25" Margin="0,0,0,0" FontSize="12" VerticalContentAlignment="Center" TextChanged="textBoxCoilsValue05_TextChanged"/>
                         <Button x:Name="buttonWriteCoils05" Content="Write" Width="55" Height="25" Margin="10,0,0,0" Click="buttonWriteCoils05_Click" FontSize="12"/>
                     </StackPanel>
-                    <Label x:Name="labelCoils_13" Content="Force Multiple Coils (FC15):" Height="26" Margin="0,293,286.429,0" VerticalAlignment="Top" FontSize="12" HorizontalAlignment="Right" Width="200"/>
-                    <StackPanel Margin="0,319,10,0" Background="AliceBlue" Height="40" Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Right" Width="476">
-                        <Label x:Name="labelCoils_14" Content="Address start:" Height="30" FontSize="12"/>
+                    <Label x:Name="labelCoils_13" Content="Force Multiple Coils (FC15):" Height="26" Margin="0,304,210,0" VerticalAlignment="Top" FontSize="12" HorizontalAlignment="Right" Width="200"/>
+                    <StackPanel x:Name="StackPanelCoils4" Margin="0,330,10,0" Background="AliceBlue" Height="40" Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Right" Width="400">
+                        <Label x:Name="labelCoils_14" Content="Start" Height="30" FontSize="12"/>
                         <ComboBox x:Name="comboBoxCoilsAddress15_A" Width="55" Height="25" FontSize="12" SelectionChanged="comboBoxCoilsAddress15_A_SelectionChanged">
                             <ComboBoxItem Content="DEC"/>
                             <ComboBoxItem Content="HEX"/>
                         </ComboBox>
                         <TextBox x:Name="textBoxCoilsAddress15_A" TextWrapping="Wrap" Width="50"  Height="25" Margin="10,0,0,0" FontSize="12" VerticalContentAlignment="Center" TextChanged="textBoxCoilsAddress15_A_TextChanged"/>
-                        <Label x:Name="labelCoils_15" Content="Address stop:" Height="30" FontSize="12" Margin="7,0,0,0"/>
+                        <Label x:Name="labelCoils_15" Content="Stop:" Height="30" FontSize="12" Margin="7,0,0,0"/>
                         <ComboBox x:Name="comboBoxCoilsAddress15_B" Width="55" Height="25" FontSize="12" SelectionChanged="comboBoxCoilsAddress15_B_SelectionChanged">
                             <ComboBoxItem Content="DEC"/>
                             <ComboBoxItem Content="HEX"/>
                         </ComboBox>
                         <TextBox x:Name="textBoxCoilsAddress15_B" TextWrapping="Wrap" Width="50"  Height="25" Margin="10,0,0,0" FontSize="12" VerticalContentAlignment="Center" TextChanged="textBoxCoilsAddress15_B_TextChanged"/>
                     </StackPanel>
-                    <StackPanel Margin="0,359,10,0" Background="AliceBlue" Height="40" Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Right" Width="476">
-                        <Label x:Name="labelCoils_16" Content="Value:" Height="30" FontSize="12" Margin="10,0,0,0"/>
-                        <TextBox x:Name="textBoxCoilsValue15" TextWrapping="Wrap" Width="280"  Height="25" Margin="35,0,0,0" FontSize="12" VerticalContentAlignment="Center" TextChanged="textBoxCoilsValue15_TextChanged"/>
+                    <StackPanel x:Name="StackPanelCoils5" Margin="0,370,10,0" Background="AliceBlue" Height="40" Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Right" Width="400">
+                        <Label x:Name="labelCoils_16" Content="Value:" Height="30" FontSize="12" Margin="0,0,0,0"/>
+                        <TextBox x:Name="textBoxCoilsValue15" TextWrapping="Wrap" Width="284"  Height="25" Margin="0,8,0,7" FontSize="12" VerticalContentAlignment="Center" TextChanged="textBoxCoilsValue15_TextChanged"/>
                         <Button x:Name="buttonWriteCoils15" Content="Write" Width="55" Height="25" Margin="10,0,0,0" Click="buttonWriteCoils15_Click" FontSize="12"/>
                     </StackPanel>
-                    <StackPanel Margin="0,253,10,0" Background="AliceBlue" Height="40" Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Right" Width="476">
+                    <StackPanel x:Name="StackPanelCoils3" Margin="0,259,10,0" Background="AliceBlue" Height="40" Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Right" Width="400">
                         <Label x:Name="labelCoils_11" Content="Address:" Height="25" FontSize="12"/>
                         <ComboBox x:Name="comboBoxCoilsAddress05_b" Width="55" Height="25" FontSize="12" SelectionChanged="comboBoxCoilsAddress05_b_SelectionChanged">
                             <ComboBoxItem Content="DEC"/>
@@ -330,15 +325,15 @@
                         </ComboBox>
                         <TextBox x:Name="textBoxCoilsAddress05_b" TextWrapping="Wrap" Width="50"  Height="25" Margin="10,0,0,0" FontSize="12" VerticalContentAlignment="Center" TextChanged="textBoxCoilsAddress05_b_TextChanged"/>
                         <Label x:Name="labelCoils_12" Content="Value:" Height="25" FontSize="12"/>
-                        <TextBox x:Name="textBoxCoilsValue05_b" TextWrapping="Wrap" Width="50"  Height="25" Margin="10,0,0,0" FontSize="12" VerticalContentAlignment="Center" TextChanged="textBoxCoilsValue05_b_TextChanged"/>
+                        <TextBox x:Name="textBoxCoilsValue05_b" TextWrapping="Wrap" Width="50"  Height="25" Margin="0,0,0,0" FontSize="12" VerticalContentAlignment="Center" TextChanged="textBoxCoilsValue05_b_TextChanged"/>
                         <Button x:Name="buttonWriteCoils05_B" Content="Write" Width="55" Height="25" Margin="10,0,0,0" Click="buttonWriteCoils05_B_Click" FontSize="12"/>
                     </StackPanel>
-                    <StackPanel x:Name="stackGoToCoils" Margin="0,432,10,0" Background="AliceBlue" Height="40" Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Right" Width="272">
+                    <StackPanel x:Name="stackGoToCoils" Margin="0,432,10,0" Background="AliceBlue" Height="40" Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Right" Width="272" Visibility="Hidden">
                         <Label x:Name="labelGoToCoils" Content="Go to Coil address:" Height="30" FontSize="12"/>
                         <TextBox x:Name="textBoxGoToCoilAddress" TextWrapping="Wrap" Width="50"  Height="25" Margin="10,0,0,0" FontSize="12" VerticalContentAlignment="Center"/>
                         <Button x:Name="buttonGoToCoilAddress" Content="Vai" Width="55" Height="25" Margin="10,0,0,0" Click="buttonGoToCoilAddress_Click" FontSize="12"/>
                     </StackPanel>
-                    <Button x:Name="buttonClearCoils" Height="25" Margin="0,0,414,9.571" FontSize="12" HorizontalAlignment="Right" Width="72" VerticalAlignment="Bottom" Click="buttonClearCoils_Click">
+                    <Button x:Name="buttonClearCoils" Height="25" Margin="0,0,338,10" FontSize="12" HorizontalAlignment="Right" Width="72" VerticalAlignment="Bottom" Click="buttonClearCoils_Click">
                         <StackPanel Orientation="Horizontal">
                             <Viewbox Width="16" Height="16" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
                                 <Rectangle Width="16" Height="16">
@@ -361,8 +356,8 @@
                             <TextBlock x:Name="textBlockClearCoils" Text="Clear" Margin="3,0,0,0"/>
                         </StackPanel>
                     </Button>
-                    <CheckBox x:Name="CheckBoxSendValuesOnEditCoillsTable" Content="Live edit (sends automatically commands FC05)" Margin="0,0,20.429,57" HorizontalAlignment="Right" Width="466" Height="16" VerticalAlignment="Bottom"/>
-                    <Button x:Name="buttonExportCoils" Height="25" Margin="0,0,337,9.571" FontSize="12" HorizontalAlignment="Right" Width="72" VerticalAlignment="Bottom" Click="buttonExportCoils_Click">
+                    <CheckBox x:Name="CheckBoxSendValuesOnEditCoillsTable" Content="Live edit (sends automatically commands FC05)" Margin="0,0,20,42" HorizontalAlignment="Right" Width="390" VerticalAlignment="Bottom"/>
+                    <Button x:Name="buttonExportCoils" Height="25" Margin="0,0,261,10" HorizontalAlignment="Right" Width="72" VerticalAlignment="Bottom" Click="buttonExportCoils_Click">
                         <StackPanel Orientation="Horizontal">
                             <Viewbox Width="16" Height="16" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
                                 <Rectangle Width="16" Height="16">
@@ -386,12 +381,12 @@
                             <TextBlock x:Name="textBlockExportCoils" Text="Export" Margin="3,0,0,0"/>
                         </StackPanel>
                     </Button>
-                    <Label x:Name="labelPrimoRegistroHolding_Copy" Content="Range registri: 0-9998" Margin="0,10,10,0" VerticalAlignment="Top" RenderTransformOrigin="0.22,0.103" HorizontalAlignment="Right" Width="200" HorizontalContentAlignment="Right" FontSize="12"/>
+                    <Label x:Name="labelPrimoRegistroCoils" Content="Range registri: 0-9998" Margin="0,10,10,0" VerticalAlignment="Top" RenderTransformOrigin="0.22,0.103" HorizontalAlignment="Right" Width="200" HorizontalContentAlignment="Right" FontSize="12"/>
                 </Grid>
             </TabItem>
             <TabItem x:Name="tabItem2" Header="Inputs (1 bit)" FontSize="12">
-                <Grid Background="#FFE5E5E5">
-                    <DataGrid x:Name="dataGridViewInput" Margin="10,50,491,10" AutoGenerateColumns="False" HorizontalGridLinesBrush="LightGray" VerticalGridLinesBrush="LightGray" BorderThickness="1" FontSize="14"  RowBackground="#FFF1F1F1">
+                <Grid x:Name="GridInputs" Background="#FFE5E5E5">
+                    <DataGrid x:Name="dataGridViewInput" Margin="10,50,415,10" AutoGenerateColumns="False" HorizontalGridLinesBrush="LightGray" VerticalGridLinesBrush="LightGray" BorderThickness="1" FontSize="14"  RowBackground="#FFF1F1F1">
                         <DataGrid.Columns>
                             <DataGridTextColumn x:Name="dataGridTabInputsRegisters" Header="Register" Binding="{Binding Register}" Width="100" Visibility="Collapsed">
                                 <DataGridTextColumn.ElementStyle>
@@ -409,7 +404,7 @@
                                     </Style>
                                 </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>
-                            <DataGridTextColumn x:Name="dataGridTabInputsNotes" Header="Notes" Binding="{Binding Notes}" Width="400" Visibility="Collapsed"/>
+                            <DataGridTextColumn x:Name="dataGridTabInputsNotes" Header="Notes" Binding="{Binding Notes}" Width="600" Visibility="Collapsed"/>
                         </DataGrid.Columns>
                     </DataGrid>
                     <ComboBox x:Name="comboBoxInputRegistri" HorizontalAlignment="Left" Margin="74,10,0,0" VerticalAlignment="Top" Width="55" FontSize="12" Height="25" SelectionChanged="comboBoxInputRegistri_SelectionChanged">
@@ -422,45 +417,42 @@
                         <ComboBoxItem Content="DEC"/>
                         <ComboBoxItem Content="HEX"/>
                     </ComboBox>
-                    <TextBox x:Name="textBoxInputOffset" HorizontalAlignment="Left" Height="25" Margin="255,10,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="65" FontSize="12" TextChanged="textBoxInputOffset_TextChanged"/>
+                    <TextBox x:Name="textBoxInputOffset" HorizontalAlignment="Left" Height="25" Margin="255,10,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="65" FontSize="12" TextChanged="textBoxInputOffset_TextChanged" VerticalContentAlignment="Center"/>
                     <Label x:Name="labelOffsetHiddenInput" Content="Offset hidden in table" HorizontalAlignment="Left" Margin="325,10,0,0" VerticalAlignment="Top" FontSize="12"/>
                     <Label x:Name="labelPrimoRegistroInputs" Content="Range registri: 0-9998" Margin="0,10,13,0" VerticalAlignment="Top" RenderTransformOrigin="0.22,0.103" HorizontalAlignment="Right" Width="200" HorizontalContentAlignment="Right" FontSize="12"/>
-                    <Label x:Name="labelInputs_2" Content="Read Input Status (FC02):" Height="26" Margin="0,50,286.429,0" VerticalAlignment="Top" FontSize="12" HorizontalAlignment="Right" Width="200"/>
-                    <StackPanel Margin="0,76,10,0" Background="AliceBlue" Height="40" Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Right" Width="476">
+                    <Label x:Name="labelInputs_2" Content="Read Input Status (FC02):" Height="26" Margin="0,50,210,0" VerticalAlignment="Top" FontSize="12" HorizontalAlignment="Right" Width="200"/>
+                    <StackPanel x:Name="StackPanelInputs0" Margin="0,76,10,0" Background="AliceBlue" Height="40" Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Right" Width="400">
                         <Label x:Name="labelInputs_3" Content="Address:" Height="25" FontSize="12"/>
                         <ComboBox x:Name="comboBoxInputAddress02" Width="55" Height="25" FontSize="12" SelectionChanged="comboBoxInputAddress02_SelectionChanged">
                             <ComboBoxItem Content="DEC"/>
                             <ComboBoxItem Content="HEX"/>
                         </ComboBox>
-                        <TextBox x:Name="textBoxInputAddress02" TextWrapping="Wrap" Width="50"  Height="25" Margin="10,0,0,0" FontSize="12" TextChanged="textBoxInputAddress02_TextChanged"/>
-                        <Label x:Name="labelInputs_4" Content="Nr. of inputs:" Height="25" FontSize="12"/>
-                        <TextBox x:Name="textBoxInputNumber" TextWrapping="Wrap" Width="50"  Height="25" Margin="10,0,0,0" FontSize="12" TextChanged="textBoxInputNumber_TextChanged"/>
+                        <TextBox x:Name="textBoxInputAddress02" TextWrapping="Wrap" Width="50"  Height="25" Margin="10,0,0,0" FontSize="12" TextChanged="textBoxInputAddress02_TextChanged" VerticalContentAlignment="Center"/>
+                        <Label x:Name="labelInputs_4" Content="Num.:" Height="25" FontSize="12"/>
+                        <TextBox x:Name="textBoxInputNumber" TextWrapping="Wrap" Width="50"  Height="25" Margin="0,0,0,0" FontSize="12" TextChanged="textBoxInputNumber_TextChanged" VerticalContentAlignment="Center"/>
                         <Button x:Name="buttonReadInput02" Content="Read" Width="55" Height="25" Margin="10,0,0,0" Click="buttonReadInput02_Click" FontSize="12"/>
                         <Button x:Name="buttonLoopInput02" Content="Loop" Width="55" Height="25" Margin="10,0,0,0" FontSize="12" Click="buttonLoopInput02_Click"/>
                     </StackPanel>
-                    <Label x:Name="labelInputs_5" Content="Read Input Range:" Height="26" Margin="0,116,286.429,0" VerticalAlignment="Top" FontSize="12" HorizontalAlignment="Right" Width="200"/>
-                    <StackPanel Margin="0,142,10,0" Background="AliceBlue" Height="40" Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Right" Width="476">
-                        <Label x:Name="labelInputs_6" Content="Add. start:" Height="30" FontSize="12"/>
+                    <Label x:Name="labelInputs_5" Content="Read Input Range:" Height="26" Margin="0,121,210,0" VerticalAlignment="Top" FontSize="12" HorizontalAlignment="Right" Width="200"/>
+                    <StackPanel x:Name="StackPanelInputs1" Margin="0,148
+                                ,10,0" Background="AliceBlue" Height="40" Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Right" Width="400">
+                        <Label x:Name="labelInputs_6" Content="Start:" Height="30" FontSize="12"/>
                         <ComboBox x:Name="comboBoxInputRange_A" Width="55" Height="25" FontSize="12" SelectionChanged="comboBoxInputRange_A_SelectionChanged">
                             <ComboBoxItem Content="DEC"/>
                             <ComboBoxItem Content="HEX"/>
                         </ComboBox>
-                        <TextBox x:Name="textBoxInputRange_A" TextWrapping="Wrap" Width="50"  Height="25" Margin="10,0,0,0" FontSize="12" TextChanged="textBoxInputRange_A_TextChanged"/>
+                        <TextBox x:Name="textBoxInputRange_A" TextWrapping="Wrap" Width="50"  Height="25" Margin="10,0,0,0" FontSize="12" TextChanged="textBoxInputRange_A_TextChanged" VerticalContentAlignment="Center"/>
                         <Label x:Name="labelInputs_7" Content="stop:" Height="30" FontSize="12"/>
-                        <ComboBox x:Name="comboBoxInputRange_B" Width="55" Height="25" FontSize="12" SelectionChanged="comboBoxInputRange_B_SelectionChanged">
-                            <ComboBoxItem Content="DEC"/>
-                            <ComboBoxItem Content="HEX"/>
-                        </ComboBox>
-                        <TextBox x:Name="textBoxInputRange_B" TextWrapping="Wrap" Width="50"  Height="25" Margin="10,0,0,0" FontSize="12" TextChanged="textBoxInputRange_B_TextChanged"/>
+                        <TextBox x:Name="textBoxInputRange_B" TextWrapping="Wrap" Width="50"  Height="25" Margin="0,0,0,0" FontSize="12" TextChanged="textBoxInputRange_B_TextChanged" VerticalContentAlignment="Center"/>
                         <Button x:Name="buttonReadInputRange" Content="Read" Width="55" Height="25" Margin="10,0,0,0" Click="buttonReadInputRange_Click" FontSize="12"/>
                         <Button x:Name="buttonLoopInputRange" Content="Loop" Width="55" Height="25" Margin="10,0,0,0" FontSize="12" Click="buttonLoopInputRange_Click"/>
                     </StackPanel>
-                    <StackPanel x:Name="stackGoToInput" Margin="0,430,10,0" Background="AliceBlue" Height="40" Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Right" Width="272">
+                    <StackPanel x:Name="stackGoToInput" Margin="0,430,10,0" Background="AliceBlue" Height="40" Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Right" Width="272" Visibility="Hidden">
                         <Label x:Name="labelGoToInput" Content="Go to Input address:" Height="30"/>
                         <TextBox x:Name="textBoxGoToInputAddress" TextWrapping="Wrap" Width="55"  Height="25" Margin="10,0,0,0"/>
                         <Button x:Name="buttonGoToInputAddress" Content="Vai" Width="55" Height="25" Margin="10,0,0,0" Click="buttonGoToInputAddress_Click"/>
                     </StackPanel>
-                    <Button x:Name="buttonClearInput" Height="25" Margin="0,0,414,9.571" FontSize="12" HorizontalAlignment="Right" Width="72" VerticalAlignment="Bottom" Click="buttonClearInput_Click">
+                    <Button x:Name="buttonClearInput" Height="25" Margin="0,0,338,10" FontSize="12" HorizontalAlignment="Right" Width="72" VerticalAlignment="Bottom" Click="buttonClearInput_Click">
                         <StackPanel Orientation="Horizontal">
                             <Viewbox Width="16" Height="16" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
                                 <Rectangle Width="16" Height="16">
@@ -483,7 +475,7 @@
                             <TextBlock x:Name="textBlockClearInput" Text="Clear" Margin="3,0,0,0"/>
                         </StackPanel>
                     </Button>
-                    <Button x:Name="buttonExportInput" Height="25" Margin="0,0,337,9.571" FontSize="12" HorizontalAlignment="Right" Width="71" VerticalAlignment="Bottom" Click="buttonExportInput_Click">
+                    <Button x:Name="buttonExportInput" Height="25" Margin="0,0,261,10" FontSize="12" HorizontalAlignment="Right" Width="72" VerticalAlignment="Bottom" Click="buttonExportInput_Click">
                         <StackPanel Orientation="Horizontal">
                             <Viewbox Width="16" Height="16" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
                                 <Rectangle Width="16" Height="16">
@@ -510,8 +502,8 @@
                 </Grid>
             </TabItem>
             <TabItem x:Name="tabItem3" Header="Input registers (1 word)" FontSize="12">
-                <Grid Background="#FFE5E5E5">
-                    <DataGrid x:Name="dataGridViewInputRegister" Margin="10,50,491,10" AutoGenerateColumns="False"  HorizontalGridLinesBrush="LightGray" VerticalGridLinesBrush="LightGray" BorderThickness="1" FontSize="14"  RowBackground="#FFF1F1F1">
+                <Grid x:Name="GridInputRegisters" Background="#FFE5E5E5">
+                    <DataGrid x:Name="dataGridViewInputRegister" Margin="10,50,415,10" AutoGenerateColumns="False"  HorizontalGridLinesBrush="LightGray" VerticalGridLinesBrush="LightGray" BorderThickness="1" FontSize="14"  RowBackground="#FFF1F1F1">
                         <DataGrid.RowStyle>
                             <Style TargetType="DataGridRow">
                                 <Setter Property="ToolTip">
@@ -547,8 +539,8 @@
                                 </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>
                             <DataGridTextColumn x:Name="dataGridTabInputRegistersConvertedValues" Header="Converted value" Binding="{Binding ValueConverted}" Width="130" Visibility="Collapsed"/>
-                            <DataGridTextColumn x:Name="dataGridTabInputRegistersNotes" Header="Notes" Binding="{Binding Notes}" Width="400" Visibility="Collapsed"/>
-                            <DataGridTextColumn x:Name="dataGridTabInputRegistersMappings" Header="Mappings" Binding="{Binding Mappings}" Width="400" Visibility="Collapsed"/>
+                            <DataGridTextColumn x:Name="dataGridTabInputRegistersNotes" Header="Notes" Binding="{Binding Notes}" Width="600" Visibility="Collapsed"/>
+                            <DataGridTextColumn x:Name="dataGridTabInputRegistersMappings" Header="Mappings" Binding="{Binding Mappings}" Width="600" Visibility="Collapsed"/>
                         </DataGrid.Columns>
                     </DataGrid>
                     <ComboBox x:Name="comboBoxInputRegRegistri" HorizontalAlignment="Left" Margin="74,10,0,0" VerticalAlignment="Top" Width="55" FontSize="12" Height="25" SelectionChanged="comboBoxInputRegRegistri_SelectionChanged">
@@ -561,7 +553,7 @@
                         <ComboBoxItem Content="DEC"/>
                         <ComboBoxItem Content="HEX"/>
                     </ComboBox>
-                    <TextBox x:Name="textBoxInputRegOffset" HorizontalAlignment="Left" Height="25" Margin="380,10,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="65" FontSize="12" TextChanged="textBoxInputRegOffset_TextChanged"/>
+                    <TextBox x:Name="textBoxInputRegOffset" HorizontalAlignment="Left" Height="25" Margin="380,10,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="65" FontSize="12" TextChanged="textBoxInputRegOffset_TextChanged" VerticalContentAlignment="Center"/>
                     <Label x:Name="labelOffsetHiddenInputRegister" Content="Offset hidden in table" HorizontalAlignment="Left" Margin="450,9,0,0" VerticalAlignment="Top" FontSize="12"/>
                     <Label x:Name="labelPrimoInputRegister" Content="Range registri: 0-9998" Margin="0,10,13,0" VerticalAlignment="Top" RenderTransformOrigin="0.22,0.103" HorizontalAlignment="Right" Width="201" HorizontalContentAlignment="Right" FontSize="12"/>
                     <ComboBox x:Name="comboBoxInputRegValori" HorizontalAlignment="Left" Margin="195,10,0,0" VerticalAlignment="Top" Width="55" FontSize="12" Height="25" SelectionChanged="comboBoxInputRegValori_SelectionChanged">
@@ -569,42 +561,38 @@
                         <ComboBoxItem Content="HEX"/>
                     </ComboBox>
                     <Label x:Name="labelInputRegisters_1" Content="Values:" HorizontalAlignment="Left" Margin="140,10,0,0" VerticalAlignment="Top" FontSize="12"/>
-                    <Label x:Name="labelInputRegisters_3" Content="Read Input Register (FC04):" Height="26" Margin="0,50,223,0" VerticalAlignment="Top" FontSize="12" HorizontalAlignment="Right" Width="263"/>
-                    <StackPanel Margin="0,76,10,0" Background="AliceBlue" Height="40" Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Right" Width="476">
+                    <Label x:Name="labelInputRegisters_3" Content="Read Input Register (FC04):" Height="26" Margin="0,50,147,0" VerticalAlignment="Top" FontSize="12" HorizontalAlignment="Right" Width="263"/>
+                    <StackPanel x:Name="StackPanelInputRegisters0" Margin="0,76,10,0" Background="AliceBlue" Height="40" Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Right" Width="400">
                         <Label x:Name="labelInputRegisters_4" Content="Address:" Height="25" FontSize="12"/>
                         <ComboBox x:Name="comboBoxInputRegisterAddress04" Width="55" Height="25" FontSize="12" SelectionChanged="comboBoxInputRegisterAddress04_SelectionChanged">
                             <ComboBoxItem Content="DEC"/>
                             <ComboBoxItem Content="HEX"/>
                         </ComboBox>
-                        <TextBox x:Name="textBoxInputRegisterAddress04" TextWrapping="Wrap" Width="50"  Height="25" Margin="10,0,0,0" FontSize="12" TextChanged="textBoxInputRegisterAddress04_TextChanged"/>
-                        <Label x:Name="labelInputRegisters_5" Content="Nr. of registers:" Height="25" FontSize="12"/>
-                        <TextBox x:Name="textBoxInputRegisterNumber" TextWrapping="Wrap" Width="50"  Height="25" Margin="10,0,0,0" FontSize="12" TextChanged="textBoxInputRegisterNumber_TextChanged"/>
+                        <TextBox x:Name="textBoxInputRegisterAddress04" TextWrapping="Wrap" Width="50"  Height="25" Margin="10,0,0,0" FontSize="12" TextChanged="textBoxInputRegisterAddress04_TextChanged" VerticalContentAlignment="Center"/>
+                        <Label x:Name="labelInputRegisters_5" Content="Num.:" Height="25" FontSize="12"/>
+                        <TextBox x:Name="textBoxInputRegisterNumber" TextWrapping="Wrap" Width="50"  Height="25" Margin="0,0,0,0" FontSize="12" TextChanged="textBoxInputRegisterNumber_TextChanged" VerticalContentAlignment="Center"/>
                         <Button x:Name="buttonReadInputRegister04" Content="Read" Width="55" Height="25" Margin="10,0,0,0" Click="buttonReadInputRegister04_Click" FontSize="12"/>
                         <Button x:Name="buttonLoopInputRegister04" Content="Loop" Width="55" Height="25" Margin="10,0,0,0" FontSize="12" Click="buttonLoopInputRegister04_Click"/>
                     </StackPanel>
-                    <Label x:Name="labelInputRegisters_6" Content="Read Input Register Range:" Height="26" Margin="0,116,223,0" VerticalAlignment="Top" FontSize="12" HorizontalAlignment="Right" Width="263"/>
-                    <StackPanel Margin="0,142,10,0" Background="AliceBlue" Height="40" Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Right" Width="476">
-                        <Label x:Name="labelInputRegisters_7" Content="Add. start:" Height="30" FontSize="12"/>
+                    <Label x:Name="labelInputRegisters_6" Content="Read Input Register Range:" Height="26" Margin="0,121,147,0" VerticalAlignment="Top" FontSize="12" HorizontalAlignment="Right" Width="263"/>
+                    <StackPanel x:Name="StackPanelInputRegisters1" Margin="0,148,10,0" Background="AliceBlue" Height="40" Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Right" Width="400">
+                        <Label x:Name="labelInputRegisters_7" Content="Start:" Height="30" FontSize="12"/>
                         <ComboBox x:Name="comboBoxInputRegisterRange_A" Width="55" Height="25" FontSize="12" SelectionChanged="comboBoxInputRegisterRange_A_SelectionChanged">
                             <ComboBoxItem Content="DEC"/>
                             <ComboBoxItem Content="HEX"/>
                         </ComboBox>
-                        <TextBox x:Name="textBoxInputRegisterRange_A" TextWrapping="Wrap" Width="50"  Height="25" Margin="10,0,0,0" FontSize="12" TextChanged="textBoxInputRegisterRange_A_TextChanged"/>
+                        <TextBox x:Name="textBoxInputRegisterRange_A" TextWrapping="Wrap" Width="50"  Height="25" Margin="10,0,0,0" FontSize="12" TextChanged="textBoxInputRegisterRange_A_TextChanged" VerticalContentAlignment="Center"/>
                         <Label x:Name="labelInputRegisters_8" Content="Stop:" Height="30" FontSize="12"/>
-                        <ComboBox x:Name="comboBoxInputRegisterRange_B" Width="55" Height="25" FontSize="12" SelectionChanged="comboBoxInputRegisterRange_B_SelectionChanged">
-                            <ComboBoxItem Content="DEC"/>
-                            <ComboBoxItem Content="HEX"/>
-                        </ComboBox>
-                        <TextBox x:Name="textBoxInputRegisterRange_B" TextWrapping="Wrap" Width="50"  Height="25" Margin="10,0,0,0" FontSize="12" TextChanged="textBoxInputRegisterRange_B_TextChanged"/>
+                        <TextBox x:Name="textBoxInputRegisterRange_B" TextWrapping="Wrap" Width="50"  Height="25" Margin="0,0,0,0" FontSize="12" TextChanged="textBoxInputRegisterRange_B_TextChanged" VerticalContentAlignment="Center"/>
                         <Button x:Name="buttonReadInputRegisterRange" Content="Read" Width="55" Height="25" Margin="10,0,0,0" Click="buttonReadInputRegisterRange_Click" FontSize="12" RenderTransformOrigin="0.5,0.5"/>
                         <Button x:Name="buttonLoopInputRegisterRange" Content="Loop" Width="55" Height="25" Margin="10,0,0,0" FontSize="12" RenderTransformOrigin="0.501,0.5" Click="buttonLoopInputRegisterRange_Click"/>
                     </StackPanel>
-                    <StackPanel x:Name="stackGoToInputRegister" Margin="0,430,10,0" Background="AliceBlue" Height="40" Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Right" Width="324">
+                    <StackPanel x:Name="stackGoToInputRegister" Margin="0,430,10,0" Background="AliceBlue" Height="40" Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Right" Width="324" Visibility="Hidden">
                         <Label x:Name="labelGoToInputRegister" Content="Go to Input Register address:" Height="30"/>
                         <TextBox x:Name="textBoxGoToInputRegisterAddress" TextWrapping="Wrap" Width="55"  Height="25" Margin="10,0,0,0"/>
                         <Button x:Name="buttonGoToInputRegisterAddress" Content="Vai" Width="55" Height="25" Margin="10,0,0,0" Click="buttonGoToInputRegisterAddress_Click"/>
                     </StackPanel>
-                    <Button x:Name="buttonClearInputReg" Height="25" Margin="0,0,414,9.571" FontSize="12" HorizontalAlignment="Right" Width="72" VerticalAlignment="Bottom" Click="buttonClearInputReg_Click">
+                    <Button x:Name="buttonClearInputReg" Height="25" Margin="0,0,338,10" FontSize="12" HorizontalAlignment="Right" Width="72" VerticalAlignment="Bottom" Click="buttonClearInputReg_Click">
                         <StackPanel Orientation="Horizontal">
                             <Viewbox Width="16" Height="16" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
                                 <Rectangle Width="16" Height="16">
@@ -627,7 +615,7 @@
                             <TextBlock x:Name="textBlockClearInputReg" Text="Clear" Margin="3,0,0,0"/>
                         </StackPanel>
                     </Button>
-                    <Button x:Name="buttonExportInputReg" Height="25" Margin="0,0,337,9.571" FontSize="12" HorizontalAlignment="Right" Width="72" VerticalAlignment="Bottom" Click="buttonExportInputReg_Click">
+                    <Button x:Name="buttonExportInputReg" Height="25" Margin="0,0,261,10" FontSize="12" HorizontalAlignment="Right" Width="72" VerticalAlignment="Bottom" Click="buttonExportInputReg_Click">
                         <StackPanel Orientation="Horizontal">
                             <Viewbox Width="16" Height="16" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
                                 <Rectangle Width="16" Height="16">
@@ -654,8 +642,8 @@
                 </Grid>
             </TabItem>
             <TabItem x:Name="tabItem4" Header="Holding registers (1 word)" FontSize="12">
-                <Grid Background="#FFE5E5E5">
-                    <DataGrid x:Name="dataGridViewHolding" Margin="10,50,491,10" AutoGenerateColumns="False"  HorizontalGridLinesBrush="LightGray" VerticalGridLinesBrush="LightGray" BorderThickness="1" FontSize="14" CellEditEnding="dataGridViewHolding_KeyUp" RowBackground="#FFF1F1F1">
+                <Grid x:Name="GridHoldingRegisters" Background="#FFE5E5E5">
+                    <DataGrid x:Name="dataGridViewHolding" Margin="10,50,415,10" AutoGenerateColumns="False"  HorizontalGridLinesBrush="LightGray" VerticalGridLinesBrush="LightGray" BorderThickness="1" FontSize="14" CellEditEnding="dataGridViewHolding_KeyUp" RowBackground="#FFF1F1F1" Width="Auto">
                         <DataGrid.RowStyle>
                             <Style TargetType="DataGridRow">
                                 <Setter Property="ToolTip">
@@ -691,8 +679,8 @@
                                 </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>
                             <DataGridTextColumn x:Name="dataGridTabHoldingRegistersConvertedValues" Header="Value converted" Binding="{Binding ValueConverted}" Width="130" Visibility="Collapsed"/>
-                            <DataGridTextColumn x:Name="dataGridTabHoldingRegistersNotes" Header="Notes" Binding="{Binding Notes}" Width="400" Visibility="Collapsed"/>
-                            <DataGridTextColumn x:Name="dataGridTabHoldingRegistersMappings" Header="Mappings" Binding="{Binding Mappings}" Width="400" Visibility="Collapsed"/>
+                            <DataGridTextColumn x:Name="dataGridTabHoldingRegistersNotes" Header="Notes" Binding="{Binding Notes}" Width="600" Visibility="Collapsed"/>
+                            <DataGridTextColumn x:Name="dataGridTabHoldingRegistersMappings" Header="Mappings" Binding="{Binding Mappings}" Width="600" Visibility="Collapsed"/>
                         </DataGrid.Columns>
 
                     </DataGrid>
@@ -706,7 +694,7 @@
                         <ComboBoxItem Content="DEC"/>
                         <ComboBoxItem Content="HEX"/>
                     </ComboBox>
-                    <TextBox x:Name="textBoxHoldingOffset" HorizontalAlignment="Left" Height="25" Margin="380,10,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="65" FontSize="12" TextChanged="textBoxHoldingOffset_TextChanged"/>
+                    <TextBox x:Name="textBoxHoldingOffset" HorizontalAlignment="Left" Height="25" Margin="380,10,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="65" FontSize="12" TextChanged="textBoxHoldingOffset_TextChanged" VerticalContentAlignment="Center"/>
                     <Label x:Name="labelOffsetHiddenHolding" Content="Offset hidden in table" HorizontalAlignment="Left" Margin="450,10,0,0" VerticalAlignment="Top" FontSize="12"/>
                     <Label x:Name="labelPrimoRegistroHolding" Content="Range registri: 0-9998" Margin="0,10,10,0" VerticalAlignment="Top" RenderTransformOrigin="0.22,0.103" HorizontalAlignment="Right" Width="200" HorizontalContentAlignment="Right" FontSize="12"/>
                     <ComboBox x:Name="comboBoxHoldingValori" HorizontalAlignment="Left" Margin="195,10,0,0" VerticalAlignment="Top" Width="55" FontSize="12" Height="25" SelectionChanged="comboBoxHoldingValori_SelectionChanged">
@@ -714,97 +702,93 @@
                         <ComboBoxItem Content="HEX"/>
                     </ComboBox>
                     <Label x:Name="labelHoldingRegisters_1" Content="Values:" HorizontalAlignment="Left" Margin="140,10,0,0" VerticalAlignment="Top" FontSize="12"/>
-                    <Label x:Name="labelHoldingRegisters_3" Content="Read Holding Register (FC03)" Height="26" Margin="0,50,286,0" VerticalAlignment="Top" FontSize="12" HorizontalAlignment="Right" Width="200"/>
-                    <StackPanel Margin="0,77,10,0" Background="AliceBlue" Height="40" Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Right" Width="476">
+                    <Label x:Name="labelHoldingRegisters_3" Content="Read Holding Register (FC03)" Height="26" Margin="0,50,210,0" VerticalAlignment="Top" FontSize="12" HorizontalAlignment="Right" Width="200"/>
+                    <StackPanel x:Name="StackPanelHoldingRegisters0" Margin="0,77,10,0" Background="AliceBlue" Height="40" Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Right" Width="400">
                         <Label x:Name="labelHoldingRegisters_4" Content="Address:" Height="25" FontSize="12"/>
                         <ComboBox x:Name="comboBoxHoldingAddress03" Width="55" Height="25" FontSize="12" SelectionChanged="comboBoxHoldingAddress03_SelectionChanged">
                             <ComboBoxItem Content="DEC"/>
                             <ComboBoxItem Content="HEX"/>
                         </ComboBox>
-                        <TextBox x:Name="textBoxHoldingAddress03" TextWrapping="Wrap" Width="50"  Height="25" Margin="10,0,0,0" FontSize="12" TextChanged="textBoxHoldingAddress03_TextChanged"/>
-                        <Label x:Name="labelHoldingRegisters_5" Content="Nr. of reg.:" Height="25" FontSize="12"/>
-                        <TextBox x:Name="textBoxHoldingRegisterNumber" TextWrapping="Wrap" Width="50"  Height="25" Margin="10,0,0,0" FontSize="12" TextChanged="textBoxHoldingRegisterNumber_TextChanged"/>
+                        <TextBox x:Name="textBoxHoldingAddress03" TextWrapping="Wrap" Width="50"  Height="25" Margin="10,0,0,0" FontSize="12" TextChanged="textBoxHoldingAddress03_TextChanged" VerticalContentAlignment="Center"/>
+                        <Label x:Name="labelHoldingRegisters_5" Content="Num.:" Height="25" FontSize="12"/>
+                        <TextBox x:Name="textBoxHoldingRegisterNumber" TextWrapping="Wrap" Width="50"  Height="25" Margin="0,0,0,0" FontSize="12" TextChanged="textBoxHoldingRegisterNumber_TextChanged" VerticalContentAlignment="Center"/>
                         <Button x:Name="buttonReadHolding03" Content="Read" Width="55" Height="25" Margin="10,0,0,0" Click="buttonReadHolding03_Click" FontSize="12" RenderTransformOrigin="0.5,0.5"/>
                         <Button x:Name="buttonLoopHolding03" Content="Loop" Width="55" Height="25" Margin="10,0,0,0" FontSize="12" Click="buttonLoopHolding03_Click"/>
                     </StackPanel>
-                    <Label x:Name="labelHoldingRegisters_6" Content="Read Holding Register Range" Height="26" Margin="0,122,286,0" VerticalAlignment="Top" FontSize="12" HorizontalAlignment="Right" Width="200"/>
-                    <StackPanel Margin="0,148,10,0" Background="AliceBlue" Height="40" Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Right" Width="476">
+                    <Label x:Name="labelHoldingRegisters_6" Content="Read Holding Register Range" Height="26" Margin="0,121,210,0" VerticalAlignment="Top" FontSize="12" HorizontalAlignment="Right" Width="200"/>
+                    <StackPanel x:Name="StackPanelHoldingRegisters1" Margin="0,148,10,0" Background="AliceBlue" Height="40" Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Right" Width="400">
                         <Label x:Name="labelHoldingRegisters_7" Content="Add. start:" Height="30" FontSize="12"/>
                         <ComboBox x:Name="comboBoxHoldingRange_A" Width="55" Height="25" FontSize="12" SelectionChanged="comboBoxHoldingRange_A_SelectionChanged">
                             <ComboBoxItem Content="DEC"/>
                             <ComboBoxItem Content="HEX"/>
                         </ComboBox>
-                        <TextBox x:Name="textBoxHoldingRange_A" TextWrapping="Wrap" Width="50"  Height="25" Margin="10,0,0,0" FontSize="12" TextChanged="textBoxHoldingRange_A_TextChanged"/>
+                        <TextBox x:Name="textBoxHoldingRange_A" TextWrapping="Wrap" Width="50"  Height="25" Margin="10,0,0,0" FontSize="12" TextChanged="textBoxHoldingRange_A_TextChanged" VerticalContentAlignment="Center"/>
                         <Label x:Name="labelHoldingRegisters_8" Content="stop:" Height="30" FontSize="12"/>
-                        <ComboBox x:Name="comboBoxHoldingRange_B" Width="55" Height="25" FontSize="12" SelectionChanged="comboBoxHoldingRange_B_SelectionChanged">
-                            <ComboBoxItem Content="DEC"/>
-                            <ComboBoxItem Content="HEX"/>
-                        </ComboBox>
-                        <TextBox x:Name="textBoxHoldingRange_B" TextWrapping="Wrap" Width="50"  Height="25" Margin="10,0,0,0" FontSize="12" TextChanged="textBoxHoldingRange_B_TextChanged"/>
+                        <TextBox x:Name="textBoxHoldingRange_B" TextWrapping="Wrap" Width="50"  Height="25" Margin="0,0,0,0" FontSize="12" TextChanged="textBoxHoldingRange_B_TextChanged" VerticalContentAlignment="Center"/>
                         <Button x:Name="buttonReadHoldingRange" Content="Read" Width="55" Height="25" Margin="10,0,0,0" Click="buttonReadHoldingRange_Click" FontSize="12"/>
                         <Button x:Name="buttonLoopHoldingRange" Content="Loop" Width="55" Height="25" Margin="10,0,0,0" FontSize="12" Click="buttonLoopHoldingRange_Click"/>
                     </StackPanel>
-                    <Label x:Name="labelHoldingRegisters_9" Content="Preset Single Register (FC06)" Height="26" Margin="0,193,286,0" VerticalAlignment="Top" FontSize="12" HorizontalAlignment="Right" Width="200"/>
-                    <StackPanel Margin="0,219,10,0" Background="AliceBlue" Height="40" Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Right" Width="476">
+                    <Label x:Name="labelHoldingRegisters_9" Content="Preset Single Register (FC06)" Height="26" Margin="0,193,210,0" VerticalAlignment="Top" FontSize="12" HorizontalAlignment="Right" Width="200"/>
+                    <StackPanel x:Name="StackPanelHoldingRegisters2" Margin="0,219,10,0" Background="AliceBlue" Height="40" Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Right" Width="400">
                         <Label x:Name="labelHoldingRegisters_10" Content="Address:" Height="25" FontSize="12"/>
                         <ComboBox x:Name="comboBoxHoldingAddress06" Width="55" Height="25" FontSize="12" SelectionChanged="comboBoxHoldingAddress06_SelectionChanged">
                             <ComboBoxItem Content="DEC"/>
                             <ComboBoxItem Content="HEX"/>
                         </ComboBox>
-                        <TextBox x:Name="textBoxHoldingAddress06" TextWrapping="Wrap" Width="50"  Height="25" Margin="10,0,0,0" FontSize="12" TextChanged="textBoxHoldingAddress06_TextChanged"/>
+                        <TextBox x:Name="textBoxHoldingAddress06" TextWrapping="Wrap" Width="50"  Height="25" Margin="10,0,0,0" FontSize="12" TextChanged="textBoxHoldingAddress06_TextChanged" VerticalContentAlignment="Center"/>
                         <Label x:Name="labelHoldingRegisters_11" Content="Value:" Height="25" FontSize="12"/>
                         <ComboBox x:Name="comboBoxHoldingValue06" Width="55" Height="25" FontSize="12" SelectionChanged="comboBoxHoldingValue06_SelectionChanged">
                             <ComboBoxItem Content="DEC"/>
                             <ComboBoxItem Content="HEX"/>
                         </ComboBox>
-                        <TextBox x:Name="textBoxHoldingValue06" TextWrapping="Wrap" Width="50"  Height="25" Margin="10,0,0,0" FontSize="12" TextChanged="textBoxHoldingValue06_TextChanged"/>
+                        <TextBox x:Name="textBoxHoldingValue06" TextWrapping="Wrap" Width="50"  Height="25" Margin="10,0,0,0" FontSize="12" TextChanged="textBoxHoldingValue06_TextChanged" VerticalContentAlignment="Center"/>
                         <Button x:Name="buttonWriteHolding06" Content="Write" Width="55" Height="25" Margin="10,0,0,0" Click="buttonWriteHolding06_Click" FontSize="12" RenderTransformOrigin="0.501,0.5"/>
                     </StackPanel>
-                    <Label x:Name="labelHoldingRegisters_14" Content="Preset Multiple Registers (FC16)" Height="30" Margin="0,304,286,0" VerticalAlignment="Top" FontSize="12" HorizontalAlignment="Right" Width="200"/>
-                    <StackPanel Margin="0,374,10,0" Background="AliceBlue" Height="42" Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Right" Width="476">
+                    <Label x:Name="labelHoldingRegisters_14" Content="Preset Multiple Registers (FC16)" Height="26" Margin="0,304,210,0" VerticalAlignment="Top" FontSize="12" HorizontalAlignment="Right" Width="200"/>
+                    <StackPanel x:Name="StackPanelHoldingRegisters5" Margin="0,370,10,0" Background="AliceBlue" Height="42" Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Right" Width="400">
                         <Label x:Name="labelHoldingRegisters_17" Content="Value:" Height="30" FontSize="12" Margin="0,0,0,0"/>
                         <ComboBox x:Name="comboBoxHoldingValue16" Width="55" Height="25" FontSize="12" Margin="0,0,0,0" SelectionChanged="comboBoxHoldingValue16_SelectionChanged">
                             <ComboBoxItem Content="DEC"/>
                             <ComboBoxItem Content="HEX"/>
                         </ComboBox>
-                        <TextBox x:Name="textBoxHoldingValue16" TextWrapping="Wrap" Width="281"  Height="25" Margin="10,8,0,8" FontSize="12" TextChanged="textBoxHoldingValue16_TextChanged"/>
+                        <TextBox x:Name="textBoxHoldingValue16" TextWrapping="Wrap" Width="220"  Height="25" Margin="10,8,0,8" FontSize="12" TextChanged="textBoxHoldingValue16_TextChanged" VerticalContentAlignment="Center"/>
                         <Button x:Name="buttonWriteHolding16" Content="Write" Width="55" Height="25" Margin="10,0,0,0" Click="buttonWriteHolding16_Click" FontSize="12"/>
                     </StackPanel>
-                    <StackPanel Margin="0,334,10,0" Background="AliceBlue" Height="40" Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Right" Width="476">
+                    <StackPanel x:Name="StackPanelHoldingRegisters4" Margin="0,330,10,0" Background="AliceBlue" Height="40" Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Right" Width="400">
                         <Label x:Name="labelHoldingRegisters_15" Content="Address start:" Height="30" FontSize="12"/>
                         <ComboBox x:Name="comboBoxHoldingAddress16_A" Width="55" Height="25" FontSize="12" SelectionChanged="comboBoxHoldingAddress16_A_SelectionChanged">
                             <ComboBoxItem Content="DEC"/>
                             <ComboBoxItem Content="HEX"/>
                         </ComboBox>
-                        <TextBox x:Name="textBoxHoldingAddress16_A" TextWrapping="Wrap" Width="50"  Height="25" Margin="10,0,0,0" FontSize="12" TextChanged="textBoxHoldingAddress16_A_TextChanged"/>
+                        <TextBox x:Name="textBoxHoldingAddress16_A" TextWrapping="Wrap" Width="50"  Height="25" Margin="10,0,0,0" FontSize="12" TextChanged="textBoxHoldingAddress16_A_TextChanged" VerticalContentAlignment="Center"/>
                         <Label x:Name="labelHoldingRegisters_16" Content="Nr. di word:" Height="30" FontSize="12" Margin="3,0,0,0"/>
                         <ComboBox x:Name="comboBoxHoldingAddress16_B" Width="55" Height="25" FontSize="12" SelectionChanged="comboBoxHoldingAddress16_B_SelectionChanged">
                             <ComboBoxItem Content="DEC"/>
                             <ComboBoxItem Content="HEX"/>
                         </ComboBox>
-                        <TextBox x:Name="textBoxHoldingAddress16_B" TextWrapping="Wrap" Width="50"  Height="25" Margin="10,0,0,0" FontSize="12" TextChanged="textBoxHoldingAddress16_B_TextChanged"/>
+                        <TextBox x:Name="textBoxHoldingAddress16_B" TextWrapping="Wrap" Width="50"  Height="25" Margin="10,0,0,0" FontSize="12" TextChanged="textBoxHoldingAddress16_B_TextChanged" VerticalContentAlignment="Center"/>
                     </StackPanel>
-                    <StackPanel Margin="0,259,10,0" Background="AliceBlue" Height="40" Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Right" Width="476">
+                    <StackPanel x:Name="StackPanelHoldingRegisters3" Margin="0,259,10,0" Background="AliceBlue" Height="40" Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Right" Width="400">
                         <Label x:Name="labelHoldingRegisters_12" Content="Address:" Height="25" FontSize="12"/>
                         <ComboBox x:Name="comboBoxHoldingAddress06_b" Width="55" Height="25" FontSize="12" SelectionChanged="comboBoxHoldingAddress06_b_SelectionChanged">
                             <ComboBoxItem Content="DEC"/>
                             <ComboBoxItem Content="HEX"/>
                         </ComboBox>
-                        <TextBox x:Name="textBoxHoldingAddress06_b" TextWrapping="Wrap" Width="50"  Height="25" Margin="10,0,0,0" FontSize="12" TextChanged="textBoxHoldingAddress06_b_TextChanged"/>
+                        <TextBox x:Name="textBoxHoldingAddress06_b" TextWrapping="Wrap" Width="50"  Height="25" Margin="10,0,0,0" FontSize="12" TextChanged="textBoxHoldingAddress06_b_TextChanged" VerticalContentAlignment="Center"/>
                         <Label x:Name="labelHoldingRegisters_13" Content="Value:" Height="25" FontSize="12"/>
                         <ComboBox x:Name="comboBoxHoldingValue06_b" Width="55" Height="25" SelectionChanged="comboBoxHoldingValue06_b_SelectionChanged" FontSize="12">
                             <ComboBoxItem Content="DEC"/>
                             <ComboBoxItem Content="HEX"/>
                         </ComboBox>
-                        <TextBox x:Name="textBoxHoldingValue06_b" TextWrapping="Wrap" Width="50"  Height="25" Margin="10,0,0,0" FontSize="12" TextChanged="textBoxHoldingValue06_b_TextChanged"/>
+                        <TextBox x:Name="textBoxHoldingValue06_b" TextWrapping="Wrap" Width="50"  Height="25" Margin="10,0,0,0" FontSize="12" TextChanged="textBoxHoldingValue06_b_TextChanged" VerticalContentAlignment="Center"/>
                         <Button x:Name="buttonWriteHolding06_b" Content="Write" Width="55" Height="25" Margin="10,0,0,0" Click="buttonWriteHolding06_b_Click" FontSize="12"/>
                     </StackPanel>
-                    <StackPanel x:Name="stackGoToHolding" Margin="0,432,13,0" Background="AliceBlue" Height="40" Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Right" Width="271">
+                    <StackPanel x:Name="stackGoToHolding" Margin="0,432,13,0" Background="AliceBlue" Height="40" Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Right" Width="271" Visibility="Hidden">
                         <Label x:Name="labelGoToHolding" Content="Go to Holding address:" Height="30" FontSize="12"/>
                         <TextBox x:Name="textBoxGoToHoldingAddress" TextWrapping="Wrap" Width="50"  Height="25" Margin="10,0,0,0" FontSize="12"/>
                         <Button x:Name="buttonGoToHoldingAddress" Content="Vai" Width="55" Height="25" Margin="10,0,0,0" Click="buttonGoToHoldingAddress_Click" FontSize="12"/>
                     </StackPanel>
-                    <Button x:Name="buttonClearHoldingReg" Height="25" Margin="0,0,414,9.571" FontSize="12" HorizontalAlignment="Right" Width="72" VerticalAlignment="Bottom" Click="buttonClearHoldingReg_Click">
+                    <Button x:Name="buttonClearHoldingReg" Height="25" Margin="0,0,338,10" FontSize="12" HorizontalAlignment="Right" Width="72" VerticalAlignment="Bottom" Click="buttonClearHoldingReg_Click">
                         <StackPanel Orientation="Horizontal">
                             <Viewbox Width="16" Height="16" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
                                 <Rectangle Width="16" Height="16">
@@ -827,8 +811,8 @@
                             <TextBlock x:Name="textBlockClearHoldingReg" Text="Clear" Margin="3,0,0,0"/>
                         </StackPanel>
                     </Button>
-                    <CheckBox x:Name="CheckBoxSendValuesOnEditHoldingTable" Content="Live edit (sends automatically commands FC06)" HorizontalAlignment="Right" Margin="0,0,215,44.571" VerticalAlignment="Bottom"/>
-                    <Button x:Name="buttonExportHoldingReg" Height="25" Margin="0,0,337,9.571" FontSize="12" HorizontalAlignment="Right" Width="72" VerticalAlignment="Bottom" Click="buttonExportHoldingReg_Click">
+                    <CheckBox x:Name="CheckBoxSendValuesOnEditHoldingTable" Content="Live edit (sends automatically commands FC06)" HorizontalAlignment="Right" Margin="0,0,20,42" VerticalAlignment="Bottom" Width="390"/>
+                    <Button x:Name="buttonExportHoldingReg" Height="25" Margin="0,0,261,10" FontSize="12" HorizontalAlignment="Right" Width="72" VerticalAlignment="Bottom" Click="buttonExportHoldingReg_Click">
                         <StackPanel Orientation="Horizontal">
                             <Viewbox Width="16" Height="16" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
                                 <Rectangle Width="16" Height="16">
@@ -855,7 +839,7 @@
                 </Grid>
             </TabItem>
             <TabItem Header="Diagnostic (FC08)" FontSize="12">
-                <Grid x:Name="ButtonCalcCRC" Background="#FFE5E5E5">
+                <Grid x:Name="GridDiagnostic" Background="#FFE5E5E5">
                     <Label x:Name="labelDiagnostic_0" Content="Diagnostic functions (FC08):" HorizontalAlignment="Left" Margin="28,34,0,0" VerticalAlignment="Top" FontWeight="Bold" FontSize="15"/>
                     <Label x:Name="labelDiagnostic_1" Content="Default SubFunction:" HorizontalAlignment="Left" Margin="28,69,0,0" VerticalAlignment="Top" FontSize="13"/>
                     <Label x:Name="labelDiagnostic_2" Content="Response:" HorizontalAlignment="Left" Margin="28,103,0,0" VerticalAlignment="Top" FontSize="13"/>
@@ -927,7 +911,7 @@
                 </Grid>
             </TabItem>
             <TabItem x:Name="tabItem6" Header="Log" FontSize="12">
-                <Grid Background="#FFE5E5E5">
+                <Grid x:Name="GridLog" Background="#FFE5E5E5">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                         <ColumnDefinition/>
@@ -948,7 +932,7 @@
                 </Grid>
             </TabItem>
             <TabItem x:Name="TabItem7" Header="Settings" FontSize="12">
-                <Grid Background="#FFE5E5E5">
+                <Grid x:Name="GridSettings" Background="#FFE5E5E5">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="24*"></ColumnDefinition>
                         <ColumnDefinition Width="179*"/>
@@ -975,7 +959,7 @@
                     <CheckBox x:Name="checkBoxViewTableWithoutOffset" Content="Nascondi offset utente nelle tabelle" HorizontalAlignment="Left" Margin="28,135,0,0" Grid.Row="1" VerticalAlignment="Top" Grid.ColumnSpan="3" Width="426" Checked="checkBoxViewTableWithoutOffset_CheckedChanged" Unchecked="checkBoxViewTableWithoutOffset_CheckedChanged"/>
                     <Label x:Name="labelSettings_3" Content="Loop polling interval [ms]:" HorizontalAlignment="Left" Margin="28,333,0,0" Grid.Row="1" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
                     <TextBox x:Name="TextBoxPollingInterval" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="235,335,0,0" Grid.Row="1" TextWrapping="Wrap" Text="10000" VerticalAlignment="Top" Width="69" TextChanged="TextBoxPollingINterval_TextChanged"/>
-                    <Label x:Name="labelSettings_3_Copy" Content="Read timeout (serial/TCP) [ms]" HorizontalAlignment="Left" Margin="28,302,0,0" Grid.Row="1" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
+                    <Label x:Name="labelSettings_5" Content="Read timeout (serial/TCP) [ms]" HorizontalAlignment="Left" Margin="28,302,0,0" Grid.Row="1" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
                     <TextBox x:Name="textBoxReadTimeout" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="234.714,301.857,0,0" Grid.Row="1" TextWrapping="Wrap" Text="1000" VerticalAlignment="Top" Width="69" TextChanged="TextBoxReadTimeout_TextChanged"/>
                     <TextBox x:Name="textBoxCurrentLanguage" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="235,368,0,0" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Width="69" TextChanged="TextBoxCurrentLanguage_TextChanged" IsEnabled="False"/>
                     <Label x:Name="labelSettings_4" Content="Current Language:" HorizontalAlignment="Left" Margin="28,365,0,0" Grid.Row="1" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
