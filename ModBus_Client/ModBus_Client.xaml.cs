@@ -275,6 +275,10 @@ namespace ModBus_Client
         public SolidColorBrush BackGroundDark = new SolidColorBrush(Color.FromArgb(255, (byte)60, (byte)60, (byte)60));
         public SolidColorBrush BackGroundDark2 = new SolidColorBrush(Color.FromArgb(255, (byte)90, (byte)90, (byte)90));
 
+        // Test dark color v2
+        //public SolidColorBrush BackGroundDark = new SolidColorBrush(Color.FromArgb(255, (byte)90, (byte)90, (byte)90));
+        //public SolidColorBrush BackGroundDark2 = new SolidColorBrush(Color.FromArgb(255, (byte)60, (byte)60, (byte)60)); 
+
         public string ForeGroundDarkStr;
         public string BackGroundDarkStr;
 
@@ -6776,13 +6780,13 @@ namespace ModBus_Client
             NewStyle.Setters.Add(SetBackgroundProperty);
 
             // Main
-            this.Background = darkMode ? BackGroundDark2 : BackGroundLight;
+            this.Background = darkMode ? BackGroundDark2 : BackGroundLight2;
             ToolBarTrayMain.Background = darkMode ? BackGroundDark2 : Brushes.White;
 
-            textBoxModbusAddress.Background = darkMode ? BackGroundDark : BackGroundLight;
+            textBoxModbusAddress.Background = darkMode ? BackGroundDark : BackGroundLight2;
             textBoxModbusAddress.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
 
-            tabControlMain.Background = darkMode ? BackGroundDark2 : BackGroundLight;
+            tabControlMain.Background = darkMode ? BackGroundDark2 : BackGroundLight2;
             GridConnection.Background = darkMode ? BackGroundDark : BackGroundLight;
 
             labelSerialRtu.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
@@ -6979,9 +6983,9 @@ namespace ModBus_Client
             textBoxDiagnosticFunctionManual.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
             textBoxManualDiagnosticResponse.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
 
-            textBoxDiagnosticResponse.Background = darkMode ? BackGroundDark : BackGroundLight;
-            textBoxDiagnosticFunctionManual.Background = darkMode ? BackGroundDark : BackGroundLight;
-            textBoxManualDiagnosticResponse.Background = darkMode ? BackGroundDark : BackGroundLight;
+            textBoxDiagnosticResponse.Background = darkMode ? BackGroundDark : BackGroundLight2;
+            textBoxDiagnosticFunctionManual.Background = darkMode ? BackGroundDark : BackGroundLight2;
+            textBoxManualDiagnosticResponse.Background = darkMode ? BackGroundDark : BackGroundLight2;
 
             // Log
             GridLog.Background = darkMode ? BackGroundDark : BackGroundLight;
@@ -7012,80 +7016,80 @@ namespace ModBus_Client
 
             // Controlli
             textBoxCoilsOffset.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
-            textBoxCoilsOffset.Background = darkMode ? BackGroundDark : BackGroundLight;
+            textBoxCoilsOffset.Background = darkMode ? BackGroundDark : BackGroundLight2;
             textBoxCoilsAddress01.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
-            textBoxCoilsAddress01.Background = darkMode ? BackGroundDark : BackGroundLight;
+            textBoxCoilsAddress01.Background = darkMode ? BackGroundDark : BackGroundLight2;
             textBoxCoilNumber.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
-            textBoxCoilNumber.Background = darkMode ? BackGroundDark : BackGroundLight;
+            textBoxCoilNumber.Background = darkMode ? BackGroundDark : BackGroundLight2;
             textBoxCoilsRange_A.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
-            textBoxCoilsRange_A.Background = darkMode ? BackGroundDark : BackGroundLight;
+            textBoxCoilsRange_A.Background = darkMode ? BackGroundDark : BackGroundLight2;
             textBoxCoilsRange_B.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
-            textBoxCoilsRange_B.Background = darkMode ? BackGroundDark : BackGroundLight;
+            textBoxCoilsRange_B.Background = darkMode ? BackGroundDark : BackGroundLight2;
             textBoxCoilsAddress05.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
-            textBoxCoilsAddress05.Background = darkMode ? BackGroundDark : BackGroundLight;
+            textBoxCoilsAddress05.Background = darkMode ? BackGroundDark : BackGroundLight2;
             textBoxCoilsValue05.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
-            textBoxCoilsValue05.Background = darkMode ? BackGroundDark : BackGroundLight;
+            textBoxCoilsValue05.Background = darkMode ? BackGroundDark : BackGroundLight2;
             textBoxCoilsAddress05_b.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
-            textBoxCoilsAddress05_b.Background = darkMode ? BackGroundDark : BackGroundLight;
+            textBoxCoilsAddress05_b.Background = darkMode ? BackGroundDark : BackGroundLight2;
             textBoxCoilsValue05_b.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
-            textBoxCoilsValue05_b.Background = darkMode ? BackGroundDark : BackGroundLight;
+            textBoxCoilsValue05_b.Background = darkMode ? BackGroundDark : BackGroundLight2;
             textBoxCoilsAddress15_A.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
-            textBoxCoilsAddress15_A.Background = darkMode ? BackGroundDark : BackGroundLight;
+            textBoxCoilsAddress15_A.Background = darkMode ? BackGroundDark : BackGroundLight2;
             textBoxCoilsAddress15_B.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
-            textBoxCoilsAddress15_B.Background = darkMode ? BackGroundDark : BackGroundLight;
+            textBoxCoilsAddress15_B.Background = darkMode ? BackGroundDark : BackGroundLight2;
             textBoxCoilsValue15.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
-            textBoxCoilsValue15.Background = darkMode ? BackGroundDark : BackGroundLight;
+            textBoxCoilsValue15.Background = darkMode ? BackGroundDark : BackGroundLight2;
             textBoxGoToCoilAddress.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
-            textBoxGoToCoilAddress.Background = darkMode ? BackGroundDark : BackGroundLight;
+            textBoxGoToCoilAddress.Background = darkMode ? BackGroundDark : BackGroundLight2;
 
             textBoxInputOffset.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
-            textBoxInputOffset.Background = darkMode ? BackGroundDark : BackGroundLight;
+            textBoxInputOffset.Background = darkMode ? BackGroundDark : BackGroundLight2;
             textBoxInputAddress02.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
-            textBoxInputAddress02.Background = darkMode ? BackGroundDark : BackGroundLight;
+            textBoxInputAddress02.Background = darkMode ? BackGroundDark : BackGroundLight2;
             textBoxInputNumber.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
-            textBoxInputNumber.Background = darkMode ? BackGroundDark : BackGroundLight;
+            textBoxInputNumber.Background = darkMode ? BackGroundDark : BackGroundLight2;
             textBoxInputRange_A.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
-            textBoxInputRange_A.Background = darkMode ? BackGroundDark : BackGroundLight;
+            textBoxInputRange_A.Background = darkMode ? BackGroundDark : BackGroundLight2;
             textBoxInputRange_B.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
-            textBoxInputRange_B.Background = darkMode ? BackGroundDark : BackGroundLight;
+            textBoxInputRange_B.Background = darkMode ? BackGroundDark : BackGroundLight2;
 
             textBoxInputRegOffset.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
-            textBoxInputRegOffset.Background = darkMode ? BackGroundDark : BackGroundLight;
+            textBoxInputRegOffset.Background = darkMode ? BackGroundDark : BackGroundLight2;
             textBoxInputRegisterAddress04.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
-            textBoxInputRegisterAddress04.Background = darkMode ? BackGroundDark : BackGroundLight;
+            textBoxInputRegisterAddress04.Background = darkMode ? BackGroundDark : BackGroundLight2;
             textBoxInputRegisterNumber.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
-            textBoxInputRegisterNumber.Background = darkMode ? BackGroundDark : BackGroundLight;
+            textBoxInputRegisterNumber.Background = darkMode ? BackGroundDark : BackGroundLight2;
             textBoxInputRegisterRange_A.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
-            textBoxInputRegisterRange_A.Background = darkMode ? BackGroundDark : BackGroundLight;
+            textBoxInputRegisterRange_A.Background = darkMode ? BackGroundDark : BackGroundLight2;
             textBoxInputRegisterRange_B.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
-            textBoxInputRegisterRange_B.Background = darkMode ? BackGroundDark : BackGroundLight;
+            textBoxInputRegisterRange_B.Background = darkMode ? BackGroundDark : BackGroundLight2;
 
             textBoxHoldingOffset.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
-            textBoxHoldingOffset.Background = darkMode ? BackGroundDark : BackGroundLight;
+            textBoxHoldingOffset.Background = darkMode ? BackGroundDark : BackGroundLight2;
             textBoxHoldingAddress03.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
-            textBoxHoldingAddress03.Background = darkMode ? BackGroundDark : BackGroundLight;
+            textBoxHoldingAddress03.Background = darkMode ? BackGroundDark : BackGroundLight2;
             textBoxHoldingRegisterNumber.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
-            textBoxHoldingRegisterNumber.Background = darkMode ? BackGroundDark : BackGroundLight;
+            textBoxHoldingRegisterNumber.Background = darkMode ? BackGroundDark : BackGroundLight2;
             textBoxHoldingRange_A.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
-            textBoxHoldingRange_A.Background = darkMode ? BackGroundDark : BackGroundLight;
+            textBoxHoldingRange_A.Background = darkMode ? BackGroundDark : BackGroundLight2;
             textBoxHoldingRange_B.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
-            textBoxHoldingRange_B.Background = darkMode ? BackGroundDark : BackGroundLight;
+            textBoxHoldingRange_B.Background = darkMode ? BackGroundDark : BackGroundLight2;
             textBoxHoldingAddress06.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
-            textBoxHoldingAddress06.Background = darkMode ? BackGroundDark : BackGroundLight;
+            textBoxHoldingAddress06.Background = darkMode ? BackGroundDark : BackGroundLight2;
             textBoxHoldingValue06.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
-            textBoxHoldingValue06.Background = darkMode ? BackGroundDark : BackGroundLight;
+            textBoxHoldingValue06.Background = darkMode ? BackGroundDark : BackGroundLight2;
             textBoxHoldingAddress06_b.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
-            textBoxHoldingAddress06_b.Background = darkMode ? BackGroundDark : BackGroundLight;
+            textBoxHoldingAddress06_b.Background = darkMode ? BackGroundDark : BackGroundLight2;
             textBoxHoldingValue06_b.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
-            textBoxHoldingValue06_b.Background = darkMode ? BackGroundDark : BackGroundLight;
+            textBoxHoldingValue06_b.Background = darkMode ? BackGroundDark : BackGroundLight2;
             textBoxHoldingAddress16_A.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
-            textBoxHoldingAddress16_A.Background = darkMode ? BackGroundDark : BackGroundLight;
+            textBoxHoldingAddress16_A.Background = darkMode ? BackGroundDark : BackGroundLight2;
             textBoxHoldingAddress16_B.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
-            textBoxHoldingAddress16_B.Background = darkMode ? BackGroundDark : BackGroundLight;
+            textBoxHoldingAddress16_B.Background = darkMode ? BackGroundDark : BackGroundLight2;
             textBoxHoldingValue16.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
-            textBoxHoldingValue16.Background = darkMode ? BackGroundDark : BackGroundLight;
+            textBoxHoldingValue16.Background = darkMode ? BackGroundDark : BackGroundLight2;
             textBoxGoToHoldingAddress.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
-            textBoxGoToHoldingAddress.Background = darkMode ? BackGroundDark : BackGroundLight;
+            textBoxGoToHoldingAddress.Background = darkMode ? BackGroundDark : BackGroundLight2;
         }
     }
 
