@@ -948,10 +948,10 @@
                     <Label x:Name="labelSettings_1" Content="Restart the application to apply changes in this page" HorizontalAlignment="Left" Margin="89,10,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2" Width="469" Grid.Column="1"/>
                     <CheckBox x:Name="checkBoxCloseConsolAfterBoot" Content="Chiudi console al termine dell'avvio" HorizontalAlignment="Left" Margin="28,159,0,0" Grid.Row="1" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
                     <Label x:Name="labelColorCellRead" Content="Colore celle lette:" Grid.Column="2" HorizontalAlignment="Left" Margin="28,34.857,0,0" Grid.Row="1" VerticalAlignment="Top"/>
-                    <Label x:Name="labelColorCellWrote" Content="Colore celle scritte:" Grid.Column="2" HorizontalAlignment="Left" Margin="28,65.857,0,0" Grid.Row="1" VerticalAlignment="Top"/>
+                    <Label x:Name="labelColorCellWrote" Content="Colore celle scritte:" Grid.Column="2" HorizontalAlignment="Left" Margin="28,64,0,0" Grid.Row="1" VerticalAlignment="Top"/>
                     <Label x:Name="labelColorCellError" Content="Colore celle che hanno generato un errore:" Grid.Column="2" HorizontalAlignment="Left" Margin="28,96.857,0,0" Grid.Row="1" VerticalAlignment="Top"/>
                     <Button x:Name="buttonColorCellRead" Content="Color" HorizontalAlignment="Left" Margin="320,34.857,0,0" Grid.Row="1" VerticalAlignment="Top" Width="75" Grid.Column="2" Click="buttonColorCellRead_Click"/>
-                    <Button x:Name="buttonCellWrote" Content="Color" HorizontalAlignment="Left" Margin="320,68.857,0,0" Grid.Row="1" VerticalAlignment="Top" Width="75" Grid.Column="2" Click="buttonCellWrote_Click"/>
+                    <Button x:Name="buttonCellWrote" Content="Color" HorizontalAlignment="Left" Margin="320,67,0,0" Grid.Row="1" VerticalAlignment="Top" Width="75" Grid.Column="2" Click="buttonCellWrote_Click"/>
                     <Button x:Name="buttonColorCellError" Content="Color" HorizontalAlignment="Left" Margin="320,99.857,0,0" Grid.Row="1" VerticalAlignment="Top" Width="75" Grid.Column="2" Click="buttonColorCellError_Click"/>
                     <CheckBox x:Name="checkBoxUseOffsetInTextBox" Content="Correggi automaticamente offset indirizzi modbus textBox&#xD;&#xA;(se off invia qualsiasi indirizzo immesso nella textBox)" HorizontalAlignment="Left" Margin="28,47,0,0" Grid.Row="1" VerticalAlignment="Top" Grid.ColumnSpan="3" Width="426" Checked="checkBoxUseOffsetInTextBox_Checked"/>
                     <CheckBox x:Name="checkBoxFollowModbusProtocol" Content="Limita gli indirizzi modbus a 9998 (come da protocollo)" HorizontalAlignment="Left" Margin="28,89,0,0" Grid.Row="1" VerticalAlignment="Top" Grid.ColumnSpan="3" Width="426"/>
@@ -964,6 +964,8 @@
                     <TextBox x:Name="textBoxCurrentLanguage" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="235,368,0,0" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Width="69" TextChanged="TextBoxCurrentLanguage_TextChanged" IsEnabled="False"/>
                     <Label x:Name="labelSettings_4" Content="Current Language:" HorizontalAlignment="Left" Margin="28,365,0,0" Grid.Row="1" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
                     <CheckBox x:Name="CheckBoxDarkMode" Content="Dark Mode" HorizontalAlignment="Left" Margin="28,182,0,0" Grid.Row="1" VerticalAlignment="Top" Grid.ColumnSpan="2" Checked="CheckBoxDarkMode_Checked" Unchecked="CheckBoxDarkMode_Checked"/>
+                    <Button x:Name="ButtonResetLightMode" Content="Reset Light Mode" Grid.Column="2" HorizontalAlignment="Left" Margin="140,135,0,0" Grid.Row="1" VerticalAlignment="Top" Width="125"/>
+                    <Button x:Name="ButtonResetDarkMode" Content="Reset Light Mode" Grid.Column="2" HorizontalAlignment="Left" Margin="270,135,0,0" Grid.Row="1" VerticalAlignment="Top" Width="125"/>
                 </Grid>
             </TabItem>
         </TabControl>

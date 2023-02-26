@@ -519,6 +519,96 @@ namespace ModBus_Client
             }
 
             changeEnableButtonsConnect(false);
+
+            // Command line parameters
+            string[] argv = Environment.GetCommandLineArgs();
+            for(int i = 0; i < argv.Length; i++)
+            {
+                // --profile "test 2"
+                if (argv[i].IndexOf("--profile") != -1)
+                {
+                    radioButtonModeTcp.IsChecked = true;
+
+                    if ((i + 1) < argv.Length)
+                    {
+                        LoadProfile(argv[i + 1].Replace("\"", ""));
+                    }
+                    else
+                    {
+                        Console.WriteLine("Not enough parameter for --profile");
+                    }
+                }
+
+                // --tcp 127.0.0.1 502
+                if (argv[i].IndexOf("--tcp") != -1)
+                {
+                    radioButtonModeTcp.IsChecked = true;
+
+                    if ((i + 1) < argv.Length)
+                    {
+                        textBoxTcpClientIpAddress.Text = argv[i + 1];
+                        textBoxTcpClientPort.Text = argv[i + 2];
+
+                        buttonTcpActive_Click(null, null);
+                    }
+                    else
+                    {
+                        Console.WriteLine("Not enough parameter for --tcp");
+                    }
+                }
+
+                // --rtu COM3 19200 8N1
+                if (argv[i].IndexOf("--rtu") != -1)
+                {
+                    radioButtonModeSerial.IsChecked = true;
+
+                    if ((i + 1) < argv.Length)
+                    {
+                        for(int ii = 0; ii < comboBoxSerialPort.Items.Count; ii++)
+                        {
+                            if (comboBoxSerialPort.Items[ii].ToString().IndexOf(argv[i + 1]) != -1)
+                                comboBoxSerialPort.SelectedIndex = ii;
+                        }
+
+                        for (int ii = 0; ii < comboBoxSerialSpeed.Items.Count; ii++)
+                        {
+                            if (comboBoxSerialSpeed.Items[ii].ToString().IndexOf(argv[i + 2]) != -1)
+                                comboBoxSerialSpeed.SelectedIndex = ii;
+                        }
+
+                        for (int ii = 0; ii < comboBoxSerialStop.Items.Count; ii++)
+                        {
+                            if (comboBoxSerialStop.Items[ii].ToString().IndexOf(argv[i + 3].Substring(2)) != -1)
+                                comboBoxSerialStop.SelectedIndex = ii;
+                        }
+
+                        if (argv[i + 3].Substring(1, 1) == "N")
+                            comboBoxSerialParity.SelectedIndex = 0;
+                        if (argv[i + 3].Substring(1, 1) == "E")
+                            comboBoxSerialParity.SelectedIndex = 1;
+                        if (argv[i + 3].Substring(1, 1) == "O")
+                            comboBoxSerialParity.SelectedIndex = 2;
+
+                        buttonTcpActive_Click(null, null);
+                    }
+                    else
+                    {
+                        Console.WriteLine("Not enough parameter for --rtu");
+                    }
+                }
+
+                if (argv[i].IndexOf("--tab") != -1)
+                {
+                    if((i + 1) < argv.Length)
+                    { 
+                        tabControlMain.SelectedIndex = int.Parse(argv[i + 1]);
+                    }
+                    else
+                    {
+                        Console.WriteLine("Not enough parameter for --tab");
+                    }
+                }
+            }
         }
 
         private void radioButtonModeSerial_CheckedChanged(object sender, RoutedEventArgs e)
@@ -4070,34 +4160,44 @@ namespace ModBus_Client
             //Controllo il risultato del form
             if ((bool)form_load.DialogResult)
             {
-                //SaveConfiguration_v1(false);
-                SaveConfiguration_v2(false);
+                LoadProfile(form_load.path);
+            }
+        }
 
-                pathToConfiguration = form_load.path;
+        public void LoadProfile(string profile)
+        {
+            if (!Directory.Exists(Directory.GetCurrentDirectory() + "\\Json\\" + pathToConfiguration))
+            {
+                Console.WriteLine("Profile: " + profile + " not found");
+                return;
+            }
 
-                if (pathToConfiguration != defaultPathToConfiguration)
-                {
-                    this.Title = title + " " + version + " - File: " + pathToConfiguration;
-                }
+           SaveConfiguration_v2(false);
 
-                // Se esiste una nuova versione del file di configurazione uso l'ultima, altrimenti carico il modello precedente
-                if (File.Exists(Directory.GetCurrentDirectory() + "\\Json\\" + pathToConfiguration + "\\Config.json"))
-                {
-                    LoadConfiguration_v2();
-                }
-                else
-                {
-                    LoadConfiguration_v1();
-                }
+            pathToConfiguration = profile;
 
-                if ((bool)radioButtonModeSerial.IsChecked)
-                {
-                    buttonSerialActive.Focus();
-                }
-                else
-                {
-                    buttonTcpActive.Focus();
-                }
+            if (pathToConfiguration != defaultPathToConfiguration)
+            {
+                this.Title = title + " " + version + " - File: " + pathToConfiguration;
+            }
+
+            // Se esiste una nuova versione del file di configurazione uso l'ultima, altrimenti carico il modello precedente
+            if (File.Exists(Directory.GetCurrentDirectory() + "\\Json\\" + pathToConfiguration + "\\Config.json"))
+            {
+                LoadConfiguration_v2();
+            }
+            else
+            {
+                LoadConfiguration_v1();
+            }
+
+            if ((bool)radioButtonModeSerial.IsChecked)
+            {
+                buttonSerialActive.Focus();
+            }
+            else
+            {
+                buttonTcpActive.Focus();
             }
         }
 
