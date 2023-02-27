@@ -524,6 +524,27 @@ namespace ModBus_Client
             string[] argv = Environment.GetCommandLineArgs();
             for(int i = 0; i < argv.Length; i++)
             {
+                // -h
+                // --help
+                if (argv[i].IndexOf("-h") != -1 || argv[i].IndexOf("--help") != -1)
+                {
+                    Console.WriteLine("Command line parameters:");
+                    Console.WriteLine("");
+                    Console.WriteLine("Load profile:");
+                    Console.WriteLine("--profile \"Profile name\"");
+                    Console.WriteLine(":");
+                    Console.WriteLine("TCP connection:");
+                    Console.WriteLine("--tcp 192.168.1.40 502");
+                    Console.WriteLine("");
+                    Console.WriteLine("RTU connection:");
+                    Console.WriteLine("--rtu COM3 19200 8N1");
+                    Console.WriteLine("");
+                    Console.WriteLine("--profile \"Custom\" --tcp 192.168.1.40 502");
+                    Console.WriteLine("--profile \"Custom\" --rtu COM3 9600 8E2");
+                    Console.WriteLine("");
+                    apriConsole();
+                }
+
                 // --profile "test 2"
                 if (argv[i].IndexOf("--profile") != -1)
                 {
@@ -7190,6 +7211,32 @@ namespace ModBus_Client
             textBoxHoldingValue16.Background = darkMode ? BackGroundDark : BackGroundLight2;
             textBoxGoToHoldingAddress.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
             textBoxGoToHoldingAddress.Background = darkMode ? BackGroundDark : BackGroundLight2;
+        }
+
+        private void ButtonResetLightMode_Click(object sender, RoutedEventArgs e)
+        {
+            CheckBoxDarkMode.IsChecked = false;
+
+            colorDefaultReadCell = new SolidColorBrush(Color.FromArgb(0xFF, 0x87, 0xCE, 0xFA));
+            colorDefaultWriteCell = Brushes.LightGreen;
+            colorErrorCell = Brushes.Orange;
+
+            labelColorCellRead.Background = colorDefaultReadCell;
+            labelColorCellWrote.Background = colorDefaultWriteCell;
+            labelColorCellError.Background = colorErrorCell;
+        }
+
+        private void ButtonResetDarkMode_Click(object sender, RoutedEventArgs e)
+        {
+            CheckBoxDarkMode.IsChecked = true;
+
+            colorDefaultReadCell = Brushes.DarkBlue;
+            colorDefaultWriteCell = Brushes.LightGreen;
+            colorErrorCell = Brushes.Orange;
+
+            labelColorCellRead.Background = new SolidColorBrush(Color.FromArgb(0xFF, 85, 85, 85));
+            labelColorCellWrote.Background = new SolidColorBrush(Color.FromArgb(0xFF, 0, 128, 0));
+            labelColorCellError.Background = colorErrorCell;
         }
     }
 
