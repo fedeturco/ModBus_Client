@@ -225,7 +225,7 @@
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
-                    <DataGrid x:Name="dataGridViewCoils" Margin="10,50,415,10" AutoGenerateColumns="False" HorizontalGridLinesBrush="LightGray" VerticalGridLinesBrush="LightGray" BorderThickness="1" FontSize="14" CellEditEnding="dataGridViewCoils_KeyUp"  RowBackground="#FFF1F1F1">
+                    <DataGrid x:Name="dataGridViewCoils" Margin="10,50,415,10" AutoGenerateColumns="False" HorizontalGridLinesBrush="LightGray" VerticalGridLinesBrush="LightGray" BorderThickness="1" FontSize="14" CellEditEnding="dataGridViewCoils_KeyUp"  RowBackground="White">
                         <DataGrid.Columns>
                             <DataGridTextColumn x:Name="dataGridTabCoilsRegisters" Header="Register" Binding="{Binding Register}" Width="100" Visibility="Collapsed">
                                 <DataGridTextColumn.ElementStyle>
@@ -381,7 +381,6 @@
                             <TextBlock x:Name="textBlockExportCoils" Text="Export" Margin="3,0,0,0"/>
                         </StackPanel>
                     </Button>
-                    <Label x:Name="labelPrimoRegistroCoils" Content="Range registri: 0-9998" Margin="0,10,10,0" VerticalAlignment="Top" RenderTransformOrigin="0.22,0.103" HorizontalAlignment="Right" Width="200" HorizontalContentAlignment="Right" FontSize="12"/>
                 </Grid>
             </TabItem>
             <TabItem x:Name="tabItem2" Header="Inputs (1 bit)" FontSize="12">
@@ -419,7 +418,6 @@
                     </ComboBox>
                     <TextBox x:Name="textBoxInputOffset" HorizontalAlignment="Left" Height="25" Margin="255,10,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="65" FontSize="12" TextChanged="textBoxInputOffset_TextChanged" VerticalContentAlignment="Center"/>
                     <Label x:Name="labelOffsetHiddenInput" Content="Offset hidden in table" HorizontalAlignment="Left" Margin="325,10,0,0" VerticalAlignment="Top" FontSize="12"/>
-                    <Label x:Name="labelPrimoRegistroInputs" Content="Range registri: 0-9998" Margin="0,10,13,0" VerticalAlignment="Top" RenderTransformOrigin="0.22,0.103" HorizontalAlignment="Right" Width="200" HorizontalContentAlignment="Right" FontSize="12"/>
                     <Label x:Name="labelInputs_2" Content="Read Input Status (FC02):" Height="26" Margin="0,50,210,0" VerticalAlignment="Top" FontSize="12" HorizontalAlignment="Right" Width="200"/>
                     <StackPanel x:Name="StackPanelInputs0" Margin="0,76,10,0" Background="AliceBlue" Height="40" Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Right" Width="400">
                         <Label x:Name="labelInputs_3" Content="Address:" Height="25" FontSize="12"/>
@@ -503,7 +501,7 @@
             </TabItem>
             <TabItem x:Name="tabItem3" Header="Input registers (1 word)" FontSize="12">
                 <Grid x:Name="GridInputRegisters" Background="#FFE5E5E5">
-                    <DataGrid x:Name="dataGridViewInputRegister" Margin="10,50,415,10" AutoGenerateColumns="False"  HorizontalGridLinesBrush="LightGray" VerticalGridLinesBrush="LightGray" BorderThickness="1" FontSize="14"  RowBackground="#FFF1F1F1">
+                    <DataGrid x:Name="dataGridViewInputRegister" Margin="10,50,415,10" AutoGenerateColumns="False"  HorizontalGridLinesBrush="LightGray" VerticalGridLinesBrush="LightGray" BorderThickness="1" FontSize="14"  RowBackground="White">
                         <DataGrid.RowStyle>
                             <Style TargetType="DataGridRow">
                                 <Setter Property="ToolTip">
@@ -555,7 +553,6 @@
                     </ComboBox>
                     <TextBox x:Name="textBoxInputRegOffset" HorizontalAlignment="Left" Height="25" Margin="380,10,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="65" FontSize="12" TextChanged="textBoxInputRegOffset_TextChanged" VerticalContentAlignment="Center"/>
                     <Label x:Name="labelOffsetHiddenInputRegister" Content="Offset hidden in table" HorizontalAlignment="Left" Margin="450,9,0,0" VerticalAlignment="Top" FontSize="12"/>
-                    <Label x:Name="labelPrimoInputRegister" Content="Range registri: 0-9998" Margin="0,10,13,0" VerticalAlignment="Top" RenderTransformOrigin="0.22,0.103" HorizontalAlignment="Right" Width="201" HorizontalContentAlignment="Right" FontSize="12"/>
                     <ComboBox x:Name="comboBoxInputRegValori" HorizontalAlignment="Left" Margin="195,10,0,0" VerticalAlignment="Top" Width="55" FontSize="12" Height="25" SelectionChanged="comboBoxInputRegValori_SelectionChanged">
                         <ComboBoxItem Content="DEC"/>
                         <ComboBoxItem Content="HEX"/>
@@ -696,7 +693,6 @@
                     </ComboBox>
                     <TextBox x:Name="textBoxHoldingOffset" HorizontalAlignment="Left" Height="25" Margin="380,10,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="65" FontSize="12" TextChanged="textBoxHoldingOffset_TextChanged" VerticalContentAlignment="Center"/>
                     <Label x:Name="labelOffsetHiddenHolding" Content="Offset hidden in table" HorizontalAlignment="Left" Margin="450,10,0,0" VerticalAlignment="Top" FontSize="12"/>
-                    <Label x:Name="labelPrimoRegistroHolding" Content="Range registri: 0-9998" Margin="0,10,10,0" VerticalAlignment="Top" RenderTransformOrigin="0.22,0.103" HorizontalAlignment="Right" Width="200" HorizontalContentAlignment="Right" FontSize="12"/>
                     <ComboBox x:Name="comboBoxHoldingValori" HorizontalAlignment="Left" Margin="195,10,0,0" VerticalAlignment="Top" Width="55" FontSize="12" Height="25" SelectionChanged="comboBoxHoldingValori_SelectionChanged">
                         <ComboBoxItem Content="DEC"/>
                         <ComboBoxItem Content="HEX"/>
@@ -965,7 +961,7 @@
                     <Label x:Name="labelSettings_4" Content="Current Language:" HorizontalAlignment="Left" Margin="28,365,0,0" Grid.Row="1" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
                     <CheckBox x:Name="CheckBoxDarkMode" Content="Dark Mode" HorizontalAlignment="Left" Margin="28,182,0,0" Grid.Row="1" VerticalAlignment="Top" Grid.ColumnSpan="2" Checked="CheckBoxDarkMode_Checked" Unchecked="CheckBoxDarkMode_Checked"/>
                     <Button x:Name="ButtonResetLightMode" Content="Reset Light Mode" Grid.Column="2" HorizontalAlignment="Left" Margin="140,135,0,0" Grid.Row="1" VerticalAlignment="Top" Width="125" Click="ButtonResetLightMode_Click"/>
-                    <Button x:Name="ButtonResetDarkMode" Content="Reset Light Mode" Grid.Column="2" HorizontalAlignment="Left" Margin="270,135,0,0" Grid.Row="1" VerticalAlignment="Top" Width="125" Click="ButtonResetDarkMode_Click"/>
+                    <Button x:Name="ButtonResetDarkMode" Content="Reset Dark Mode" Grid.Column="2" HorizontalAlignment="Left" Margin="270,135,0,0" Grid.Row="1" VerticalAlignment="Top" Width="125" Click="ButtonResetDarkMode_Click"/>
                 </Grid>
             </TabItem>
         </TabControl>

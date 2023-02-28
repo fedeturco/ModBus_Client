@@ -153,6 +153,7 @@ namespace ModBus_Client
                 template.textBoxTemplateNotes_ = TextBoxTemplateNotes.Text;
 
                 JavaScriptSerializer jss = new JavaScriptSerializer();
+                jss.MaxJsonLength = main.MaxJsonLength;
                 string file_content = jss.Serialize(template);
 
                 File.WriteAllText("Json/" + pathToConfiguration + "/Template.json", file_content);
@@ -177,6 +178,7 @@ namespace ModBus_Client
                 string file_content = File.ReadAllText("Json/" + pathToConfiguration + "/Template.json");
 
                 JavaScriptSerializer jss = new JavaScriptSerializer();
+                jss.MaxJsonLength = main.MaxJsonLength;
                 TEMPLATE template = jss.Deserialize<TEMPLATE>(file_content);
 
                 comboBoxCoilsOffset.SelectedIndex = template.comboBoxCoilsOffset_ == "HEX" ? 1 : 0;
@@ -459,6 +461,7 @@ namespace ModBus_Client
                 if ((bool)window.ShowDialog())
                 {
                     JavaScriptSerializer jss = new JavaScriptSerializer();
+                    jss.MaxJsonLength = main.MaxJsonLength;
                     dynamic profile = jss.DeserializeObject(File.ReadAllText(window.FileName));
 
                     if (!profile.ContainsKey("type"))
@@ -646,6 +649,7 @@ namespace ModBus_Client
                     }
 
                     JavaScriptSerializer jss = new JavaScriptSerializer();
+                    jss.MaxJsonLength = main.MaxJsonLength;
                     File.WriteAllText(profilePath, jss.Serialize(slave));
                 }
             }

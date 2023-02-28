@@ -252,6 +252,7 @@ namespace ModBus_Client
                 string file_content = File.ReadAllText("Json/" + pathToConfiguration + "/ComandiByte.json");
 
                 JavaScriptSerializer jss = new JavaScriptSerializer();
+                jss.MaxJsonLength = modBus_Client.MaxJsonLength;
                 SAVE_Form4 config = jss.Deserialize<SAVE_Form4>(file_content);
 
                 S_textBoxLabel = config.textBoxLabel_;
@@ -310,6 +311,7 @@ namespace ModBus_Client
                 config.registriBloccati_ = !textBoxLabel[0].IsEnabled;
 
                 JavaScriptSerializer jss = new JavaScriptSerializer();
+                jss.MaxJsonLength = modBus_Client.MaxJsonLength;
                 string file_content = jss.Serialize(config);
 
                 File.WriteAllText("Json/" + pathToConfiguration + "/ComandiByte.json", file_content);

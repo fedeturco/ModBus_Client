@@ -469,6 +469,7 @@ namespace ModBus_Client
                 string file_content = File.ReadAllText("Json/" + pathToConfiguration + "/ComandiBit.json");
 
                 JavaScriptSerializer jss = new JavaScriptSerializer();
+                jss.MaxJsonLength = modBus_Client.MaxJsonLength;
                 SAVE_Form config = jss.Deserialize<SAVE_Form>(file_content);
 
                 //textBoxModBusAddress.Text = config.textBoxModBusAddress_;
@@ -537,6 +538,7 @@ namespace ModBus_Client
                     string file_content = File.ReadAllText("Json/" + pathToConfiguration + "/Label_ComandiBit_" + i.ToString() + ".json");
 
                     JavaScriptSerializer jss = new JavaScriptSerializer();
+                    jss.MaxJsonLength = modBus_Client.MaxJsonLength;
                     SAVE_Form3 config = jss.Deserialize<SAVE_Form3>(file_content);
 
                     String[] labelBitRegisters_ = new String[16];
@@ -608,6 +610,7 @@ namespace ModBus_Client
                 config.registriBloccati_ = !textBoxLabel[0].IsEnabled;
 
                 JavaScriptSerializer jss = new JavaScriptSerializer();
+                jss.MaxJsonLength = modBus_Client.MaxJsonLength;
                 string file_content = jss.Serialize(config);
 
                 File.WriteAllText("Json/" + pathToConfiguration + "/ComandiBit.json", file_content);

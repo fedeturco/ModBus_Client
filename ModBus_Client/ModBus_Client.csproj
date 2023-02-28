@@ -278,6 +278,11 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Img\ModBus_Client_Diagnostic_00.PNG" />
+    <Resource Include="Img\ModBus_Client_Home_00.PNG" />
+    <Resource Include="Img\ModBus_Client_Settings_00.PNG" />
+    <Resource Include="Img\ModBus_Client_Template_00.PNG" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

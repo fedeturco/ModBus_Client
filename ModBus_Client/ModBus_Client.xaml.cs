@@ -103,9 +103,14 @@ namespace ModBus_Client
         SolidColorBrush colorDefaultWriteCell = Brushes.LightGreen;
         SolidColorBrush colorErrorCell = Brushes.Orange;
 
+        String colorDefaultReadCellStr;
+        String colorDefaultWriteCellStr;
+        String colorErrorCellStr;
+
         SolidColorBrush colorDefaultReadCell_Light = Brushes.DarkBlue;
         SolidColorBrush colorDefaultWriteCell_Light = Brushes.LightGreen;
         SolidColorBrush colorErrorCell_Light = Brushes.Orange;
+
         SolidColorBrush colorDefaultReadCell_Dark = Brushes.DarkBlue;
         SolidColorBrush colorDefaultWriteCell_Dark = Brushes.LightGreen;
         SolidColorBrush colorErrorCell_Dark = Brushes.Orange;
@@ -290,6 +295,11 @@ namespace ModBus_Client
         public string ForeGroundLightStr;
         public string BackGroundLightStr;
         public string BackGroundLight2Str;
+
+        public int MaxJsonLength = 104857600; // 200 MB, sufficienti per 65536*4 etichette Template.json
+        // see https://learn.microsoft.com/it-it/dotnet/api/system.web.script.serialization.javascriptserializer.maxjsonlength?view=netframework-4.8.1
+                                                    
+
         public MainWindow()
         {
             InitializeComponent();
@@ -407,6 +417,13 @@ namespace ModBus_Client
 
             this.Left = (screenWidth / 2) - (windowWidth / 2);
             this.Top = (screenHeight / 2) - (windowHeight / 2);
+
+            ForeGroundDarkStr = ForeGroundDark.ToString();
+            BackGroundDarkStr = BackGroundDark.ToString();
+
+            ForeGroundLightStr = ForeGroundLight.ToString();
+            BackGroundLightStr = BackGroundLight.ToString();
+            BackGroundLight2Str = BackGroundLight2.ToString();
         }
 
         private void Form1_FormClosing(object sender, EventArgs e)
@@ -630,6 +647,9 @@ namespace ModBus_Client
                     }
                 }
             }
+
+            // Aggiorno grafica colori
+            CheckBoxDarkMode_Checked(null, null);
         }
 
         private void radioButtonModeSerial_CheckedChanged(object sender, RoutedEventArgs e)
@@ -697,7 +717,6 @@ namespace ModBus_Client
 
                     // Create a new SerialPort object with default settings.
                     serialPort = new SerialPort();
-
                     serialPort.PortName = comboBoxSerialPort.SelectedItem.ToString();
 
                     // debug
@@ -1049,6 +1068,7 @@ namespace ModBus_Client
                 config.textBoxReadTimeout = textBoxReadTimeout.Text;
 
                 var jss = new JavaScriptSerializer();
+                jss.MaxJsonLength = this.MaxJsonLength;
                 jss.RecursionLimit = 1000;
                 string file_content = jss.Serialize(config);
 
@@ -1227,7 +1247,11 @@ namespace ModBus_Client
                 labelColorCellWrote.Background = colorDefaultWriteCell;
                 labelColorCellError.Background = colorErrorCell;
 
-                if(!(config.TextBoxPollingInterval_ is null))
+                colorDefaultReadCellStr = colorDefaultReadCell.ToString();
+                colorDefaultWriteCellStr = colorDefaultWriteCell.ToString();
+                colorErrorCellStr = colorErrorCell.ToString();
+
+                if (!(config.TextBoxPollingInterval_ is null))
                 {
                     TextBoxPollingInterval.Text = config.TextBoxPollingInterval_;
                 }
@@ -1285,6 +1309,7 @@ namespace ModBus_Client
                 string file_content = File.ReadAllText("Json/" + pathToConfiguration + "/Template.json");
 
                 JavaScriptSerializer jss = new JavaScriptSerializer();
+                jss.MaxJsonLength = this.MaxJsonLength;
                 TEMPLATE template = jss.Deserialize<TEMPLATE>(file_content);
 
                 template_coilsOffset = 0;
@@ -1576,11 +1601,11 @@ namespace ModBus_Client
                             // Cancello la tabella e inserisco le nuove righe
                             if (useOffsetInTable)
                             {
-                                insertRowsTable(list_coilsTable, null, address_start, response, colorDefaultReadCell, comboBoxCoilsRegistri_, "DEC");
+                                insertRowsTable(list_coilsTable, null, address_start, response, colorDefaultReadCellStr, comboBoxCoilsRegistri_, "DEC");
                             }
                             else
                             {
-                                insertRowsTable(list_coilsTable, null, address_start, response, colorDefaultReadCell, comboBoxCoilsRegistri_, "DEC");
+                                insertRowsTable(list_coilsTable, null, address_start, response, colorDefaultReadCellStr, comboBoxCoilsRegistri_, "DEC");
                             }
 
                             applyTemplateCoils();
@@ -1695,11 +1720,11 @@ namespace ModBus_Client
                 // Cancello la tabella e inserisco le nuove righe
                 if (useOffsetInTable)
                 {
-                    insertRowsTable(list_coilsTable, null, address_start - P.uint_parser(textBoxCoilsOffset_, comboBoxCoilsOffset_), response, colorDefaultReadCell, comboBoxCoilsRegistri_, "DEC");
+                    insertRowsTable(list_coilsTable, null, address_start - P.uint_parser(textBoxCoilsOffset_, comboBoxCoilsOffset_), response, colorDefaultReadCellStr, comboBoxCoilsRegistri_, "DEC");
                 }
                 else
                 {
-                    insertRowsTable(list_coilsTable, null, address_start, response, colorDefaultReadCell, comboBoxCoilsRegistri_, "DEC");
+                    insertRowsTable(list_coilsTable, null, address_start, response, colorDefaultReadCellStr, comboBoxCoilsRegistri_, "DEC");
                 }
 
                 this.Dispatcher.Invoke((Action)delegate
@@ -1756,7 +1781,7 @@ namespace ModBus_Client
 
             tmp.Register = "Internal";
             tmp.Value = "Error";
-            tmp.Foreground = ForeGroundLight.ToString();
+            tmp.Foreground = ForeGroundLightStr;
             tmp.Background = Brushes.Red.ToString();
 
             this.Dispatcher.Invoke((Action)delegate
@@ -1842,11 +1867,11 @@ namespace ModBus_Client
                         // Cancello la tabella e inserisco le nuove righe
                         if (useOffsetInTable)
                         {
-                            insertRowsTable(list_coilsTable, null, address_start - P.uint_parser(textBoxCoilsOffset_, comboBoxCoilsOffset_), value, colorDefaultWriteCell, comboBoxCoilsRegistri_, "DEC");
+                            insertRowsTable(list_coilsTable, null, address_start - P.uint_parser(textBoxCoilsOffset_, comboBoxCoilsOffset_), value, colorDefaultWriteCellStr, comboBoxCoilsRegistri_, "DEC");
                         }
                         else
                         {
-                            insertRowsTable(list_coilsTable, null, address_start, value, colorDefaultWriteCell, comboBoxCoilsRegistri_, "DEC");
+                            insertRowsTable(list_coilsTable, null, address_start, value, colorDefaultWriteCellStr, comboBoxCoilsRegistri_, "DEC");
                         }
                     }
                 }
@@ -1939,11 +1964,11 @@ namespace ModBus_Client
                         // Cancello la tabella e inserisco le nuove righe
                         if (useOffsetInTable)
                         {
-                            insertRowsTable(list_coilsTable, null, address_start - P.uint_parser(textBoxCoilsOffset_, comboBoxCoilsOffset_), value, colorDefaultWriteCell, comboBoxCoilsRegistri_, null);
+                            insertRowsTable(list_coilsTable, null, address_start - P.uint_parser(textBoxCoilsOffset_, comboBoxCoilsOffset_), value, colorDefaultWriteCellStr, comboBoxCoilsRegistri_, null);
                         }
                         else
                         {
-                            insertRowsTable(list_coilsTable, null, address_start, value, colorDefaultWriteCell, comboBoxCoilsRegistri_, null);
+                            insertRowsTable(list_coilsTable, null, address_start, value, colorDefaultWriteCellStr, comboBoxCoilsRegistri_, null);
                         }
                     }
                 }
@@ -2044,11 +2069,11 @@ namespace ModBus_Client
                             // Cancello la tabella e inserisco le nuove righe
                             if (useOffsetInTable)
                             {
-                                insertRowsTable(list_inputsTable, null, address_start - P.uint_parser(textBoxInputOffset_, comboBoxInputOffset_), response, colorDefaultReadCell, comboBoxInputRegistri_, "DEC");
+                                insertRowsTable(list_inputsTable, null, address_start - P.uint_parser(textBoxInputOffset_, comboBoxInputOffset_), response, colorDefaultReadCellStr, comboBoxInputRegistri_, "DEC");
                             }
                             else
                             {
-                                insertRowsTable(list_inputsTable, null, address_start, response, colorDefaultReadCell, comboBoxInputRegistri_, "DEC");
+                                insertRowsTable(list_inputsTable, null, address_start, response, colorDefaultReadCellStr, comboBoxInputRegistri_, "DEC");
                             }
 
                             applyTemplateInputs();
@@ -2171,11 +2196,11 @@ namespace ModBus_Client
                 // Cancello la tabella e inserisco le nuove righe
                 if (useOffsetInTable)
                 {
-                    insertRowsTable(list_inputsTable, null, address_start - P.uint_parser(textBoxInputOffset_, comboBoxInputOffset_), response, colorDefaultReadCell, comboBoxInputRegistri_, "DEC");
+                    insertRowsTable(list_inputsTable, null, address_start - P.uint_parser(textBoxInputOffset_, comboBoxInputOffset_), response, colorDefaultReadCellStr, comboBoxInputRegistri_, "DEC");
                 }
                 else
                 {
-                    insertRowsTable(list_inputsTable, null, address_start, response, colorDefaultReadCell, comboBoxInputRegistri_, "DEC");
+                    insertRowsTable(list_inputsTable, null, address_start, response, colorDefaultReadCellStr, comboBoxInputRegistri_, "DEC");
                 }
 
                 applyTemplateInputs();
@@ -2281,11 +2306,11 @@ namespace ModBus_Client
                             //Cancello la tabella e inserisco le nuove righe
                             if (useOffsetInTable)
                             {
-                                insertRowsTable(list_inputRegistersTable, null, address_start - P.uint_parser(textBoxInputRegOffset_, comboBoxInputRegOffset_), response, colorDefaultReadCell, comboBoxInputRegRegistri_, comboBoxInputRegValori_);
+                                insertRowsTable(list_inputRegistersTable, null, address_start - P.uint_parser(textBoxInputRegOffset_, comboBoxInputRegOffset_), response, colorDefaultReadCellStr, comboBoxInputRegRegistri_, comboBoxInputRegValori_);
                             }
                             else
                             {
-                                insertRowsTable(list_inputRegistersTable, null, address_start, response, colorDefaultReadCell, comboBoxInputRegRegistri_, comboBoxInputRegValori_);
+                                insertRowsTable(list_inputRegistersTable, null, address_start, response, colorDefaultReadCellStr, comboBoxInputRegRegistri_, comboBoxInputRegValori_);
                             }
 
                             applyTemplateInputRegister();
@@ -2414,11 +2439,11 @@ namespace ModBus_Client
                 //Cancello la tabella e inserisco le nuove righe
                 if (useOffsetInTable)
                 {
-                    insertRowsTable(list_inputRegistersTable, null, address_start - P.uint_parser(textBoxInputRegOffset_, comboBoxInputRegOffset_), response, colorDefaultReadCell, comboBoxInputRegRegistri_, comboBoxInputRegValori_);
+                    insertRowsTable(list_inputRegistersTable, null, address_start - P.uint_parser(textBoxInputRegOffset_, comboBoxInputRegOffset_), response, colorDefaultReadCellStr, comboBoxInputRegRegistri_, comboBoxInputRegValori_);
                 }
                 else
                 {
-                    insertRowsTable(list_inputRegistersTable, null, address_start, response, colorDefaultReadCell, comboBoxInputRegRegistri_, comboBoxInputRegValori_);
+                    insertRowsTable(list_inputRegistersTable, null, address_start, response, colorDefaultReadCellStr, comboBoxInputRegRegistri_, comboBoxInputRegValori_);
                 }
 
                 applyTemplateInputRegister();
@@ -2524,11 +2549,11 @@ namespace ModBus_Client
                             // Cancello la tabella e inserisco le nuove righe
                             if (useOffsetInTable)
                             {
-                                insertRowsTable(list_holdingRegistersTable, null, P.uint_parser(textBoxHoldingOffset_, comboBoxHoldingOffset_) + P.uint_parser(textBoxHoldingAddress03_, comboBoxHoldingAddress03_) - P.uint_parser(textBoxHoldingOffset_, comboBoxHoldingOffset_), response, colorDefaultReadCell, comboBoxHoldingRegistri_, comboBoxHoldingValori_);
+                                insertRowsTable(list_holdingRegistersTable, null, P.uint_parser(textBoxHoldingOffset_, comboBoxHoldingOffset_) + P.uint_parser(textBoxHoldingAddress03_, comboBoxHoldingAddress03_) - P.uint_parser(textBoxHoldingOffset_, comboBoxHoldingOffset_), response, colorDefaultReadCellStr, comboBoxHoldingRegistri_, comboBoxHoldingValori_);
                             }
                             else
                             {
-                                insertRowsTable(list_holdingRegistersTable, null, P.uint_parser(textBoxHoldingOffset_, comboBoxHoldingOffset_) + P.uint_parser(textBoxHoldingAddress03_, comboBoxHoldingAddress03_), response, colorDefaultReadCell, comboBoxHoldingRegistri_, comboBoxHoldingValori_);
+                                insertRowsTable(list_holdingRegistersTable, null, P.uint_parser(textBoxHoldingOffset_, comboBoxHoldingOffset_) + P.uint_parser(textBoxHoldingAddress03_, comboBoxHoldingAddress03_), response, colorDefaultReadCellStr, comboBoxHoldingRegistri_, comboBoxHoldingValori_);
                             }
 
                             // Applico le note ai registri
@@ -2796,8 +2821,26 @@ namespace ModBus_Client
 
                     if (match.Split(':').Length > 1)
                     {
+                        // byte (low byte or high byte)
+                        if (test.IndexOf("byte") == 0)
+                        { 
+                            // Soluzione bug sul fatto che ragiono a blocchi di 8 byte ma prendo gli utlimi 4
+                            if (test.ToLower().IndexOf("+") != -1)
+                            {
+                                values_[3] = values_[0];
+                            }
+
+                            if(test.ToLower().IndexOf("-") != -1)
+                                labels[0] = "value (byte): " + ((byte)(values_[3] & 0xFF)).ToString();
+                            else
+                                labels[0] = "value (byte): " + ((byte)((values_[3]>>8) & 0xFF)).ToString();
+
+                            convertedValue = labels[0].Replace("value ", "");
+                            type = 4;
+                        }
+
                         // bitmap (type 1)
-                        if (test.IndexOf("b") == 0)
+                        else if (test.IndexOf("b") == 0)
                         {
                             int index = int.Parse(test.Substring(1));
 
@@ -3041,7 +3084,7 @@ namespace ModBus_Client
 
                             tmp[0] = (byte)(values_[3] & 0xFF);
                             tmp[1] = (byte)((values_[3] >> 8) & 0xFF);
-                             
+
                             labels[0] = "value (int16): " + BitConverter.ToInt16(tmp, 0).ToString(); // + "" + match.Split(':')[1];
                             convertedValue = labels[0].Replace("value ", "");
                             type = 4;
@@ -3248,11 +3291,11 @@ namespace ModBus_Client
                         //Cancello la tabella e inserisco le nuove righe
                         if (useOffsetInTable)
                         {
-                            insertRowsTable(list_holdingRegistersTable, null, address_start - P.uint_parser(textBoxHoldingOffset_, comboBoxHoldingOffset_), value, colorDefaultWriteCell, comboBoxHoldingRegistri_, comboBoxHoldingValori_);
+                            insertRowsTable(list_holdingRegistersTable, null, address_start - P.uint_parser(textBoxHoldingOffset_, comboBoxHoldingOffset_), value, colorDefaultWriteCellStr, comboBoxHoldingRegistri_, comboBoxHoldingValori_);
                         }
                         else
                         {
-                            insertRowsTable(list_holdingRegistersTable, null, address_start, value, colorDefaultWriteCell, comboBoxHoldingRegistri_, comboBoxHoldingValori_);
+                            insertRowsTable(list_holdingRegistersTable, null, address_start, value, colorDefaultWriteCellStr, comboBoxHoldingRegistri_, comboBoxHoldingValori_);
                         }
                     }
                 }
@@ -3352,11 +3395,11 @@ namespace ModBus_Client
                             // Cancello la tabella e inserisco le nuove righe
                             if (useOffsetInTable)
                             {
-                                insertRowsTable(list_holdingRegistersTable, null, address_start - P.uint_parser(textBoxHoldingOffset_, comboBoxHoldingOffset_), writtenRegs, colorDefaultWriteCell, comboBoxHoldingRegistri_, comboBoxHoldingValori_);
+                                insertRowsTable(list_holdingRegistersTable, null, address_start - P.uint_parser(textBoxHoldingOffset_, comboBoxHoldingOffset_), writtenRegs, colorDefaultWriteCellStr, comboBoxHoldingRegistri_, comboBoxHoldingValori_);
                             }
                             else
                             {
-                                insertRowsTable(list_holdingRegistersTable, null, address_start, writtenRegs, colorDefaultWriteCell, comboBoxHoldingRegistri_, comboBoxHoldingValori_);
+                                insertRowsTable(list_holdingRegistersTable, null, address_start, writtenRegs, colorDefaultWriteCellStr, comboBoxHoldingRegistri_, comboBoxHoldingValori_);
                             }
                         }
                         else
@@ -3391,11 +3434,11 @@ namespace ModBus_Client
                             // Cancello la tabella e inserisco le nuove righe
                             if (useOffsetInTable)
                             {
-                                insertRowsTable(list_holdingRegistersTable, null, address_start - P.uint_parser(textBoxHoldingOffset_, comboBoxHoldingOffset_), writtenRegs, colorDefaultWriteCell, comboBoxHoldingRegistri_, comboBoxHoldingValori_);
+                                insertRowsTable(list_holdingRegistersTable, null, address_start - P.uint_parser(textBoxHoldingOffset_, comboBoxHoldingOffset_), writtenRegs, colorDefaultWriteCellStr, comboBoxHoldingRegistri_, comboBoxHoldingValori_);
                             }
                             else
                             {
-                                insertRowsTable(list_holdingRegistersTable, null, address_start, writtenRegs, colorDefaultWriteCell, comboBoxHoldingRegistri_, comboBoxHoldingValori_);
+                                insertRowsTable(list_holdingRegistersTable, null, address_start, writtenRegs, colorDefaultWriteCellStr, comboBoxHoldingRegistri_, comboBoxHoldingValori_);
                             }
                         }
                         else
@@ -3544,11 +3587,11 @@ namespace ModBus_Client
                 //Cancello la tabella e inserisco le nuove righe
                 if (useOffsetInTable)
                 {
-                    insertRowsTable(list_holdingRegistersTable, null, address_start - P.uint_parser(textBoxHoldingOffset_, comboBoxHoldingOffset_), response, colorDefaultReadCell, comboBoxHoldingRegistri_, comboBoxHoldingValori_);
+                    insertRowsTable(list_holdingRegistersTable, null, address_start - P.uint_parser(textBoxHoldingOffset_, comboBoxHoldingOffset_), response, colorDefaultReadCellStr, comboBoxHoldingRegistri_, comboBoxHoldingValori_);
                 }
                 else
                 {
-                    insertRowsTable(list_holdingRegistersTable, null, address_start, response, colorDefaultReadCell, comboBoxHoldingRegistri.SelectedValue.ToString().Split(' ')[1], comboBoxHoldingValori.SelectedValue.ToString().Split(' ')[1]);
+                    insertRowsTable(list_holdingRegistersTable, null, address_start, response, colorDefaultReadCellStr, comboBoxHoldingRegistri.SelectedValue.ToString().Split(' ')[1], comboBoxHoldingValori.SelectedValue.ToString().Split(' ')[1]);
                 }
 
                 applyTemplateHoldingRegister();
@@ -3658,7 +3701,7 @@ namespace ModBus_Client
         }
 
         // Funzione inserimento righe nelle collections
-        public void insertRowsTable(ObservableCollection<ModBus_Item> tab_1, ObservableCollection<ModBus_Item> tab_2, uint address_start, UInt16[] response, SolidColorBrush cellBackGround, String formatRegister, String formatVal)
+        public void insertRowsTable(ObservableCollection<ModBus_Item> tab_1, ObservableCollection<ModBus_Item> tab_2, uint address_start, UInt16[] response, String cellBackGround, String formatRegister, String formatVal)
         {
             this.Dispatcher.Invoke((Action)delegate
             {
@@ -3692,27 +3735,30 @@ namespace ModBus_Client
                         row.Value = "0x" + (response[i]).ToString("X").PadLeft(4, '0');
                     }
 
-                    //Colorazione celle
+                    // Colorazione celle
                     if (colorMode)
                     {
                         if (response[i] > 0)
                         {
-                            this.Dispatcher.Invoke((Action)delegate
-                            {
-                                row.Foreground = ForeGroundLight.ToString();
-                                row.Background = cellBackGround.ToString();
-                            });
+                            row.Foreground = darkMode ? ForeGroundDarkStr : ForeGroundLightStr;
+                            row.Background = cellBackGround;
+                        }
+                        else
+                        {
+                            row.Foreground = darkMode ? ForeGroundDarkStr : ForeGroundLightStr;
+                            row.Background = darkMode ? BackGroundDarkStr : Brushes.White.ToString();
                         }
                     }
                     else
                     {
-                        /*if (i % 2 == 0)
+                        if (i % 2 == 0)
                         {
                             this.Dispatcher.Invoke((Action)delegate
                             {
-                                row.Color = cellBackGround.ToString();
+                                row.Foreground = darkMode ? BackGroundDarkStr : ForeGroundLightStr;
+                                row.Background = cellBackGround;
                             });
-                        }*/
+                        }
                     }
 
                     // Il valore in binario lo metto sempre tanto poi nelle coils ed inputs è nascosto
@@ -3813,6 +3859,7 @@ namespace ModBus_Client
                 
                 colorDefaultReadCell = new SolidColorBrush(Color.FromArgb(colorDialogBox.Color.A, colorDialogBox.Color.R, colorDialogBox.Color.G, colorDialogBox.Color.B));
                 labelColorCellRead.Background = colorDefaultReadCell;
+                colorDefaultReadCellStr = colorDefaultReadCell.ToString();
             }
         }
 
@@ -3942,11 +3989,11 @@ namespace ModBus_Client
                         //Cancello la tabella e inserisco le nuove righe
                         if (useOffsetInTable)
                         {
-                            insertRowsTable(list_holdingRegistersTable, null, address_start - P.uint_parser(textBoxHoldingOffset_, comboBoxHoldingOffset_), value, colorDefaultWriteCell, comboBoxHoldingRegistri_, comboBoxHoldingValori_);
+                            insertRowsTable(list_holdingRegistersTable, null, address_start - P.uint_parser(textBoxHoldingOffset_, comboBoxHoldingOffset_), value, colorDefaultWriteCellStr, comboBoxHoldingRegistri_, comboBoxHoldingValori_);
                         }
                         else
                         {
-                            insertRowsTable(list_holdingRegistersTable, null, address_start, value, colorDefaultWriteCell, comboBoxHoldingRegistri_, comboBoxHoldingValori_);
+                            insertRowsTable(list_holdingRegistersTable, null, address_start, value, colorDefaultWriteCellStr, comboBoxHoldingRegistri_, comboBoxHoldingValori_);
                         }
                     }
                 }
@@ -4024,11 +4071,11 @@ namespace ModBus_Client
                         //Cancello la tabella e inserisco le nuove righe
                         if (useOffsetInTable)
                         {
-                            insertRowsTable(list_coilsTable, null, address_start - P.uint_parser(textBoxCoilsOffset_, comboBoxCoilsOffset_), value, colorDefaultWriteCell, comboBoxCoilsRegistri_, "DEC");
+                            insertRowsTable(list_coilsTable, null, address_start - P.uint_parser(textBoxCoilsOffset_, comboBoxCoilsOffset_), value, colorDefaultWriteCellStr, comboBoxCoilsRegistri_, "DEC");
                         }
                         else
                         {
-                            insertRowsTable(list_coilsTable, null, address_start, value, colorDefaultWriteCell, comboBoxCoilsRegistri_, "DEC");
+                            insertRowsTable(list_coilsTable, null, address_start, value, colorDefaultWriteCellStr, comboBoxCoilsRegistri_, "DEC");
                         }
                     }
                 }
@@ -4714,7 +4761,6 @@ namespace ModBus_Client
             try
             {
                 ModBus_Item currentItem = new ModBus_Item();
-                int index = 0;
 
                 this.Dispatcher.Invoke((Action)delegate
                 {
@@ -5455,6 +5501,7 @@ namespace ModBus_Client
 
 
                         JavaScriptSerializer jss = new JavaScriptSerializer();
+                        jss.MaxJsonLength = this.MaxJsonLength;
                         string file_content = jss.Serialize(save);
 
                         StreamWriter writer = new StreamWriter(saveFileDialogBox.OpenFile());
@@ -5544,6 +5591,7 @@ namespace ModBus_Client
 
 
                         JavaScriptSerializer jss = new JavaScriptSerializer();
+                        jss.MaxJsonLength = this.MaxJsonLength;
                         string file_content = jss.Serialize(save);
 
                         StreamWriter writer = new StreamWriter(saveFileDialogBox.OpenFile());
@@ -5633,6 +5681,7 @@ namespace ModBus_Client
 
 
                         JavaScriptSerializer jss = new JavaScriptSerializer();
+                        jss.MaxJsonLength = this.MaxJsonLength;
                         string file_content = jss.Serialize(save);
 
                         StreamWriter writer = new StreamWriter(saveFileDialogBox.OpenFile());
@@ -5722,6 +5771,7 @@ namespace ModBus_Client
 
 
                         JavaScriptSerializer jss = new JavaScriptSerializer();
+                        jss.MaxJsonLength = this.MaxJsonLength;
                         string file_content = jss.Serialize(save);
 
                         StreamWriter writer = new StreamWriter(saveFileDialogBox.OpenFile());
@@ -6332,6 +6382,10 @@ namespace ModBus_Client
                     colorDefaultReadCell = colorDefaultReadCell_Dark;
                     colorDefaultWriteCell = colorDefaultWriteCell_Dark;
                     colorErrorCell = colorErrorCell_Dark;
+
+                    colorDefaultReadCellStr = colorDefaultReadCell.ToString();
+                    colorDefaultWriteCellStr = colorDefaultWriteCell.ToString();
+                    colorErrorCellStr = colorErrorCell.ToString();
                 }
                 else
                 {
@@ -6342,6 +6396,10 @@ namespace ModBus_Client
                     colorDefaultReadCell = colorDefaultReadCell_Light;
                     colorDefaultWriteCell = colorDefaultWriteCell_Light;
                     colorErrorCell = colorErrorCell_Light;
+
+                    colorDefaultReadCellStr = colorDefaultReadCell.ToString();
+                    colorDefaultWriteCellStr = colorDefaultWriteCell.ToString();
+                    colorErrorCellStr = colorErrorCell.ToString();
                 }
             }
 
@@ -6349,7 +6407,7 @@ namespace ModBus_Client
             try
             {
                 string file_content = File.ReadAllText(Directory.GetCurrentDirectory() + "\\Json\\" + pathToConfiguration + "\\Template.json");
-
+                jss.MaxJsonLength = this.MaxJsonLength;
                 TEMPLATE template = jss.Deserialize<TEMPLATE>(file_content);
 
                 template_coilsOffset = 0;
@@ -6877,12 +6935,20 @@ namespace ModBus_Client
                 colorDefaultReadCell = colorDefaultReadCell_Dark;
                 colorDefaultWriteCell = colorDefaultWriteCell_Dark;
                 colorErrorCell = colorErrorCell_Dark;
+
+                colorDefaultReadCellStr = colorDefaultReadCell.ToString();
+                colorDefaultWriteCellStr = colorDefaultWriteCell.ToString();
+                colorErrorCellStr = colorErrorCell.ToString();
             }
             else
             {
                 colorDefaultReadCell = colorDefaultReadCell_Light;
                 colorDefaultWriteCell = colorDefaultWriteCell_Light;
                 colorErrorCell = colorErrorCell_Light;
+
+                colorDefaultReadCellStr = colorDefaultReadCell.ToString();
+                colorDefaultWriteCellStr = colorDefaultWriteCell.ToString();
+                colorErrorCellStr = colorErrorCell.ToString();
             }
 
             // BorderBrush
@@ -6949,7 +7015,6 @@ namespace ModBus_Client
             labelCoils_5.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
             labelCoils_8.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
             labelCoils_13.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
-            labelPrimoRegistroCoils.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
             CheckBoxSendValuesOnEditCoillsTable.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
 
             StackPanelCoils0.Background = darkMode ? BackGroundDark2 : new SolidColorBrush(Color.FromArgb(255, (byte)240, (byte)248, (byte)255));
@@ -6987,7 +7052,6 @@ namespace ModBus_Client
             labelInputs_0.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
             labelInputs_1.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
             labelOffsetHiddenInput.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
-            labelPrimoRegistroInputs.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
             labelInputs_2.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
             labelInputs_5.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
 
@@ -7022,7 +7086,6 @@ namespace ModBus_Client
             labelInputRegisters_1.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
             labelInputRegisters_2.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
             labelOffsetHiddenInputRegister.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
-            labelPrimoInputRegister.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
             labelInputRegisters_3.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
             labelInputRegisters_6.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
 
@@ -7057,7 +7120,6 @@ namespace ModBus_Client
             labelHoldingRegisters_1.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
             labelHoldingRegisters_2.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
             labelOffsetHiddenHolding.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
-            labelPrimoRegistroHolding.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
             labelHoldingRegisters_3.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
             labelHoldingRegisters_6.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
             labelHoldingRegisters_9.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
@@ -7211,32 +7273,38 @@ namespace ModBus_Client
             textBoxHoldingValue16.Background = darkMode ? BackGroundDark : BackGroundLight2;
             textBoxGoToHoldingAddress.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
             textBoxGoToHoldingAddress.Background = darkMode ? BackGroundDark : BackGroundLight2;
+
+            // Cancello le raccolte delle tabelle
+            list_holdingRegistersTable.Clear();
+            list_inputRegistersTable.Clear();
+            list_inputsTable.Clear();
+            list_coilsTable.Clear();
         }
 
         private void ButtonResetLightMode_Click(object sender, RoutedEventArgs e)
         {
+            colorDefaultReadCell_Light = new SolidColorBrush(Color.FromArgb(0xFF, 0x87, 0xCE, 0xFA));
+            colorDefaultWriteCell_Light = Brushes.LightGreen;
+            colorErrorCell_Light = Brushes.Orange;
+
+            labelColorCellRead.Background = colorDefaultReadCell_Light;
+            labelColorCellWrote.Background = colorDefaultWriteCell_Light;
+            labelColorCellError.Background = colorErrorCell_Light;
+
             CheckBoxDarkMode.IsChecked = false;
-
-            colorDefaultReadCell = new SolidColorBrush(Color.FromArgb(0xFF, 0x87, 0xCE, 0xFA));
-            colorDefaultWriteCell = Brushes.LightGreen;
-            colorErrorCell = Brushes.Orange;
-
-            labelColorCellRead.Background = colorDefaultReadCell;
-            labelColorCellWrote.Background = colorDefaultWriteCell;
-            labelColorCellError.Background = colorErrorCell;
         }
 
         private void ButtonResetDarkMode_Click(object sender, RoutedEventArgs e)
         {
+            colorDefaultReadCell_Dark = new SolidColorBrush(Color.FromArgb(0xFF, 85, 85, 85));
+            colorDefaultWriteCell_Dark = new SolidColorBrush(Color.FromArgb(0xFF, 0, 128, 0));
+            colorErrorCell_Dark = Brushes.Orange;
+
+            labelColorCellRead.Background = colorDefaultReadCell_Dark;
+            labelColorCellWrote.Background = colorDefaultWriteCell_Dark;
+            labelColorCellError.Background = colorErrorCell_Dark;
+
             CheckBoxDarkMode.IsChecked = true;
-
-            colorDefaultReadCell = Brushes.DarkBlue;
-            colorDefaultWriteCell = Brushes.LightGreen;
-            colorErrorCell = Brushes.Orange;
-
-            labelColorCellRead.Background = new SolidColorBrush(Color.FromArgb(0xFF, 85, 85, 85));
-            labelColorCellWrote.Background = new SolidColorBrush(Color.FromArgb(0xFF, 0, 128, 0));
-            labelColorCellError.Background = colorErrorCell;
         }
     }
 
