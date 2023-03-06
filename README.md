@@ -17,7 +17,7 @@ Si riportano a seguire alcuni screenshot del programma, si rimanda al manuale pe
 
 ![alt text](https://github.com/Fedex1515/ModBus_Client/blob/master/ModBus_Client/Img/ModBus_Client_Home_00.PNG?raw=true)
 
-### FC01 Read Coils / FC03 Preset single coil / FC15 Preset multiple coils 
+### FC01 Read Coils / FC05 Preset single coil / FC15 Preset multiple coils 
 
 ![alt text](https://github.com/Fedex1515/ModBus_Client/blob/master/ModBus_Client/Img/ModBus_Client_Coils_00.PNG?raw=true)
 
