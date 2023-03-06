@@ -403,7 +403,7 @@ namespace ModBusMaster_Chicco
                 stream.ReadTimeout = readTimeout;
                 stream.Write(query, 0, query.Length);
 
-                Console_printByte("Sent: ", query, query.Length);
+                Console_printByte("Tx: ", query, query.Length);
                 Console_print(" Tx -> ", query, query.Length);
 
                 response = new Byte[buffer_dimension];
@@ -426,7 +426,7 @@ namespace ModBusMaster_Chicco
 
                 RX_set = true;
 
-                Console_printByte("Received: ", response, Length);
+                Console_printByte("Rx: ", response, Length);
                 Console_print(" Rx <- ", response, Length);
 
                 // Modbus Error Code
@@ -502,7 +502,7 @@ namespace ModBusMaster_Chicco
                 serialPort.ReadTimeout = readTimeout;
                 serialPort.Write(query, 0, query.Length);
 
-                Console_printByte("Sent: ", query, query.Length);
+                Console_printByte("Tx: ", query, query.Length);
                 Console_print(" Tx -> ", query, query.Length);
 
                 response = new Byte[buffer_dimension];
@@ -525,7 +525,7 @@ namespace ModBusMaster_Chicco
 
                 RX_set = true;        // pictureBox gialla
 
-                Console_printByte("Received: ", response, response.Length);
+                Console_printByte("Rx: ", response, response.Length);
                 Console_print(" Rx <- ", response, response.Length);
 
                 //Leggo i bit di ciascun byte partendo dal 3 che contiene le prime 8 coils
@@ -637,7 +637,7 @@ namespace ModBusMaster_Chicco
                 stream.ReadTimeout = readTimeout;
                 stream.Write(query, 0, query.Length);
 
-                Console_printByte("Sent: ", query, query.Length);
+                Console_printByte("Tx: ", query, query.Length);
                 Console_print(" Tx -> ", query, query.Length);
 
                 response = new Byte[buffer_dimension];
@@ -661,7 +661,7 @@ namespace ModBusMaster_Chicco
 
                 RX_set = true;
 
-                Console_printByte("Received: ", response, Length);
+                Console_printByte("Rx: ", response, Length);
                 Console_print(" Rx <- ", response, Length);
 
                 // Modbus Error Code
@@ -737,7 +737,7 @@ namespace ModBusMaster_Chicco
                 serialPort.ReadTimeout = readTimeout;
                 serialPort.Write(query, 0, query.Length);
 
-                Console_printByte("Sent: ", query, query.Length);
+                Console_printByte("Tx: ", query, query.Length);
                 Console_print(" Tx -> ", query, query.Length);
 
                 response = new Byte[buffer_dimension];
@@ -754,7 +754,7 @@ namespace ModBusMaster_Chicco
 
                     RX_set = true;        // pictureBox gialla
 
-                    Console_printByte("Received: ", response, response.Length);
+                    Console_printByte("Rx: ", response, response.Length);
                     Console_print(" Rx <- ", response, response.Length);
 
                     //Leggo i bit di ciascun byte partendo dal 9 che contiene le prime 8 coils
@@ -869,7 +869,7 @@ namespace ModBusMaster_Chicco
                 stream.ReadTimeout = readTimeout;
                 stream.Write(query, 0, query.Length);
 
-                Console_printByte("Sent: ", query, query.Length);
+                Console_printByte("Tx: ", query, query.Length);
                 Console_print(" Tx -> ", query, query.Length);
 
                 response = new Byte[buffer_dimension];
@@ -893,7 +893,7 @@ namespace ModBusMaster_Chicco
 
                 RX_set = true;       // pictureBox gialla
 
-                Console_printByte("Received: ", response, Length);
+                Console_printByte("Rx: ", response, Length);
                 Console_print(" Rx <- ", response, Length);
 
                 // Modbus Error Code
@@ -951,7 +951,7 @@ namespace ModBusMaster_Chicco
                 serialPort.ReadTimeout = readTimeout;
                 serialPort.Write(query, 0, query.Length);
 
-                Console_printByte("Sent: ", query, query.Length);
+                Console_printByte("Tx: ", query, query.Length);
                 Console_print(" Tx -> ", query, query.Length);
 
                 response = new Byte[buffer_dimension];
@@ -974,7 +974,7 @@ namespace ModBusMaster_Chicco
 
                 RX_set = true;        // pictureBox gialla
 
-                Console_printByte("Received: ", response, response.Length);
+                Console_printByte("Rx: ", response, response.Length);
                 Console_print(" Rx <- ", response, response.Length);
 
                 for (int i = 3; i < response.Length - 2; i += 2)
@@ -1063,7 +1063,7 @@ namespace ModBusMaster_Chicco
                 stream.ReadTimeout = readTimeout;
                 stream.Write(query, 0, query.Length);
 
-                Console_printByte("Sent: ", query, query.Length);
+                Console_printByte("Tx: ", query, query.Length);
                 Console_print(" Tx -> ", query, query.Length);
 
                 response = new Byte[buffer_dimension];
@@ -1087,7 +1087,7 @@ namespace ModBusMaster_Chicco
 
                 RX_set = true;       // pictureBox gialla
 
-                Console_printByte("Received: ", response, Length);
+                Console_printByte("Rx: ", response, Length);
                 Console_print(" Rx <- ", response, Length);
 
                 // Modbus Error Code
@@ -1147,7 +1147,7 @@ namespace ModBusMaster_Chicco
 
                 Thread.Sleep(200);
 
-                Console_printByte("Sent: ", query, query.Length);
+                Console_printByte("Tx: ", query, query.Length);
                 Console_print(" Tx -> ", query, query.Length);
 
                 response = new Byte[buffer_dimension];
@@ -1170,7 +1170,7 @@ namespace ModBusMaster_Chicco
 
                 RX_set = true;        // pictureBox gialla
 
-                Console_printByte("Received: ", response, response.Length);
+                Console_printByte("Rx: ", response, response.Length);
                 Console_print(" Rx <- ", response, response.Length);
 
                 for (int i = 3; i < response.Length - 2; i += 2) //-2 di CRC
@@ -1264,7 +1264,7 @@ namespace ModBusMaster_Chicco
                 stream.ReadTimeout = readTimeout;
                 stream.Write(query, 0, query.Length);
 
-                Console_printByte("Sent: ", query, query.Length);
+                Console_printByte("Tx: ", query, query.Length);
                 Console_print(" Tx -> ", query, query.Length);
 
                 response = new Byte[buffer_dimension];
@@ -1288,7 +1288,7 @@ namespace ModBusMaster_Chicco
 
                 RX_set = true;        // pictureBox gialla
 
-                Console_printByte("Received: ", response, Length);
+                Console_printByte("Rx: ", response, Length);
                 Console_print(" Rx <- ", response, Length);
 
                 // Modbus Error Code
@@ -1348,7 +1348,7 @@ namespace ModBusMaster_Chicco
                 serialPort.ReadTimeout = readTimeout;
                 serialPort.Write(query, 0, query.Length);
 
-                Console_printByte("Sent: ", query, query.Length);
+                Console_printByte("Tx: ", query, query.Length);
                 Console_print(" Tx -> ", query, query.Length);
 
                 try
@@ -1369,7 +1369,7 @@ namespace ModBusMaster_Chicco
 
                 RX_set = true;        // pictureBox gialla
 
-                Console_printByte("Received: ", response, response.Length);
+                Console_printByte("Rx: ", response, response.Length);
                 Console_print(" Rx <- ", response, response.Length);
 
                 // Check CRC
@@ -1455,7 +1455,7 @@ namespace ModBusMaster_Chicco
                 stream.ReadTimeout = readTimeout;
                 stream.Write(query, 0, query.Length);
 
-                Console_printByte("Sent: ", query, query.Length);
+                Console_printByte("Tx: ", query, query.Length);
                 Console_print(" Tx -> ", query, query.Length);
 
                 response = new Byte[buffer_dimension];
@@ -1479,7 +1479,7 @@ namespace ModBusMaster_Chicco
 
                 RX_set = true;        // pictureBox gialla
 
-                Console_printByte("Received: ", response, Length);
+                Console_printByte("Rx: ", response, Length);
                 Console_print(" Rx <- ", response, Length);
 
                 // Modbus Error Code
@@ -1535,7 +1535,7 @@ namespace ModBusMaster_Chicco
                 serialPort.ReadTimeout = readTimeout;
                 serialPort.Write(query, 0, query.Length);
 
-                Console_printByte("Sent: ", query, query.Length);
+                Console_printByte("Tx: ", query, query.Length);
                 Console_print(" Tx -> ", query, query.Length);
 
                 try
@@ -1555,7 +1555,7 @@ namespace ModBusMaster_Chicco
 
                 RX_set = true;        // pictureBox gialla
 
-                Console_printByte("Received: ", response, response.Length);
+                Console_printByte("Rx: ", response, response.Length);
                 Console_print(" Rx <- ", response, response.Length);
 
                 // Check CRC
@@ -1639,7 +1639,7 @@ namespace ModBusMaster_Chicco
                 stream.ReadTimeout = readTimeout;
                 stream.Write(query, 0, query.Length);
 
-                Console_printByte("Sent: ", query, query.Length);
+                Console_printByte("Tx: ", query, query.Length);
                 Console_print(" Tx -> ", query, query.Length);
 
                 response = new Byte[buffer_dimension];
@@ -1663,7 +1663,7 @@ namespace ModBusMaster_Chicco
 
                 RX_set = true;       // pictureBox gialla
 
-                Console_printByte("Received: ", response, Length);
+                Console_printByte("Rx: ", response, Length);
                 Console_print(" Rx <- ", response, Length);
 
                 // Modbus Error Code
@@ -1737,7 +1737,7 @@ namespace ModBusMaster_Chicco
                 serialPort.ReadTimeout = readTimeout;
                 serialPort.Write(query, 0, query.Length);
 
-                Console_printByte("Sent: ", query, query.Length);
+                Console_printByte("Tx: ", query, query.Length);
                 Console_print(" Tx -> ", query, query.Length);
 
                 int Length = 0;
@@ -1763,7 +1763,7 @@ namespace ModBusMaster_Chicco
 
                 RX_set = true;       // pictureBox gialla
 
-                Console_printByte("Received: ", response, Length);
+                Console_printByte("Rx: ", response, Length);
                 Console_print(" Rx <- ", response, Length);
 
                 // Modbus Error Code
@@ -1902,7 +1902,7 @@ namespace ModBusMaster_Chicco
                 stream.ReadTimeout = readTimeout;
                 stream.Write(query, 0, query.Length);
 
-                Console_printByte("Sent: ", query, query.Length);
+                Console_printByte("Tx: ", query, query.Length);
                 Console_print(" Tx -> ", query, query.Length);
 
                 response = new Byte[buffer_dimension];
@@ -1926,7 +1926,7 @@ namespace ModBusMaster_Chicco
 
                 RX_set = true;        // pictureBox gialla
 
-                Console_printByte("Received: ", response, Length);
+                Console_printByte("Rx: ", response, Length);
                 Console_print(" Rx <- ", response, Length);
 
                 // Modbus Error Code
@@ -2030,7 +2030,7 @@ namespace ModBusMaster_Chicco
                 serialPort.ReadTimeout = readTimeout;
                 serialPort.Write(query, 0, query.Length);
 
-                Console_printByte("Sent: ", query, query.Length);
+                Console_printByte("Tx: ", query, query.Length);
                 Console_print(" Tx -> ", query, query.Length);
 
                 response = new Byte[buffer_dimension];
@@ -2053,7 +2053,7 @@ namespace ModBusMaster_Chicco
 
                 RX_set = true;        // pictureBox gialla
 
-                Console_printByte("Received: ", response, response.Length);
+                Console_printByte("Rx: ", response, response.Length);
                 Console_print(" Rx <- ", response, response.Length);
 
                 // Modbus Error Code
@@ -2149,7 +2149,7 @@ namespace ModBusMaster_Chicco
                 stream.ReadTimeout = readTimeout;
                 stream.Write(query, 0, query.Length);
 
-                Console_printByte("Sent: ", query, query.Length);
+                Console_printByte("Tx: ", query, query.Length);
                 Console_print(" Tx -> ", query, query.Length);
 
                 response = new Byte[buffer_dimension];
@@ -2173,7 +2173,7 @@ namespace ModBusMaster_Chicco
 
                 RX_set = true;       // pictureBox gialla
 
-                Console_printByte("Received: ", response, Length);
+                Console_printByte("Rx: ", response, Length);
                 Console_print(" Rx <- ", response, Length);
 
                 // Modbus Error Code
@@ -2251,7 +2251,7 @@ namespace ModBusMaster_Chicco
                 serialPort.ReadTimeout = readTimeout;
                 serialPort.Write(query, 0, query.Length);
 
-                Console_printByte("Sent: ", query, query.Length);
+                Console_printByte("Tx: ", query, query.Length);
                 Console_print(" Tx -> ", query, query.Length);
 
                 try
@@ -2272,7 +2272,7 @@ namespace ModBusMaster_Chicco
 
                 RX_set = true;       // pictureBox gialla
 
-                Console_printByte("Received: ", response, response.Length);
+                Console_printByte("Rx: ", response, response.Length);
                 Console_print(" Rx <- ", response, response.Length);
 
                 if(!Check_CRC(response, response.Length))
@@ -2403,18 +2403,10 @@ namespace ModBusMaster_Chicco
             if (Length > 0)
             {
                 String message = "";
-                String aa = "";
 
                 for (int i = 0; i < Length; i++)
-                {
+                    message += query[i].ToString("X").PadLeft(2, '0') + " ";
 
-                    aa = query[i].ToString("X");
-
-                    if (aa.Length < 2)
-                        aa = "0" + aa;
-
-                    message += "0x" + aa + " ";
-                }
                 Console.WriteLine(intestazione + message);
             }
         }

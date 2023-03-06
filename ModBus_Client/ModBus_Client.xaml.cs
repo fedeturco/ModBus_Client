@@ -1797,7 +1797,7 @@ namespace ModBus_Client
 
             tmp.Register = "CRC";
             tmp.Value = "Error";
-            tmp.Foreground = ForeGroundLight.ToString();
+            tmp.Foreground = ForeGroundLightStr;
             tmp.Background = Brushes.Tomato.ToString();
 
             this.Dispatcher.Invoke((Action)delegate
@@ -1813,7 +1813,7 @@ namespace ModBus_Client
 
             tmp.Register = "Timeout";
             tmp.Value = "";
-            tmp.Foreground = ForeGroundLight.ToString();
+            tmp.Foreground = ForeGroundLightStr;
             tmp.Background = Brushes.Violet.ToString();
 
             this.Dispatcher.Invoke((Action)delegate
@@ -1832,7 +1832,7 @@ namespace ModBus_Client
             tmp.Register = "ErrCode:";
             tmp.Value = err.ToString().Split('-')[0].Split(':')[2];
             tmp.ValueBin = err.ToString().Split('-')[1].Split('\n')[0].Replace("\r","");
-            tmp.Foreground = ForeGroundLight.ToString();
+            tmp.Foreground = ForeGroundLightStr;
             tmp.Background = Brushes.OrangeRed.ToString();
 
             this.Dispatcher.Invoke((Action)delegate
@@ -2822,7 +2822,7 @@ namespace ModBus_Client
                     if (match.Split(':').Length > 1)
                     {
                         // byte (low byte or high byte)
-                        if (test.IndexOf("byte") == 0)
+                        if (test.ToLower().IndexOf("byte") == 0)
                         { 
                             // Soluzione bug sul fatto che ragiono a blocchi di 8 byte ma prendo gli utlimi 4
                             if (test.ToLower().IndexOf("+") != -1)
