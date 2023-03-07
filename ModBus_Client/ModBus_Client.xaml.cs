@@ -2831,9 +2831,9 @@ namespace ModBus_Client
                             }
 
                             if(test.ToLower().IndexOf("-") != -1)
-                                labels[0] = "value (byte): " + ((byte)(values_[3] & 0xFF)).ToString();
+                                labels[0] = "value (byte): " + ((byte)((values_[3]>>8) & 0xFF)).ToString(); // High Byte
                             else
-                                labels[0] = "value (byte): " + ((byte)((values_[3]>>8) & 0xFF)).ToString();
+                                labels[0] = "value (byte): " + ((byte)(values_[3] & 0xFF)).ToString();      // Low Byte
 
                             convertedValue = labels[0].Replace("value ", "");
                             type = 4;
@@ -2855,6 +2855,9 @@ namespace ModBus_Client
 
                             labels[index] = match.Split(':')[1];
                             type = 2;
+
+                            //convertedValue = labels[1] + ((values_[3]) >> 8).ToString() + " " + labels[0] + (values_[3] & 0xFF).ToString();
+                            convertedValue = String.Format("H: {0} L: {1}", ((values_[3]) >> 8), (values_[3] & 0xFF));
                         }
 
                         // float (type 3)
