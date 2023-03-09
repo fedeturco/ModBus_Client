@@ -4549,14 +4549,18 @@ namespace ModBus_Client
             if (!PR.Status.ToString().Equals("Success"))
             {
                 buttonPingIp.Background = Brushes.Red;
-                DoEvents();
-                MessageBox.Show("Ping failed", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+
+                // Rimosso box per comodita, meglio sfondo sul bottone
+                //DoEvents();
+                //MessageBox.Show("Ping failed", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             else
             {
                 buttonPingIp.Background = Brushes.LightGreen;
-                DoEvents();
-                MessageBox.Show("Ping ok.\nResponse time: " + PR.RoundtripTime + "ms", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+
+                // Rimosso box per comodita, meglio sfondo sul bottone
+                //DoEvents();
+                //MessageBox.Show("Ping ok.\nResponse time: " + PR.RoundtripTime + "ms", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
 
