@@ -249,7 +249,7 @@ namespace ModBus_Client
             //Caricamento valori ultima sessione di questo form
             try
             {
-                string file_content = File.ReadAllText("Json/" + pathToConfiguration + "/ComandiByte.json");
+                string file_content = File.ReadAllText(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "/Json/" + pathToConfiguration + "/ComandiByte.json");
 
                 JavaScriptSerializer jss = new JavaScriptSerializer();
                 jss.MaxJsonLength = modBus_Client.MaxJsonLength;
@@ -314,7 +314,7 @@ namespace ModBus_Client
                 jss.MaxJsonLength = modBus_Client.MaxJsonLength;
                 string file_content = jss.Serialize(config);
 
-                File.WriteAllText("Json/" + pathToConfiguration + "/ComandiByte.json", file_content);
+                File.WriteAllText(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "/Json/" + pathToConfiguration + "/ComandiByte.json", file_content);
 
             }
             catch (Exception error)

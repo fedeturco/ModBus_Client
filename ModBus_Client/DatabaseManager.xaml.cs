@@ -55,7 +55,7 @@ namespace ModBus_Client
 
          void LoadDb()
         {
-            String[] subFolders = Directory.GetDirectories("Json\\");
+            String[] subFolders = Directory.GetDirectories(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "\\Json\\");
 
             db.Clear();
 
@@ -117,7 +117,7 @@ namespace ModBus_Client
 
             if ((bool)window.ShowDialog())
             {
-                ZipFile.ExtractToDirectory(window.FileName, "Json\\" + System.IO.Path.GetFileNameWithoutExtension(window.FileName));
+                ZipFile.ExtractToDirectory(window.FileName, System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "\\Json\\" + System.IO.Path.GetFileNameWithoutExtension(window.FileName));
             }
 
             LoadDb();

@@ -496,7 +496,7 @@ namespace ModBus_Client
             // Menu lingua
             languageToolStripMenu.Items.Clear();
 
-            foreach (string lang in Directory.GetFiles(Directory.GetCurrentDirectory() + "//Lang"))
+            foreach (string lang in Directory.GetFiles(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "//Lang"))
             {
                 var tmp = new MenuItem();
 
@@ -508,7 +508,7 @@ namespace ModBus_Client
             }
 
             // Se esiste una nuova versione del file di configurazione uso l'ultima, altrimenti carico il modello precedente
-            if (File.Exists(Directory.GetCurrentDirectory() + "\\Json\\" + pathToConfiguration + "\\Config.json"))
+            if (File.Exists(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "\\Json\\" + pathToConfiguration + "\\Config.json"))
             {
                 LoadConfiguration_v2();
             }
@@ -1096,7 +1096,7 @@ namespace ModBus_Client
         {
             try
             {
-                string file_content = File.ReadAllText("Json/" + pathToConfiguration + "/CONFIGURAZIONE.json");
+                string file_content = File.ReadAllText(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "/Json/" + pathToConfiguration + "/CONFIGURAZIONE.json");
 
                 JavaScriptSerializer jss = new JavaScriptSerializer();
                 SAVE config = jss.Deserialize<SAVE>(file_content);
@@ -1306,7 +1306,7 @@ namespace ModBus_Client
 
             try
             {
-                string file_content = File.ReadAllText("Json/" + pathToConfiguration + "/Template.json");
+                string file_content = File.ReadAllText(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "/Json/" + pathToConfiguration + "/Template.json");
 
                 JavaScriptSerializer jss = new JavaScriptSerializer();
                 jss.MaxJsonLength = this.MaxJsonLength;
@@ -3664,7 +3664,7 @@ namespace ModBus_Client
         {
             try
             {
-                System.Diagnostics.Process.Start(Directory.GetCurrentDirectory() + "\\Manuali\\Guida_ModBus_Client_" + textBoxCurrentLanguage.Text + ".pdf");
+                System.Diagnostics.Process.Start(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "\\Manuali\\Guida_ModBus_Client_" + textBoxCurrentLanguage.Text + ".pdf");
             }
             catch
             {
@@ -4209,13 +4209,13 @@ namespace ModBus_Client
                 }
 
 
-                Directory.CreateDirectory("Json\\" + pathToConfiguration);
+                Directory.CreateDirectory(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "\\Json\\" + pathToConfiguration);
 
-                String[] fileNames = Directory.GetFiles("Json\\" + prevoiusPath + "\\");
+                String[] fileNames = Directory.GetFiles(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "\\Json\\" + prevoiusPath + "\\");
 
                 for (int i = 0; i < fileNames.Length; i++)
                 {
-                    String newFile = "Json\\" + pathToConfiguration + fileNames[i].Substring(fileNames[i].LastIndexOf('\\'));
+                    String newFile = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "\\Json\\" + pathToConfiguration + fileNames[i].Substring(fileNames[i].LastIndexOf('\\'));
 
                     Console.WriteLine("Copying file: " + fileNames[i] + " to " + newFile);
                     File.Copy(fileNames[i], newFile);
@@ -4237,7 +4237,7 @@ namespace ModBus_Client
 
         public void LoadProfile(string profile)
         {
-            if (!Directory.Exists(Directory.GetCurrentDirectory() + "\\Json\\" + pathToConfiguration))
+            if (!Directory.Exists(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "\\Json\\" + pathToConfiguration))
             {
                 Console.WriteLine("Profile: " + profile + " not found");
                 return;
@@ -4253,7 +4253,7 @@ namespace ModBus_Client
             }
 
             // Se esiste una nuova versione del file di configurazione uso l'ultima, altrimenti carico il modello precedente
-            if (File.Exists(Directory.GetCurrentDirectory() + "\\Json\\" + pathToConfiguration + "\\Config.json"))
+            if (File.Exists(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "\\Json\\" + pathToConfiguration + "\\Config.json"))
             {
                 LoadConfiguration_v2();
             }
@@ -4284,7 +4284,7 @@ namespace ModBus_Client
             SaveConfiguration_v2(false);
 
             // Se esiste una nuova versione del file di configurazione uso l'ultima, altrimenti carico il modello precedente
-            if (File.Exists(Directory.GetCurrentDirectory() + "\\Json\\" + pathToConfiguration + "\\Config.json"))
+            if (File.Exists(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "\\Json\\" + pathToConfiguration + "\\Config.json"))
             {
                 LoadConfiguration_v2();
             }
@@ -5799,8 +5799,8 @@ namespace ModBus_Client
         public void SaveConfiguration_v2(bool alert)
         {
             JavaScriptSerializer jss = new JavaScriptSerializer();
-
-            dynamic toSave = jss.DeserializeObject(File.ReadAllText(Directory.GetCurrentDirectory() + "\\Config\\SettingsToSave.json"));
+            
+            dynamic toSave = jss.DeserializeObject(File.ReadAllText(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "\\Config\\SettingsToSave.json"));
 
             Dictionary<string, Dictionary<string, object>> file_ = new Dictionary<string, Dictionary<string, object>>();
 
@@ -6041,7 +6041,7 @@ namespace ModBus_Client
 
             file_.Add("others", others);
 
-            File.WriteAllText("Json/" + pathToConfiguration + "/Config.json", jss.Serialize(file_));
+            File.WriteAllText(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "/Json/" + pathToConfiguration + "/Config.json", jss.Serialize(file_));
 
             if (alert)
             {
@@ -6053,8 +6053,8 @@ namespace ModBus_Client
         {
             JavaScriptSerializer jss = new JavaScriptSerializer();
 
-            dynamic toSave = jss.DeserializeObject(File.ReadAllText(Directory.GetCurrentDirectory() + "\\Config\\SettingsToSave.json"));
-            dynamic loaded = jss.DeserializeObject(File.ReadAllText(Directory.GetCurrentDirectory() + "\\Json\\" + pathToConfiguration + "\\Config.json"));
+            dynamic toSave = jss.DeserializeObject(File.ReadAllText(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "\\Config\\SettingsToSave.json"));
+            dynamic loaded = jss.DeserializeObject(File.ReadAllText(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "\\Json\\" + pathToConfiguration + "\\Config.json"));
 
             foreach (KeyValuePair<string, object> row in toSave["toSave"])
             {
@@ -6413,7 +6413,7 @@ namespace ModBus_Client
             // Al termine del caricamento della configurazione carico il template
             try
             {
-                string file_content = File.ReadAllText(Directory.GetCurrentDirectory() + "\\Json\\" + pathToConfiguration + "\\Template.json");
+                string file_content = File.ReadAllText(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "\\Json\\" + pathToConfiguration + "\\Template.json");
                 jss.MaxJsonLength = this.MaxJsonLength;
                 TEMPLATE template = jss.Deserialize<TEMPLATE>(file_content);
 

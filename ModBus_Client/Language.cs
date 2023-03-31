@@ -22,7 +22,7 @@ namespace LanguageLib
 
         public void loadLanguageTemplate(string templateName)
         {
-            string file_content = File.ReadAllText("Lang/" + templateName + ".json");
+            string file_content = File.ReadAllText(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "/Lang/" + templateName + ".json");
 
             JavaScriptSerializer jss = new JavaScriptSerializer();
             languageTemplate = jss.Deserialize<dynamic>(file_content);

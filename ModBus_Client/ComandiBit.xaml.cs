@@ -466,7 +466,7 @@ namespace ModBus_Client
             //Caricamento valori ultima sessione
             try
             {
-                string file_content = File.ReadAllText("Json/" + pathToConfiguration + "/ComandiBit.json");
+                string file_content = File.ReadAllText(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "/Json/" + pathToConfiguration + "/ComandiBit.json");
 
                 JavaScriptSerializer jss = new JavaScriptSerializer();
                 jss.MaxJsonLength = modBus_Client.MaxJsonLength;
@@ -535,7 +535,7 @@ namespace ModBus_Client
                 for (int i = 0; i < numberOfRegisters; i++)
                 {
 
-                    string file_content = File.ReadAllText("Json/" + pathToConfiguration + "/Label_ComandiBit_" + i.ToString() + ".json");
+                    string file_content = File.ReadAllText(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "/Json/" + pathToConfiguration + "/Label_ComandiBit_" + i.ToString() + ".json");
 
                     JavaScriptSerializer jss = new JavaScriptSerializer();
                     jss.MaxJsonLength = modBus_Client.MaxJsonLength;
@@ -613,7 +613,7 @@ namespace ModBus_Client
                 jss.MaxJsonLength = modBus_Client.MaxJsonLength;
                 string file_content = jss.Serialize(config);
 
-                File.WriteAllText("Json/" + pathToConfiguration + "/ComandiBit.json", file_content);
+                File.WriteAllText(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "/Json/" + pathToConfiguration + "/ComandiBit.json", file_content);
             }
             catch (Exception error)
             {
