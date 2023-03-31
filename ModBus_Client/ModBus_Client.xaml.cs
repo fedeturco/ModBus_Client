@@ -1727,6 +1727,8 @@ namespace ModBus_Client
                     insertRowsTable(list_coilsTable, null, address_start, response, colorDefaultReadCellStr, comboBoxCoilsRegistri_, "DEC");
                 }
 
+                applyTemplateCoils();
+
                 this.Dispatcher.Invoke((Action)delegate
                 {
                     buttonReadCoilsRange.IsEnabled = true;
