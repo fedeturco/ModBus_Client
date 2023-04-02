@@ -32,7 +32,7 @@ namespace ModBus_Client
     public partial class ComandiByte : Window
     {
         ModBus_Chicco ModBus;
-        MainWindow modBus_Client;
+        MainWindow main;
         Language lang;
 
         int page = 0;
@@ -58,7 +58,7 @@ namespace ModBus_Client
 
         String pathToConfiguration;
 
-        public ComandiByte(ModBus_Chicco ModBus_, MainWindow modBus_Client_)
+        public ComandiByte(ModBus_Chicco ModBus_, MainWindow main_)
         {
             InitializeComponent();
 
@@ -68,13 +68,13 @@ namespace ModBus_Client
             this.Closing += Sim_Form_cs_Closing;
 
             ModBus = ModBus_;
-            modBus_Client = modBus_Client_;
-            pathToConfiguration = modBus_Client.pathToConfiguration;
+            main = main_;
+            pathToConfiguration = main.pathToConfiguration;
 
-            textBoxModBusAddress.Text = modBus_Client.textBoxModbusAddress.Text;
+            textBoxModBusAddress.Text = main.textBoxModbusAddress.Text;
 
-            textBoxHoldingOffset.Text = modBus_Client.textBoxHoldingOffset.Text;
-            comboBoxHoldingOffset.SelectedIndex = modBus_Client.comboBoxHoldingOffset.SelectedIndex;
+            textBoxHoldingOffset.Text = main.textBoxHoldingOffset.Text;
+            comboBoxHoldingOffset.SelectedIndex = main.comboBoxHoldingOffset.SelectedIndex;
 
             // Assegnazione array elementi grafici
             textBoxLabel[0] = textBoxLabel_A;
@@ -223,9 +223,9 @@ namespace ModBus_Client
             this.Left = (screenWidth / 2) - (windowWidth / 2);
             this.Top = (screenHeight / 2) - (windowHeight / 2);
 
-            lang.loadLanguageTemplate(modBus_Client_.language);
+            lang.loadLanguageTemplate(main_.language);
 
-            this.Title = modBus_Client_.Title;
+            this.Title = main_.Title;
 
             // Nascondo gli elementi dispari dei bytw (buttons/comboBoxes)
             for(int i = 1; i < 16; i += 2)
@@ -249,10 +249,10 @@ namespace ModBus_Client
             //Caricamento valori ultima sessione di questo form
             try
             {
-                string file_content = File.ReadAllText(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "/Json/" + pathToConfiguration + "/ComandiByte.json");
+                string file_content = File.ReadAllText(main.localPath + "/Json/" + pathToConfiguration + "/ComandiByte.json");
 
                 JavaScriptSerializer jss = new JavaScriptSerializer();
-                jss.MaxJsonLength = modBus_Client.MaxJsonLength;
+                jss.MaxJsonLength = main.MaxJsonLength;
                 SAVE_Form4 config = jss.Deserialize<SAVE_Form4>(file_content);
 
                 S_textBoxLabel = config.textBoxLabel_;
@@ -311,10 +311,10 @@ namespace ModBus_Client
                 config.registriBloccati_ = !textBoxLabel[0].IsEnabled;
 
                 JavaScriptSerializer jss = new JavaScriptSerializer();
-                jss.MaxJsonLength = modBus_Client.MaxJsonLength;
+                jss.MaxJsonLength = main.MaxJsonLength;
                 string file_content = jss.Serialize(config);
 
-                File.WriteAllText(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "/Json/" + pathToConfiguration + "/ComandiByte.json", file_content);
+                File.WriteAllText(main.localPath + "/Json/" + pathToConfiguration + "/ComandiByte.json", file_content);
 
             }
             catch (Exception error)
@@ -407,7 +407,7 @@ namespace ModBus_Client
             {
                 uint address_start = P.uint_parser(textBoxHoldingOffset, comboBoxHoldingOffset) + P.uint_parser(textBoxHoldingAddress[row * 2], comboBoxHoldingAddress[row * 2]);
 
-                UInt16[] response = ModBus.readHoldingRegister_03(byte.Parse(textBoxModBusAddress.Text), address_start, 1, modBus_Client.readTimeout);
+                UInt16[] response = ModBus.readHoldingRegister_03(byte.Parse(textBoxModBusAddress.Text), address_start, 1, main.readTimeout);
 
                 uint[] response_ = new uint[response.Length];
 
@@ -452,7 +452,7 @@ namespace ModBus_Client
                 if (value < 65536 && value >= 0)
                 {
 
-                    if ((bool)ModBus.presetSingleRegister_06(byte.Parse(textBoxModBusAddress.Text), address_start, value, modBus_Client.readTimeout))
+                    if ((bool)ModBus.presetSingleRegister_06(byte.Parse(textBoxModBusAddress.Text), address_start, value, main.readTimeout))
                     {
                         textBoxHoldingValue[row].Background = Brushes.LightGreen;
                         textBoxHoldingValue[row + 1].Background = Brushes.LightGreen;

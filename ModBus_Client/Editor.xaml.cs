@@ -156,7 +156,7 @@ namespace ModBus_Client
             //Caricamento valori ultima sessione da file del form "Sim_AUGE"
             try
             {
-                string file_content = File.ReadAllText(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "/Json/" + pathToConfiguration + "/ComandiBit.json");
+                string file_content = File.ReadAllText(main.localPath + "/Json/" + pathToConfiguration + "/ComandiBit.json");
 
                 JavaScriptSerializer jss = new JavaScriptSerializer();
                 jss.MaxJsonLength = main.MaxJsonLength;
@@ -211,7 +211,7 @@ namespace ModBus_Client
                 this.Title = sim_Auge.textBoxLabel[row].Text;
                 textBoxLabel_A.Text = sim_Auge.textBoxLabel[row].Text;
 
-                string file_content = File.ReadAllText(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "/Json/" + pathToConfiguration + "/Label_ComandiBit_" + row.ToString() + ".json");
+                string file_content = File.ReadAllText(main.localPath + "/Json/" + pathToConfiguration + "/Label_ComandiBit_" + row.ToString() + ".json");
 
                 JavaScriptSerializer jss = new JavaScriptSerializer();
                 jss.MaxJsonLength = main.MaxJsonLength;
@@ -258,7 +258,7 @@ namespace ModBus_Client
                 jss.MaxJsonLength = main.MaxJsonLength;
                 string file_content = jss.Serialize(config);
 
-                File.WriteAllText(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "/Json/" + pathToConfiguration + "/Label_ComandiBit_" + row.ToString() + ".json", file_content);
+                File.WriteAllText(main.localPath + "/Json/" + pathToConfiguration + "/Label_ComandiBit_" + row.ToString() + ".json", file_content);
             }
             catch (Exception error)
             {
