@@ -690,6 +690,7 @@ namespace ModBus_Client
     public class ModBus_Item
     {
         public string Register { get; set; }
+        public UInt16 RegisterUInt { get; set; }
         public string Value { get; set; }
         public string ValueBin { get; set; }
         public string ValueConverted { get; set; }
