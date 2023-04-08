@@ -112,7 +112,7 @@ namespace ModBus_Client
             main.SaveConfiguration_v2(false);
 
             // Se esiste una nuova versione del file di configurazione uso l'ultima, altrimenti carico il modello precedente
-            if (File.Exists(Directory.GetCurrentDirectory() + "\\Json\\" + pathToConfiguration + "\\Config.json"))
+            if (File.Exists(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "\\Json\\" + pathToConfiguration + "\\Config.json"))
             {
                 main.LoadConfiguration_v2();
             }
@@ -144,10 +144,10 @@ namespace ModBus_Client
                 template.textBoxInputRegOffset_ = textBoxInputRegOffset.Text;
                 template.textBoxHoldingOffset_ = textBoxHoldingOffset.Text;
 
-                template.dataGridViewCoils = list_coilsTable.ToArray<ModBus_Item>();
-                template.dataGridViewInput = list_inputsTable.ToArray<ModBus_Item>();
-                template.dataGridViewInputRegister = list_inputRegistersTable.ToArray<ModBus_Item>();
-                template.dataGridViewHolding = list_holdingRegistersTable.ToArray<ModBus_Item>();
+                template.dataGridViewCoils = list_coilsTable;
+                template.dataGridViewInput = list_inputsTable;
+                template.dataGridViewInputRegister = list_inputRegistersTable;
+                template.dataGridViewHolding = list_holdingRegistersTable;
 
                 template.textBoxTemplateLabel_ = TextBoxTemplateLabel.Text;
                 template.textBoxTemplateNotes_ = TextBoxTemplateNotes.Text;
@@ -409,6 +409,11 @@ namespace ModBus_Client
                             {
                                 comboBoxReg.SelectedIndex = 1;
                                 item.Register = item.Register.Substring(2);
+                                item.RegisterUInt = UInt16.Parse(item.Register, System.Globalization.NumberStyles.HexNumber);
+                            }
+                            else
+                            {
+                                item.RegisterUInt = UInt16.Parse(item.Register, System.Globalization.NumberStyles.Integer);
                             }
 
                             item.Notes = splitted[i].Split(',')[3];
@@ -679,10 +684,10 @@ namespace ModBus_Client
         public string textBoxInputRegOffset_ { get; set; }
         public string textBoxHoldingOffset_ { get; set; }
 
-        public ModBus_Item[] dataGridViewCoils { get; set; }
-        public ModBus_Item[] dataGridViewInput { get; set; }
-        public ModBus_Item[] dataGridViewInputRegister { get; set; }
-        public ModBus_Item[] dataGridViewHolding { get; set; }
+        public ObservableCollection<ModBus_Item> dataGridViewCoils { get; set; }
+        public ObservableCollection<ModBus_Item> dataGridViewInput { get; set; }
+        public ObservableCollection<ModBus_Item> dataGridViewInputRegister { get; set; }
+        public ObservableCollection<ModBus_Item> dataGridViewHolding { get; set; }
         public string textBoxTemplateLabel_ { get; set; }
         public string textBoxTemplateNotes_ { get; set; }
     }
@@ -690,6 +695,7 @@ namespace ModBus_Client
     public class ModBus_Item
     {
         public string Register { get; set; }
+        public UInt16 RegisterUInt { get; set; }
         public string Value { get; set; }
         public string ValueBin { get; set; }
         public string ValueConverted { get; set; }

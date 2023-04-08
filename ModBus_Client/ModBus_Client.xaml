@@ -442,7 +442,7 @@
                         <TextBox x:Name="textBoxInputRange_A" TextWrapping="Wrap" Width="50"  Height="25" Margin="10,0,0,0" FontSize="12" TextChanged="textBoxInputRange_A_TextChanged" VerticalContentAlignment="Center"/>
                         <Label x:Name="labelInputs_7" Content="stop:" Height="30" FontSize="12"/>
                         <TextBox x:Name="textBoxInputRange_B" TextWrapping="Wrap" Width="50"  Height="25" Margin="0,0,0,0" FontSize="12" TextChanged="textBoxInputRange_B_TextChanged" VerticalContentAlignment="Center"/>
-                        <Button x:Name="buttonReadInputRange" Content="Read" Width="55" Height="25" Margin="10,0,0,0" Click="buttonReadInputRange_Click" FontSize="12"/>
+                        <Button x:Name="buttonReadInputRange" Content="Read" Width="55" Height="25" Margin="10,8,0,0" Click="buttonReadInputRange_Click" FontSize="12" VerticalAlignment="Top"/>
                         <Button x:Name="buttonLoopInputRange" Content="Loop" Width="55" Height="25" Margin="10,0,0,0" FontSize="12" Click="buttonLoopInputRange_Click"/>
                     </StackPanel>
                     <StackPanel x:Name="stackGoToInput" Margin="0,430,10,0" Background="AliceBlue" Height="40" Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Right" Width="272" Visibility="Hidden">
@@ -568,7 +568,7 @@
                         <TextBox x:Name="textBoxInputRegisterAddress04" TextWrapping="Wrap" Width="50"  Height="25" Margin="10,0,0,0" FontSize="12" TextChanged="textBoxInputRegisterAddress04_TextChanged" VerticalContentAlignment="Center"/>
                         <Label x:Name="labelInputRegisters_5" Content="Num.:" Height="25" FontSize="12"/>
                         <TextBox x:Name="textBoxInputRegisterNumber" TextWrapping="Wrap" Width="50"  Height="25" Margin="0,0,0,0" FontSize="12" TextChanged="textBoxInputRegisterNumber_TextChanged" VerticalContentAlignment="Center"/>
-                        <Button x:Name="buttonReadInputRegister04" Content="Read" Width="55" Height="25" Margin="10,0,0,0" Click="buttonReadInputRegister04_Click" FontSize="12"/>
+                        <Button x:Name="buttonReadInputRegister04" Content="Read" Width="55" Height="25" Margin="10,0,0,8" Click="buttonReadInputRegister04_Click" FontSize="12" VerticalAlignment="Bottom"/>
                         <Button x:Name="buttonLoopInputRegister04" Content="Loop" Width="55" Height="25" Margin="10,0,0,0" FontSize="12" Click="buttonLoopInputRegister04_Click"/>
                     </StackPanel>
                     <Label x:Name="labelInputRegisters_6" Content="Read Input Register Range:" Height="26" Margin="0,121,147,0" VerticalAlignment="Top" FontSize="12" HorizontalAlignment="Right" Width="263"/>
