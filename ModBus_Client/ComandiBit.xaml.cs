@@ -34,7 +34,7 @@ namespace ModBus_Client
     public partial class ComandiBit : Window
     {
         ModBus_Chicco ModBus;
-        MainWindow modBus_Client;
+        MainWindow main;
         Language lang; 
 
         static int numberOfRegisters = 16;  // Numero di registri comandabili dal form
@@ -55,7 +55,7 @@ namespace ModBus_Client
 
         String pathToConfiguration;
 
-        public ComandiBit(ModBus_Chicco ModBus_, MainWindow modBus_Client_)
+        public ComandiBit(ModBus_Chicco ModBus_, MainWindow main_)
         {
             InitializeComponent();
 
@@ -65,15 +65,15 @@ namespace ModBus_Client
             this.Closing += Sim_Form_cs_Closing;
 
             ModBus = ModBus_;
-            modBus_Client = modBus_Client_;
-            pathToConfiguration = modBus_Client.pathToConfiguration;
+            main = main_;
+            pathToConfiguration = main.pathToConfiguration;
 
-            modBus_Client.toolSTripMenuEnable(false);
+            main.toolSTripMenuEnable(false);
 
-            textBoxModBusAddress.Text = modBus_Client.textBoxModbusAddress.Text;
+            textBoxModBusAddress.Text = main.textBoxModbusAddress.Text;
 
-            textBoxHoldingOffset.Text = modBus_Client.textBoxHoldingOffset.Text;
-            comboBoxHoldingOffset.SelectedIndex = modBus_Client.comboBoxHoldingOffset.SelectedIndex;
+            textBoxHoldingOffset.Text = main.textBoxHoldingOffset.Text;
+            comboBoxHoldingOffset.SelectedIndex = main.comboBoxHoldingOffset.SelectedIndex;
 
             //Assegnazione textBox
             textBoxLabel[0] = textBoxLabel_A;
@@ -455,9 +455,9 @@ namespace ModBus_Client
             this.Left = (screenWidth / 2) - (windowWidth / 2);
             this.Top = (screenHeight / 2) - (windowHeight / 2);
 
-            lang.loadLanguageTemplate(modBus_Client_.language);
+            lang.loadLanguageTemplate(main_.language);
 
-            this.Title = modBus_Client_.Title;
+            this.Title = main_.Title;
         }
 
 
@@ -466,10 +466,10 @@ namespace ModBus_Client
             //Caricamento valori ultima sessione
             try
             {
-                string file_content = File.ReadAllText("Json/" + pathToConfiguration + "/ComandiBit.json");
+                string file_content = File.ReadAllText(main.localPath + "/Json/" + pathToConfiguration + "/ComandiBit.json");
 
                 JavaScriptSerializer jss = new JavaScriptSerializer();
-                jss.MaxJsonLength = modBus_Client.MaxJsonLength;
+                jss.MaxJsonLength = main.MaxJsonLength;
                 SAVE_Form config = jss.Deserialize<SAVE_Form>(file_content);
 
                 //textBoxModBusAddress.Text = config.textBoxModBusAddress_;
@@ -535,10 +535,10 @@ namespace ModBus_Client
                 for (int i = 0; i < numberOfRegisters; i++)
                 {
 
-                    string file_content = File.ReadAllText("Json/" + pathToConfiguration + "/Label_ComandiBit_" + i.ToString() + ".json");
+                    string file_content = File.ReadAllText(main.localPath + "/Json/" + pathToConfiguration + "/Label_ComandiBit_" + i.ToString() + ".json");
 
                     JavaScriptSerializer jss = new JavaScriptSerializer();
-                    jss.MaxJsonLength = modBus_Client.MaxJsonLength;
+                    jss.MaxJsonLength = main.MaxJsonLength;
                     SAVE_Form3 config = jss.Deserialize<SAVE_Form3>(file_content);
 
                     String[] labelBitRegisters_ = new String[16];
@@ -567,7 +567,7 @@ namespace ModBus_Client
         private void Sim_Form_cs_Closing(object sender, EventArgs e)
         {
             salva_configurazione();
-            modBus_Client.toolSTripMenuEnable(true);
+            main.toolSTripMenuEnable(true);
         }
 
         public void salva_configurazione()
@@ -610,10 +610,10 @@ namespace ModBus_Client
                 config.registriBloccati_ = !textBoxLabel[0].IsEnabled;
 
                 JavaScriptSerializer jss = new JavaScriptSerializer();
-                jss.MaxJsonLength = modBus_Client.MaxJsonLength;
+                jss.MaxJsonLength = main.MaxJsonLength;
                 string file_content = jss.Serialize(config);
 
-                File.WriteAllText("Json/" + pathToConfiguration + "/ComandiBit.json", file_content);
+                File.WriteAllText(main.localPath + "/Json/" + pathToConfiguration + "/ComandiBit.json", file_content);
             }
             catch (Exception error)
             {
@@ -690,7 +690,7 @@ namespace ModBus_Client
 
                     textBoxValue[row].Text = val.ToString();
 
-                    ModBus.presetSingleRegister_06(byte.Parse(textBoxModBusAddress.Text), address, val, modBus_Client.readTimeout);
+                    ModBus.presetSingleRegister_06(byte.Parse(textBoxModBusAddress.Text), address, val, main.readTimeout);
                 }
 
                 pictureBoxBusy.Background = Brushes.LightGray;
@@ -710,7 +710,7 @@ namespace ModBus_Client
 
             UInt16 address = (UInt16)(P.uint_parser(textBoxRegister[row], comboBox[row]) + P.uint_parser(textBoxHoldingOffset, comboBoxHoldingOffset));
 
-            ModBus.presetSingleRegister_06(byte.Parse(textBoxModBusAddress.Text), address, 0, modBus_Client.readTimeout);
+            ModBus.presetSingleRegister_06(byte.Parse(textBoxModBusAddress.Text), address, 0, main.readTimeout);
 
             pictureBoxBusy.Background = Brushes.LightGray;
         }
@@ -721,7 +721,7 @@ namespace ModBus_Client
 
             UInt16 address = (UInt16)(P.uint_parser(textBoxRegister[row], comboBox[row]) + P.uint_parser(textBoxHoldingOffset, comboBoxHoldingOffset));
 
-            UInt16 val = ModBus.readHoldingRegister_03(byte.Parse(textBoxModBusAddress.Text), address, 1, modBus_Client.readTimeout)[0];
+            UInt16 val = ModBus.readHoldingRegister_03(byte.Parse(textBoxModBusAddress.Text), address, 1, main.readTimeout)[0];
 
             intToPicture(row, val);
             textBoxValue[row].Text = val.ToString();
@@ -743,7 +743,7 @@ namespace ModBus_Client
                     S_titleLalbel[i] = textBoxLabel[i].Text;
                 }
 
-                Editor editorForm = new Editor(false, ModBus, row, this, pathToConfiguration, !textBoxLabel[0].IsEnabled, modBus_Client);
+                Editor editorForm = new Editor(false, ModBus, row, this, pathToConfiguration, !textBoxLabel[0].IsEnabled, main);
                 editorForm.Show();
             }
             catch (Exception error)

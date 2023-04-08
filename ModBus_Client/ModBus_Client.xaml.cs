@@ -98,6 +98,7 @@ namespace ModBus_Client
 
         String defaultPathToConfiguration = "Generico";
         public String pathToConfiguration;
+        public String localPath = "";
 
         SolidColorBrush colorDefaultReadCell = Brushes.DarkBlue;
         SolidColorBrush colorDefaultWriteCell = Brushes.LightGreen;
@@ -165,6 +166,7 @@ namespace ModBus_Client
         ObservableCollection<ModBus_Item> list_template_inputsTable = new ObservableCollection<ModBus_Item>();
         ObservableCollection<ModBus_Item> list_template_holdingRegistersTable = new ObservableCollection<ModBus_Item>();
         ObservableCollection<ModBus_Item> list_template_inputRegistersTable = new ObservableCollection<ModBus_Item>();
+
 
         // Stati loop interrogazioni
         public int pauseLoop = 1000;
@@ -297,16 +299,21 @@ namespace ModBus_Client
         public string BackGroundLight2Str;
 
         public int MaxJsonLength = 104857600; // 200 MB, sufficienti per 65536*4 etichette Template.json
-        // see https://learn.microsoft.com/it-it/dotnet/api/system.web.script.serialization.javascriptserializer.maxjsonlength?view=netframework-4.8.1
-                                                    
+                                              // see https://learn.microsoft.com/it-it/dotnet/api/system.web.script.serialization.javascriptserializer.maxjsonlength?view=netframework-4.8.1
+
+        public ThreadPriority threadPriority;
 
         public MainWindow()
         {
+            localPath = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+
             InitializeComponent();
 
             version = Assembly.GetEntryAssembly().GetName().Version.Major.ToString() + "." + Assembly.GetEntryAssembly().GetName().Version.Minor.ToString();
 
             lang = new Language(this);
+
+            threadPriority = ThreadPriority.Highest;
 
             // Creo evento di chiusura del form
             this.Closing += Form1_FormClosing;
@@ -496,7 +503,7 @@ namespace ModBus_Client
             // Menu lingua
             languageToolStripMenu.Items.Clear();
 
-            foreach (string lang in Directory.GetFiles(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "//Lang"))
+            foreach (string lang in Directory.GetFiles(localPath + "//Lang"))
             {
                 var tmp = new MenuItem();
 
@@ -508,7 +515,7 @@ namespace ModBus_Client
             }
 
             // Se esiste una nuova versione del file di configurazione uso l'ultima, altrimenti carico il modello precedente
-            if (File.Exists(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "\\Json\\" + pathToConfiguration + "\\Config.json"))
+            if (File.Exists(localPath + "\\Json\\" + pathToConfiguration + "\\Config.json"))
             {
                 LoadConfiguration_v2();
             }
@@ -582,7 +589,7 @@ namespace ModBus_Client
                 {
                     radioButtonModeTcp.IsChecked = true;
 
-                    if ((i + 1) < argv.Length)
+                    if ((i + 2) < argv.Length)
                     {
                         textBoxTcpClientIpAddress.Text = argv[i + 1];
                         textBoxTcpClientPort.Text = argv[i + 2];
@@ -1240,7 +1247,7 @@ namespace ModBus_Client
                 BrushConverter bc = new BrushConverter();
 
                 colorDefaultReadCell = (SolidColorBrush)bc.ConvertFromString(config.colorDefaultReadCell_);
-                colorDefaultWriteCell = (SolidColorBrush)bc.ConvertFromString(config.colorDefaultWriteCell_); 
+                colorDefaultWriteCell = (SolidColorBrush)bc.ConvertFromString(config.colorDefaultWriteCell_);
                 colorErrorCell = (SolidColorBrush)bc.ConvertFromString(config.colorErrorCell_);
 
                 labelColorCellRead.Background = colorDefaultReadCell;
@@ -1256,12 +1263,12 @@ namespace ModBus_Client
                     TextBoxPollingInterval.Text = config.TextBoxPollingInterval_;
                 }
 
-                if(config.CheckBoxSendValuesOnEditCoillsTable_ != null)
+                if (config.CheckBoxSendValuesOnEditCoillsTable_ != null)
                 {
-                    CheckBoxSendValuesOnEditCoillsTable.IsChecked  = config.CheckBoxSendValuesOnEditCoillsTable_;
+                    CheckBoxSendValuesOnEditCoillsTable.IsChecked = config.CheckBoxSendValuesOnEditCoillsTable_;
                 }
 
-                if(config.CheckBoxSendValuesOnEditHoldingTable_ != null)
+                if (config.CheckBoxSendValuesOnEditHoldingTable_ != null)
                 {
                     CheckBoxSendValuesOnEditHoldingTable.IsChecked = config.CheckBoxSendValuesOnEditHoldingTable_;
                 }
@@ -1280,16 +1287,16 @@ namespace ModBus_Client
                 {
                     language = config.language;
 
-                    foreach(MenuItem tmp in languageToolStripMenu.Items)
+                    foreach (MenuItem tmp in languageToolStripMenu.Items)
                     {
-                        if(tmp.Header.ToString().IndexOf(language) != -1)
+                        if (tmp.Header.ToString().IndexOf(language) != -1)
                         {
                             tmp.IsChecked = true;
                         }
                     }
                 }
 
-                if(config.textBoxReadTimeout != null)
+                if (config.textBoxReadTimeout != null)
                 {
                     textBoxReadTimeout.Text = config.textBoxReadTimeout;
                 }
@@ -1372,7 +1379,7 @@ namespace ModBus_Client
                 // Tabella holdings
                 for (int i = 0; i < template.dataGridViewHolding.Count(); i++)
                 {
-                    if(UInt16.TryParse(template.dataGridViewHolding[i].Register, template.comboBoxHoldingRegistri_ == "HEX" ? System.Globalization.NumberStyles.HexNumber : System.Globalization.NumberStyles.Integer, null, out tmp))
+                    if (UInt16.TryParse(template.dataGridViewHolding[i].Register, template.comboBoxHoldingRegistri_ == "HEX" ? System.Globalization.NumberStyles.HexNumber : System.Globalization.NumberStyles.Integer, null, out tmp))
                     {
                         template.dataGridViewHolding[i].RegisterUInt = tmp;
                         template.dataGridViewHolding[i].Register = tmp.ToString();
@@ -1551,6 +1558,7 @@ namespace ModBus_Client
             }
 
             Thread t = new Thread(new ThreadStart(readCoils));
+            t.Priority = threadPriority;
             t.Start();
         }
 
@@ -1581,8 +1589,6 @@ namespace ModBus_Client
                             {
                                 insertRowsTable(list_coilsTable, list_template_coilsTable, template_coilsOffset, address_start, response, colorDefaultReadCellStr, comboBoxCoilsRegistri_, "DEC");
                             }
-
-                            // // applyTemplateCoils();
                         }
                     }
                 }
@@ -1643,6 +1649,7 @@ namespace ModBus_Client
             }
 
             Thread t = new Thread(new ThreadStart(readColisRange));
+            t.Priority = threadPriority;
             t.Start();
         }
 
@@ -1700,8 +1707,6 @@ namespace ModBus_Client
                 {
                     insertRowsTable(list_coilsTable, list_template_coilsTable, template_coilsOffset, address_start, response, colorDefaultReadCellStr, comboBoxCoilsRegistri_, "DEC");
                 }
-
-                // // applyTemplateCoils();
 
                 this.Dispatcher.Invoke((Action)delegate
                 {
@@ -1823,6 +1828,7 @@ namespace ModBus_Client
             buttonWriteCoils05.IsEnabled = false;
 
             Thread t = new Thread(new ThreadStart(writeCoil_01));
+            t.Priority = threadPriority;
             t.Start();
         }
 
@@ -1906,6 +1912,7 @@ namespace ModBus_Client
             buttonWriteCoils15.IsEnabled = false;
 
             Thread t = new Thread(new ThreadStart(writeMultipleCoils));
+            t.Priority = threadPriority;
             t.Start();
         }
 
@@ -2016,6 +2023,7 @@ namespace ModBus_Client
             }
 
             Thread t = new Thread(new ThreadStart(readInputs));
+            t.Priority = threadPriority;
             t.Start();
         }
 
@@ -2051,8 +2059,6 @@ namespace ModBus_Client
                             {
                                 insertRowsTable(list_inputsTable, list_template_inputsTable, template_inputsOffset, address_start, response, colorDefaultReadCellStr, comboBoxInputRegistri_, "DEC");
                             }
-
-                            // applyTemplateInputs();
                         }
                     }
                 }
@@ -2113,6 +2119,7 @@ namespace ModBus_Client
             }
 
             Thread t = new Thread(new ThreadStart(readInputsRange));
+            t.Priority = threadPriority;
             t.Start();
         }
 
@@ -2178,8 +2185,6 @@ namespace ModBus_Client
                 {
                     insertRowsTable(list_inputsTable, list_template_inputsTable, template_inputsOffset, address_start, response, colorDefaultReadCellStr, comboBoxInputRegistri_, "DEC");
                 }
-
-                // applyTemplateInputs();
 
                 this.Dispatcher.Invoke((Action)delegate
                 {
@@ -2252,6 +2257,7 @@ namespace ModBus_Client
             }
 
             Thread t = new Thread(new ThreadStart(readInputRegisters));
+            t.Priority = threadPriority;
             t.Start();
         }
 
@@ -2279,7 +2285,7 @@ namespace ModBus_Client
                     {
                         if (response.Length > 0)
                         {
-                            //Cancello la tabella e inserisco le nuove righe
+                            // Cancello la tabella e inserisco le nuove righe
                             if (useOffsetInTable)
                             {
                                 insertRowsTable(list_inputRegistersTable, list_template_inputRegistersTable, template_inputRegistersOffset, address_start - P.uint_parser(textBoxInputRegOffset_, comboBoxInputRegOffset_), response, colorDefaultReadCellStr, comboBoxInputRegRegistri_, comboBoxInputRegValori_);
@@ -2288,8 +2294,6 @@ namespace ModBus_Client
                             {
                                 insertRowsTable(list_inputRegistersTable, list_template_inputRegistersTable, template_inputRegistersOffset, address_start, response, colorDefaultReadCellStr, comboBoxInputRegRegistri_, comboBoxInputRegValori_);
                             }
-
-                            // applyTemplateInputRegister();
                         }
                     }
                 }
@@ -2351,6 +2355,7 @@ namespace ModBus_Client
             }
 
             Thread t = new Thread(new ThreadStart(readInputRegistersRange));
+            t.Priority = threadPriority;
             t.Start();
         }
 
@@ -2412,7 +2417,7 @@ namespace ModBus_Client
                     address_start = address_start - 30001;
                 }
 
-                //Cancello la tabella e inserisco le nuove righe
+                // Cancello la tabella e inserisco le nuove righe
                 if (useOffsetInTable)
                 {
                     insertRowsTable(list_inputRegistersTable, list_template_inputRegistersTable, template_inputRegistersOffset, address_start - P.uint_parser(textBoxInputRegOffset_, comboBoxInputRegOffset_), response, colorDefaultReadCellStr, comboBoxInputRegRegistri_, comboBoxInputRegValori_);
@@ -2421,8 +2426,6 @@ namespace ModBus_Client
                 {
                     insertRowsTable(list_inputRegistersTable, list_template_inputRegistersTable, template_inputRegistersOffset, address_start, response, colorDefaultReadCellStr, comboBoxInputRegRegistri_, comboBoxInputRegValori_);
                 }
-
-                // applyTemplateInputRegister();
 
                 this.Dispatcher.Invoke((Action)delegate
                 {
@@ -2496,6 +2499,7 @@ namespace ModBus_Client
             }
 
             Thread t = new Thread(new ThreadStart(readHoldingRegisters));
+            t.Priority = threadPriority;
             t.Start();
         }
 
@@ -2531,9 +2535,6 @@ namespace ModBus_Client
                             {
                                 insertRowsTable(list_holdingRegistersTable, list_template_holdingRegistersTable, template_HoldingOffset, P.uint_parser(textBoxHoldingOffset_, comboBoxHoldingOffset_) + P.uint_parser(textBoxHoldingAddress03_, comboBoxHoldingAddress03_), response, colorDefaultReadCellStr, comboBoxHoldingRegistri_, comboBoxHoldingValori_);
                             }
-
-                            // Applico le note ai registri
-                            // applyTemplateHoldingRegister();
                         }
                     }
                 }
@@ -2586,7 +2587,7 @@ namespace ModBus_Client
             }
         }
 
-        public void applyTemplateCoils()
+        /*public void applyTemplateCoils()
         {
             // Carico le etichette dal template per la tabella corrente
             System.Globalization.NumberStyles registerFormat = comboBoxCoilsRegistri_ == "HEX" ? System.Globalization.NumberStyles.HexNumber : System.Globalization.NumberStyles.Integer;
@@ -2600,16 +2601,13 @@ namespace ModBus_Client
                 // Cerco una corrispondenza nel file template
                 for (int i = 0; i < list_template_coilsTable.Count(); i++)
                 {
-                    try
+                    // Cerco una corrispondenza
+                    ModBus_Item match = list_template_coilsTable.FirstOrDefault(x => (int.Parse(x.Register) + template_coilsOffset) == (int.Parse(list_coilsTable[a].Register.Replace("0x", ""), registerFormat) + offsetValue));
+
+                    if (match != null)
                     {
-                        // Se trovo una corrispondenza esco dal for (list_template_inputsTable.Register,template_inputsOffset,offsetValue sono già in DEC, list_inputsTable[a].Register dipende DEC o HEX)
-                        if ((int.Parse(list_template_coilsTable[i].Register) + template_coilsOffset) == (int.Parse(list_coilsTable[a].Register.Replace("0x", ""), registerFormat) + offsetValue))
-                        {
-                            list_coilsTable[a].Notes = list_template_coilsTable[i].Notes;
-                            break;
-                        }
+                        list_inputsTable[a].Notes = match.Notes;
                     }
-                    catch { }
                 }
             }
         }
@@ -2625,19 +2623,12 @@ namespace ModBus_Client
             // Passo fuori ogni riga della tabella dei registri
             for (int a = 0; a < list_inputsTable.Count(); a++)
             {
-                // Cerco una corrispondenza nel file template
-                for (int i = 0; i < list_template_inputsTable.Count(); i++)
+                // Cerco una corrispondenza
+                ModBus_Item match = list_template_inputsTable.FirstOrDefault(x => (int.Parse(x.Register) + template_inputsOffset) == (int.Parse(list_inputsTable[a].Register.Replace("0x", ""), registerFormat) + offsetValue));
+
+                if(match != null)
                 {
-                    try
-                    {
-                        // Se trovo una corrispondenza esco dal for (list_template_inputsTable.Register,template_inputsOffset,offsetValue sono già in DEC, list_inputsTable[a].Register dipende DEC o HEX)
-                        if ((int.Parse(list_template_inputsTable[i].Register) + template_inputsOffset) == (int.Parse(list_inputsTable[a].Register.Replace("0x", ""), registerFormat) + offsetValue))
-                        {
-                            list_inputsTable[a].Notes = list_template_inputsTable[i].Notes;
-                            break;
-                        }
-                    }
-                    catch { }
+                    list_inputsTable[a].Notes = match.Notes;
                 }
             }
         }
@@ -2653,43 +2644,32 @@ namespace ModBus_Client
             // Passo fuori ogni riga della tabella dei registri
             for (int a = 0; a < list_inputRegistersTable.Count(); a++)
             {
-                bool found = false;
+                // Cerco una corrispondenza
+                ModBus_Item match = list_template_inputRegistersTable.FirstOrDefault(x => (int.Parse(x.Register) + template_inputRegistersOffset) == (int.Parse(list_inputRegistersTable[a].Register.Replace("0x", ""), registerFormat) + offsetValue));
                 string convertedValue = "";
 
-                // Cerco una corrispondenza nel file template
-                for (int i = 0; i < list_template_inputRegistersTable.Count(); i++)
+                if (match != null)
                 {
-                    try
+                    list_inputRegistersTable[a].Notes = match.Notes;
+
+                    // Se è presente un mappings dei bit lo aggiungo
+                    if (match.Mappings != null)
                     {
-                        // Se trovo una corrispondenza esco dal for (list_template_inputRegistersTable.Register,template_inputRegistersOffset,offsetValue sono già in DEC, list_inputRegistersTable[a].Register dipende DEC o HEX)
-                        if ((int.Parse(list_template_inputRegistersTable[i].Register) + template_inputRegistersOffset) == (int.Parse(list_inputRegistersTable[a].Register.Replace("0x", ""), registerFormat) + offsetValue))
-                        {
-                            found = true;
-                            list_inputRegistersTable[a].Notes = list_template_inputRegistersTable[i].Notes;
-
-                            // Se è presente un mappings dei bit lo aggiungo
-                            if (list_template_inputRegistersTable[i].Mappings != null)
-                            {
-                                list_inputRegistersTable[a].Mappings = GetMappingValue(list_inputRegistersTable, a, list_template_inputRegistersTable[i].Mappings, out convertedValue);
-                                list_inputRegistersTable[a].ValueConverted = convertedValue;
-                            }
-                            else
-                            {
-                                list_inputRegistersTable[a].Mappings = GetMappingValue(list_inputRegistersTable, a, "", out convertedValue);
-                                list_inputRegistersTable[a].ValueConverted = convertedValue;
-                            }
-                            break;
-                        }
+                        list_inputRegistersTable[a].Mappings = GetMappingValue(list_inputRegistersTable, a, match.Mappings, out convertedValue);
+                        list_inputRegistersTable[a].ValueConverted = convertedValue;
                     }
-                    catch { }
-                }
-
-                    
-                 if(!found)
-                 {
+                    else
+                    {
+                        list_inputRegistersTable[a].Mappings = GetMappingValue(list_inputRegistersTable, a, "", out convertedValue);
+                        list_inputRegistersTable[a].ValueConverted = convertedValue;
+                    }
+                    break;
+                }   
+                else
+                {
                     list_inputRegistersTable[a].Mappings = GetMappingValue(list_inputRegistersTable, a, "", out convertedValue);
                     list_inputRegistersTable[a].ValueConverted = convertedValue;
-                 }
+                }
             }
         }
 
@@ -2698,46 +2678,34 @@ namespace ModBus_Client
             // Carico le etichette dal template per la tabella corrente
             System.Globalization.NumberStyles registerFormat = comboBoxHoldingRegistri_ == "HEX" ? System.Globalization.NumberStyles.HexNumber : System.Globalization.NumberStyles.Integer;
             System.Globalization.NumberStyles offsetFormat = comboBoxHoldingOffset_ == "HEX" ? System.Globalization.NumberStyles.HexNumber : System.Globalization.NumberStyles.Integer;
-            
+
             int offsetValue = int.Parse(textBoxHoldingOffset_, offsetFormat);
 
             // Passo fuori ogni riga della tabella dei registri
             for (int a = 0; a < list_holdingRegistersTable.Count(); a++)
             {
-                bool found = false;
+                // Cerco una corrispondenza
+                ModBus_Item match = list_template_holdingRegistersTable.FirstOrDefault(x => (int.Parse(x.Register) + template_HoldingOffset) == (int.Parse(list_holdingRegistersTable[a].Register.Replace("0x", ""), registerFormat) + offsetValue));
                 string convertedValue = "";
 
-                // Cerco una corrispondenza nel file template
-                for (int i = 0; i < list_template_holdingRegistersTable.Count(); i++)
+                if (match != null)
                 {
-                    try
+                    // Applico descrizione risorsa
+                    list_holdingRegistersTable[a].Notes = match.Notes;
+
+                    // Se è presente un mappings dei bit lo aggiungo
+                    if (match.Mappings != null)
                     {
-                        // Se trovo una corrispondenza esco dal for (list_template_inputRegistersTable.Register,template_inputRegistersOffset,offsetValue sono già in DEC, list_inputRegistersTable[a].Register dipende DEC o HEX)
-                        if ((int.Parse(list_template_holdingRegistersTable[i].Register) + template_HoldingOffset) == (int.Parse(list_holdingRegistersTable[a].Register.Replace("0x", ""), registerFormat) + offsetValue))
-                        {
-                            // Applico descrizione risorsa
-                            list_holdingRegistersTable[a].Notes = list_template_holdingRegistersTable[i].Notes;
-                            found = true;
-
-                            // Se è presente un mappings dei bit lo aggiungo
-                            if (list_template_holdingRegistersTable[i].Mappings != null)
-                            {
-                                list_holdingRegistersTable[a].Mappings = GetMappingValue(list_holdingRegistersTable, a, list_template_holdingRegistersTable[i].Mappings, out convertedValue);
-                                list_holdingRegistersTable[a].ValueConverted = convertedValue;
-                            }
-                            else
-                            {
-                                list_holdingRegistersTable[a].Mappings = GetMappingValue(list_holdingRegistersTable, a, "", out convertedValue);
-                                list_holdingRegistersTable[a].ValueConverted = convertedValue;
-                            }
-
-                            break;
-                        }
+                        list_holdingRegistersTable[a].Mappings = GetMappingValue(list_holdingRegistersTable, a, match.Mappings, out convertedValue);
+                        list_holdingRegistersTable[a].ValueConverted = convertedValue;
                     }
-                    catch { }
+                    else
+                    {
+                        list_holdingRegistersTable[a].Mappings = GetMappingValue(list_holdingRegistersTable, a, "", out convertedValue);
+                        list_holdingRegistersTable[a].ValueConverted = convertedValue;
+                    }
                 }
-
-                if (!found)
+                else
                 {
                     list_holdingRegistersTable[a].Mappings = GetMappingValue(list_holdingRegistersTable, a, "", out convertedValue);
                     list_holdingRegistersTable[a].ValueConverted = convertedValue;
@@ -3707,8 +3675,478 @@ namespace ModBus_Client
                 Console.WriteLine(err);
                 return "";
             }
-        }
+        }*/
 
+        // Funzione che dal valore costruisce il mapping dei bit associato se è stato fornito un mapping
+        // Mapping: b0:Status ON/OFF,b1: .....,
+        public string GetMappingValue2(UInt16[] value_list, int list_index, string mappings, out string convertedValue)
+        {
+            convertedValue = "";
+
+            try
+            {
+                string[] labels = new string[16];
+                string result = "";
+
+                // 8 bytes tmp per conversioni UInt32/UInt64
+                UInt16[] values_ = { 0, 0, 0, 0 };
+
+                int type = 0; // 0 -> Not found, 1 -> bitmap, 2 -> byte map
+                int a = -3;
+
+                if (mappings.IndexOf('+') != -1)
+                {
+                    a = 0; // Sposto le due word da prendere in la di 1
+                }
+
+                int index_start = list_index + a;
+
+                for (int i = 0; i < 4; i++)
+                {
+                    if ((list_index + i) < value_list.Length)
+                        values_[i] = value_list[list_index + i];
+                }
+
+                if (mappings.IndexOf(':') == -1 && mappings.Length > 0)
+                    mappings += ":";
+
+                foreach (string match in mappings.Split(';'))
+                {
+                    string test = match.Split(':')[0];
+
+                    if (match.Split(':').Length > 1)
+                    {
+                        // byte (low byte or high byte)
+                        if (test.ToLower().IndexOf("byte") == 0)
+                        {
+                            // Soluzione bug sul fatto che ragiono a blocchi di 8 byte ma prendo gli utlimi 4
+                            if (test.ToLower().IndexOf("+") != -1)
+                            {
+                                values_[3] = values_[0];
+                            }
+
+                            if (test.ToLower().IndexOf("-") != -1)
+                                labels[0] = "value (byte): " + ((byte)((values_[3] >> 8) & 0xFF)).ToString(); // High Byte
+                            else
+                                labels[0] = "value (byte): " + ((byte)(values_[3] & 0xFF)).ToString();      // Low Byte
+
+                            convertedValue = labels[0].Replace("value ", "");
+                            type = 4;
+                        }
+
+                        // bitmap (type 1)
+                        else if (test.IndexOf("b") == 0)
+                        {
+                            int index = int.Parse(test.Substring(1));
+
+                            labels[index] = match.Split(':')[1];
+                            type = 1;
+                        }
+
+                        // bytemap (type 2)
+                        else if (test.IndexOf("B") == 0)
+                        {
+                            int index = int.Parse(test.Substring(1));
+
+                            labels[index] = match.Split(':')[1];
+                            type = 2;
+
+                            //convertedValue = labels[1] + ((values_[3]) >> 8).ToString() + " " + labels[0] + (values_[3] & 0xFF).ToString();
+                            convertedValue = String.Format("H: {0} L: {1}", ((values_[3]) >> 8), (values_[3] & 0xFF));
+                        }
+
+                        // float (type 3)
+                        else if (test.IndexOf("F") == 0 || test.ToLower().IndexOf("float") == 0)
+                        {
+                            byte[] tmp = new byte[4];
+
+                            // Soluzione bug sul fatto che ragiono a blocchi di 8 byte ma prendo gli utlimi 4
+                            if (test.ToLower().IndexOf("+") != -1)
+                            {
+                                values_[2] = values_[0];
+                                values_[3] = values_[1];
+                            }
+
+                            if (test.ToLower().IndexOf("-") != -1 || test.ToLower().IndexOf("_swap") != -1)
+                            {
+                                tmp[0] = (byte)(values_[2] & 0xFF);
+                                tmp[1] = (byte)((values_[2] >> 8) & 0xFF);
+                                tmp[2] = (byte)(values_[3] & 0xFF);
+                                tmp[3] = (byte)((values_[3] >> 8) & 0xFF);
+                            }
+                            else
+                            {
+                                tmp[0] = (byte)(values_[3] & 0xFF);
+                                tmp[1] = (byte)((values_[3] >> 8) & 0xFF);
+                                tmp[2] = (byte)(values_[2] & 0xFF);
+                                tmp[3] = (byte)((values_[2] >> 8) & 0xFF);
+                            }
+
+                            labels[0] = "value (float32): " + BitConverter.ToSingle(tmp, 0).ToString(System.Globalization.CultureInfo.InvariantCulture); // + " " + match.Split(':')[1];
+                            convertedValue = labels[0].Replace("value ", "");
+                            type = 3;
+                        }
+
+                        // double (type 7)
+                        else if (test.IndexOf("d") == 0 || test.ToLower().IndexOf("double") == 0)
+                        {
+                            byte[] tmp = new byte[8];
+
+                            if (test.ToLower().IndexOf("-") != -1 || test.ToLower().IndexOf("_swap") != -1)
+                            {
+                                tmp[0] = (byte)(values_[0] & 0xFF);
+                                tmp[1] = (byte)((values_[0] >> 8) & 0xFF);
+                                tmp[2] = (byte)(values_[1] & 0xFF);
+                                tmp[3] = (byte)((values_[1] >> 8) & 0xFF);
+                                tmp[4] = (byte)(values_[2] & 0xFF);
+                                tmp[5] = (byte)((values_[2] >> 8) & 0xFF);
+                                tmp[6] = (byte)(values_[3] & 0xFF);
+                                tmp[7] = (byte)((values_[3] >> 8) & 0xFF);
+                            }
+                            else
+                            {
+                                tmp[0] = (byte)(values_[3] & 0xFF);
+                                tmp[1] = (byte)((values_[3] >> 8) & 0xFF);
+                                tmp[2] = (byte)(values_[2] & 0xFF);
+                                tmp[3] = (byte)((values_[2] >> 8) & 0xFF);
+                                tmp[4] = (byte)(values_[1] & 0xFF);
+                                tmp[5] = (byte)((values_[1] >> 8) & 0xFF);
+                                tmp[6] = (byte)(values_[0] & 0xFF);
+                                tmp[7] = (byte)((values_[0] >> 8) & 0xFF);
+                            }
+
+                            labels[0] = "value (double64): " + BitConverter.ToDouble(tmp, 0).ToString(System.Globalization.CultureInfo.InvariantCulture); // + " " + match.Split(':')[1];
+                            convertedValue = labels[0].Replace("value ", "");
+                            type = 7;
+                        }
+
+                        // uint64 (type 6)
+                        else if (test.ToLower().IndexOf("uint64") == 0)
+                        {
+                            byte[] tmp = new byte[8];
+
+                            if (test.ToLower().IndexOf("-") != -1 || test.ToLower().IndexOf("_swap") != -1)
+                            {
+                                tmp[0] = (byte)(values_[0] & 0xFF);
+                                tmp[1] = (byte)((values_[0] >> 8) & 0xFF);
+                                tmp[2] = (byte)(values_[1] & 0xFF);
+                                tmp[3] = (byte)((values_[1] >> 8) & 0xFF);
+                                tmp[4] = (byte)(values_[2] & 0xFF);
+                                tmp[5] = (byte)((values_[2] >> 8) & 0xFF);
+                                tmp[6] = (byte)(values_[3] & 0xFF);
+                                tmp[7] = (byte)((values_[3] >> 8) & 0xFF);
+                            }
+                            else
+                            {
+                                tmp[0] = (byte)(values_[3] & 0xFF);
+                                tmp[1] = (byte)((values_[3] >> 8) & 0xFF);
+                                tmp[2] = (byte)(values_[2] & 0xFF);
+                                tmp[3] = (byte)((values_[2] >> 8) & 0xFF);
+                                tmp[4] = (byte)(values_[1] & 0xFF);
+                                tmp[5] = (byte)((values_[1] >> 8) & 0xFF);
+                                tmp[6] = (byte)(values_[0] & 0xFF);
+                                tmp[7] = (byte)((values_[0] >> 8) & 0xFF);
+                            }
+
+                            labels[0] = "value (uint64): " + BitConverter.ToUInt64(tmp, 0).ToString(); // + "" + match.Split(':')[1];
+                            convertedValue = labels[0].Replace("value ", "");
+                            type = 6;
+                        }
+
+                        // int64 (type 6)
+                        else if (test.ToLower().IndexOf("int64") == 0)
+                        {
+                            byte[] tmp = new byte[8];
+
+                            if (test.ToLower().IndexOf("-") != -1 || test.ToLower().IndexOf("_swap") != -1)
+                            {
+                                tmp[0] = (byte)(values_[0] & 0xFF);
+                                tmp[1] = (byte)((values_[0] >> 8) & 0xFF);
+                                tmp[2] = (byte)(values_[1] & 0xFF);
+                                tmp[3] = (byte)((values_[1] >> 8) & 0xFF);
+                                tmp[4] = (byte)(values_[2] & 0xFF);
+                                tmp[5] = (byte)((values_[2] >> 8) & 0xFF);
+                                tmp[6] = (byte)(values_[3] & 0xFF);
+                                tmp[7] = (byte)((values_[3] >> 8) & 0xFF);
+                            }
+                            else
+                            {
+                                tmp[0] = (byte)(values_[3] & 0xFF);
+                                tmp[1] = (byte)((values_[3] >> 8) & 0xFF);
+                                tmp[2] = (byte)(values_[2] & 0xFF);
+                                tmp[3] = (byte)((values_[2] >> 8) & 0xFF);
+                                tmp[4] = (byte)(values_[1] & 0xFF);
+                                tmp[5] = (byte)((values_[1] >> 8) & 0xFF);
+                                tmp[6] = (byte)(values_[0] & 0xFF);
+                                tmp[7] = (byte)((values_[0] >> 8) & 0xFF);
+                            }
+
+                            labels[0] = "value (int64): " + BitConverter.ToInt64(tmp, 0).ToString(); // + "" + match.Split(':')[1];
+                            convertedValue = labels[0].Replace("value ", "");
+                            type = 6;
+                        }
+
+                        // uint32 (type 5)
+                        else if (test.ToLower().IndexOf("uint32") == 0)
+                        {
+                            byte[] tmp = new byte[4];
+
+                            // Soluzione bug sul fatto che ragiono a blocchi di 8 byte ma prendo gli utlimi 4
+                            if (test.ToLower().IndexOf("+") != -1)
+                            {
+                                values_[2] = values_[0];
+                                values_[3] = values_[1];
+                            }
+
+                            if (test.ToLower().IndexOf("-") != -1 || test.ToLower().IndexOf("_swap") != -1)
+                            {
+                                tmp[0] = (byte)(values_[2] & 0xFF);
+                                tmp[1] = (byte)((values_[2] >> 8) & 0xFF);
+                                tmp[2] = (byte)(values_[3] & 0xFF);
+                                tmp[3] = (byte)((values_[3] >> 8) & 0xFF);
+                            }
+                            else
+                            {
+                                tmp[0] = (byte)(values_[3] & 0xFF);
+                                tmp[1] = (byte)((values_[3] >> 8) & 0xFF);
+                                tmp[2] = (byte)(values_[2] & 0xFF);
+                                tmp[3] = (byte)((values_[2] >> 8) & 0xFF);
+                            }
+
+                            labels[0] = "value (uint32): " + BitConverter.ToUInt32(tmp, 0).ToString(); // + "" + match.Split(':')[1];
+                            convertedValue = labels[0].Replace("value ", "");
+                            type = 5;
+                        }
+
+                        // int32 (type 5)
+                        else if (test.ToLower().IndexOf("int32") == 0)
+                        {
+                            byte[] tmp = new byte[4];
+
+                            // Soluzione bug sul fatto che ragiono a blocchi di 8 byte ma prendo gli utlimi 4
+                            if (test.ToLower().IndexOf("+") != -1)
+                            {
+                                values_[2] = values_[0];
+                                values_[3] = values_[1];
+                            }
+
+                            if (test.ToLower().IndexOf("-") != -1 || test.ToLower().IndexOf("_swap") != -1)
+                            {
+                                tmp[0] = (byte)(values_[2] & 0xFF);
+                                tmp[1] = (byte)((values_[2] >> 8) & 0xFF);
+                                tmp[2] = (byte)(values_[3] & 0xFF);
+                                tmp[3] = (byte)((values_[3] >> 8) & 0xFF);
+                            }
+                            else
+                            {
+                                tmp[0] = (byte)(values_[3] & 0xFF);
+                                tmp[1] = (byte)((values_[3] >> 8) & 0xFF);
+                                tmp[2] = (byte)(values_[2] & 0xFF);
+                                tmp[3] = (byte)((values_[2] >> 8) & 0xFF);
+                            }
+
+                            labels[0] = "value (int32): " + BitConverter.ToInt32(tmp, 0).ToString(); // + "" + match.Split(':')[1];
+                            convertedValue = labels[0].Replace("value ", "");
+                            type = 5;
+                        }
+
+                        // uint16 (type 4)
+                        else if (test.ToLower().IndexOf("uint") == 0 || test.ToLower().IndexOf("uint16") == 0)
+                        {
+                            byte[] tmp = new byte[2];
+
+                            // Soluzione bug sul fatto che ragiono a blocchi di 8 byte ma prendo gli utlimi 4
+                            if (test.ToLower().IndexOf("+") != -1)
+                            {
+                                values_[3] = values_[0];
+                            }
+
+                            tmp[0] = (byte)(values_[3] & 0xFF);
+                            tmp[1] = (byte)((values_[3] >> 8) & 0xFF);
+
+                            labels[0] = "value (uint16): " + BitConverter.ToUInt16(tmp, 0).ToString(); // + "" + match.Split(':')[1];
+                            convertedValue = labels[0].Replace("value ", "");
+                            type = 4;
+                        }
+
+                        // int16 (type 4)
+                        else if (test.ToLower().IndexOf("int") == 0 || test.ToLower().IndexOf("int16") == 0)
+                        {
+                            byte[] tmp = new byte[2];
+
+                            // Soluzione bug sul fatto che ragiono a blocchi di 8 byte ma prendo gli utlimi 4
+                            if (test.ToLower().IndexOf("+") != -1)
+                            {
+                                values_[3] = values_[0];
+                            }
+
+                            tmp[0] = (byte)(values_[3] & 0xFF);
+                            tmp[1] = (byte)((values_[3] >> 8) & 0xFF);
+
+                            labels[0] = "value (int16): " + BitConverter.ToInt16(tmp, 0).ToString(); // + "" + match.Split(':')[1];
+                            convertedValue = labels[0].Replace("value ", "");
+                            type = 4;
+                        }
+
+                        // String (type 255)
+                        else if (test.ToLower().IndexOf("string") == 0)
+                        {
+                            int length = int.Parse(test.Split(')')[0].Split('(')[1].Split(',')[0]);
+                            int offset = 0;
+
+                            if (test.Split(')')[0].Split('(')[1].IndexOf(',') != -1)
+                            {
+                                int.TryParse(test.Split(')')[0].Split('(')[1].Split(',')[1], out offset);
+                            }
+
+                            byte[] tmp = new byte[length];
+                            String output = "";
+
+                            int start = 0;
+                            int stop = 0;
+
+                            start = list_index - (Math.Abs(offset) / 2);
+                            stop = list_index + (length / 2) - (Math.Abs(offset) / 2);
+
+                            for (int i = start; i < stop; i += 1)
+                            {
+                                UInt16 currrValue = value_list[i];
+
+                                try
+                                {
+                                    ASCIIEncoding ascii = new ASCIIEncoding();
+
+                                    if (test.ToLower().IndexOf("_swap") != -1)
+                                    {
+                                        output += ascii.GetString(new byte[] { (byte)(currrValue & 0xFF), (byte)((currrValue >> 8) & 0xFF) });
+                                    }
+                                    else
+                                    {
+                                        output += ascii.GetString(new byte[] { (byte)((currrValue >> 8) & 0xFF), (byte)(currrValue & 0xFF) });
+                                    }
+                                }
+                                catch (Exception err)
+                                {
+                                    Console.WriteLine(err);
+                                }
+                            }
+
+                            labels[0] = "value (String): " + output;
+                            convertedValue = labels[0].Replace("value ", "");
+                            type = 7;
+                        }
+                    }
+
+                    // etichetta generica senza mapping
+                    if (mappings.Length < 2)
+                    {
+                        labels[0] = "value (dec): " + value_list[index_start + a].ToString() + "\nvalue (hex): 0x" + values_[3].ToString("X").PadLeft(4, '0') + "\nvalue (bin): " + Convert.ToString(values_[1] >> 8, 2).PadLeft(8, '0') + " " + Convert.ToString((UInt16)((UInt16)(values_[1]) << 8) >> 8, 2).PadLeft(8, '0');
+                        //convertedValue = labels[0];
+                        type = 255;
+                    }
+                }
+
+                // bitmap
+                if (type == 1)
+                {
+                    /*if (value_list[index_start + Math.Abs(a)].Notes != null)
+                    {
+                        if (value_list[index_start + Math.Abs(a)].Notes.Length > 0)
+                        {
+                            result = value_list[index_start + Math.Abs(a)].Notes + "\n\n";
+                        }
+                    }*/
+
+                    for (int i = 15; i >= 0; i--)
+                    {
+                        if ((values_[3] & (1 << i)) > 0)
+                        {
+                            if (i < 10)
+                            {
+                                result += "bit   " + i.ToString() + ":  1 - " + labels[i];
+                            }
+                            else
+                            {
+                                result += "bit " + i.ToString() + ":  1 - " + labels[i];
+                            }
+                        }
+                        else
+                        {
+                            if (i < 10)
+                            {
+                                result += "bit   " + i.ToString() + ":  0 - " + labels[i];
+                            }
+                            else
+                            {
+                                result += "bit " + i.ToString() + ":  0 - " + labels[i];
+                            }
+                        }
+
+                        if (i > 0)
+                        {
+                            result += "\n";
+                        }
+                    }
+                }
+
+                // bytemap
+                else if (type == 2)
+                {
+                    /*if (value_list[index_start + Math.Abs(a)].Notes != null)
+                    {
+                        if (value_list[index_start + Math.Abs(a)].Notes.Length > 0)
+                        {
+                            result = value_list[index_start + Math.Abs(a)].Notes + "\n\n";
+                        }
+                    }*/
+
+                    for (int i = 1; i >= 0; i--)
+                    {
+                        result += "byte " + i.ToString() + ": " + ((values_[3] >> (i * 8)) & 0xFF).ToString() + " - " + labels[i];
+
+                        if (i == 1)
+                        {
+                            result += "\n";
+                        }
+                    }
+                }
+
+                // conversioni interi
+                else if (type == 3 || type == 4 || type == 5 || type == 6 || type == 7)
+                {
+                    /*if (value_list[index_start - a].Notes != null)
+                    {
+                        if (value_list[index_start - a].Notes.Length > 0)
+                        {
+                            result = value_list[index_start - a].Notes + "\n\n";
+                        }
+                    }*/
+
+                    result += labels[0];
+                }
+
+                // etichetta generica
+                else if (type == 255)
+                {
+                    /*if (value_list[index_start - a].Notes != null)
+                    {
+                        if (value_list[index_start - a].Notes.Length > 0)
+                        {
+                            result = value_list[index_start - a].Notes + "\n\n";
+                        }
+                    }*/
+
+                    result += labels[0];
+                }
+
+                return result;
+            }
+            catch (Exception err)
+            {
+                Console.WriteLine(err);
+                return "";
+            }
+        }
 
         // Preset single register
         private void buttonWriteHolding06_Click(object sender, RoutedEventArgs e)
@@ -3738,7 +4176,7 @@ namespace ModBus_Client
                     {
                         UInt16[] value = { (UInt16)P.uint_parser(textBoxHoldingValue06_, comboBoxHoldingValue06_) };
 
-                        //Cancello la tabella e inserisco le nuove righe
+                        // Cancello la tabella e inserisco le nuove righe
                         if (useOffsetInTable)
                         {
                             insertRowsTable(list_holdingRegistersTable, list_template_holdingRegistersTable, template_HoldingOffset, address_start - P.uint_parser(textBoxHoldingOffset_, comboBoxHoldingOffset_), value, colorDefaultWriteCellStr, comboBoxHoldingRegistri_, comboBoxHoldingValori_);
@@ -3804,6 +4242,7 @@ namespace ModBus_Client
             buttonWriteHolding16.IsEnabled = false;
 
             Thread t = new Thread(new ThreadStart(writeMultipleRegisters));
+            t.Priority = threadPriority;
             t.Start();
         }
 
@@ -3858,8 +4297,6 @@ namespace ModBus_Client
                             list_holdingRegistersTable[(int)(address_start)].Foreground = ForeGroundLight.ToString();
                             list_holdingRegistersTable[(int)(address_start)].Background = Brushes.Red.ToString();
                         }
-
-                        // // applyTemplateHoldingRegister();
                     }
                 }
                 else
@@ -3897,8 +4334,6 @@ namespace ModBus_Client
                             list_holdingRegistersTable[(int)(address_start)].Foreground = ForeGroundLight.ToString();
                             list_holdingRegistersTable[(int)(address_start)].Background = Brushes.Red.ToString();
                         }
-
-                        // applyTemplateHoldingRegister();
                     }
                 }
 
@@ -3959,6 +4394,7 @@ namespace ModBus_Client
             }
 
             Thread t = new Thread(new ThreadStart(readHoldingRegistersRange));
+            t.Priority = threadPriority;
             t.Start();
         }
 
@@ -4044,8 +4480,6 @@ namespace ModBus_Client
                     insertRowsTable(list_holdingRegistersTable, list_template_holdingRegistersTable, template_HoldingOffset, address_start, response, colorDefaultReadCellStr, comboBoxHoldingRegistri.SelectedValue.ToString().Split(' ')[1], comboBoxHoldingValori.SelectedValue.ToString().Split(' ')[1]);
                 }
 
-                // applyTemplateHoldingRegister();
-
                 this.Dispatcher.Invoke((Action)delegate
                 {
                     buttonReadHoldingRange.IsEnabled = true;
@@ -4111,7 +4545,7 @@ namespace ModBus_Client
         {
             try
             {
-                System.Diagnostics.Process.Start(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "\\Manuali\\Guida_ModBus_Client_" + textBoxCurrentLanguage.Text + ".pdf");
+                System.Diagnostics.Process.Start(localPath + "\\Manuali\\Guida_ModBus_Client_" + textBoxCurrentLanguage.Text + ".pdf");
             }
             catch
             {
@@ -4129,7 +4563,6 @@ namespace ModBus_Client
         private void richTextBoxAppend(RichTextBox richTextBox, String append)
         {
             richTextBox.AppendText(DateTime.Now.ToString("HH:mm:ss") + " " + append + "\n");
-
         }
 
         private void buttonClearSerialStatus_Click(object sender, RoutedEventArgs e)
@@ -4212,7 +4645,7 @@ namespace ModBus_Client
                     }
 
                     ModBus_Item found = template.FirstOrDefault(x => (x.RegisterUInt + template_offset) == (address_start + i));
-                    if(found != null)
+                    if (found != null)
                     {
                         String convertedValue;
                         row.Mappings = GetMappingValue2(response, i, found.Mappings, out convertedValue);
@@ -4236,7 +4669,6 @@ namespace ModBus_Client
                 }
             }
         }
-
         private void buttonSendDiagnosticQuery_Click(object sender, RoutedEventArgs e)
         {
             byte[] diagnostic_codes = { 0x00, 0x01, 0x02, 0x03, 0x04, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F, 0x10, 0x11, 0x12, 0x14 };
@@ -4405,6 +4837,7 @@ namespace ModBus_Client
             buttonWriteHolding06_b.IsEnabled = false;
 
             Thread t = new Thread(new ThreadStart(writeHoldingRegister_02));
+            t.Priority = threadPriority;
             t.Start();
         }
 
@@ -4427,7 +4860,7 @@ namespace ModBus_Client
                     {
                         UInt16[] value = { (UInt16)P.uint_parser(textBoxHoldingValue06_b_, comboBoxHoldingValue06_b_) };
 
-                        //Cancello la tabella e inserisco le nuove righe
+                        // Cancello la tabella e inserisco le nuove righe
                         if (useOffsetInTable)
                         {
                             insertRowsTable(list_holdingRegistersTable, list_template_holdingRegistersTable, template_HoldingOffset, address_start - P.uint_parser(textBoxHoldingOffset_, comboBoxHoldingOffset_), value, colorDefaultWriteCellStr, comboBoxHoldingRegistri_, comboBoxHoldingValori_);
@@ -4492,6 +4925,7 @@ namespace ModBus_Client
             buttonWriteCoils05_B.IsEnabled = false;
 
             Thread t = new Thread(new ThreadStart(writeCoil_02));
+            t.Priority = threadPriority;
             t.Start();
         }
 
@@ -4509,7 +4943,7 @@ namespace ModBus_Client
                     {
                         UInt16[] value = { UInt16.Parse(textBoxCoilsValue05_b_) };
 
-                        //Cancello la tabella e inserisco le nuove righe
+                        // Cancello la tabella e inserisco le nuove righe
                         if (useOffsetInTable)
                         {
                             insertRowsTable(list_coilsTable, list_template_coilsTable, template_coilsOffset, address_start - P.uint_parser(textBoxCoilsOffset_, comboBoxCoilsOffset_), value, colorDefaultWriteCellStr, comboBoxCoilsRegistri_, "DEC");
@@ -4647,13 +5081,13 @@ namespace ModBus_Client
                 }
 
 
-                Directory.CreateDirectory("Json\\" + pathToConfiguration);
+                Directory.CreateDirectory(localPath + "\\Json\\" + pathToConfiguration);
 
-                String[] fileNames = Directory.GetFiles("Json\\" + prevoiusPath + "\\");
+                String[] fileNames = Directory.GetFiles(localPath + "\\Json\\" + prevoiusPath + "\\");
 
                 for (int i = 0; i < fileNames.Length; i++)
                 {
-                    String newFile = "Json\\" + pathToConfiguration + fileNames[i].Substring(fileNames[i].LastIndexOf('\\'));
+                    String newFile = localPath + "\\Json\\" + pathToConfiguration + fileNames[i].Substring(fileNames[i].LastIndexOf('\\'));
 
                     Console.WriteLine("Copying file: " + fileNames[i] + " to " + newFile);
                     File.Copy(fileNames[i], newFile);
@@ -4675,7 +5109,7 @@ namespace ModBus_Client
 
         public void LoadProfile(string profile)
         {
-            if (!Directory.Exists(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "\\Json\\" + pathToConfiguration))
+            if (!Directory.Exists(localPath + "\\Json\\" + pathToConfiguration))
             {
                 Console.WriteLine("Profile: " + profile + " not found");
                 return;
@@ -4691,7 +5125,7 @@ namespace ModBus_Client
             }
 
             // Se esiste una nuova versione del file di configurazione uso l'ultima, altrimenti carico il modello precedente
-            if (File.Exists(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "\\Json\\" + pathToConfiguration + "\\Config.json"))
+            if (File.Exists(localPath + "\\Json\\" + pathToConfiguration + "\\Config.json"))
             {
                 LoadConfiguration_v2();
             }
@@ -4722,7 +5156,7 @@ namespace ModBus_Client
             SaveConfiguration_v2(false);
 
             // Se esiste una nuova versione del file di configurazione uso l'ultima, altrimenti carico il modello precedente
-            if (File.Exists(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "\\Json\\" + pathToConfiguration + "\\Config.json"))
+            if (File.Exists(localPath + "\\Json\\" + pathToConfiguration + "\\Config.json"))
             {
                 LoadConfiguration_v2();
             }
@@ -4991,6 +5425,8 @@ namespace ModBus_Client
                 // Rimosso box per comodita, meglio sfondo sul bottone
                 //DoEvents();
                 //MessageBox.Show("Ping failed", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+
+                richTextBoxAppend(richTextBoxStatus, "Ping failed");
             }
             else
             {
@@ -4999,6 +5435,8 @@ namespace ModBus_Client
                 // Rimosso box per comodita, meglio sfondo sul bottone
                 //DoEvents();
                 //MessageBox.Show("Ping ok.\nResponse time: " + PR.RoundtripTime + "ms", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                
+                richTextBoxAppend(richTextBoxStatus, "Ping Ok - Response time: " + PR.RoundtripTime + "ms");
             }
         }
 
@@ -5055,6 +5493,7 @@ namespace ModBus_Client
                     if(UInt16.TryParse(tmp.Text, out out_))
                     {
                         Thread t = new Thread(new ParameterizedThreadStart(writeRegisterDatagrid));
+                        t.Priority = threadPriority;
                         t.Start(tmp.Text);
                     }
                 }
@@ -5191,6 +5630,7 @@ namespace ModBus_Client
                     if (UInt16.TryParse(tmp.Text, out out_))
                     {
                         Thread t = new Thread(new ParameterizedThreadStart(writeCoilDataGrid));
+                        t.Priority = threadPriority;
                         t.Start(tmp.Text);
                     }
                 }
@@ -6237,8 +6677,8 @@ namespace ModBus_Client
         public void SaveConfiguration_v2(bool alert)
         {
             JavaScriptSerializer jss = new JavaScriptSerializer();
-
-            dynamic toSave = jss.DeserializeObject(File.ReadAllText(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "\\Config\\SettingsToSave.json"));
+            
+            dynamic toSave = jss.DeserializeObject(File.ReadAllText(localPath + "\\Config\\SettingsToSave.json"));
 
             Dictionary<string, Dictionary<string, object>> file_ = new Dictionary<string, Dictionary<string, object>>();
 
@@ -6479,7 +6919,7 @@ namespace ModBus_Client
 
             file_.Add("others", others);
 
-            File.WriteAllText(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "/Json/" + pathToConfiguration + "/Config.json", jss.Serialize(file_));
+            File.WriteAllText(localPath + "/Json/" + pathToConfiguration + "/Config.json", jss.Serialize(file_));
 
             if (alert)
             {
@@ -6526,7 +6966,7 @@ namespace ModBus_Client
                                         {
                                             (this.FindName(sub.Key) as TextBox).Text = loaded[row.Key][prop.Value.ToString()];
                                         }
-                                        catch(Exception err)
+                                        catch (Exception err)
                                         {
                                             Console.WriteLine(prop.Value.ToString() + " generated an error");
                                             Console.WriteLine(err);
@@ -6547,7 +6987,7 @@ namespace ModBus_Client
                                     {
                                         (this.FindName(sub.Key) as TextBox).Text = loaded[row.Key][sub.Key.ToString()];
                                     }
-                                    catch(Exception err)
+                                    catch (Exception err)
                                     {
                                         Console.WriteLine(sub.Key.ToString() + " generated an error");
                                         Console.WriteLine(err);
@@ -6581,7 +7021,7 @@ namespace ModBus_Client
                                         {
                                             (this.FindName(sub.Key) as CheckBox).IsChecked = loaded[row.Key][prop.Value.ToString()];
                                         }
-                                        catch(Exception err)
+                                        catch (Exception err)
                                         {
                                             Console.WriteLine(prop.Value.ToString() + " generated an error");
                                             Console.WriteLine(err);
@@ -6808,12 +7248,12 @@ namespace ModBus_Client
                 else
                     colorDefaultReadCell_Dark = (SolidColorBrush)bc.ConvertFromString(loaded["others"]["colorDefaultReadCell"]);
 
-                if(loaded["others"].ContainsKey("colorDefaultWriteCell_Dark"))
+                if (loaded["others"].ContainsKey("colorDefaultWriteCell_Dark"))
                     colorDefaultWriteCell_Dark = (SolidColorBrush)bc.ConvertFromString(loaded["others"]["colorDefaultWriteCell_Dark"]);
                 else
                     colorDefaultWriteCell_Dark = (SolidColorBrush)bc.ConvertFromString(loaded["others"]["colorDefaultWriteCell"]);
 
-                if(loaded["others"].ContainsKey("colorErrorCell_Dark"))
+                if (loaded["others"].ContainsKey("colorErrorCell_Dark"))
                     colorErrorCell_Dark = (SolidColorBrush)bc.ConvertFromString(loaded["others"]["colorErrorCell_Dark"]);
                 else
                     colorErrorCell_Dark = (SolidColorBrush)bc.ConvertFromString(loaded["others"]["colorErrorCell"]);

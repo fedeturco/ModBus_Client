@@ -112,7 +112,7 @@ namespace ModBus_Client
             main.SaveConfiguration_v2(false);
 
             // Se esiste una nuova versione del file di configurazione uso l'ultima, altrimenti carico il modello precedente
-            if (File.Exists(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "\\Json\\" + pathToConfiguration + "\\Config.json"))
+            if (File.Exists(main.localPath + "\\Json\\" + pathToConfiguration + "\\Config.json"))
             {
                 main.LoadConfiguration_v2();
             }
@@ -156,7 +156,7 @@ namespace ModBus_Client
                 jss.MaxJsonLength = main.MaxJsonLength;
                 string file_content = jss.Serialize(template);
 
-                File.WriteAllText("Json/" + pathToConfiguration + "/Template.json", file_content);
+                File.WriteAllText(main.localPath + "/Json/" + pathToConfiguration + "/Template.json", file_content);
 
                 Console.WriteLine("Caricata configurazione precedente\n");
 
@@ -175,7 +175,7 @@ namespace ModBus_Client
         { 
             try
             {
-                string file_content = File.ReadAllText("Json/" + pathToConfiguration + "/Template.json");
+                string file_content = File.ReadAllText(main.localPath + "/Json/" + pathToConfiguration + "/Template.json");
 
                 JavaScriptSerializer jss = new JavaScriptSerializer();
                 jss.MaxJsonLength = main.MaxJsonLength;
