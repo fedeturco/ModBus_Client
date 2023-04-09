@@ -414,6 +414,7 @@
     "disconnected": "Disconnesso",
     "connectedTo": "Connesso a",
     "failedToConnect": "Fallita connessione a",
+    "connectingTo": "Connessione in corso a ",
     "maxRegNumber": "Numero di registri troppo elevato",
     "errSetReg": "Errore nel settaggio del registro",
     "infoSaveConfig": "Salvataggio configurazione avvenuto. Al prossimo avvio verrà caricata la configurazione corrente.",
