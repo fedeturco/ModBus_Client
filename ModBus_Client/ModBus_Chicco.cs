@@ -78,8 +78,8 @@ namespace ModBusMaster_Chicco
     {
         public int TYPE_RTU = 10;        // Mode RTU
         public int TYPE_ASCII = 20;      // Mode ASCII (not supported now)
-        public int TYPE_TCP_REOPEN = 30; // Open the connection on every call
-        public int TYPE_TCP_SOCK = 31;   // Open the conection ony al first time}
+        public int TYPE_TCP_REOPEN = 30; // Open the connection on every request modbus
+        public int TYPE_TCP_SOCK = 31;   // Open the conection only al first time
     }
 
     public class ModBus_Chicco

@@ -959,9 +959,11 @@
                     <TextBox x:Name="textBoxReadTimeout" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="234.714,301.857,0,0" Grid.Row="1" TextWrapping="Wrap" Text="1000" VerticalAlignment="Top" Width="69" TextChanged="TextBoxReadTimeout_TextChanged"/>
                     <TextBox x:Name="textBoxCurrentLanguage" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="235,368,0,0" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Width="69" TextChanged="TextBoxCurrentLanguage_TextChanged" IsEnabled="False"/>
                     <Label x:Name="labelSettings_4" Content="Current Language:" HorizontalAlignment="Left" Margin="28,365,0,0" Grid.Row="1" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
-                    <CheckBox x:Name="CheckBoxDarkMode" Content="Dark Mode" HorizontalAlignment="Left" Margin="28,182,0,0" Grid.Row="1" VerticalAlignment="Top" Grid.ColumnSpan="2" Checked="CheckBoxDarkMode_Checked" Unchecked="CheckBoxDarkMode_Checked"/>
+                    <CheckBox x:Name="CheckBoxDarkMode" Content="Dark Mode" HorizontalAlignment="Left" Margin="28,183,0,0" Grid.Row="1" VerticalAlignment="Top" Grid.ColumnSpan="2" Checked="CheckBoxDarkMode_Checked" Unchecked="CheckBoxDarkMode_Checked"/>
                     <Button x:Name="ButtonResetLightMode" Content="Reset Light Mode" Grid.Column="2" HorizontalAlignment="Left" Margin="140,135,0,0" Grid.Row="1" VerticalAlignment="Top" Width="125" Click="ButtonResetLightMode_Click"/>
                     <Button x:Name="ButtonResetDarkMode" Content="Reset Dark Mode" Grid.Column="2" HorizontalAlignment="Left" Margin="270,135,0,0" Grid.Row="1" VerticalAlignment="Top" Width="125" Click="ButtonResetDarkMode_Click"/>
+                    <ComboBox x:Name="comboBoxTcpConnectionMode" Grid.Column="2" HorizontalAlignment="Left" Margin="173,368,0,0" Grid.Row="1" VerticalAlignment="Top" Width="222"/>
+                    <Label x:Name="labelSettings_6" Content="TCP Connection mode:" HorizontalAlignment="Left" Margin="28,366,0,0" Grid.Row="1" VerticalAlignment="Top" Grid.Column="2"/>
                 </Grid>
             </TabItem>
         </TabControl>

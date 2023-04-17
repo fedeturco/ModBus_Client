@@ -30,6 +30,7 @@ namespace ModBus_Client
         ObservableCollection<profile> db = new ObservableCollection<profile>();
 
         Language lang;
+        public string SelectedProfile = "";
 
         public DatabaseManager(MainWindow main_)
         {
@@ -63,7 +64,7 @@ namespace ModBus_Client
             {
                 profile tmp = new profile();
 
-                tmp.name = subFolders[i].Substring(subFolders[i].IndexOf('\\') + 1);
+                tmp.name = subFolders[i].Split('\\')[subFolders[i].Split('\\').Length - 1];
 
                 db.Add(tmp);
             }
@@ -127,13 +128,16 @@ namespace ModBus_Client
         {
             try
             {
-                profile selected = (profile)DataGridDb.SelectedItem;
+                if (DataGridDb.SelectedItem != null)
+                {
+                    profile selected = (profile)DataGridDb.SelectedItem;
 
-                labelProfileSelected.Content = labelProfileSelected.Content.ToString().Split(':')[0] + ": " + selected.name;
-                labelProfileSelected.Visibility = Visibility.Visible;
+                    labelProfileSelected.Content = labelProfileSelected.Content.ToString().Split(':')[0] + ": " + selected.name;
+                    labelProfileSelected.Visibility = Visibility.Visible;
 
-                ButtonExportZip.IsEnabled = true;
-                //ButtonImportZip.IsEnabled = true;
+                    ButtonExportZip.IsEnabled = true;
+                    //ButtonImportZip.IsEnabled = true;
+                }
             }
             catch
             {
@@ -147,6 +151,21 @@ namespace ModBus_Client
             if(e.Key == Key.Escape)
             {
                 this.Close();
+            }
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            this.DialogResult = false;
+
+            if (DataGridDb.SelectedItem != null)
+            {
+                profile selected = (profile)DataGridDb.SelectedItem;
+                this.SelectedProfile = selected.name;
+                this.DialogResult = true;
+
+                // debug
+                Console.WriteLine("Selected: {0}", selected.name);
             }
         }
     }

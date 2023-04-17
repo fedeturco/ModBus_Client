@@ -403,6 +403,9 @@ namespace ModBus_Client
             comboBoxHoldingAddress16_B.SelectedIndex = 0;
             comboBoxHoldingValue16.SelectedIndex = 0;
 
+            comboBoxTcpConnectionMode.Items.Add("Open on connect, close on disconnect");
+            comboBoxTcpConnectionMode.Items.Add("Open and close socket on each request");
+            comboBoxTcpConnectionMode.SelectedIndex = 0;
 
             pictureBoxRunningAs.Background = Brushes.LightGray;
             pictureBoxIsSending.Background = Brushes.LightGray;
@@ -1483,6 +1486,7 @@ namespace ModBus_Client
             String ip_address = "";
             String port = "";
             bool check = false;
+            int TCPMode = 0;
 
             this.Dispatcher.Invoke((Action)delegate
             {
@@ -1491,6 +1495,7 @@ namespace ModBus_Client
                 check = pictureBoxTcp.Background == Brushes.LightGray;
 
                 richTextBoxAppend(richTextBoxStatus, lang.languageTemplate["strings"]["connectingTo"] + " " + ip_address + ":" + port);
+                TCPMode = comboBoxTcpConnectionMode.SelectedIndex == 0 ? ModBus_Def.TYPE_TCP_SOCK : ModBus_Def.TYPE_TCP_REOPEN;
             });
 
             if (check)
@@ -1504,7 +1509,7 @@ namespace ModBus_Client
                     this.Dispatcher.Invoke((Action)delegate
                     {
                         // Initialise Modbus Object
-                        ModBus = new ModBus_Chicco(serialPort, textBoxTcpClientIpAddress.Text, textBoxTcpClientPort.Text, ModBus_Def.TYPE_TCP_REOPEN, pictureBoxIsResponding, pictureBoxIsSending);
+                        ModBus = new ModBus_Chicco(serialPort, textBoxTcpClientIpAddress.Text, textBoxTcpClientPort.Text, TCPMode, pictureBoxIsResponding, pictureBoxIsSending);
                         ModBus.open();
 
                         pictureBoxTcp.Background = Brushes.Lime;
@@ -4123,7 +4128,12 @@ namespace ModBus_Client
         private void gestisciDatabaseToolStripMenuItem_Click(object sender, RoutedEventArgs e)
         {
             DatabaseManager window = new DatabaseManager(this);
-            window.Show();
+            window.ShowDialog();
+
+            if ((bool)window.DialogResult)
+            {
+                LoadProfile(window.SelectedProfile);
+            }
         }
 
         private void comboBoxHoldingValue06_b_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -4189,7 +4199,7 @@ namespace ModBus_Client
             Carica_impianto form_load = new Carica_impianto(defaultPathToConfiguration, this);
             form_load.ShowDialog();
 
-            //Controllo il risultato del form
+            // Check form result
             if ((bool)form_load.DialogResult)
             {
                 LoadProfile(form_load.path);
@@ -4504,28 +4514,37 @@ namespace ModBus_Client
         private void buttonPingIp_Click(object sender, RoutedEventArgs e)
         {
             Ping p1 = new Ping();
-            PingReply PR = p1.Send(textBoxTcpClientIpAddress.Text, 500);
-
-            // check when the ping is not success
-            if (!PR.Status.ToString().Equals("Success"))
+            try
             {
-                buttonPingIp.Background = Brushes.Red;
+                PingReply PR = p1.Send(textBoxTcpClientIpAddress.Text, 500);
 
-                // Rimosso box per comodita, meglio sfondo sul bottone
-                //DoEvents();
-                //MessageBox.Show("Ping failed", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                // check when the ping is not success
+                if (!PR.Status.ToString().Equals("Success"))
+                {
+                    buttonPingIp.Background = Brushes.Red;
 
-                richTextBoxAppend(richTextBoxStatus, "Ping failed");
+                    // Rimosso box per comodita
+                    // DoEvents();
+                    // MessageBox.Show("Ping failed", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+
+                    richTextBoxAppend(richTextBoxStatus, "Ping failed");
+                }
+                else
+                {
+                    buttonPingIp.Background = Brushes.LightGreen;
+
+                    // Rimosso box per comodita
+                    // DoEvents();
+                    // MessageBox.Show("Ping ok.\nResponse time: " + PR.RoundtripTime + "ms", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+
+                    richTextBoxAppend(richTextBoxStatus, "Ping Ok - Response time: " + PR.RoundtripTime + "ms");
+                }
             }
-            else
+            catch (Exception err)
             {
-                buttonPingIp.Background = Brushes.LightGreen;
+                Console.WriteLine(err);
 
-                // Rimosso box per comodita, meglio sfondo sul bottone
-                //DoEvents();
-                //MessageBox.Show("Ping ok.\nResponse time: " + PR.RoundtripTime + "ms", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
-                
-                richTextBoxAppend(richTextBoxStatus, "Ping Ok - Response time: " + PR.RoundtripTime + "ms");
+                richTextBoxAppend(richTextBoxStatus, "Network unreachable");
             }
         }
 
@@ -6397,6 +6416,8 @@ namespace ModBus_Client
 
             buttonSendDiagnosticQuery.IsEnabled = enabled;
             buttonSendManualDiagnosticQuery.IsEnabled = enabled;
+
+            comboBoxTcpConnectionMode.IsEnabled = !enabled;
         }
 
         private void comboBoxHoldingAddress03_SelectionChanged(object sender, SelectionChangedEventArgs e)
