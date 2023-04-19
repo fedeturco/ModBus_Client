@@ -3320,8 +3320,8 @@ namespace ModBus_Client
 
                 for (int i = 0; i < 4; i++)
                 {
-                    if ((list_index + i) < value_list.Length)
-                        values_[i] = value_list[list_index + i];
+                    if ((index_start + i) >= 0 && (index_start + i) < value_list.Length)
+                        values_[i] = value_list[index_start + i];
                 }
 
                 if (mappings.IndexOf(':') == -1 && mappings.Length > 0)
@@ -3337,10 +3337,8 @@ namespace ModBus_Client
                         if (test.ToLower().IndexOf("byte") == 0)
                         {
                             // Soluzione bug sul fatto che ragiono a blocchi di 8 byte ma prendo gli utlimi 4
-                            if (test.ToLower().IndexOf("+") != -1)
-                            {
+                            if(test.ToLower().IndexOf("+") != -1)
                                 values_[3] = values_[0];
-                            }
 
                             if (test.ToLower().IndexOf("-") != -1)
                                 labels[0] = "value (byte): " + ((byte)((values_[3] >> 8) & 0xFF)).ToString(); // High Byte
