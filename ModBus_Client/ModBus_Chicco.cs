@@ -74,6 +74,14 @@ using Raccolta_funzioni_parser;
 
 namespace ModBusMaster_Chicco
 {
+    public class ModBus_Def
+    {
+        public int TYPE_RTU = 10;        // Mode RTU
+        public int TYPE_ASCII = 20;      // Mode ASCII (not supported now)
+        public int TYPE_TCP_REOPEN = 30; // Open the connection on every request modbus
+        public int TYPE_TCP_SOCK = 31;   // Open the conection only al first time
+    }
+
     public class ModBus_Chicco
     {
         //-----VARIABILI-OGGETTO------
@@ -81,14 +89,16 @@ namespace ModBusMaster_Chicco
 
         bool ordineTextBoxLog = true;   // true -> in cima, false -> in fondo
 
-        //RTU o ASCII
+        // RTU o ASCII
         SerialPort serialPort;
 
-        //TCP
+        // TCP
+        TcpClient client;
         String ip_address;
         String port;
 
-        String type;    //"RTU", "ASCII", "TCP"
+        int type;    //"RTU", "ASCII", "TCP"
+        ModBus_Def def = new ModBus_Def();
 
         Border pictureBoxSending = new Border();
         Border pictureBoxReceiving = new Border();
@@ -122,27 +132,7 @@ namespace ModBusMaster_Chicco
          */
         public string[] ModbusErrorCodes = { "", "Illegal Function", "Illegal Data Address", "Illegal Data Value", "Slave Device Failure", "Acknowledge", "Slave Device Busy", "Negative Acknowledge", "Memory Parity Error", "", "Gateway Path Unavailable", "Gateway Target Device Failed to Respond" };
 
-        public ModBus_Chicco(SerialPort serialPort_, String ip_address_, String port_, String type_)
-        {
-            //Type: "TCP", "RTU", "ASCII" (ASCII ANCORA DA IMPLEMENTARE)
-            type = type_;
-
-            //RTU/ASCII
-            serialPort = serialPort_;
-
-            //TCP
-            ip_address = ip_address_;
-            port = port_;
-
-            //Dimensione log locale
-            log.Limit = 10000;
-            log2.Limit = 10000;
-
-            //DEBUG
-            Console.WriteLine("Oggeto ModBus:" + type);
-        }
-
-        public ModBus_Chicco(SerialPort serialPort_, String ip_address_, String port_, String type_, Border pictureBoxSending_, Border pictureBoxReceiving_)
+        public ModBus_Chicco(SerialPort serialPort_, String ip_address_, String port_, int type_, Border pictureBoxSending_, Border pictureBoxReceiving_)
         {
             //ClientActive = true;
             //Type: TCP, RTU, ASCII
@@ -264,6 +254,9 @@ namespace ModBusMaster_Chicco
         public void open()
         {
             ClientActive = true;
+
+            if(type == def.TYPE_TCP_SOCK)
+                client = new TcpClient(ip_address, int.Parse(port));
         }
 
         public void close()
@@ -271,18 +264,23 @@ namespace ModBusMaster_Chicco
             threadTxRxIsRunning = false;
             ClientActive = false;
 
-            try
+            if (type == def.TYPE_RTU)
             {
-                serialPort.Close();
-                //Il client viene chiuso al termine di ogni richiesta
+                try
+                {
+                    serialPort.Close();
+                }
+                catch { }
             }
-            catch { }
 
-            try
+            else if (type == def.TYPE_TCP_SOCK)
             {
-
+                try
+                {
+                    client.Close();
+                }
+                catch { }
             }
-            catch { }
         }
 
         public byte[] readSerialCustom(int expected_len, int timeout)
@@ -354,7 +352,7 @@ namespace ModBusMaster_Chicco
             byte[] response;
             UInt16[] result = new UInt16[no_of_coils];
 
-            if (type == "TCP" && ClientActive)
+            if ((type == def.TYPE_TCP_SOCK || type == def.TYPE_TCP_REOPEN) && ClientActive)
             {
                 /*
                TCP:
@@ -394,7 +392,8 @@ namespace ModBusMaster_Chicco
                 query[10] = (byte)(no_of_coils >> 8);
                 query[11] = (byte)(no_of_coils);
 
-                TcpClient client = new TcpClient(ip_address, int.Parse(port));
+                if (type == def.TYPE_TCP_REOPEN)
+                    client = new TcpClient(ip_address, int.Parse(port));
 
                 TX_set = true;
 
@@ -415,7 +414,8 @@ namespace ModBusMaster_Chicco
                 }
                 catch { }
 
-                client.Close();
+                if(type == def.TYPE_TCP_REOPEN)
+                    client.Close();
 
                 // Timeout
                 if (Length == 0)
@@ -446,17 +446,17 @@ namespace ModBusMaster_Chicco
                     {
                         try
                         {
-                            //Se supero l'indice me ne frego (accade se coil % 8 != 0)
-                            //che tanto va nel catch
+                            // Se supero l'indice pazienza (accade se coil % 8 != 0)
+                            // che tanto va nel catch
 
-                            //DEBUG
-                            //Console.WriteLine("i: " + i.ToString() + " a: " + a.ToString());
+                            // DEBUG
+                            // Console.WriteLine("i: " + i.ToString() + " a: " + a.ToString());
 
                             result[(i - 9) * 8 + a] = (response[i] & (1 << a)) > 0 ? (byte)(1) : (byte)(0);
                         }
                         catch
                         {
-                            //result[(i - 9) * 8 + a] = "?";
+                            // result[(i - 9) * 8 + a] = "?";
                         }
                     }
                 }
@@ -467,7 +467,7 @@ namespace ModBusMaster_Chicco
                 return result;
 
             }
-            else if (type == "RTU" && ClientActive)
+            else if (type == def.TYPE_RTU && ClientActive)
             {
                 /*
                 RTU
@@ -588,7 +588,7 @@ namespace ModBusMaster_Chicco
             byte[] response;
             UInt16[] result = new UInt16[no_of_input];
 
-            if (type == "TCP" && ClientActive)
+            if ((type == def.TYPE_TCP_SOCK || type == def.TYPE_TCP_REOPEN) && ClientActive)
             {
                 /*
                 TCP:
@@ -628,7 +628,8 @@ namespace ModBusMaster_Chicco
                 query[10] = (byte)(no_of_input >> 8);
                 query[11] = (byte)(no_of_input);
 
-                TcpClient client = new TcpClient(ip_address, int.Parse(port));
+                if (type == def.TYPE_TCP_REOPEN)
+                    client = new TcpClient(ip_address, int.Parse(port));
 
                 TX_set = true;
 
@@ -650,7 +651,7 @@ namespace ModBusMaster_Chicco
                 }
                 catch { }
                 
-                client.Close();
+                // client.Close();
 
                 // Timeout
                 if (Length == 0)
@@ -702,7 +703,7 @@ namespace ModBusMaster_Chicco
                 return result;
 
             }
-            else if (type == "RTU" && ClientActive)
+            else if (type == def.TYPE_RTU && ClientActive)
             {
                 /*
                 RTU
@@ -820,7 +821,7 @@ namespace ModBusMaster_Chicco
             byte[] response;
             UInt16[] result = new UInt16[no_of_registers];
 
-            if (type == "TCP" && ClientActive)
+            if ((type == def.TYPE_TCP_SOCK || type == def.TYPE_TCP_REOPEN) && ClientActive)
             {
                 /*
                 TCP:
@@ -860,7 +861,8 @@ namespace ModBusMaster_Chicco
                 query[10] = (byte)(no_of_registers >> 8);
                 query[11] = (byte)(no_of_registers);
 
-                TcpClient client = new TcpClient(ip_address, int.Parse(port));
+                if (type == def.TYPE_TCP_REOPEN)
+                    client = new TcpClient(ip_address, int.Parse(port));
 
                 TX_set = true;       // pictureBox gialla
 
@@ -882,7 +884,8 @@ namespace ModBusMaster_Chicco
                 }
                 catch { }
 
-                client.Close();
+                if (type == def.TYPE_TCP_REOPEN)
+                    client.Close();
 
                 // Timeout
                 if (Length == 0)
@@ -916,7 +919,7 @@ namespace ModBusMaster_Chicco
                 return result;
 
             }
-            else if (type == "RTU" && ClientActive)
+            else if (type == def.TYPE_RTU && ClientActive)
             {
                 /*
                 RTU
@@ -1014,7 +1017,7 @@ namespace ModBusMaster_Chicco
             byte[] response;
             UInt16[] result = new UInt16[no_of_registers];
 
-            if (type == "TCP" && ClientActive)
+            if ((type == def.TYPE_TCP_SOCK || type == def.TYPE_TCP_REOPEN) && ClientActive)
             {
                 /*
                 TCP:
@@ -1054,7 +1057,8 @@ namespace ModBusMaster_Chicco
                 query[10] = (byte)(no_of_registers >> 8);
                 query[11] = (byte)(no_of_registers);
 
-                TcpClient client = new TcpClient(ip_address, int.Parse(port));
+                if (type == def.TYPE_TCP_REOPEN)
+                    client = new TcpClient(ip_address, int.Parse(port));
 
                 TX_set = true;       // pictureBox gialla
 
@@ -1076,7 +1080,8 @@ namespace ModBusMaster_Chicco
                 }
                 catch { }
 
-                client.Close();
+                if (type == def.TYPE_TCP_REOPEN)
+                    client.Close();
 
                 // Timeout
                 if (Length == 0)
@@ -1110,7 +1115,7 @@ namespace ModBusMaster_Chicco
                 return result;
 
             }
-            else if (type == "RTU" && ClientActive)
+            else if (type == def.TYPE_RTU && ClientActive)
             {
                 /*
                 RTU:
@@ -1210,7 +1215,7 @@ namespace ModBusMaster_Chicco
             byte[] response;
             //uint[] result = new uint[no_of_registers];
 
-            if (type == "TCP" && ClientActive)
+            if ((type == def.TYPE_TCP_SOCK || type == def.TYPE_TCP_REOPEN) && ClientActive)
             {
                 /*
                 TCP:
@@ -1255,7 +1260,8 @@ namespace ModBusMaster_Chicco
 
                 query[11] = 0x00;
 
-                TcpClient client = new TcpClient(ip_address, int.Parse(port));
+                if (type == def.TYPE_TCP_REOPEN)
+                    client = new TcpClient(ip_address, int.Parse(port));
 
                 TX_set = true;       // pictureBox gialla
 
@@ -1277,7 +1283,8 @@ namespace ModBusMaster_Chicco
                 }
                 catch { }
 
-                client.Close();
+                if (type == def.TYPE_TCP_REOPEN)
+                    client.Close();
 
                 // Timeout
                 if (Length == 0)
@@ -1306,7 +1313,7 @@ namespace ModBusMaster_Chicco
                 return false;
 
             }
-            else if (type == "RTU" && ClientActive)
+            else if (type == def.TYPE_RTU && ClientActive)
             {
                 //True se la funzione riceve risposta affermativa
 
@@ -1405,7 +1412,7 @@ namespace ModBusMaster_Chicco
             byte[] query;
             byte[] response;
 
-            if (type == "TCP" && ClientActive)
+            if ((type == def.TYPE_TCP_SOCK || type == def.TYPE_TCP_REOPEN) && ClientActive)
             {
                 /*
                 TCP:
@@ -1446,7 +1453,8 @@ namespace ModBusMaster_Chicco
                 query[10] = (byte)(value >> 8);
                 query[11] = (byte)(value);
 
-                TcpClient client = new TcpClient(ip_address, int.Parse(port));
+                if (type == def.TYPE_TCP_REOPEN)
+                    client = new TcpClient(ip_address, int.Parse(port));
 
                 TX_set = true;       // pictureBox gialla
 
@@ -1467,8 +1475,9 @@ namespace ModBusMaster_Chicco
                     Length = stream.Read(response, 0, response.Length);
                 }
                 catch { }
-                
-                client.Close();
+
+                if (type == def.TYPE_TCP_REOPEN)
+                    client.Close();
 
                 // Timeout
                 if (Length == 0)
@@ -1497,7 +1506,7 @@ namespace ModBusMaster_Chicco
                 return false;
 
             }
-            else if (type == "RTU" && ClientActive)
+            else if (type == def.TYPE_RTU && ClientActive)
             {
                 //True se la funzione riceve risposta affermativa
 
@@ -1590,7 +1599,7 @@ namespace ModBusMaster_Chicco
             byte[] response;
             String[] result = new String[buffer_dimension];
 
-            if (type == "TCP" && ClientActive)
+            if ((type == def.TYPE_TCP_SOCK || type == def.TYPE_TCP_REOPEN) && ClientActive)
             {
                 /*
                 TCP:
@@ -1630,7 +1639,8 @@ namespace ModBusMaster_Chicco
                 query[10] = (byte)(data >> 8);
                 query[11] = (byte)(data);
 
-                TcpClient client = new TcpClient(ip_address, int.Parse(port));
+                if (type == def.TYPE_TCP_REOPEN)
+                    client = new TcpClient(ip_address, int.Parse(port));
 
                 TX_set = true;       // pictureBox gialla
 
@@ -1652,7 +1662,8 @@ namespace ModBusMaster_Chicco
                 }
                 catch { }
 
-                client.Close();
+                if (type == def.TYPE_TCP_REOPEN)
+                    client.Close();
 
                 // Timeout
                 if (Length == 0)
@@ -1702,7 +1713,7 @@ namespace ModBusMaster_Chicco
                 return result_;
 
             }
-            else if (type == "RTU" && ClientActive)
+            else if (type == def.TYPE_RTU && ClientActive)
             {
                 /*
                 RTU:
@@ -1811,7 +1822,7 @@ namespace ModBusMaster_Chicco
             byte[] query;
             byte[] response;
 
-            if (type == "TCP" && ClientActive)
+            if ((type == def.TYPE_TCP_SOCK || type == def.TYPE_TCP_REOPEN) && ClientActive)
             {
                 /*
                TCP:
@@ -1893,7 +1904,8 @@ namespace ModBusMaster_Chicco
                     Console.WriteLine("byte: " +  val.ToString());
                 }
 
-                TcpClient client = new TcpClient(ip_address, int.Parse(port));
+                if (type == def.TYPE_TCP_REOPEN)
+                    client = new TcpClient(ip_address, int.Parse(port));
 
                 TX_set = true;       // pictureBox gialla
 
@@ -1915,7 +1927,8 @@ namespace ModBusMaster_Chicco
                 }
                 catch { }
 
-                client.Close();
+                if (type == def.TYPE_TCP_REOPEN)
+                    client.Close();
 
                 // Timeout
                 if (Length == 0)
@@ -1952,7 +1965,7 @@ namespace ModBusMaster_Chicco
                 return false;
 
             }
-            else if (type == "RTU" && ClientActive)
+            else if (type == def.TYPE_RTU && ClientActive)
             {
                 //True se la funzione riceve risposta affermativa
 
@@ -2081,7 +2094,7 @@ namespace ModBusMaster_Chicco
             byte[] query;
             byte[] response;
 
-            if (type == "TCP" && ClientActive)
+            if ((type == def.TYPE_TCP_SOCK || type == def.TYPE_TCP_REOPEN) && ClientActive)
             {
                 /*
                 TCP:
@@ -2140,7 +2153,8 @@ namespace ModBusMaster_Chicco
                     query[14 + 2*i] = (byte)(register_value[i]);
                 }
 
-                TcpClient client = new TcpClient(ip_address, int.Parse(port));
+                if (type == def.TYPE_TCP_REOPEN)
+                    client = new TcpClient(ip_address, int.Parse(port));
 
                 TX_set = true;       // pictureBox gialla
 
@@ -2162,7 +2176,8 @@ namespace ModBusMaster_Chicco
                 }
                 catch { }
 
-                client.Close();
+                if (type == def.TYPE_TCP_REOPEN)
+                    client.Close();
 
                 // Timeout
                 if (Length == 0)
@@ -2198,7 +2213,7 @@ namespace ModBusMaster_Chicco
                 return new UInt16[0] { }; ;
 
             }
-            else if (type == "RTU" && ClientActive)
+            else if (type == def.TYPE_RTU && ClientActive)
             {
                 //True se la funzione riceve risposta affermativa
 

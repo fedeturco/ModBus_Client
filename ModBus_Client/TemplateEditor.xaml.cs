@@ -144,10 +144,10 @@ namespace ModBus_Client
                 template.textBoxInputRegOffset_ = textBoxInputRegOffset.Text;
                 template.textBoxHoldingOffset_ = textBoxHoldingOffset.Text;
 
-                template.dataGridViewCoils = list_coilsTable.ToArray<ModBus_Item>();
-                template.dataGridViewInput = list_inputsTable.ToArray<ModBus_Item>();
-                template.dataGridViewInputRegister = list_inputRegistersTable.ToArray<ModBus_Item>();
-                template.dataGridViewHolding = list_holdingRegistersTable.ToArray<ModBus_Item>();
+                template.dataGridViewCoils = list_coilsTable;
+                template.dataGridViewInput = list_inputsTable;
+                template.dataGridViewInputRegister = list_inputRegistersTable;
+                template.dataGridViewHolding = list_holdingRegistersTable;
 
                 template.textBoxTemplateLabel_ = TextBoxTemplateLabel.Text;
                 template.textBoxTemplateNotes_ = TextBoxTemplateNotes.Text;
@@ -409,6 +409,11 @@ namespace ModBus_Client
                             {
                                 comboBoxReg.SelectedIndex = 1;
                                 item.Register = item.Register.Substring(2);
+                                item.RegisterUInt = UInt16.Parse(item.Register, System.Globalization.NumberStyles.HexNumber);
+                            }
+                            else
+                            {
+                                item.RegisterUInt = UInt16.Parse(item.Register, System.Globalization.NumberStyles.Integer);
                             }
 
                             item.Notes = splitted[i].Split(',')[3];
@@ -679,10 +684,10 @@ namespace ModBus_Client
         public string textBoxInputRegOffset_ { get; set; }
         public string textBoxHoldingOffset_ { get; set; }
 
-        public ModBus_Item[] dataGridViewCoils { get; set; }
-        public ModBus_Item[] dataGridViewInput { get; set; }
-        public ModBus_Item[] dataGridViewInputRegister { get; set; }
-        public ModBus_Item[] dataGridViewHolding { get; set; }
+        public ObservableCollection<ModBus_Item> dataGridViewCoils { get; set; }
+        public ObservableCollection<ModBus_Item> dataGridViewInput { get; set; }
+        public ObservableCollection<ModBus_Item> dataGridViewInputRegister { get; set; }
+        public ObservableCollection<ModBus_Item> dataGridViewHolding { get; set; }
         public string textBoxTemplateLabel_ { get; set; }
         public string textBoxTemplateNotes_ { get; set; }
     }

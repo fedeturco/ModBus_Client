@@ -319,6 +319,7 @@
     "disconnected": "Disconnected",
     "connectedTo": "Connected to",
     "failedToConnect": "Failed to connect to",
+    "connectingTo": "Connecting to",
     "maxRegNumber": "Number of registers too bit",
     "errSetReg": "Error writing register",
     "infoSaveConfig": "Configuration saved successfully. Current configuration will be loaded on next startup.",
