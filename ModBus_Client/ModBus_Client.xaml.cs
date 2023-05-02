@@ -1512,8 +1512,6 @@ namespace ModBus_Client
                 {
                     Console.WriteLine("Impossibile stabilire una connessione con il server");
                     richTextBoxAppend(richTextBoxStatus, lang.languageTemplate["strings"]["failedToConnect"] + " " + ip_address + ":" + port);
-
-                    return;
                 }
             }
             else
