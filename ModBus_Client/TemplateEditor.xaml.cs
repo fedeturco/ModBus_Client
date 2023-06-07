@@ -2,7 +2,7 @@
 
 // -------------------------------------------------------------------------------------------
 
-// Copyright (c) 2022 Federico Turco
+// Copyright (c) 2023 Federico Turco
 
 // Permission is hereby granted, free of charge, to any person
 // obtaining a copy of this software and associated documentation
@@ -70,6 +70,7 @@ namespace ModBus_Client
         ObservableCollection<ModBus_Item> list_inputRegistersTable = new ObservableCollection<ModBus_Item>();
         ObservableCollection<ModBus_Item> list_holdingRegistersTable = new ObservableCollection<ModBus_Item>();
 
+        ObservableCollection<Group_Item> list_groups = new ObservableCollection<Group_Item>();
         public TemplateEditor(MainWindow main_)
         {
             InitializeComponent();
@@ -81,6 +82,8 @@ namespace ModBus_Client
             dataGridViewInput.ItemsSource = list_inputsTable;
             dataGridViewInputRegister.ItemsSource = list_inputRegistersTable;
             dataGridViewHolding.ItemsSource = list_holdingRegistersTable;
+
+            dataGridViewGroups.ItemsSource = list_groups;
 
             main.Dispatcher.Invoke((Action)delegate
             {
@@ -148,6 +151,8 @@ namespace ModBus_Client
                 template.dataGridViewInput = list_inputsTable;
                 template.dataGridViewInputRegister = list_inputRegistersTable;
                 template.dataGridViewHolding = list_holdingRegistersTable;
+
+                template.Groups = list_groups;
 
                 template.textBoxTemplateLabel_ = TextBoxTemplateLabel.Text;
                 template.textBoxTemplateNotes_ = TextBoxTemplateNotes.Text;
@@ -236,6 +241,15 @@ namespace ModBus_Client
                 foreach (ModBus_Item item in template.dataGridViewHolding)
                 {
                     list_holdingRegistersTable.Add(item);
+                }
+
+                // Tabella groups
+                if (template.Groups != null)
+                {
+                    foreach (Group_Item item in template.Groups)
+                    {
+                        list_groups.Add(item);
+                    }
                 }
 
                 Console.WriteLine("Caricata configurazione precedente\n");
@@ -362,7 +376,7 @@ namespace ModBus_Client
                     {
                         if (item != null)
                         {
-                            content += offset + (registerHex ? ",0x" : ",") + item.Register + "," + item.Value + "," + item.Notes + "," + item.Mappings + "\n";
+                            content += offset + (registerHex ? ",0x" : ",") + item.Register + "," + item.Value + "," + item.Notes + "," + item.Mappings + "," + item.Group + "\n";
                         }
                     }
 
@@ -418,6 +432,11 @@ namespace ModBus_Client
 
                             item.Notes = splitted[i].Split(',')[3];
                             item.Mappings = splitted[i].Split(',')[4];
+
+                            if (splitted[i].Length > 5)
+                                item.Group = splitted[i].Split(',')[5];
+                            else
+                                item.Group = "";
 
                             collection.Add(item);
                         }
@@ -690,6 +709,8 @@ namespace ModBus_Client
         public ObservableCollection<ModBus_Item> dataGridViewHolding { get; set; }
         public string textBoxTemplateLabel_ { get; set; }
         public string textBoxTemplateNotes_ { get; set; }
+
+        public ObservableCollection<Group_Item> Groups { get; set; }
     }
 
     public class ModBus_Item
@@ -701,10 +722,16 @@ namespace ModBus_Client
         public string ValueConverted { get; set; }
         public string Notes { get; set; }
         public string Mappings { get; set; }
+        public string Group { get; set; }
         public string Foreground { get; set; }
         public string Background { get; set; }
     }
 
+    public class Group_Item
+    {
+        public string Group { get; set; }
+        public string Label { get; set; }
+    }
     public class MOD_SlaveProfile
     {
         public List<int> slave_id { get; set; }

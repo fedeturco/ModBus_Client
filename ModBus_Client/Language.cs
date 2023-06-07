@@ -10,7 +10,7 @@ using System.Web.Script.Serialization;
 
 namespace LanguageLib
 {
-    class Language
+    public class Language
     {
         public dynamic languageTemplate;
         System.Windows.Window win;

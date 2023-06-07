@@ -2,7 +2,7 @@
 
 // -------------------------------------------------------------------------------------------
 
-// Copyright (c) 2022 Federico Turco
+// Copyright (c) 2023 Federico Turco
 
 // Permission is hereby granted, free of charge, to any person
 // obtaining a copy of this software and associated documentation
@@ -104,9 +104,9 @@ namespace ModBus_Client
         SolidColorBrush colorDefaultWriteCell = Brushes.LightGreen;
         SolidColorBrush colorErrorCell = Brushes.Orange;
 
-        String colorDefaultReadCellStr;
-        String colorDefaultWriteCellStr;
-        String colorErrorCellStr;
+        public String colorDefaultReadCellStr;
+        public String colorDefaultWriteCellStr;
+        public String colorErrorCellStr;
 
         SolidColorBrush colorDefaultReadCell_Light = Brushes.DarkBlue;
         SolidColorBrush colorDefaultWriteCell_Light = Brushes.LightGreen;
@@ -116,10 +116,10 @@ namespace ModBus_Client
         SolidColorBrush colorDefaultWriteCell_Dark = Brushes.LightGreen;
         SolidColorBrush colorErrorCell_Dark = Brushes.Orange;
 
-        ObservableCollection<ModBus_Item> list_coilsTable = new ObservableCollection<ModBus_Item>();
-        ObservableCollection<ModBus_Item> list_inputsTable = new ObservableCollection<ModBus_Item>();
-        ObservableCollection<ModBus_Item> list_inputRegistersTable = new ObservableCollection<ModBus_Item>();
-        ObservableCollection<ModBus_Item> list_holdingRegistersTable = new ObservableCollection<ModBus_Item>();
+        public ObservableCollection<ModBus_Item> list_coilsTable = new ObservableCollection<ModBus_Item>();
+        public ObservableCollection<ModBus_Item> list_inputsTable = new ObservableCollection<ModBus_Item>();
+        public ObservableCollection<ModBus_Item> list_inputRegistersTable = new ObservableCollection<ModBus_Item>();
+        public ObservableCollection<ModBus_Item> list_holdingRegistersTable = new ObservableCollection<ModBus_Item>();
 
         System.Windows.Forms.ColorDialog colorDialogBox = new System.Windows.Forms.ColorDialog();
 
@@ -157,16 +157,16 @@ namespace ModBus_Client
         SaveFileDialog saveFileDialogBox;
         //OpenFileDialog openFileDialogBox;
 
-        int template_coilsOffset = 0;
-        int template_inputsOffset = 0;
-        int template_inputRegistersOffset = 0;
-        int template_HoldingOffset = 0;
+        public int template_coilsOffset = 0;
+        public int template_inputsOffset = 0;
+        public int template_inputRegistersOffset = 0;
+        public int template_HoldingOffset = 0;
 
         // Le liste seguenti contengono il registro già convertito in DEC duramte il caricamento del file Template.json
-        ObservableCollection<ModBus_Item> list_template_coilsTable = new ObservableCollection<ModBus_Item>();
-        ObservableCollection<ModBus_Item> list_template_inputsTable = new ObservableCollection<ModBus_Item>();
-        ObservableCollection<ModBus_Item> list_template_holdingRegistersTable = new ObservableCollection<ModBus_Item>();
-        ObservableCollection<ModBus_Item> list_template_inputRegistersTable = new ObservableCollection<ModBus_Item>();
+        public ObservableCollection<ModBus_Item> list_template_coilsTable = new ObservableCollection<ModBus_Item>();
+        public ObservableCollection<ModBus_Item> list_template_inputsTable = new ObservableCollection<ModBus_Item>();
+        public ObservableCollection<ModBus_Item> list_template_holdingRegistersTable = new ObservableCollection<ModBus_Item>();
+        public ObservableCollection<ModBus_Item> list_template_inputRegistersTable = new ObservableCollection<ModBus_Item>();
 
 
         // Stati loop interrogazioni
@@ -192,7 +192,7 @@ namespace ModBus_Client
 
         public int readTimeout;
 
-        Language lang;
+        public Language lang;
 
         public int LogLimitRichTextBox = 2000;
 
@@ -201,82 +201,87 @@ namespace ModBus_Client
 
         // Variabili di appoggio per gestire le chiamate a thread
 
-        bool useOffsetInTable = false;
-        bool correctModbusAddressAuto = false;
-        bool colorMode = false;
-        bool darkMode = false;
+        public bool useOffsetInTable = false;
+        public bool correctModbusAddressAuto = false;
+        public bool colorMode = false;
+        public bool darkMode = false;
 
-        String textBoxModbusAddress_ = "";
-        String comboBoxCoilsRegistri_ = "";
-        String textBoxCoilsOffset_ = "";
-        String comboBoxCoilsOffset_ = "";
-        String comboBoxCoilsAddress01_ = "";
-        String textBoxCoilsAddress01_ = "";
-        String textBoxCoilNumber_ = "";
-        String comboBoxCoilsRange_A_ = "";
-        String textBoxCoilsRange_A_ = "";
-        //String comboBoxCoilsRange_B_ = "";
-        String textBoxCoilsRange_B_ = "";
-        String comboBoxCoilsAddress05_ = "";
-        String textBoxCoilsAddress05_ = "";
-        String textBoxCoilsValue05_ = "";
-        String comboBoxCoilsAddress05_b_ = "";
-        String textBoxCoilsAddress05_b_ = "";
-        String textBoxCoilsValue05_b_ = "";
-        String comboBoxCoilsAddress15_A_ = "";
-        String textBoxCoilsAddress15_A_ = "";
-        String comboBoxCoilsAddress15_B_ = "";
-        String textBoxCoilsAddress15_B_ = "";
-        String textBoxCoilsValue15_ = "";
+        public String textBoxModbusAddress_ = "";
+        public String comboBoxCoilsRegistri_ = "";
+        public String textBoxCoilsOffset_ = "";
+        public String comboBoxCoilsOffset_ = "";
+        public String comboBoxCoilsAddress01_ = "";
+        public String textBoxCoilsAddress01_ = "";
+        public String textBoxCoilNumber_ = "";
+        public String comboBoxCoilsRange_A_ = "";
+        public String textBoxCoilsRange_A_ = "";
+        //public String comboBoxCoilsRange_B_ = "";
+        public String textBoxCoilsRange_B_ = "";
+        public String comboBoxCoilsAddress05_ = "";
+        public String textBoxCoilsAddress05_ = "";
+        public String textBoxCoilsValue05_ = "";
+        public String comboBoxCoilsAddress05_b_ = "";
+        public String textBoxCoilsAddress05_b_ = "";
+        public String textBoxCoilsValue05_b_ = "";
+        public String comboBoxCoilsAddress15_A_ = "";
+        public String textBoxCoilsAddress15_A_ = "";
+        public String comboBoxCoilsAddress15_B_ = "";
+        public String textBoxCoilsAddress15_B_ = "";
+        public String textBoxCoilsValue15_ = "";
 
-        String comboBoxInputRegistri_ = "";
-        String comboBoxInputOffset_ = "";
-        String textBoxInputOffset_ = "";
-        String comboBoxInputAddress02_ = "";
-        String textBoxInputAddress02_ = "";
-        String textBoxInputNumber_ = "";
-        String comboBoxInputRange_A_ = "";
-        String textBoxInputRange_A_ = "";
-        //String comboBoxInputRange_B_ = "";
-        String textBoxInputRange_B_ = "";
+        public String comboBoxInputRegistri_ = "";
+        public String comboBoxInputOffset_ = "";
+        public String textBoxInputOffset_ = "";
+        public String comboBoxInputAddress02_ = "";
+        public String textBoxInputAddress02_ = "";
+        public String textBoxInputNumber_ = "";
+        public String comboBoxInputRange_A_ = "";
+        public String textBoxInputRange_A_ = "";
+        //public String comboBoxInputRange_B_ = "";
+        public String textBoxInputRange_B_ = "";
 
-        String comboBoxInputRegRegistri_ = "";
-        String comboBoxInputRegValori_ = "";
-        String comboBoxInputRegOffset_ = "";
-        String textBoxInputRegOffset_ = "";
-        String comboBoxInputRegisterAddress04_ = "";
-        String textBoxInputRegisterAddress04_ = "";
-        String textBoxInputRegisterNumber_ = "";
-        String comboBoxInputRegisterRange_A_ = "";
-        String textBoxInputRegisterRange_A_ = "";
-        //String comboBoxInputRegisterRange_B_ = "";
-        String textBoxInputRegisterRange_B_ = "";
+        public String comboBoxInputRegRegistri_ = "";
+        public String comboBoxInputRegValori_ = "";
+        public String comboBoxInputRegOffset_ = "";
+        public String textBoxInputRegOffset_ = "";
+        public String comboBoxInputRegisterAddress04_ = "";
+        public String textBoxInputRegisterAddress04_ = "";
+        public String textBoxInputRegisterNumber_ = "";
+        public String comboBoxInputRegisterRange_A_ = "";
+        public String textBoxInputRegisterRange_A_ = "";
+        //public String comboBoxInputRegisterRange_B_ = "";
+        public String textBoxInputRegisterRange_B_ = "";
 
-        String comboBoxHoldingRegistri_ = "";
-        String comboBoxHoldingValori_ = "";
-        String comboBoxHoldingOffset_ = "";
-        String textBoxHoldingOffset_ = "";
-        String comboBoxHoldingAddress03_ = "";
-        String textBoxHoldingAddress03_ = "";
-        String textBoxHoldingRegisterNumber_ = "";
-        String comboBoxHoldingRange_A_ = "";
-        String textBoxHoldingRange_A_ = "";
-        //String comboBoxHoldingRange_B_ = "";
-        String textBoxHoldingRange_B_ = "";
-        String comboBoxHoldingAddress06_ = "";
-        String textBoxHoldingAddress06_ = "";
-        String comboBoxHoldingValue06_ = "";
-        String textBoxHoldingValue06_ = "";
-        String comboBoxHoldingAddress06_b_ = "";
-        String textBoxHoldingAddress06_b_ = "";
-        String comboBoxHoldingValue06_b_ = "";
-        String textBoxHoldingValue06_b_ = "";
-        String comboBoxHoldingAddress16_A_ = "";
-        String textBoxHoldingAddress16_A_ = "";
-        String comboBoxHoldingAddress16_B_ = "";
-        String textBoxHoldingAddress16_B_ = "";
-        String comboBoxHoldingValue16_ = "";
-        String textBoxHoldingValue16_ = "";
+        public String comboBoxHoldingRegistri_ = "";
+        public String comboBoxHoldingValori_ = "";
+        public String comboBoxHoldingOffset_ = "";
+        public String textBoxHoldingOffset_ = "";
+        public String comboBoxHoldingAddress03_ = "";
+        public String textBoxHoldingAddress03_ = "";
+        public String textBoxHoldingRegisterNumber_ = "";
+        public String comboBoxHoldingRange_A_ = "";
+        public String textBoxHoldingRange_A_ = "";
+        //public String comboBoxHoldingRange_B_ = "";
+        public String textBoxHoldingRange_B_ = "";
+        public String comboBoxHoldingAddress06_ = "";
+        public String textBoxHoldingAddress06_ = "";
+        public String comboBoxHoldingValue06_ = "";
+        public String textBoxHoldingValue06_ = "";
+        public String comboBoxHoldingAddress06_b_ = "";
+        public String textBoxHoldingAddress06_b_ = "";
+        public String comboBoxHoldingValue06_b_ = "";
+        public String textBoxHoldingValue06_b_ = "";
+        public String comboBoxHoldingAddress16_A_ = "";
+        public String textBoxHoldingAddress16_A_ = "";
+        public String comboBoxHoldingAddress16_B_ = "";
+        public String textBoxHoldingAddress16_B_ = "";
+        public String comboBoxHoldingValue16_ = "";
+        public String textBoxHoldingValue16_ = "";
+
+        String comboBoxHoldingGroup_ = "";
+        String comboBoxInputRegisterGroup_ = "";
+        String comboBoxInputGroup_ = "";
+        String comboBoxCoilsGroup_ = "";
 
         // Dark mode
         public SolidColorBrush ForeGroundDark = new SolidColorBrush(Color.FromArgb(255, (byte)249, (byte)249, (byte)249));
@@ -1216,10 +1221,11 @@ namespace ModBus_Client
                 comboBoxHoldingRegistri.SelectedIndex = config.comboBoxHoldingRegistri_ == "HEX" ? 1 : 0;
                 comboBoxHoldingValori.SelectedIndex = config.comboBoxHoldingValori_ == "HEX" ? 1 : 0;
 
-                textBoxCoilsOffset.Text = config.textBoxCoilsOffset_;
-                textBoxInputOffset.Text = config.textBoxInputOffset_;
-                textBoxInputRegOffset.Text = config.textBoxInputRegOffset_;
-                textBoxHoldingOffset.Text = config.textBoxHoldingOffset_;
+                // Da eliminare
+                //textBoxCoilsOffset.Text = config.textBoxCoilsOffset_;
+                //textBoxInputOffset.Text = config.textBoxInputOffset_;
+                //textBoxInputRegOffset.Text = config.textBoxInputRegOffset_;
+                //textBoxHoldingOffset.Text = config.textBoxHoldingOffset_;
 
                 // Funzioni doppie per force coil e preset holding aggiunte dopo
                 comboBoxCoilsAddress05_b.SelectedIndex = config.comboBoxCoilsAddress05_b_ == "HEX" ? 1 : 0;
@@ -1335,7 +1341,7 @@ namespace ModBus_Client
                 UInt16 tmp = 0;
 
                 // Coils
-                template_coilsOffset = int.Parse(template.textBoxCoilsOffset_, template.comboBoxCoilsOffset_ == "HEX" ? System.Globalization.NumberStyles.HexNumber : System.Globalization.NumberStyles.HexNumber);
+                template_coilsOffset = int.Parse(template.textBoxCoilsOffset_, template.comboBoxCoilsOffset_ == "HEX" ? System.Globalization.NumberStyles.HexNumber : System.Globalization.NumberStyles.Integer);
 
                 // Inputs
                 template_inputsOffset = int.Parse(template.textBoxInputOffset_, template.comboBoxInputOffset_ == "HEX" ? System.Globalization.NumberStyles.HexNumber : System.Globalization.NumberStyles.Integer);
@@ -1400,7 +1406,6 @@ namespace ModBus_Client
 
         private void salvaToolStripMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            //SaveConfiguration_v1(true);
             SaveConfiguration_v2(true);
         }
 
@@ -1534,11 +1539,11 @@ namespace ModBus_Client
                 }
                 catch
                 {
-                    Console.WriteLine("Impossibile stabilire una connessione con il server");
-
                     this.Dispatcher.Invoke((Action)delegate
                     {
                         richTextBoxAppend(richTextBoxStatus, lang.languageTemplate["strings"]["failedToConnect"] + " " + ip_address + ":" + port);
+                        changeEnableButtonsConnect(false);
+                        buttonTcpActive.IsEnabled = true;
                     });
 
                     return;
@@ -1619,14 +1624,7 @@ namespace ModBus_Client
                         if (response.Length > 0)
                         {
                             // Cancello la tabella e inserisco le nuove righe
-                            if (useOffsetInTable)
-                            {
-                                insertRowsTable(list_coilsTable, list_template_coilsTable, template_coilsOffset, address_start, response, colorDefaultReadCellStr, comboBoxCoilsRegistri_, "DEC");
-                            }
-                            else
-                            {
-                                insertRowsTable(list_coilsTable, list_template_coilsTable, template_coilsOffset, address_start, response, colorDefaultReadCellStr, comboBoxCoilsRegistri_, "DEC");
-                            }
+                            insertRowsTable(list_coilsTable, list_template_coilsTable, template_coilsOffset, P.uint_parser(textBoxCoilsOffset_, comboBoxCoilsOffset_), address_start, response, colorDefaultReadCellStr, comboBoxCoilsRegistri_, "DEC", true);
                         }
                     }
                 }
@@ -1643,15 +1641,15 @@ namespace ModBus_Client
             {
                 if (err.Message.IndexOf("Timed out") != -1)
                 {
-                    SetTableTimeoutError(list_coilsTable);
+                    SetTableTimeoutError(list_coilsTable, true);
                 }
                 if (err.Message.IndexOf("ModBus ErrCode") != -1)
                 {
-                    SetTableModBusError(list_coilsTable, err);
+                    SetTableModBusError(list_coilsTable, err, true);
                 }
                 if (err.Message.IndexOf("CRC Error") != -1)
                 {
-                    SetTableCrcError(list_coilsTable);
+                    SetTableCrcError(list_coilsTable, true);
                 }
 
                 Console.WriteLine(err);
@@ -1666,7 +1664,7 @@ namespace ModBus_Client
             }
             catch (Exception err)
             {
-                SetTableInternalError(list_coilsTable);
+                SetTableInternalError(list_coilsTable, true);
                 Console.WriteLine(err);
 
                 this.Dispatcher.Invoke((Action)delegate
@@ -1717,13 +1715,13 @@ namespace ModBus_Client
                         // Timeout
                         if (read is null)
                         {
-                            SetTableTimeoutError(list_coilsTable);
+                            SetTableTimeoutError(list_coilsTable, false);
                         }
 
                         // CRC error
                         if (read.Length == 0)
                         {
-                            SetTableCrcError(list_coilsTable);
+                            SetTableCrcError(list_coilsTable, false);
                         }
 
                         Array.Copy(read, 0, response, read_len * i, coil_len % read_len);
@@ -1737,14 +1735,7 @@ namespace ModBus_Client
                 }
 
                 // Cancello la tabella e inserisco le nuove righe
-                if (useOffsetInTable)
-                {
-                    insertRowsTable(list_coilsTable, list_template_coilsTable, template_coilsOffset, address_start - P.uint_parser(textBoxCoilsOffset_, comboBoxCoilsOffset_), response, colorDefaultReadCellStr, comboBoxCoilsRegistri_, "DEC");
-                }
-                else
-                {
-                    insertRowsTable(list_coilsTable, list_template_coilsTable, template_coilsOffset, address_start, response, colorDefaultReadCellStr, comboBoxCoilsRegistri_, "DEC");
-                }
+                insertRowsTable(list_coilsTable, list_template_coilsTable, template_coilsOffset, P.uint_parser(textBoxCoilsOffset_, comboBoxCoilsOffset_),  address_start, response, colorDefaultReadCellStr, comboBoxCoilsRegistri_, "DEC", true);
 
                 this.Dispatcher.Invoke((Action)delegate
                 {
@@ -1758,15 +1749,15 @@ namespace ModBus_Client
             {
                 if (err.Message.IndexOf("Timed out") != -1)
                 {
-                    SetTableTimeoutError(list_coilsTable);
+                    SetTableTimeoutError(list_coilsTable, false);
                 }
                 if (err.Message.IndexOf("ModBus ErrCode") != -1)
                 {
-                    SetTableModBusError(list_coilsTable, err);
+                    SetTableModBusError(list_coilsTable, err, false);
                 }
                 if (err.Message.IndexOf("CRC Error") != -1)
                 {
-                    SetTableCrcError(list_coilsTable);
+                    SetTableCrcError(list_coilsTable, false);
                 }
 
                 Console.WriteLine(err);
@@ -1781,7 +1772,7 @@ namespace ModBus_Client
             }
             catch (Exception err)
             {
-                SetTableInternalError(list_coilsTable);
+                SetTableInternalError(list_coilsTable, false);
                 Console.WriteLine(err);
 
                 this.Dispatcher.Invoke((Action)delegate
@@ -1794,7 +1785,7 @@ namespace ModBus_Client
             }
         }
 
-        private void SetTableInternalError(ObservableCollection<ModBus_Item> list_)
+        private void SetTableInternalError(ObservableCollection<ModBus_Item> list_, bool clear)
         {
             ModBus_Item tmp = new ModBus_Item();
 
@@ -1805,12 +1796,14 @@ namespace ModBus_Client
 
             this.Dispatcher.Invoke((Action)delegate
             {
-                list_.Clear();
+                if(clear)
+                    list_.Clear();
+
                 list_.Add(tmp);
             });
         }
 
-        private void SetTableCrcError(ObservableCollection<ModBus_Item> list_)
+        private void SetTableCrcError(ObservableCollection<ModBus_Item> list_, bool clear)
         {
             ModBus_Item tmp = new ModBus_Item();
 
@@ -1821,12 +1814,14 @@ namespace ModBus_Client
 
             this.Dispatcher.Invoke((Action)delegate
             {
-                list_.Clear();
+                if (clear)
+                    list_.Clear();
+
                 list_.Add(tmp);
             });
         }
 
-        private void SetTableTimeoutError(ObservableCollection<ModBus_Item> list_)
+        private void SetTableTimeoutError(ObservableCollection<ModBus_Item> list_, bool clear)
         {
             ModBus_Item tmp = new ModBus_Item();
 
@@ -1837,12 +1832,14 @@ namespace ModBus_Client
 
             this.Dispatcher.Invoke((Action)delegate
             {
-                list_.Clear();
+                if(clear)
+                    list_.Clear();
+
                 list_.Add(tmp);
             });
         }
 
-        private void SetTableModBusError(ObservableCollection<ModBus_Item> list_, ModbusException err)
+        private void SetTableModBusError(ObservableCollection<ModBus_Item> list_, ModbusException err, bool clear)
         {
             ModBus_Item tmp = new ModBus_Item();
 
@@ -1856,7 +1853,9 @@ namespace ModBus_Client
 
             this.Dispatcher.Invoke((Action)delegate
             {
-                list_.Clear();
+                if(clear)
+                    list_.Clear();
+
                 list_.Add(tmp);
             });
         }
@@ -1885,14 +1884,7 @@ namespace ModBus_Client
                         UInt16[] value = { UInt16.Parse(textBoxCoilsValue05_) };
 
                         // Cancello la tabella e inserisco le nuove righe
-                        if (useOffsetInTable)
-                        {
-                            insertRowsTable(list_coilsTable, list_template_coilsTable, template_coilsOffset, address_start - P.uint_parser(textBoxCoilsOffset_, comboBoxCoilsOffset_), value, colorDefaultWriteCellStr, comboBoxCoilsRegistri_, "DEC");
-                        }
-                        else
-                        {
-                            insertRowsTable(list_coilsTable, list_template_coilsTable, template_coilsOffset, address_start, value, colorDefaultWriteCellStr, comboBoxCoilsRegistri_, "DEC");
-                        }
+                        insertRowsTable(list_coilsTable, list_template_coilsTable, template_coilsOffset, P.uint_parser(textBoxCoilsOffset_, comboBoxCoilsOffset_), address_start, value, colorDefaultWriteCellStr, comboBoxCoilsRegistri_, "DEC", true);
                     }
                 }
 
@@ -1908,15 +1900,15 @@ namespace ModBus_Client
             {
                 if (err.Message.IndexOf("Timed out") != -1)
                 {
-                    SetTableTimeoutError(list_coilsTable);
+                    SetTableTimeoutError(list_coilsTable, true);
                 }
                 if (err.Message.IndexOf("ModBus ErrCode") != -1)
                 {
-                    SetTableModBusError(list_coilsTable, err);
+                    SetTableModBusError(list_coilsTable, err, true);
                 }
                 if (err.Message.IndexOf("CRC Error") != -1)
                 {
-                    SetTableCrcError(list_coilsTable);
+                    SetTableCrcError(list_coilsTable, true);
                 }
 
                 Console.WriteLine(err);
@@ -1931,7 +1923,7 @@ namespace ModBus_Client
             }
             catch(Exception err)
             {
-                SetTableInternalError(list_coilsTable);
+                SetTableInternalError(list_coilsTable, true);
 
                 Console.WriteLine(err);
 
@@ -1969,14 +1961,7 @@ namespace ModBus_Client
                         UInt16[] value = { UInt16.Parse(textBoxCoilsValue05_b_) };
 
                         // Cancello la tabella e inserisco le nuove righe
-                        if (useOffsetInTable)
-                        {
-                            insertRowsTable(list_coilsTable, list_template_coilsTable, template_coilsOffset, address_start - P.uint_parser(textBoxCoilsOffset_, comboBoxCoilsOffset_), value, colorDefaultWriteCellStr, comboBoxCoilsRegistri_, "DEC");
-                        }
-                        else
-                        {
-                            insertRowsTable(list_coilsTable, list_template_coilsTable, template_coilsOffset, address_start, value, colorDefaultWriteCellStr, comboBoxCoilsRegistri_, "DEC");
-                        }
+                        insertRowsTable(list_coilsTable, list_template_coilsTable, template_coilsOffset, P.uint_parser(textBoxCoilsOffset_, comboBoxCoilsOffset_), address_start, value, colorDefaultWriteCellStr, comboBoxCoilsRegistri_, "DEC", true);
                     }
                 }
 
@@ -1992,15 +1977,15 @@ namespace ModBus_Client
             {
                 if (err.Message.IndexOf("Timed out") != -1)
                 {
-                    SetTableTimeoutError(list_coilsTable);
+                    SetTableTimeoutError(list_coilsTable, true);
                 }
                 if (err.Message.IndexOf("ModBus ErrCode") != -1)
                 {
-                    SetTableModBusError(list_coilsTable, err);
+                    SetTableModBusError(list_coilsTable, err, true);
                 }
                 if (err.Message.IndexOf("CRC Error") != -1)
                 {
-                    SetTableCrcError(list_coilsTable);
+                    SetTableCrcError(list_coilsTable, true);
                 }
 
                 Console.WriteLine(err);
@@ -2015,7 +2000,7 @@ namespace ModBus_Client
             }
             catch (Exception err)
             {
-                SetTableInternalError(list_coilsTable);
+                SetTableInternalError(list_coilsTable, true);
 
                 Console.WriteLine(err);
 
@@ -2067,14 +2052,7 @@ namespace ModBus_Client
                         }
 
                         // Cancello la tabella e inserisco le nuove righe
-                        if (useOffsetInTable)
-                        {
-                            insertRowsTable(list_coilsTable, list_template_coilsTable, template_coilsOffset, address_start - P.uint_parser(textBoxCoilsOffset_, comboBoxCoilsOffset_), value, colorDefaultWriteCellStr, comboBoxCoilsRegistri_, null);
-                        }
-                        else
-                        {
-                            insertRowsTable(list_coilsTable, list_template_coilsTable, template_coilsOffset, address_start, value, colorDefaultWriteCellStr, comboBoxCoilsRegistri_, null);
-                        }
+                        insertRowsTable(list_coilsTable, list_template_coilsTable, template_coilsOffset, P.uint_parser(textBoxCoilsOffset_, comboBoxCoilsOffset_), address_start, value, colorDefaultWriteCellStr, comboBoxCoilsRegistri_, null, true);
                     }
                 }
 
@@ -2090,15 +2068,15 @@ namespace ModBus_Client
             {
                 if (err.Message.IndexOf("Timed out") != -1)
                 {
-                    SetTableTimeoutError(list_coilsTable);
+                    SetTableTimeoutError(list_coilsTable, true);
                 }
                 if (err.Message.IndexOf("ModBus ErrCode") != -1)
                 {
-                    SetTableModBusError(list_coilsTable, err);
+                    SetTableModBusError(list_coilsTable, err, true);
                 }
                 if (err.Message.IndexOf("CRC Error") != -1)
                 {
-                    SetTableCrcError(list_coilsTable);
+                    SetTableCrcError(list_coilsTable, true);
                 }
 
                 Console.WriteLine(err);
@@ -2113,7 +2091,7 @@ namespace ModBus_Client
             }
             catch (Exception err)
             {
-                SetTableInternalError(list_coilsTable);
+                SetTableInternalError(list_coilsTable, true);
                 Console.WriteLine(err);
 
                 this.Dispatcher.Invoke((Action)delegate
@@ -2174,14 +2152,7 @@ namespace ModBus_Client
                         if (response.Length > 0)
                         {
                             // Cancello la tabella e inserisco le nuove righe
-                            if (useOffsetInTable)
-                            {
-                                insertRowsTable(list_inputsTable, list_template_inputsTable, template_inputsOffset, address_start - P.uint_parser(textBoxInputOffset_, comboBoxInputOffset_), response, colorDefaultReadCellStr, comboBoxInputRegistri_, "DEC");
-                            }
-                            else
-                            {
-                                insertRowsTable(list_inputsTable, list_template_inputsTable, template_inputsOffset, address_start, response, colorDefaultReadCellStr, comboBoxInputRegistri_, "DEC");
-                            }
+                            insertRowsTable(list_inputsTable, list_template_inputsTable, template_inputsOffset, P.uint_parser(textBoxInputOffset_, comboBoxInputOffset_), address_start, response, colorDefaultReadCellStr, comboBoxInputRegistri_, "DEC", true);
                         }
                     }
                 }
@@ -2198,15 +2169,15 @@ namespace ModBus_Client
             {
                 if (err.Message.IndexOf("Timed out") != -1)
                 {
-                    SetTableTimeoutError(list_inputsTable);
+                    SetTableTimeoutError(list_inputsTable, true);
                 }
                 if (err.Message.IndexOf("ModBus ErrCode") != -1)
                 {
-                    SetTableModBusError(list_inputsTable, err);
+                    SetTableModBusError(list_inputsTable, err, true);
                 }
                 if (err.Message.IndexOf("CRC Error") != -1)
                 {
-                    SetTableCrcError(list_inputsTable);
+                    SetTableCrcError(list_inputsTable, true);
                 }
 
                 Console.WriteLine(err);
@@ -2221,7 +2192,7 @@ namespace ModBus_Client
             }
             catch (Exception err)
             {
-                SetTableInternalError(list_inputsTable);
+                SetTableInternalError(list_inputsTable, true);
                 Console.WriteLine(err);
 
                 this.Dispatcher.Invoke((Action)delegate
@@ -2279,14 +2250,14 @@ namespace ModBus_Client
                         // Timeout
                         if (read is null)
                         {
-                            SetTableTimeoutError(list_inputsTable);
+                            SetTableTimeoutError(list_inputsTable, false);
                             return;
                         }
 
                         // CRC error
                         if (read.Length == 0)
                         {
-                            SetTableCrcError(list_inputsTable);
+                            SetTableCrcError(list_inputsTable, false);
                             return;
                         }
 
@@ -2301,14 +2272,7 @@ namespace ModBus_Client
                 }
 
                 // Cancello la tabella e inserisco le nuove righe
-                if (useOffsetInTable)
-                {
-                    insertRowsTable(list_inputsTable, list_template_inputsTable, template_inputsOffset, address_start - P.uint_parser(textBoxInputOffset_, comboBoxInputOffset_), response, colorDefaultReadCellStr, comboBoxInputRegistri_, "DEC");
-                }
-                else
-                {
-                    insertRowsTable(list_inputsTable, list_template_inputsTable, template_inputsOffset, address_start, response, colorDefaultReadCellStr, comboBoxInputRegistri_, "DEC");
-                }
+                insertRowsTable(list_inputsTable, list_template_inputsTable, template_inputsOffset, P.uint_parser(textBoxInputOffset_, comboBoxInputOffset_), address_start, response, colorDefaultReadCellStr, comboBoxInputRegistri_, "DEC", true);
 
                 this.Dispatcher.Invoke((Action)delegate
                 {
@@ -2322,15 +2286,15 @@ namespace ModBus_Client
             {
                 if (err.Message.IndexOf("Timed out") != -1)
                 {
-                    SetTableTimeoutError(list_inputsTable);
+                    SetTableTimeoutError(list_inputsTable, false);
                 }
                 if (err.Message.IndexOf("ModBus ErrCode") != -1)
                 {
-                    SetTableModBusError(list_inputsTable, err);
+                    SetTableModBusError(list_inputsTable, err, false);
                 }
                 if (err.Message.IndexOf("CRC Error") != -1)
                 {
-                    SetTableCrcError(list_inputsTable);
+                    SetTableCrcError(list_inputsTable, false);
                 }
 
                 Console.WriteLine(err);
@@ -2345,7 +2309,7 @@ namespace ModBus_Client
             }
             catch (Exception err)
             {
-                SetTableInternalError(list_inputsTable);
+                SetTableInternalError(list_inputsTable, false);
                 Console.WriteLine(err);
 
                 this.Dispatcher.Invoke((Action)delegate
@@ -2411,14 +2375,7 @@ namespace ModBus_Client
                         if (response.Length > 0)
                         {
                             // Cancello la tabella e inserisco le nuove righe
-                            if (useOffsetInTable)
-                            {
-                                insertRowsTable(list_inputRegistersTable, list_template_inputRegistersTable, template_inputRegistersOffset, address_start - P.uint_parser(textBoxInputRegOffset_, comboBoxInputRegOffset_), response, colorDefaultReadCellStr, comboBoxInputRegRegistri_, comboBoxInputRegValori_);
-                            }
-                            else
-                            {
-                                insertRowsTable(list_inputRegistersTable, list_template_inputRegistersTable, template_inputRegistersOffset, address_start, response, colorDefaultReadCellStr, comboBoxInputRegRegistri_, comboBoxInputRegValori_);
-                            }
+                            insertRowsTable(list_inputRegistersTable, list_template_inputRegistersTable, template_inputRegistersOffset, P.uint_parser(textBoxInputRegOffset_, comboBoxInputRegOffset_), address_start, response, colorDefaultReadCellStr, comboBoxInputRegRegistri_, comboBoxInputRegValori_, true);
                         }
                     }
                 }
@@ -2435,15 +2392,15 @@ namespace ModBus_Client
             {
                 if (err.Message.IndexOf("Timed out") != -1)
                 {
-                    SetTableTimeoutError(list_inputRegistersTable);
+                    SetTableTimeoutError(list_inputRegistersTable, true);
                 }
                 if (err.Message.IndexOf("ModBus ErrCode") != -1)
                 {
-                    SetTableModBusError(list_inputRegistersTable, err);
+                    SetTableModBusError(list_inputRegistersTable, err, true);
                 }
                 if (err.Message.IndexOf("CRC Error") != -1)
                 {
-                    SetTableCrcError(list_inputRegistersTable);
+                    SetTableCrcError(list_inputRegistersTable, true);
                 }
 
                 Console.WriteLine(err);
@@ -2458,7 +2415,7 @@ namespace ModBus_Client
             }
             catch (Exception err)
             {
-                SetTableInternalError(list_inputRegistersTable);
+                SetTableInternalError(list_inputRegistersTable, true);
                 Console.WriteLine(err);
 
                 this.Dispatcher.Invoke((Action)delegate
@@ -2516,14 +2473,14 @@ namespace ModBus_Client
                         // Timeout
                         if (read is null)
                         {
-                            SetTableTimeoutError(list_inputRegistersTable);
+                            SetTableTimeoutError(list_inputRegistersTable, false);
                             return;
                         }
 
                         // CRC error
                         if (read.Length == 0)
                         {
-                            SetTableCrcError(list_inputRegistersTable);
+                            SetTableCrcError(list_inputRegistersTable, false);
                             return;
                         }
 
@@ -2543,14 +2500,7 @@ namespace ModBus_Client
                 }
 
                 // Cancello la tabella e inserisco le nuove righe
-                if (useOffsetInTable)
-                {
-                    insertRowsTable(list_inputRegistersTable, list_template_inputRegistersTable, template_inputRegistersOffset, address_start - P.uint_parser(textBoxInputRegOffset_, comboBoxInputRegOffset_), response, colorDefaultReadCellStr, comboBoxInputRegRegistri_, comboBoxInputRegValori_);
-                }
-                else
-                {
-                    insertRowsTable(list_inputRegistersTable, list_template_inputRegistersTable, template_inputRegistersOffset, address_start, response, colorDefaultReadCellStr, comboBoxInputRegRegistri_, comboBoxInputRegValori_);
-                }
+                insertRowsTable(list_inputRegistersTable, list_template_inputRegistersTable, template_inputRegistersOffset, P.uint_parser(textBoxInputRegOffset_, comboBoxInputRegOffset_), address_start, response, colorDefaultReadCellStr, comboBoxInputRegRegistri_, comboBoxInputRegValori_, true);
 
                 this.Dispatcher.Invoke((Action)delegate
                 {
@@ -2564,15 +2514,15 @@ namespace ModBus_Client
             {
                 if (err.Message.IndexOf("Timed out") != -1)
                 {
-                    SetTableTimeoutError(list_inputRegistersTable);
+                    SetTableTimeoutError(list_inputRegistersTable, false);
                 }
                 if (err.Message.IndexOf("ModBus ErrCode") != -1)
                 {
-                    SetTableModBusError(list_inputRegistersTable, err);
+                    SetTableModBusError(list_inputRegistersTable, err, false);
                 }
                 if (err.Message.IndexOf("CRC Error") != -1)
                 {
-                    SetTableCrcError(list_inputRegistersTable);
+                    SetTableCrcError(list_inputRegistersTable, false);
                 }
 
                 Console.WriteLine(err);
@@ -2587,7 +2537,7 @@ namespace ModBus_Client
             }
             catch (Exception err)
             {
-                SetTableInternalError(list_inputRegistersTable);
+                SetTableInternalError(list_inputRegistersTable, false);
                 Console.WriteLine(err);
 
                 this.Dispatcher.Invoke((Action)delegate
@@ -2652,14 +2602,17 @@ namespace ModBus_Client
                         if (response.Length > 0)
                         {
                             // Cancello la tabella e inserisco le nuove righe
-                            if (useOffsetInTable)
-                            {
-                                insertRowsTable(list_holdingRegistersTable, list_template_holdingRegistersTable, template_HoldingOffset, P.uint_parser(textBoxHoldingOffset_, comboBoxHoldingOffset_) + P.uint_parser(textBoxHoldingAddress03_, comboBoxHoldingAddress03_) - P.uint_parser(textBoxHoldingOffset_, comboBoxHoldingOffset_), response, colorDefaultReadCellStr, comboBoxHoldingRegistri_, comboBoxHoldingValori_);
-                            }
-                            else
-                            {
-                                insertRowsTable(list_holdingRegistersTable, list_template_holdingRegistersTable, template_HoldingOffset, P.uint_parser(textBoxHoldingOffset_, comboBoxHoldingOffset_) + P.uint_parser(textBoxHoldingAddress03_, comboBoxHoldingAddress03_), response, colorDefaultReadCellStr, comboBoxHoldingRegistri_, comboBoxHoldingValori_);
-                            }
+                            insertRowsTable(
+                                list_holdingRegistersTable, 
+                                list_template_holdingRegistersTable, 
+                                template_HoldingOffset,
+                                P.uint_parser(textBoxHoldingOffset_, comboBoxHoldingOffset_),
+                                address_start,
+                                response, 
+                                colorDefaultReadCellStr, 
+                                comboBoxHoldingRegistri_, 
+                                comboBoxHoldingValori_, 
+                                true);
                         }
                     }
                 }
@@ -2676,15 +2629,15 @@ namespace ModBus_Client
             {
                 if (err.Message.IndexOf("Timed out") != -1)
                 {
-                    SetTableTimeoutError(list_holdingRegistersTable);
+                    SetTableTimeoutError(list_holdingRegistersTable, true);
                 }
                 if (err.Message.IndexOf("ModBus ErrCode") != -1)
                 {
-                    SetTableModBusError(list_holdingRegistersTable, err);
+                    SetTableModBusError(list_holdingRegistersTable, err, true);
                 }
                 if (err.Message.IndexOf("CRC Error") != -1)
                 {
-                    SetTableCrcError(list_holdingRegistersTable);
+                    SetTableCrcError(list_holdingRegistersTable, true);
                 }
 
                 Console.WriteLine(err);
@@ -2699,7 +2652,7 @@ namespace ModBus_Client
             }
             catch (Exception err)
             {
-                SetTableInternalError(list_holdingRegistersTable);
+                SetTableInternalError(list_holdingRegistersTable, true);
                 Console.WriteLine(err);
 
                 this.Dispatcher.Invoke((Action)delegate
@@ -2741,14 +2694,7 @@ namespace ModBus_Client
                         UInt16[] value = { (UInt16)P.uint_parser(textBoxHoldingValue06_, comboBoxHoldingValue06_) };
 
                         // Cancello la tabella e inserisco le nuove righe
-                        if (useOffsetInTable)
-                        {
-                            insertRowsTable(list_holdingRegistersTable, list_template_holdingRegistersTable, template_HoldingOffset, address_start - P.uint_parser(textBoxHoldingOffset_, comboBoxHoldingOffset_), value, colorDefaultWriteCellStr, comboBoxHoldingRegistri_, comboBoxHoldingValori_);
-                        }
-                        else
-                        {
-                            insertRowsTable(list_holdingRegistersTable, list_template_holdingRegistersTable, template_HoldingOffset, address_start, value, colorDefaultWriteCellStr, comboBoxHoldingRegistri_, comboBoxHoldingValori_);
-                        }
+                        insertRowsTable(list_holdingRegistersTable, list_template_holdingRegistersTable, template_HoldingOffset, P.uint_parser(textBoxHoldingOffset_, comboBoxHoldingOffset_), address_start, value, colorDefaultWriteCellStr, comboBoxHoldingRegistri_, comboBoxHoldingValori_, true);
                     }
                 }
 
@@ -2764,15 +2710,15 @@ namespace ModBus_Client
             {
                 if (err.Message.IndexOf("Timed out") != -1)
                 {
-                    SetTableTimeoutError(list_holdingRegistersTable);
+                    SetTableTimeoutError(list_holdingRegistersTable, true);
                 }
                 if (err.Message.IndexOf("ModBus ErrCode") != -1)
                 {
-                    SetTableModBusError(list_holdingRegistersTable, err);
+                    SetTableModBusError(list_holdingRegistersTable, err, true);
                 }
                 if (err.Message.IndexOf("CRC Error") != -1)
                 {
-                    SetTableCrcError(list_holdingRegistersTable);
+                    SetTableCrcError(list_holdingRegistersTable, true);
                 }
 
                 Console.WriteLine(err);
@@ -2787,7 +2733,7 @@ namespace ModBus_Client
             }
             catch (Exception err)
             {
-                SetTableInternalError(list_holdingRegistersTable);
+                SetTableInternalError(list_holdingRegistersTable, true);
                 Console.WriteLine(err);
 
                 this.Dispatcher.Invoke((Action)delegate
@@ -2846,14 +2792,7 @@ namespace ModBus_Client
                         if (writtenRegs.Length == word_count)
                         {
                             // Cancello la tabella e inserisco le nuove righe
-                            if (useOffsetInTable)
-                            {
-                                insertRowsTable(list_holdingRegistersTable, list_template_holdingRegistersTable, template_HoldingOffset, address_start - P.uint_parser(textBoxHoldingOffset_, comboBoxHoldingOffset_), writtenRegs, colorDefaultWriteCellStr, comboBoxHoldingRegistri_, comboBoxHoldingValori_);
-                            }
-                            else
-                            {
-                                insertRowsTable(list_holdingRegistersTable, list_template_holdingRegistersTable, template_HoldingOffset, address_start, writtenRegs, colorDefaultWriteCellStr, comboBoxHoldingRegistri_, comboBoxHoldingValori_);
-                            }
+                            insertRowsTable(list_holdingRegistersTable, list_template_holdingRegistersTable, template_HoldingOffset, P.uint_parser(textBoxHoldingOffset_, comboBoxHoldingOffset_), address_start, writtenRegs, colorDefaultWriteCellStr, comboBoxHoldingRegistri_, comboBoxHoldingValori_, true);
                         }
                         else
                         {
@@ -2883,14 +2822,7 @@ namespace ModBus_Client
                         if (writtenRegs.Length == word_count)
                         {
                             // Cancello la tabella e inserisco le nuove righe
-                            if (useOffsetInTable)
-                            {
-                                insertRowsTable(list_holdingRegistersTable, list_template_holdingRegistersTable, template_HoldingOffset, address_start - P.uint_parser(textBoxHoldingOffset_, comboBoxHoldingOffset_), writtenRegs, colorDefaultWriteCellStr, comboBoxHoldingRegistri_, comboBoxHoldingValori_);
-                            }
-                            else
-                            {
-                                insertRowsTable(list_holdingRegistersTable, list_template_holdingRegistersTable, template_HoldingOffset, address_start, writtenRegs, colorDefaultWriteCellStr, comboBoxHoldingRegistri_, comboBoxHoldingValori_);
-                            }
+                            insertRowsTable(list_holdingRegistersTable, list_template_holdingRegistersTable, template_HoldingOffset, P.uint_parser(textBoxHoldingOffset_, comboBoxHoldingOffset_), address_start, writtenRegs, colorDefaultWriteCellStr, comboBoxHoldingRegistri_, comboBoxHoldingValori_, true);
                         }
                         else
                         {
@@ -2913,15 +2845,15 @@ namespace ModBus_Client
             {
                 if (err.Message.IndexOf("Timed out") != -1)
                 {
-                    SetTableTimeoutError(list_holdingRegistersTable);
+                    SetTableTimeoutError(list_holdingRegistersTable, true);
                 }
                 if (err.Message.IndexOf("ModBus ErrCode") != -1)
                 {
-                    SetTableModBusError(list_holdingRegistersTable, err);
+                    SetTableModBusError(list_holdingRegistersTable, err, true);
                 }
                 if (err.Message.IndexOf("CRC Error") != -1)
                 {
-                    SetTableCrcError(list_holdingRegistersTable);
+                    SetTableCrcError(list_holdingRegistersTable, true);
                 }
 
                 Console.WriteLine(err);
@@ -2936,7 +2868,7 @@ namespace ModBus_Client
             }
             catch (Exception err)
             {
-                SetTableInternalError(list_holdingRegistersTable);
+                SetTableInternalError(list_holdingRegistersTable, true);
                 Console.WriteLine(err);
 
                 this.Dispatcher.Invoke((Action)delegate
@@ -2994,14 +2926,14 @@ namespace ModBus_Client
                         // Timeout
                         if (read is null)
                         {
-                            SetTableTimeoutError(list_holdingRegistersTable);
+                            SetTableTimeoutError(list_holdingRegistersTable, false);
                             return;
                         }
 
                         // CRC error
                         if (read.Length == 0)
                         {
-                            SetTableCrcError(list_holdingRegistersTable);
+                            SetTableCrcError(list_holdingRegistersTable, false);
                             return;
                         }
 
@@ -3014,14 +2946,14 @@ namespace ModBus_Client
                         // Timeout
                         if (read is null)
                         {
-                            SetTableTimeoutError(list_holdingRegistersTable);
+                            SetTableTimeoutError(list_holdingRegistersTable, false);
                             return;
                         }
 
                         // CRC error
                         if (read.Length == 0)
                         {
-                            SetTableCrcError(list_holdingRegistersTable);
+                            SetTableCrcError(list_holdingRegistersTable, false);
                             return;
                         }
 
@@ -3034,15 +2966,8 @@ namespace ModBus_Client
                     address_start = address_start - 40001;
                 }
 
-                //Cancello la tabella e inserisco le nuove righe
-                if (useOffsetInTable)
-                {
-                    insertRowsTable(list_holdingRegistersTable, list_template_holdingRegistersTable, template_HoldingOffset, address_start - P.uint_parser(textBoxHoldingOffset_, comboBoxHoldingOffset_), response, colorDefaultReadCellStr, comboBoxHoldingRegistri_, comboBoxHoldingValori_);
-                }
-                else
-                {
-                    insertRowsTable(list_holdingRegistersTable, list_template_holdingRegistersTable, template_HoldingOffset, address_start, response, colorDefaultReadCellStr, comboBoxHoldingRegistri.SelectedValue.ToString().Split(' ')[1], comboBoxHoldingValori.SelectedValue.ToString().Split(' ')[1]);
-                }
+                // Cancello la tabella e inserisco le nuove righe
+                insertRowsTable(list_holdingRegistersTable, list_template_holdingRegistersTable, template_HoldingOffset, P.uint_parser(textBoxHoldingOffset_, comboBoxHoldingOffset_), address_start, response, colorDefaultReadCellStr, comboBoxHoldingRegistri_, comboBoxHoldingValori_, true);
 
                 this.Dispatcher.Invoke((Action)delegate
                 {
@@ -3056,15 +2981,15 @@ namespace ModBus_Client
             {
                 if (err.Message.IndexOf("Timed out") != -1)
                 {
-                    SetTableTimeoutError(list_holdingRegistersTable);
+                    SetTableTimeoutError(list_holdingRegistersTable, false);
                 }
                 if (err.Message.IndexOf("ModBus ErrCode") != -1)
                 {
-                    SetTableModBusError(list_holdingRegistersTable, err);
+                    SetTableModBusError(list_holdingRegistersTable, err, false);
                 }
                 if (err.Message.IndexOf("CRC Error") != -1)
                 {
-                    SetTableCrcError(list_holdingRegistersTable);
+                    SetTableCrcError(list_holdingRegistersTable, false);
                 }
 
                 Console.WriteLine(err);
@@ -3079,7 +3004,7 @@ namespace ModBus_Client
             }
             catch (Exception err)
             {
-                SetTableInternalError(list_holdingRegistersTable);
+                SetTableInternalError(list_holdingRegistersTable, false);
                 Console.WriteLine(err);
 
                 this.Dispatcher.Invoke((Action)delegate
@@ -3655,7 +3580,7 @@ namespace ModBus_Client
                     // etichetta generica senza mapping
                     if (mappings.Length < 2)
                     {
-                        labels[0] = "value (dec): " + value_list[index_start + a].ToString() + "\nvalue (hex): 0x" + values_[3].ToString("X").PadLeft(4, '0') + "\nvalue (bin): " + Convert.ToString(values_[1] >> 8, 2).PadLeft(8, '0') + " " + Convert.ToString((UInt16)((UInt16)(values_[1]) << 8) >> 8, 2).PadLeft(8, '0');
+                        labels[0] = "value (dec): " + values_[3].ToString() + "\nvalue (hex): 0x" + values_[3].ToString("X").PadLeft(4, '0') + "\nvalue (bin): " + Convert.ToString(values_[3] >> 8, 2).PadLeft(8, '0') + " " + Convert.ToString((UInt16)(values_[3] & 0x00FF), 2).PadLeft(8, '0');
                         //convertedValue = labels[0];
                         type = 255;
                     }
@@ -3764,12 +3689,15 @@ namespace ModBus_Client
         }
 
         // Funzione inserimento righe nelle collections
-        public void insertRowsTable(ObservableCollection<ModBus_Item> tab_1, IEnumerable<ModBus_Item> template, int template_offset, uint address_start, UInt16[] response, String cellBackGround, String formatRegister, String formatVal)
+        public void insertRowsTable(ObservableCollection<ModBus_Item> tab_1, IEnumerable<ModBus_Item> template, int template_offset, uint user_offset, uint address_start, UInt16[] response, String cellBackGround, String formatRegister, String formatVal, bool clearTable)
         {
-            this.Dispatcher.Invoke((Action)delegate
+            if (clearTable)
             {
-                tab_1.Clear();
-            });
+                this.Dispatcher.Invoke((Action)delegate
+                {
+                    tab_1.Clear();
+                });
+            }
 
             if (response != null)
             {
@@ -3777,11 +3705,15 @@ namespace ModBus_Client
                 {
                     ModBus_Item row = new ModBus_Item();
 
+                    row.RegisterUInt = (UInt16)(address_start + i);
+
+                    if (useOffsetInTable)
+                        row.RegisterUInt += (UInt16)user_offset;
+
                     // Cella con numero del registro
                     if (formatRegister == "DEC" || formatRegister == null)
                     {
                         row.Register = (address_start + i).ToString();
-                        row.RegisterUInt = (UInt16)(address_start + i);
                     }
                     else
                     {
@@ -3824,7 +3756,7 @@ namespace ModBus_Client
                         }
                     }
 
-                    ModBus_Item found = template.FirstOrDefault(x => (x.RegisterUInt + template_offset) == (address_start + i));
+                    ModBus_Item found = template.FirstOrDefault(x => (x.RegisterUInt + template_offset) == (address_start + i + user_offset));
                     if (found != null)
                     {
                         String convertedValue;
@@ -4037,14 +3969,7 @@ namespace ModBus_Client
                         UInt16[] value = { (UInt16)P.uint_parser(textBoxHoldingValue06_b_, comboBoxHoldingValue06_b_) };
 
                         // Cancello la tabella e inserisco le nuove righe
-                        if (useOffsetInTable)
-                        {
-                            insertRowsTable(list_holdingRegistersTable, list_template_holdingRegistersTable, template_HoldingOffset, address_start - P.uint_parser(textBoxHoldingOffset_, comboBoxHoldingOffset_), value, colorDefaultWriteCellStr, comboBoxHoldingRegistri_, comboBoxHoldingValori_);
-                        }
-                        else
-                        {
-                            insertRowsTable(list_holdingRegistersTable, list_template_holdingRegistersTable, template_HoldingOffset, address_start, value, colorDefaultWriteCellStr, comboBoxHoldingRegistri_, comboBoxHoldingValori_);
-                        }
+                        insertRowsTable(list_holdingRegistersTable, list_template_holdingRegistersTable, template_HoldingOffset, P.uint_parser(textBoxHoldingOffset_, comboBoxHoldingOffset_), address_start, value, colorDefaultWriteCellStr, comboBoxHoldingRegistri_, comboBoxHoldingValori_, true);
                     }
                 }
 
@@ -4060,15 +3985,15 @@ namespace ModBus_Client
             {
                 if (err.Message.IndexOf("Timed out") != -1)
                 {
-                    SetTableTimeoutError(list_holdingRegistersTable);
+                    SetTableTimeoutError(list_holdingRegistersTable, true);
                 }
                 if (err.Message.IndexOf("ModBus ErrCode") != -1)
                 {
-                    SetTableModBusError(list_holdingRegistersTable, err);
+                    SetTableModBusError(list_holdingRegistersTable, err, true);
                 }
                 if (err.Message.IndexOf("CRC Error") != -1)
                 {
-                    SetTableCrcError(list_holdingRegistersTable);
+                    SetTableCrcError(list_holdingRegistersTable, true);
                 }
 
                 Console.WriteLine(err);
@@ -4083,7 +4008,7 @@ namespace ModBus_Client
             }
             catch (Exception err)
             {
-                SetTableInternalError(list_holdingRegistersTable);
+                SetTableInternalError(list_holdingRegistersTable, true);
                 Console.WriteLine(err);
 
                 this.Dispatcher.Invoke((Action)delegate
@@ -4595,13 +4520,14 @@ namespace ModBus_Client
                     var tmp = e.EditingElement as TextBox;
                     dataGridViewHolding.SelectedItem = (ModBus_Item)e.Row.Item;
 
-                    UInt16 out_;
-                    if(UInt16.TryParse(tmp.Text, out out_))
-                    {
-                        Thread t = new Thread(new ParameterizedThreadStart(writeRegisterDatagrid));
-                        t.Priority = threadPriority;
-                        t.Start(tmp.Text);
-                    }
+                    String[] params_ = new String[2];
+
+                    params_[0] = tmp.Text;
+                    params_[1] = e.Column.Header.ToString();
+
+                    Thread t = new Thread(new ParameterizedThreadStart(writeRegisterDatagrid));
+                    t.Priority = threadPriority;
+                    t.Start(params_);
                 }
                 catch (Exception err)
                 {
@@ -4610,7 +4536,7 @@ namespace ModBus_Client
             }
         }
 
-        public void writeRegisterDatagrid(object obj)
+        public void writeRegisterDatagrid(object params_)
         {
             try
             {
@@ -4619,7 +4545,6 @@ namespace ModBus_Client
                 this.Dispatcher.Invoke((Action)delegate
                 {
                     currentItem = (ModBus_Item)dataGridViewHolding.SelectedItem;
-                    currentItem.Value = obj.ToString();
                 });
 
                 // Debug
@@ -4627,58 +4552,375 @@ namespace ModBus_Client
                 Console.WriteLine("Value: " + currentItem.Value);
                 Console.WriteLine("Notes: " + currentItem.Notes);
 
-                uint address_start = P.uint_parser(textBoxHoldingOffset_, comboBoxHoldingOffset_) + P.uint_parser(currentItem.Register, comboBoxHoldingRegistri_);
+                String[] params__ = params_ as String[];
 
-                if (address_start > 9999 && correctModbusAddressAuto)    //Se indirizzo espresso in 30001+ imposto offset a 0
+                String obj = params__[0];
+                String columnName = params__[1];
+
+                // Converted Value (colonna valori convertiti, applico la conversione e invio le word corrispondenti)
+                if (columnName.ToLower().IndexOf("converted") != -1)
                 {
-                    address_start = address_start - 40001;
-                }
+                    // Estraggo il datatype
+                    ModBus_Item tmp = list_template_holdingRegistersTable.FirstOrDefault(x => x.RegisterUInt == (UInt16)((int)(currentItem.RegisterUInt) + int.Parse(textBoxHoldingOffset_, comboBoxHoldingOffset_.IndexOf("HEX") != -1 ? System.Globalization.NumberStyles.HexNumber : System.Globalization.NumberStyles.Integer) - template_HoldingOffset));
 
-                uint value_ = P.uint_parser(currentItem.Value, comboBoxHoldingValori_);
-                bool? result = ModBus.presetSingleRegister_06(byte.Parse(textBoxModbusAddress_), address_start, value_, readTimeout);
+                    String test = "";
+                    int offset = 0;     // Offset starting word 32bit / 64bit variables
 
-                if (result != null)
-                {
-                    if (result == true)
+                    if (tmp != null)
                     {
-                        String[] value = { value_.ToString() };
-
-                        this.Dispatcher.Invoke((Action)delegate
+                        if (tmp.Mappings != null)
                         {
-                            currentItem.ValueBin = Convert.ToString(value_ >> 8, 2).PadLeft(8, '0') + " " + Convert.ToString((UInt16)(value_ << 8) >> 8, 2).PadLeft(8, '0');
-                            currentItem.Foreground = ForeGroundLight.ToString();
-                            currentItem.Background = colorDefaultWriteCell.ToString();
-                        });
+                            test = tmp.Mappings.Replace(" ", "");
+                        }
+                    }
+
+                    if (obj.IndexOf(":") != -1)
+                        obj = obj.Split(':')[1];
+
+                    UInt16[] toSend = null;
+
+                    // byte (low byte or high byte)
+                    if (test.ToLower().IndexOf("byte") == 0)
+                    {
+                        toSend = new UInt16[1];
+                        toSend[0] = (UInt16)(UInt16.Parse(obj) & 0x00FF);
+                    }
+
+                    // bitmap (type 1)
+                    else if (test.IndexOf("b") == 0)
+                    {
+                        MessageBox.Show("Datatype not suppported", "Info", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    }
+
+                    // bytemap (type 2)
+                    else if (test.IndexOf("B") == 0)
+                    {
+                        MessageBox.Show("Datatype not suppported", "Info", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    }
+
+                    // float (type 3)
+                    else if (test.IndexOf("F") == 0 || test.ToLower().IndexOf("float") == 0)
+                    {
+                        byte[] conv = BitConverter.GetBytes(float.Parse(obj, System.Globalization.CultureInfo.InvariantCulture));
+                        toSend = new UInt16[2];
+
+                        if (test.ToLower().IndexOf("+") == -1)
+                            offset = -1;
+
+                        if (test.ToLower().IndexOf("-") != -1 || test.ToLower().IndexOf("_swap") != -1)
+                        {
+                            toSend[1] = (UInt16)((conv[3] << 8) + (conv[2]));
+                            toSend[0] = (UInt16)((conv[1] << 8) + (conv[0]));
+                        }
+                        else
+                        {
+                            toSend[0] = (UInt16)((conv[3] << 8) + (conv[2]));
+                            toSend[1] = (UInt16)((conv[1] << 8) + (conv[0]));
+                        }
+                    }
+
+                    // double (type 7)
+                    else if (test.IndexOf("d") == 0 || test.ToLower().IndexOf("double") == 0)
+                    {
+                        byte[] conv = BitConverter.GetBytes(double.Parse(obj, System.Globalization.CultureInfo.InvariantCulture));
+                        toSend = new UInt16[2];
+
+                        if (test.ToLower().IndexOf("+") == -1)
+                            offset = -2;
+
+                        if (test.ToLower().IndexOf("-") != -1 || test.ToLower().IndexOf("_swap") != -1)
+                        {
+                            toSend[3] = (UInt16)((conv[7] << 8) + (conv[6]));
+                            toSend[2] = (UInt16)((conv[5] << 8) + (conv[4]));
+                            toSend[1] = (UInt16)((conv[3] << 8) + (conv[2]));
+                            toSend[0] = (UInt16)((conv[1] << 8) + (conv[0]));
+                        }
+                        else
+                        {
+                            toSend[0] = (UInt16)((conv[7] << 8) + (conv[6]));
+                            toSend[1] = (UInt16)((conv[5] << 8) + (conv[4]));
+                            toSend[2] = (UInt16)((conv[3] << 8) + (conv[2]));
+                            toSend[3] = (UInt16)((conv[1] << 8) + (conv[0]));
+                        }
+                    }
+
+                    // uint64 (type 6)
+                    else if (test.ToLower().IndexOf("uint64") == 0)
+                    {
+                        byte[] conv = BitConverter.GetBytes(UInt64.Parse(obj));
+                        toSend = new UInt16[4];
+
+                        if (test.ToLower().IndexOf("+") == -1)
+                            offset = -3;
+
+                        if (test.ToLower().IndexOf("-") != -1 || test.ToLower().IndexOf("_swap") != -1)
+                        {
+                            toSend[3] = (UInt16)((conv[7] << 8) + (conv[6]));
+                            toSend[2] = (UInt16)((conv[5] << 8) + (conv[4]));
+                            toSend[1] = (UInt16)((conv[3] << 8) + (conv[2]));
+                            toSend[0] = (UInt16)((conv[1] << 8) + (conv[0]));
+                        }
+                        else
+                        {
+                            toSend[0] = (UInt16)((conv[7] << 8) + (conv[6]));
+                            toSend[1] = (UInt16)((conv[5] << 8) + (conv[4]));
+                            toSend[2] = (UInt16)((conv[3] << 8) + (conv[2]));
+                            toSend[3] = (UInt16)((conv[1] << 8) + (conv[0]));
+                        }
+                    }
+
+                    // int64 (type 6)
+                    else if (test.ToLower().IndexOf("int64") == 0)
+                    {
+                        byte[] conv = BitConverter.GetBytes(Int64.Parse(obj));
+                        toSend = new UInt16[4];
+
+                        if (test.ToLower().IndexOf("+") == -1)
+                            offset = -3;
+
+                        if (test.ToLower().IndexOf("-") != -1 || test.ToLower().IndexOf("_swap") != -1)
+                        {
+                            toSend[3] = (UInt16)((conv[7] << 8) + (conv[6]));
+                            toSend[2] = (UInt16)((conv[5] << 8) + (conv[4]));
+                            toSend[1] = (UInt16)((conv[3] << 8) + (conv[2]));
+                            toSend[0] = (UInt16)((conv[1] << 8) + (conv[0]));
+                        }
+                        else
+                        {
+                            toSend[0] = (UInt16)((conv[7] << 8) + (conv[6]));
+                            toSend[1] = (UInt16)((conv[5] << 8) + (conv[4]));
+                            toSend[2] = (UInt16)((conv[3] << 8) + (conv[2]));
+                            toSend[3] = (UInt16)((conv[1] << 8) + (conv[0]));
+                        }
+                    }
+
+                    // uint32 (type 5)
+                    else if (test.ToLower().IndexOf("uint32") == 0)
+                    {
+                        byte[] conv = BitConverter.GetBytes(UInt32.Parse(obj));
+                        toSend = new UInt16[2];
+
+                        if (test.ToLower().IndexOf("+") == -1)
+                            offset = -1;
+
+                        if (test.ToLower().IndexOf("-") != -1 || test.ToLower().IndexOf("_swap") != -1)
+                        {
+                            toSend[1] = (UInt16)((conv[3] << 8) + (conv[2]));
+                            toSend[0] = (UInt16)((conv[1] << 8) + (conv[0]));
+                        }
+                        else
+                        {
+                            toSend[0] = (UInt16)((conv[3] << 8) + (conv[2]));
+                            toSend[1] = (UInt16)((conv[1] << 8) + (conv[0]));
+                        }
+                    }
+
+                    // int32 (type 5)
+                    else if (test.ToLower().IndexOf("int32") == 0)
+                    {
+                        byte[] conv = BitConverter.GetBytes(Int32.Parse(obj));
+                        toSend = new UInt16[2];
+
+                        if (test.ToLower().IndexOf("+") == -1)
+                            offset = -1;
+
+                        if (test.ToLower().IndexOf("-") != -1 || test.ToLower().IndexOf("_swap") != -1)
+                        {
+                            toSend[1] = (UInt16)((conv[3] << 8) + (conv[2]));
+                            toSend[0] = (UInt16)((conv[1] << 8) + (conv[0]));
+                        }
+                        else
+                        {
+                            toSend[0] = (UInt16)((conv[3] << 8) + (conv[2]));
+                            toSend[1] = (UInt16)((conv[1] << 8) + (conv[0]));
+                        }
+                    }
+
+                    // uint16 (type 4)
+                    else if (test.ToLower().IndexOf("uint") == 0 || test.ToLower().IndexOf("uint16") == 0)
+                    {
+                        toSend = new UInt16[1];
+                        toSend[0] = UInt16.Parse(obj);
+                    }
+
+                    // int16 (type 4)
+                    else if (test.ToLower().IndexOf("int") == 0 || test.ToLower().IndexOf("int16") == 0)
+                    {
+                        byte[] conv = BitConverter.GetBytes(Int16.Parse(obj));
+                        toSend = new UInt16[1];
+
+                        toSend[0] = (UInt16)((conv[0] << 0) + (conv[1] << 8));
+                    }
+
+                    // String (type 255)
+                    else if (test.ToLower().IndexOf("string") == 0)
+                    {
+                        MessageBox.Show("Datatype not suppported", "Info", MessageBoxButton.OK, MessageBoxImage.Warning);
                     }
                     else
                     {
-                        SetTableCrcError(list_holdingRegistersTable);
+                        UInt16 dummy;
+
+                        if (UInt16.TryParse(obj, out dummy))
+                        {
+                            toSend = new UInt16[1];
+                            toSend[0] = dummy;
+                        }
                     }
-                }
-                else
-                {
-                    SetTableTimeoutError(list_holdingRegistersTable);
+
+                    if (toSend != null)
+                    {
+                        long address_start = P.uint_parser(textBoxHoldingOffset_, comboBoxHoldingOffset_) + P.uint_parser(currentItem.Register, comboBoxHoldingRegistri_) + offset;
+
+                        if (address_start > 9999 && correctModbusAddressAuto)    //Se indirizzo espresso in 30001+ imposto offset a 0
+                        {
+                            address_start = address_start - 40001;
+                        }
+
+                        uint value_ = P.uint_parser(currentItem.Value, comboBoxHoldingValori_);
+
+                        if (address_start >= 0)
+                        {
+                            UInt16[] result = ModBus.presetMultipleRegisters_16(byte.Parse(textBoxModbusAddress_), (UInt16)(address_start), toSend, readTimeout);
+
+                            if (result != null)
+                            {
+                                for (int i = 0; i < result.Length; i++)
+                                {
+                                    ModBus_Item select = list_holdingRegistersTable.FirstOrDefault(x => x.RegisterUInt == (UInt16)(address_start) + i);
+                                    if (select != null)
+                                    {
+                                        this.Dispatcher.Invoke((Action)delegate
+                                        {
+                                            select.Value = result[i].ToString();
+                                            select.ValueBin = Convert.ToString(result[i] >> 8, 2).PadLeft(8, '0') + " " + Convert.ToString((UInt16)(result[i] << 8) >> 8, 2).PadLeft(8, '0');
+                                            select.Foreground = ForeGroundLight.ToString();
+                                            select.Background = colorDefaultWriteCell.ToString();
+                                        });
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                SetTableTimeoutError(list_holdingRegistersTable, true);
+                            }
+                        }
+                        else
+                        {
+                            SetTableInternalError(list_holdingRegistersTable, true);
+                        }
+                    }
+
+                    this.Dispatcher.Invoke((Action)delegate
+                    {
+                        dataGridViewHolding.Items.Refresh();
+                        dataGridViewHolding.SelectedItem = currentItem;
+                    });
                 }
 
-                this.Dispatcher.Invoke((Action)delegate
+                // Binary value
+                else if (columnName.ToLower().IndexOf("binary") != -1)
                 {
-                    dataGridViewHolding.Items.Refresh();
-                    dataGridViewHolding.SelectedItem = currentItem;
-                });
+                    UInt16 dummy_ = Convert.ToUInt16(obj.Replace(" ", ""), 2); ;
+                    uint address_start = P.uint_parser(textBoxHoldingOffset_, comboBoxHoldingOffset_) + P.uint_parser(currentItem.Register, comboBoxHoldingRegistri_);
+
+                    if (address_start > 9999 && correctModbusAddressAuto)    //Se indirizzo espresso in 30001+ imposto offset a 0
+                    {
+                        address_start = address_start - 40001;
+                    }
+
+                    bool? result = ModBus.presetSingleRegister_06(byte.Parse(textBoxModbusAddress_), address_start, dummy_, readTimeout);
+
+                    if (result != null)
+                    {
+                        if (result == true)
+                        {
+                            this.Dispatcher.Invoke((Action)delegate
+                            {
+                                currentItem.Value = comboBoxHoldingValori_.IndexOf("HEX") == -1 ? dummy_.ToString() : dummy_.ToString("x");
+                                currentItem.ValueBin = Convert.ToString(dummy_ >> 8, 2).PadLeft(8, '0') + " " + Convert.ToString((UInt16)(dummy_ << 8) >> 8, 2).PadLeft(8, '0');
+                                currentItem.Foreground = ForeGroundLight.ToString();
+                                currentItem.Background = colorDefaultWriteCell.ToString();
+                            });
+                        }
+                        else
+                        {
+                            SetTableCrcError(list_holdingRegistersTable, true);
+                        }
+                    }
+                    else
+                    {
+                        SetTableTimeoutError(list_holdingRegistersTable, true);
+                    }
+
+                    this.Dispatcher.Invoke((Action)delegate
+                    {
+                        dataGridViewHolding.Items.Refresh();
+                        dataGridViewHolding.SelectedItem = currentItem;
+                    });
+                }
+
+                // Standard value
+                else if (columnName.ToLower().IndexOf("value") != -1)
+                {
+                    UInt16 dummy_ = 0;
+                    if (UInt16.TryParse(obj, out dummy_))
+                    {
+                        uint address_start = P.uint_parser(textBoxHoldingOffset_, comboBoxHoldingOffset_) + P.uint_parser(currentItem.Register, comboBoxHoldingRegistri_);
+
+                        if (address_start > 9999 && correctModbusAddressAuto)    //Se indirizzo espresso in 30001+ imposto offset a 0
+                        {
+                            address_start = address_start - 40001;
+                        }
+
+                        uint value_ = P.uint_parser(currentItem.Value, comboBoxHoldingValori_);
+                        bool? result = ModBus.presetSingleRegister_06(byte.Parse(textBoxModbusAddress_), address_start, value_, readTimeout);
+
+                        if (result != null)
+                        {
+                            if (result == true)
+                            {
+                                String[] value = { value_.ToString() };
+
+                                this.Dispatcher.Invoke((Action)delegate
+                                {
+                                    currentItem.Value = obj;
+                                    currentItem.ValueBin = Convert.ToString(value_ >> 8, 2).PadLeft(8, '0') + " " + Convert.ToString((UInt16)(value_ << 8) >> 8, 2).PadLeft(8, '0');
+                                    currentItem.Foreground = ForeGroundLight.ToString();
+                                    currentItem.Background = colorDefaultWriteCell.ToString();
+                                });
+                            }
+                            else
+                            {
+                                SetTableCrcError(list_holdingRegistersTable, true);
+                            }
+                        }
+                        else
+                        {
+                            SetTableTimeoutError(list_holdingRegistersTable, true);
+                        }
+                    }
+
+                    this.Dispatcher.Invoke((Action)delegate
+                    {
+                        dataGridViewHolding.Items.Refresh();
+                        dataGridViewHolding.SelectedItem = currentItem;
+                    });
+                }
             }
             catch (ModbusException err)
             {
                 if (err.Message.IndexOf("Timed out") != -1)
                 {
-                    SetTableTimeoutError(list_holdingRegistersTable);
+                    SetTableTimeoutError(list_holdingRegistersTable, true);
                 }
                 if (err.Message.IndexOf("ModBus ErrCode") != -1)
                 {
-                    SetTableModBusError(list_holdingRegistersTable, err);
+                    SetTableModBusError(list_holdingRegistersTable, err, true);
                 }
                 if (err.Message.IndexOf("CRC Error") != -1)
                 {
-                    SetTableCrcError(list_holdingRegistersTable);
+                    SetTableCrcError(list_holdingRegistersTable, true);
                 }
 
                 Console.WriteLine(err);
@@ -4693,7 +4935,7 @@ namespace ModBus_Client
             }
             catch (Exception err)
             {
-                SetTableInternalError(list_holdingRegistersTable);
+                SetTableInternalError(list_holdingRegistersTable, true);
                 Console.WriteLine(err);
 
                 this.Dispatcher.Invoke((Action)delegate
@@ -4785,12 +5027,12 @@ namespace ModBus_Client
                     }
                     else
                     {
-                        SetTableCrcError(list_coilsTable);
+                        SetTableCrcError(list_coilsTable, true);
                     }
                 }
                 else
                 {
-                    SetTableTimeoutError(list_coilsTable);
+                    SetTableTimeoutError(list_coilsTable, true);
                 }
 
                 this.Dispatcher.Invoke((Action)delegate
@@ -4803,15 +5045,15 @@ namespace ModBus_Client
             {
                 if (err.Message.IndexOf("Timed out") != -1)
                 {
-                    SetTableTimeoutError(list_coilsTable);
+                    SetTableTimeoutError(list_coilsTable, true);
                 }
                 if (err.Message.IndexOf("ModBus ErrCode") != -1)
                 {
-                    SetTableModBusError(list_coilsTable, err);
+                    SetTableModBusError(list_coilsTable, err, true);
                 }
                 if (err.Message.IndexOf("CRC Error") != -1)
                 {
-                    SetTableCrcError(list_coilsTable);
+                    SetTableCrcError(list_coilsTable, true);
                 }
 
                 Console.WriteLine(err);
@@ -4826,7 +5068,7 @@ namespace ModBus_Client
             }
             catch (Exception err)
             {
-                SetTableInternalError(list_coilsTable);
+                SetTableInternalError(list_coilsTable, true);
 
                 Console.WriteLine(err);
 
@@ -5018,6 +5260,72 @@ namespace ModBus_Client
 
                         break;
 
+                    // Comandi read template group
+                    case Key.G:
+
+                        // Coils
+                        if (tabControlMain.SelectedIndex == 1)
+                        {
+                            if (buttonReadCoilsTemplateGroup.IsEnabled)
+                                buttonReadCoilsTemplateGroup_Click(sender, e);
+                        }
+
+                        // Inputs
+                        if (tabControlMain.SelectedIndex == 2)
+                        {
+                            if (buttonReadInputTemplateGroup.IsEnabled)
+                                buttonReadInputTemplateGroup_Click(sender, e);
+                        }
+
+                        // Input registers
+                        if (tabControlMain.SelectedIndex == 3)
+                        {
+                            if (buttonReadInputRegisterTemplateGroup.IsEnabled)
+                                buttonReadInputRegisterTemplateGroup_Click(sender, e);
+                        }
+
+                        // Holding registers
+                        if (tabControlMain.SelectedIndex == 4)
+                        {
+                            if (buttonReadHoldingTemplateGroup.IsEnabled)
+                                buttonReadHoldingTemplateGroup_Click(sender, e);
+                        }
+
+                        break;
+
+                    // Comandi read template group
+                    case Key.H:
+
+                        // Coils
+                        if (tabControlMain.SelectedIndex == 1)
+                        {
+                            if (buttonReadCoilsTemplate.IsEnabled)
+                                buttonReadCoilsTemplate_Click(sender, e);
+                        }
+
+                        // Inputs
+                        if (tabControlMain.SelectedIndex == 2)
+                        {
+                            if (buttonReadInputTemplate.IsEnabled)
+                                buttonReadInputTemplate_Click(sender, e);
+                        }
+
+                        // Input registers
+                        if (tabControlMain.SelectedIndex == 3)
+                        {
+                            if (buttonReadInputRegisterTemplate.IsEnabled)
+                                buttonReadInputRegisterTemplate_Click(sender, e);
+                        }
+
+                        // Holding registers
+                        if (tabControlMain.SelectedIndex == 4)
+                        {
+                            if (buttonReadHoldingTemplate.IsEnabled)
+                                buttonReadHoldingTemplate_Click(sender, e);
+                        }
+
+                        break;
+
                     // Carica profilo
                     case Key.O:
                         caricaConfigurazioneDaDatabaseToolStripMenuItem_Click(sender, e);
@@ -5030,7 +5338,8 @@ namespace ModBus_Client
 
                     // DB Manager
                     case Key.D:
-                        gestisciDatabaseToolStripMenuItem_Click(sender, e);
+                        if(gestisciDatabaseToolStripMenuItem.IsEnabled)
+                            gestisciDatabaseToolStripMenuItem_Click(sender, e);
                         break;
                         
                     // Info
@@ -5471,7 +5780,7 @@ namespace ModBus_Client
 
                 saveFileDialogBox.DefaultExt = "csv";
                 saveFileDialogBox.AddExtension = false;
-                saveFileDialogBox.FileName = "" + defaultPathToConfiguration + "_InputRegisters";
+                saveFileDialogBox.FileName = "" + defaultPathToConfiguration + "_Inputs";
                 saveFileDialogBox.Filter = "CSV|*.csv|JSON|*.json";
                 saveFileDialogBox.Title = title;
 
@@ -5561,7 +5870,7 @@ namespace ModBus_Client
 
                 saveFileDialogBox.DefaultExt = "csv";
                 saveFileDialogBox.AddExtension = false;
-                saveFileDialogBox.FileName = "" + defaultPathToConfiguration + "_InputRegisters";
+                saveFileDialogBox.FileName = "" + defaultPathToConfiguration + "_Coils";
                 saveFileDialogBox.Filter = "CSV|*.csv|JSON|*.json";
                 saveFileDialogBox.Title = title;
 
@@ -5893,7 +6202,7 @@ namespace ModBus_Client
 
             if (alert)
             {
-                MessageBox.Show(lang.languageTemplate["strings"]["infoSaveConfig"], "Info", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show(lang.languageTemplate["strings"]["infoSaveConfig"], "Info", MessageBoxButton.OK, MessageBoxImage.None);
             }
         }
 
@@ -6332,6 +6641,24 @@ namespace ModBus_Client
                         list_template_holdingRegistersTable.Add(template.dataGridViewHolding[i]);
                     }
                 }
+
+                // Tabella groups
+                if (template.Groups != null)
+                {
+                    comboBoxHoldingGroup.Items.Clear();
+                    comboBoxInputRegisterGroup.Items.Clear();
+                    comboBoxInputGroup.Items.Clear();
+                    comboBoxCoilsGroup.Items.Clear();
+
+                    for (int i = 0; i < template.Groups.Count(); i++)
+                    {
+                        KeyValuePair<Group_Item, String> kp = new KeyValuePair<Group_Item, String>(template.Groups[i], template.Groups[i].Group + " - " + template.Groups[i].Label);
+                        comboBoxHoldingGroup.Items.Add(kp);
+                        comboBoxInputRegisterGroup.Items.Add(kp);
+                        comboBoxInputGroup.Items.Add(kp);
+                        comboBoxCoilsGroup.Items.Add(kp);
+                    }
+                }
             }
             catch (Exception err)
             {
@@ -6393,6 +6720,7 @@ namespace ModBus_Client
             buttonWriteCoils05.IsEnabled = enabled;
             buttonWriteCoils05_B.IsEnabled = enabled;
             buttonWriteCoils15.IsEnabled = enabled;
+            buttonImportCoils.IsEnabled = enabled;
 
             buttonReadInput02.IsEnabled = enabled;
             buttonLoopInput02.IsEnabled = enabled;
@@ -6411,6 +6739,16 @@ namespace ModBus_Client
             buttonWriteHolding06.IsEnabled = enabled;
             buttonWriteHolding06_b.IsEnabled = enabled;
             buttonWriteHolding16.IsEnabled = enabled;
+            buttonImportHoldingReg.IsEnabled = enabled;
+
+            buttonReadHoldingTemplateGroup.IsEnabled = enabled;
+            buttonReadHoldingTemplate.IsEnabled = enabled;
+            buttonReadInputRegisterTemplateGroup.IsEnabled = enabled;
+            buttonReadInputRegisterTemplate.IsEnabled = enabled;
+            buttonReadInputTemplateGroup.IsEnabled = enabled;
+            buttonReadInputTemplate.IsEnabled = enabled;
+            buttonReadCoilsTemplateGroup.IsEnabled = enabled;
+            buttonReadCoilsTemplate.IsEnabled = enabled;
 
             buttonSendDiagnosticQuery.IsEnabled = enabled;
             buttonSendManualDiagnosticQuery.IsEnabled = enabled;
@@ -7136,6 +7474,898 @@ namespace ModBus_Client
             labelColorCellError.Background = colorErrorCell_Dark;
 
             CheckBoxDarkMode.IsChecked = true;
+        }
+
+        private void buttonImportCoils_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.DefaultExt = ".txt";
+            openFileDialog.AddExtension = false;
+            openFileDialog.Filter = "CSV|*.csv|JSON|*.json";
+            openFileDialog.Title = lang.languageTemplate["strings"]["openFileCoils"];
+            openFileDialog.ShowDialog();
+
+            if (openFileDialog.FileName != "")
+            {
+                if(File.Exists(openFileDialog.FileName))
+                {
+                    PreviewImport previewImport = new PreviewImport(this, openFileDialog.FileName, 5);
+                    previewImport.ShowDialog();
+                }
+            }
+
+            // TODO
+        }
+
+        private void buttonImportHoldingReg_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.DefaultExt = ".txt";
+            openFileDialog.AddExtension = false;
+            openFileDialog.Filter = "CSV|*.csv|JSON|*.json";
+            openFileDialog.Title = lang.languageTemplate["strings"]["openFileCoils"];
+            openFileDialog.ShowDialog();
+
+            if (openFileDialog.FileName != "")
+            {
+                if (File.Exists(openFileDialog.FileName))
+                {
+                    PreviewImport previewImport = new PreviewImport(this, openFileDialog.FileName, 6);
+                    previewImport.ShowDialog();
+                }
+            }
+        }
+
+        private void buttonReadHoldingTemplate_Click(object sender, RoutedEventArgs e)
+        {
+            buttonReadHoldingTemplate.IsEnabled = false;
+
+            Thread t = new Thread(new ThreadStart(readHoldingTemplateAll));
+            t.Priority = threadPriority;
+            t.Start();
+        }
+
+        public void readHoldingTemplateAll()
+        {
+            try
+            {
+                this.Dispatcher.Invoke((Action)delegate
+                {
+                    list_holdingRegistersTable.Clear();
+                });
+
+                foreach (ModBus_Item item in list_template_holdingRegistersTable.OrderBy(x => x.RegisterUInt))
+                {
+                    try
+                    {
+                        if (item == null)
+                            continue;
+
+                        uint address_start = (uint)(item.RegisterUInt + template_HoldingOffset - P.uint_parser(textBoxHoldingOffset_, comboBoxHoldingOffset_));
+                        uint num_regs = 1;
+
+                        if (item.Mappings != null)
+                        {
+                            if (item.Mappings.ToLower().IndexOf("32") != -1 || item.Mappings.ToLower().IndexOf("float") != -1)
+                                num_regs = 2;
+
+                            if (item.Mappings.ToLower().IndexOf("64") != -1 || item.Mappings.ToLower().IndexOf("double") != -1)
+                                num_regs = 4;
+
+                            if (item.Mappings.ToLower().IndexOf("String") != -1)
+                                num_regs = uint.Parse(item.Mappings.Split(';')[0].Replace("String(", ""));
+
+                            if (item.Mappings.IndexOf("+") == -1)
+                                address_start = address_start - num_regs + 1;
+                        }
+
+                        UInt16[] response = ModBus.readHoldingRegister_03(
+                            byte.Parse(textBoxModbusAddress_),
+                            address_start,
+                            num_regs,
+                            readTimeout);
+
+                        if (response != null)
+                        {
+                            if (response.Length > 0)
+                            {
+                                // Cancello la tabella e inserisco le nuove righe
+                                insertRowsTable(
+                                    list_holdingRegistersTable,
+                                    list_template_holdingRegistersTable,
+                                    template_HoldingOffset,
+                                    P.uint_parser(textBoxHoldingOffset_, comboBoxHoldingOffset_),
+                                    address_start,
+                                    response,
+                                    colorDefaultReadCellStr,
+                                    comboBoxHoldingRegistri_,
+                                    comboBoxHoldingValori_,
+                                    false);
+                            }
+                        }
+                    }
+                    catch (ModbusException err)
+                    {
+                        if (err.Message.IndexOf("Timed out") != -1)
+                        {
+                            SetTableTimeoutError(list_holdingRegistersTable, false);
+                        }
+                        if (err.Message.IndexOf("ModBus ErrCode") != -1)
+                        {
+                            SetTableModBusError(list_holdingRegistersTable, err, false);
+                        }
+                        if (err.Message.IndexOf("CRC Error") != -1)
+                        {
+                            SetTableCrcError(list_holdingRegistersTable, false);
+                        }
+
+                        Console.WriteLine(err);
+                    }
+                }
+            }
+            catch (Exception err)
+            {
+                SetTableInternalError(list_holdingRegistersTable, false);
+                Console.WriteLine(err);
+            }
+
+            this.Dispatcher.Invoke((Action)delegate
+            {
+                buttonReadHoldingTemplate.IsEnabled = true;
+
+                dataGridViewHolding.ItemsSource = null;
+                dataGridViewHolding.ItemsSource = list_holdingRegistersTable;
+            });
+        }
+
+        private void buttonReadHoldingTemplateGroup_Click(object sender, RoutedEventArgs e)
+        {
+            buttonReadHoldingTemplateGroup.IsEnabled = false;
+
+            Thread t = new Thread(new ThreadStart(readHoldingTemplateGroup));
+            t.Priority = threadPriority;
+            t.Start();
+        }
+
+        public void readHoldingTemplateGroup()
+        {
+            try
+            {
+                this.Dispatcher.Invoke((Action)delegate
+                {
+                    list_holdingRegistersTable.Clear();
+                });
+
+                foreach (ModBus_Item item in list_template_holdingRegistersTable.OrderBy(x => x.RegisterUInt))
+                {
+                    try
+                    {
+                        if (item == null)
+                            continue;
+
+                        if (item.Group == null && (comboBoxHoldingGroup_.Length > 1))
+                            continue;
+
+                        if (item.Group == null && (comboBoxHoldingGroup_.Length > 0))
+                        {
+                            if (int.Parse(comboBoxHoldingGroup_) != 0)
+                                continue;
+                        }
+
+                        if (item.Group != null)
+                        {
+                            if (int.Parse(item.Group) != int.Parse(comboBoxHoldingGroup_))
+                                continue;
+                        }
+
+                        uint address_start = (uint)(item.RegisterUInt + template_HoldingOffset - P.uint_parser(textBoxHoldingOffset_, comboBoxHoldingOffset_));
+                        uint num_regs = 1;
+
+                        if (item.Mappings != null)
+                        {
+                            if (item.Mappings.ToLower().IndexOf("32") != -1 || item.Mappings.ToLower().IndexOf("float") != -1)
+                                num_regs = 2;
+
+                            if (item.Mappings.ToLower().IndexOf("64") != -1 || item.Mappings.ToLower().IndexOf("double") != -1)
+                                num_regs = 4;
+
+                            if (item.Mappings.ToLower().IndexOf("String") != -1)
+                                num_regs = uint.Parse(item.Mappings.Split(';')[0].Replace("String(", ""));
+
+                            if (item.Mappings.IndexOf("+") == -1)
+                                address_start = address_start - num_regs + 1;
+                        }
+
+                        UInt16[] response = ModBus.readHoldingRegister_03(
+                            byte.Parse(textBoxModbusAddress_),
+                            address_start,
+                            num_regs,
+                            readTimeout);
+
+                        if (response != null)
+                        {
+                            if (response.Length > 0)
+                            {
+                                // Cancello la tabella e inserisco le nuove righe
+                                insertRowsTable(
+                                    list_holdingRegistersTable,
+                                    list_template_holdingRegistersTable,
+                                    template_HoldingOffset,
+                                    P.uint_parser(textBoxHoldingOffset_, comboBoxHoldingOffset_),
+                                    address_start,
+                                    response,
+                                    colorDefaultReadCellStr,
+                                    comboBoxHoldingRegistri_,
+                                    comboBoxHoldingValori_,
+                                    false);
+                            }
+                        }
+                    }
+                    catch (ModbusException err)
+                    {
+                        if (err.Message.IndexOf("Timed out") != -1)
+                        {
+                            SetTableTimeoutError(list_holdingRegistersTable, false);
+                        }
+                        if (err.Message.IndexOf("ModBus ErrCode") != -1)
+                        {
+                            SetTableModBusError(list_holdingRegistersTable, err, false);
+                        }
+                        if (err.Message.IndexOf("CRC Error") != -1)
+                        {
+                            SetTableCrcError(list_holdingRegistersTable, false);
+                        }
+
+                        Console.WriteLine(err);
+                    }
+                }
+            }
+            catch (Exception err)
+            {
+                SetTableInternalError(list_holdingRegistersTable, false);
+                Console.WriteLine(err);
+            }
+
+            this.Dispatcher.Invoke((Action)delegate
+            {
+                buttonReadHoldingTemplateGroup.IsEnabled = true;
+
+                dataGridViewHolding.ItemsSource = null;
+                dataGridViewHolding.ItemsSource = list_holdingRegistersTable;
+            });
+        }
+
+        private void comboBoxHoldingGroup_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (comboBoxHoldingGroup.SelectedItem != null)
+            {
+                KeyValuePair<Group_Item, String> kp = (KeyValuePair<Group_Item, String>)comboBoxHoldingGroup.SelectedItem;
+                comboBoxHoldingGroup_ = kp.Key.Group;
+            }
+        }
+
+        private void buttonReadInputRegisterTemplate_Click(object sender, RoutedEventArgs e)
+        {
+            buttonReadInputRegisterTemplate.IsEnabled = false;
+
+            Thread t = new Thread(new ThreadStart(readInputRegisterTemplateAll));
+            t.Priority = threadPriority;
+            t.Start();
+        }
+
+        public void readInputRegisterTemplateAll()
+        {
+            try
+            {
+                this.Dispatcher.Invoke((Action)delegate
+                {
+                    list_inputRegistersTable.Clear();
+                });
+
+                foreach (ModBus_Item item in list_template_inputRegistersTable.OrderBy(x => x.RegisterUInt))
+                {
+                    try
+                    {
+                        if (item == null)
+                            continue;
+
+                        uint address_start = (uint)(item.RegisterUInt + template_inputRegistersOffset - P.uint_parser(textBoxInputRegOffset_, comboBoxInputRegOffset_));
+                        uint num_regs = 1;
+
+                        if (item.Mappings != null)
+                        {
+                            if (item.Mappings.ToLower().IndexOf("32") != -1 || item.Mappings.ToLower().IndexOf("float") != -1)
+                                num_regs = 2;
+
+                            if (item.Mappings.ToLower().IndexOf("64") != -1 || item.Mappings.ToLower().IndexOf("double") != -1)
+                                num_regs = 4;
+
+                            if (item.Mappings.ToLower().IndexOf("String") != -1)
+                                num_regs = uint.Parse(item.Mappings.Split(';')[0].Replace("String(", ""));
+
+                            if (item.Mappings.IndexOf("+") == -1)
+                                address_start = address_start - num_regs + 1;
+                        }
+
+                        UInt16[] response = ModBus.readInputRegister_04(
+                            byte.Parse(textBoxModbusAddress_),
+                            address_start,
+                            num_regs,
+                            readTimeout);
+
+                        if (response != null)
+                        {
+                            if (response.Length > 0)
+                            {
+                                // Cancello la tabella e inserisco le nuove righe
+                                insertRowsTable(
+                                    list_inputRegistersTable,
+                                    list_template_inputRegistersTable,
+                                    template_inputRegistersOffset,
+                                    P.uint_parser(textBoxInputRegOffset_, comboBoxInputRegOffset_),
+                                    address_start,
+                                    response,
+                                    colorDefaultReadCellStr,
+                                    comboBoxHoldingRegistri_,
+                                    comboBoxHoldingValori_,
+                                    false);
+                            }
+                        }
+                    }
+                    catch (ModbusException err)
+                    {
+                        if (err.Message.IndexOf("Timed out") != -1)
+                        {
+                            SetTableTimeoutError(list_inputRegistersTable, false);
+                        }
+                        if (err.Message.IndexOf("ModBus ErrCode") != -1)
+                        {
+                            SetTableModBusError(list_inputRegistersTable, err, false);
+                        }
+                        if (err.Message.IndexOf("CRC Error") != -1)
+                        {
+                            SetTableCrcError(list_inputRegistersTable, false);
+                        }
+
+                        Console.WriteLine(err);
+                    }
+                }
+            }
+            catch (Exception err)
+            {
+                SetTableInternalError(list_inputRegistersTable, false);
+                Console.WriteLine(err);
+            }
+
+            this.Dispatcher.Invoke((Action)delegate
+            {
+                buttonReadInputRegisterTemplate.IsEnabled = true;
+
+                dataGridViewInputRegister.ItemsSource = null;
+                dataGridViewInputRegister.ItemsSource = list_inputRegistersTable;
+            });
+        }
+
+        private void buttonReadInputRegisterTemplateGroup_Click(object sender, RoutedEventArgs e)
+        {
+            buttonReadInputRegisterTemplateGroup.IsEnabled = false;
+
+            Thread t = new Thread(new ThreadStart(readInputRegisterTemplateGroup));
+            t.Priority = threadPriority;
+            t.Start();
+        }
+
+        public void readInputRegisterTemplateGroup()
+        {
+            try
+            {
+                this.Dispatcher.Invoke((Action)delegate
+                {
+                    list_inputRegistersTable.Clear();
+                });
+
+                foreach (ModBus_Item item in list_template_inputRegistersTable.OrderBy(x => x.RegisterUInt))
+                {
+                    try
+                    {
+                        if (item == null)
+                            continue;
+
+                        if (item.Group == null && (comboBoxInputRegisterGroup_.Length > 1))
+                            continue;
+
+                        if (item.Group == null && (comboBoxInputRegisterGroup_.Length > 0))
+                        {
+                            if (int.Parse(comboBoxInputRegisterGroup_) != 0)
+                                continue;
+                        }
+
+                        if (item.Group != null)
+                        {
+                            if (int.Parse(item.Group) != int.Parse(comboBoxInputRegisterGroup_))
+                                continue;
+                        }
+
+                        uint address_start = (uint)(item.RegisterUInt + template_inputRegistersOffset - P.uint_parser(textBoxInputRegOffset_, comboBoxInputRegOffset_));
+                        uint num_regs = 1;
+
+                        if (item.Mappings != null)
+                        {
+                            if (item.Mappings.ToLower().IndexOf("32") != -1 || item.Mappings.ToLower().IndexOf("float") != -1)
+                                num_regs = 2;
+
+                            if (item.Mappings.ToLower().IndexOf("64") != -1 || item.Mappings.ToLower().IndexOf("double") != -1)
+                                num_regs = 4;
+
+                            if (item.Mappings.ToLower().IndexOf("String") != -1)
+                                num_regs = uint.Parse(item.Mappings.Split(';')[0].Replace("String(", ""));
+
+                            if (item.Mappings.IndexOf("+") == -1)
+                                address_start = address_start - num_regs + 1;
+                        }
+
+                        UInt16[] response = ModBus.readInputRegister_04(
+                            byte.Parse(textBoxModbusAddress_),
+                            address_start,
+                            num_regs,
+                            readTimeout);
+
+                        if (response != null)
+                        {
+                            if (response.Length > 0)
+                            {
+                                // Cancello la tabella e inserisco le nuove righe
+                                insertRowsTable(
+                                    list_inputRegistersTable,
+                                    list_template_inputRegistersTable,
+                                    template_inputRegistersOffset,
+                                    P.uint_parser(textBoxInputRegOffset_, comboBoxInputRegOffset_),
+                                    address_start,
+                                    response,
+                                    colorDefaultReadCellStr,
+                                    comboBoxHoldingRegistri_,
+                                    comboBoxHoldingValori_,
+                                    false);
+                            }
+                        }
+                    }
+                    catch (ModbusException err)
+                    {
+                        if (err.Message.IndexOf("Timed out") != -1)
+                        {
+                            SetTableTimeoutError(list_inputRegistersTable, false);
+                        }
+                        if (err.Message.IndexOf("ModBus ErrCode") != -1)
+                        {
+                            SetTableModBusError(list_inputRegistersTable, err, false);
+                        }
+                        if (err.Message.IndexOf("CRC Error") != -1)
+                        {
+                            SetTableCrcError(list_inputRegistersTable, false);
+                        }
+
+                        Console.WriteLine(err);
+                    }
+                }
+            }
+            catch (Exception err)
+            {
+                SetTableInternalError(list_holdingRegistersTable, false);
+                Console.WriteLine(err);
+            }
+
+            this.Dispatcher.Invoke((Action)delegate
+            {
+                buttonReadInputRegisterTemplateGroup.IsEnabled = true;
+
+                dataGridViewInputRegister.ItemsSource = null;
+                dataGridViewInputRegister.ItemsSource = list_inputRegistersTable;
+            });
+        }
+
+        private void comboBoxInputRegisterGroup_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (comboBoxInputRegisterGroup.SelectedItem != null)
+            {
+                KeyValuePair<Group_Item, String> kp = (KeyValuePair<Group_Item, String>)comboBoxInputRegisterGroup.SelectedItem;
+                comboBoxInputRegisterGroup_ = kp.Key.Group;
+            }
+        }
+
+        private void buttonReadInputTemplate_Click(object sender, RoutedEventArgs e)
+        {
+            buttonReadInputTemplate.IsEnabled = false;
+
+            Thread t = new Thread(new ThreadStart(readInputTemplateAll));
+            t.Priority = threadPriority;
+            t.Start();
+        }
+
+        public void readInputTemplateAll()
+        {
+            try
+            {
+                this.Dispatcher.Invoke((Action)delegate
+                {
+                    list_inputsTable.Clear();
+                });
+
+                foreach (ModBus_Item item in list_template_inputsTable.OrderBy(x => x.RegisterUInt))
+                {
+                    try
+                    {
+                        if (item == null)
+                            continue;
+
+                        uint address_start = (uint)(item.RegisterUInt + template_inputsOffset - P.uint_parser(textBoxInputOffset_, comboBoxInputOffset_));
+                        uint num_regs = 1;
+
+                        UInt16[] response = ModBus.readInputStatus_02(
+                            byte.Parse(textBoxModbusAddress_),
+                            address_start,
+                            num_regs,
+                            readTimeout);
+
+                        if (response != null)
+                        {
+                            if (response.Length > 0)
+                            {
+                                // Cancello la tabella e inserisco le nuove righe
+                                insertRowsTable(
+                                    list_inputsTable,
+                                    list_template_inputsTable,
+                                    template_inputsOffset,
+                                    P.uint_parser(textBoxInputOffset_, comboBoxInputOffset_),
+                                    address_start,
+                                    response,
+                                    colorDefaultReadCellStr,
+                                    comboBoxHoldingRegistri_,
+                                    comboBoxHoldingValori_,
+                                    false);
+                            }
+                        }
+                    }
+                    catch (ModbusException err)
+                    {
+                        if (err.Message.IndexOf("Timed out") != -1)
+                        {
+                            SetTableTimeoutError(list_inputsTable, false);
+                        }
+                        if (err.Message.IndexOf("ModBus ErrCode") != -1)
+                        {
+                            SetTableModBusError(list_inputsTable, err, false);
+                        }
+                        if (err.Message.IndexOf("CRC Error") != -1)
+                        {
+                            SetTableCrcError(list_inputsTable, false);
+                        }
+
+                        Console.WriteLine(err);
+                    }
+                }
+            }
+            catch (Exception err)
+            {
+                SetTableInternalError(list_inputRegistersTable, false);
+                Console.WriteLine(err);
+            }
+
+            this.Dispatcher.Invoke((Action)delegate
+            {
+                buttonReadInputTemplate.IsEnabled = true;
+
+                dataGridViewInput.ItemsSource = null;
+                dataGridViewInput.ItemsSource = list_inputsTable;
+            });
+        }
+
+        private void buttonReadInputTemplateGroup_Click(object sender, RoutedEventArgs e)
+        {
+            buttonReadInputTemplateGroup.IsEnabled = false;
+
+            Thread t = new Thread(new ThreadStart(readInputTemplateGroup));
+            t.Priority = threadPriority;
+            t.Start();
+        }
+
+        public void readInputTemplateGroup()
+        {
+            try
+            {
+                this.Dispatcher.Invoke((Action)delegate
+                {
+                    list_inputsTable.Clear();
+                });
+
+                foreach (ModBus_Item item in list_template_inputsTable.OrderBy(x => x.RegisterUInt))
+                {
+                    try
+                    {
+                        if (item == null)
+                            continue;
+
+                        if (item.Group == null && (comboBoxInputGroup_.Length > 1))
+                            continue;
+
+                        if (item.Group == null && (comboBoxInputGroup_.Length > 0))
+                        {
+                            if (int.Parse(comboBoxInputGroup_) != 0)
+                                continue;
+                        }
+
+                        if (item.Group != null)
+                        {
+                            if (int.Parse(item.Group) != int.Parse(comboBoxInputGroup_))
+                                continue;
+                        }
+
+                        uint address_start = (uint)(item.RegisterUInt + template_inputsOffset - P.uint_parser(textBoxInputOffset_, comboBoxInputOffset_));
+                        uint num_regs = 1;
+
+                        UInt16[] response = ModBus.readInputStatus_02(
+                            byte.Parse(textBoxModbusAddress_),
+                            address_start,
+                            num_regs,
+                            readTimeout);
+
+                        if (response != null)
+                        {
+                            if (response.Length > 0)
+                            {
+                                // Cancello la tabella e inserisco le nuove righe
+                                insertRowsTable(
+                                    list_inputsTable,
+                                    list_template_inputsTable,
+                                    template_inputsOffset,
+                                    P.uint_parser(textBoxInputOffset_, comboBoxInputOffset_),
+                                    address_start,
+                                    response,
+                                    colorDefaultReadCellStr,
+                                    comboBoxHoldingRegistri_,
+                                    comboBoxHoldingValori_,
+                                    false);
+                            }
+                        }
+                    }
+                    catch (ModbusException err)
+                    {
+                        if (err.Message.IndexOf("Timed out") != -1)
+                        {
+                            SetTableTimeoutError(list_inputsTable, false);
+                        }
+                        if (err.Message.IndexOf("ModBus ErrCode") != -1)
+                        {
+                            SetTableModBusError(list_inputsTable, err, false);
+                        }
+                        if (err.Message.IndexOf("CRC Error") != -1)
+                        {
+                            SetTableCrcError(list_inputsTable, false);
+                        }
+
+                        Console.WriteLine(err);
+                    }
+                }
+            }
+            catch (Exception err)
+            {
+                SetTableInternalError(list_inputsTable, false);
+                Console.WriteLine(err);
+            }
+
+            this.Dispatcher.Invoke((Action)delegate
+            {
+                buttonReadInputTemplateGroup.IsEnabled = true;
+
+                dataGridViewInput.ItemsSource = null;
+                dataGridViewInput.ItemsSource = list_inputsTable;
+            });
+        }
+
+        private void comboBoxInputGroup_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (comboBoxInputGroup.SelectedItem != null)
+            {
+                KeyValuePair<Group_Item, String> kp = (KeyValuePair<Group_Item, String>)comboBoxInputGroup.SelectedItem;
+                comboBoxInputGroup_ = kp.Key.Group;
+            }
+        }
+
+        private void buttonReadCoilsTemplate_Click(object sender, RoutedEventArgs e)
+        {
+            buttonReadCoilsTemplate.IsEnabled = false;
+
+            Thread t = new Thread(new ThreadStart(readCoilsTemplateAll));
+            t.Priority = threadPriority;
+            t.Start();
+        }
+
+        public void readCoilsTemplateAll()
+        {
+            try
+            {
+                this.Dispatcher.Invoke((Action)delegate
+                {
+                    list_coilsTable.Clear();
+                });
+
+                foreach (ModBus_Item item in list_template_coilsTable.OrderBy(x => x.RegisterUInt))
+                {
+                    try
+                    {
+                        if (item == null)
+                            continue;
+
+                        uint address_start = (uint)(item.RegisterUInt + template_coilsOffset - P.uint_parser(textBoxCoilsOffset_, comboBoxCoilsOffset_));
+                        uint num_regs = 1;
+
+                        UInt16[] response = ModBus.readCoilStatus_01(
+                            byte.Parse(textBoxModbusAddress_),
+                            address_start,
+                            num_regs,
+                            readTimeout);
+
+                        if (response != null)
+                        {
+                            if (response.Length > 0)
+                            {
+                                // Cancello la tabella e inserisco le nuove righe
+                                insertRowsTable(
+                                    list_coilsTable,
+                                    list_template_coilsTable,
+                                    template_coilsOffset,
+                                    P.uint_parser(textBoxCoilsOffset_, comboBoxCoilsOffset_),
+                                    address_start,
+                                    response,
+                                    colorDefaultReadCellStr,
+                                    comboBoxHoldingRegistri_,
+                                    comboBoxHoldingValori_,
+                                    false);
+                            }
+                        }
+                    }
+                    catch (ModbusException err)
+                    {
+                        if (err.Message.IndexOf("Timed out") != -1)
+                        {
+                            SetTableTimeoutError(list_coilsTable, false);
+                        }
+                        if (err.Message.IndexOf("ModBus ErrCode") != -1)
+                        {
+                            SetTableModBusError(list_coilsTable, err, false);
+                        }
+                        if (err.Message.IndexOf("CRC Error") != -1)
+                        {
+                            SetTableCrcError(list_coilsTable, false);
+                        }
+
+                        Console.WriteLine(err);
+                    }
+                }
+            }
+            catch (Exception err)
+            {
+                SetTableInternalError(list_coilsTable, false);
+                Console.WriteLine(err);
+            }
+
+            this.Dispatcher.Invoke((Action)delegate
+            {
+                buttonReadCoilsTemplate.IsEnabled = true;
+
+                dataGridViewCoils.ItemsSource = null;
+                dataGridViewCoils.ItemsSource = list_coilsTable;
+            });
+        }
+
+        private void buttonReadCoilsTemplateGroup_Click(object sender, RoutedEventArgs e)
+        {
+            buttonReadCoilsTemplateGroup.IsEnabled = false;
+
+            Thread t = new Thread(new ThreadStart(readCoilsTemplateGroup));
+            t.Priority = threadPriority;
+            t.Start();
+        }
+
+        public void readCoilsTemplateGroup()
+        {
+            try
+            {
+                this.Dispatcher.Invoke((Action)delegate
+                {
+                    list_coilsTable.Clear();
+                });
+
+                foreach (ModBus_Item item in list_template_coilsTable.OrderBy(x => x.RegisterUInt))
+                {
+                    try
+                    {
+                        if (item == null)
+                            continue;
+
+                        if (item.Group == null && (comboBoxCoilsGroup_.Length > 1))
+                            continue;
+
+                        if (item.Group == null && (comboBoxCoilsGroup_.Length > 0))
+                        {
+                            if (int.Parse(comboBoxCoilsGroup_) != 0)
+                                continue;
+                        }
+
+                        if (item.Group != null)
+                        {
+                            if (int.Parse(item.Group) != int.Parse(comboBoxCoilsGroup_))
+                                continue;
+                        }
+
+                        uint address_start = (uint)(item.RegisterUInt + template_coilsOffset - P.uint_parser(textBoxCoilsOffset_, comboBoxCoilsOffset_));
+                        uint num_regs = 1;
+
+                        UInt16[] response = ModBus.readCoilStatus_01(
+                            byte.Parse(textBoxModbusAddress_),
+                            address_start,
+                            num_regs,
+                            readTimeout);
+
+                        if (response != null)
+                        {
+                            if (response.Length > 0)
+                            {
+                                // Cancello la tabella e inserisco le nuove righe
+                                insertRowsTable(
+                                    list_coilsTable,
+                                    list_template_coilsTable,
+                                    template_coilsOffset,
+                                    P.uint_parser(textBoxCoilsOffset_, comboBoxCoilsOffset_),
+                                    address_start,
+                                    response,
+                                    colorDefaultReadCellStr,
+                                    comboBoxHoldingRegistri_,
+                                    comboBoxHoldingValori_,
+                                    false);
+                            }
+                        }
+                    }
+                    catch (ModbusException err)
+                    {
+                        if (err.Message.IndexOf("Timed out") != -1)
+                        {
+                            SetTableTimeoutError(list_coilsTable, false);
+                        }
+                        if (err.Message.IndexOf("ModBus ErrCode") != -1)
+                        {
+                            SetTableModBusError(list_coilsTable, err, false);
+                        }
+                        if (err.Message.IndexOf("CRC Error") != -1)
+                        {
+                            SetTableCrcError(list_coilsTable, false);
+                        }
+
+                        Console.WriteLine(err);
+                    }
+                }
+            }
+            catch (Exception err)
+            {
+                SetTableInternalError(list_coilsTable, false);
+                Console.WriteLine(err);
+            }
+
+            this.Dispatcher.Invoke((Action)delegate
+            {
+                buttonReadCoilsTemplateGroup.IsEnabled = true;
+
+                dataGridViewCoils.ItemsSource = null;
+                dataGridViewCoils.ItemsSource = list_coilsTable;
+            });
+        }
+
+        private void comboBoxCoilsGroup_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (comboBoxCoilsGroup.SelectedItem != null)
+            {
+                KeyValuePair<Group_Item, String> kp = (KeyValuePair<Group_Item, String>)comboBoxCoilsGroup.SelectedItem;
+                comboBoxCoilsGroup_ = kp.Key.Group;
+            }
         }
     }
 

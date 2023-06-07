@@ -1,4 +1,34 @@
-﻿using System;
+﻿
+
+// -------------------------------------------------------------------------------------------
+
+// Copyright (c) 2023 Federico Turco
+
+// Permission is hereby granted, free of charge, to any person
+// obtaining a copy of this software and associated documentation
+// files (the "Software"), to deal in the Software without
+// restriction, including without limitation the rights to use,
+// copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the
+// Software is furnished to do so, subject to the following
+// conditions:
+
+// The above copyright notice and this permission notice shall be
+// included in all copies or substantial portions of the Software.
+
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+// EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+// OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+// NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+// WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+// FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+// OTHER DEALINGS IN THE SOFTWARE.
+
+// -------------------------------------------------------------------------------------------
+
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -105,6 +135,10 @@ namespace ModBus_Client
 
             if ((bool)window.ShowDialog())
             {
+                // Se il file lo esiste gia' lo elimino
+                if (File.Exists(window.FileName))
+                    File.Delete(window.FileName);
+
                 ZipFile.CreateFromDirectory("Json\\" + currItem.name, window.FileName);
             }
         }
@@ -118,6 +152,18 @@ namespace ModBus_Client
 
             if ((bool)window.ShowDialog())
             {
+                if(Directory.Exists(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "\\Json\\" + System.IO.Path.GetFileNameWithoutExtension(window.FileName)))
+                {
+                    if(MessageBox.Show(lang.languageTemplate["strings"]["overwriteProfile"], "Info", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+                    {
+                        Directory.Delete(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "\\Json\\" + System.IO.Path.GetFileNameWithoutExtension(window.FileName), true);
+                    }
+                    else
+                    {
+                        return;
+                    }
+                }
+
                 ZipFile.ExtractToDirectory(window.FileName, System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "\\Json\\" + System.IO.Path.GetFileNameWithoutExtension(window.FileName));
             }
 
@@ -137,12 +183,14 @@ namespace ModBus_Client
 
                     ButtonExportZip.IsEnabled = true;
                     //ButtonImportZip.IsEnabled = true;
+                    ButtonDeleteProfile.IsEnabled = true;
                 }
             }
             catch
             {
                 ButtonExportZip.IsEnabled = false;
                 //ButtonImportZip.IsEnabled = false;
+                ButtonDeleteProfile.IsEnabled = false;
             }
         }
 
@@ -166,6 +214,41 @@ namespace ModBus_Client
 
                 // debug
                 Console.WriteLine("Selected: {0}", selected.name);
+            }
+        }
+
+        private void ButtonDeleteProfile_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (DataGridDb.SelectedItem != null)
+                {
+                    profile selected = (profile)DataGridDb.SelectedItem;
+
+                    labelProfileSelected.Content = labelProfileSelected.Content.ToString().Split(':')[0] + ": " + selected.name;
+                    labelProfileSelected.Visibility = Visibility.Visible;
+
+                    if (Directory.Exists(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "\\Json\\" + selected.name))
+                    {
+                        if (MessageBox.Show(lang.languageTemplate["strings"]["deleteProfile"], "Info", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+                        {
+                            Directory.Delete(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "\\Json\\" + selected.name, true);
+
+                            ButtonExportZip.IsEnabled = false;
+                            ButtonDeleteProfile.IsEnabled = false;
+
+                            LoadDb();
+                        }
+                        else
+                        {
+                            return;
+                        }
+                    }
+                }
+            }
+            catch
+            {
+                ButtonDeleteProfile.IsEnabled = false;
             }
         }
     }

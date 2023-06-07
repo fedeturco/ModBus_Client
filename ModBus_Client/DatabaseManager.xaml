@@ -5,11 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ModBus_Client"
         mc:Ignorable="d"
-        Title="DatabaseManager" Height="436.423" Width="368.127" Loaded="Window_Loaded" KeyUp="Window_KeyUp" Closing="Window_Closing">
+        Title="DatabaseManager" Height="436.423" Width="417.127" Loaded="Window_Loaded" KeyUp="Window_KeyUp" Closing="Window_Closing">
     <Grid>
         <DataGrid x:Name="DataGridDb" Margin="10,5,10,72" SelectionMode="Single" AutoGenerateColumns="False" Width="Auto" SelectedCellsChanged="DataGridDb_SelectedCellsChanged" IsReadOnly="True" FontSize="14">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Profile" Binding="{Binding name}" Width="300"/>
+                <DataGridTextColumn Header="Profile" Binding="{Binding name}" Width="400"/>
             </DataGrid.Columns>
         </DataGrid>
         <Button x:Name="ButtonExportZip" Content="Export .zip" Margin="0,0,10.429,10" Click="ButtonExportZip_Click" Height="25" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="75" IsEnabled="False"/>
@@ -17,6 +17,7 @@
         <Button x:Name="buttonOpenFileLocation" Content="Open directory" HorizontalAlignment="Left" Margin="10,0,0,10" Width="104" Click="ButtonOpenFileLocation_Click" Height="25" VerticalAlignment="Bottom"/>
         <Button x:Name="ButtonRefresh" Content="Refresh" HorizontalAlignment="Left" Margin="119,0,0,10" Width="75" Click="ButtonRefresh_Click" Height="21" VerticalAlignment="Bottom" Visibility="Hidden"/>
         <Label x:Name="labelProfileSelected" Content="Profile" HorizontalAlignment="Left" Margin="10,0,0,35" Height="32" VerticalAlignment="Bottom" Visibility="Visible" FontSize="14"/>
+        <Button x:Name="ButtonDeleteProfile" Content="Delete" Margin="0,0,170,10" Height="25" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="71" IsEnabled="False" Click="ButtonDeleteProfile_Click"/>
 
     </Grid>
 </Window>

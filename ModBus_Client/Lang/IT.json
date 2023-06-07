@@ -14,7 +14,7 @@
     "labelIp": "Ip:",
     "labelPort1": "Porta:",
     "labelCoils_0": "Registri:",
-    "labelCoils_1": "Offset",
+    "labelCoils_1": "Offset:",
     "labelCoils_2": "Read Coil Status (FC01):",
     "labelCoils_3": "Address:",
     "labelCoils_4": "Num.:",
@@ -130,87 +130,90 @@
     },
     "buttonLoopCoils01": {
       "label": "Loop",
-      "toolTip":"Ctrl+P" 
+      "toolTip": "Ctrl+P"
     },
     "buttonReadCoilsRange": {
-      "label":"Read",
-      "toolTip":"Ctrl+E"
+      "label": "Read",
+      "toolTip": "Ctrl+E"
     },
     "buttonLoopCoilsRange": {
-      "label":"Loop",
-      "toolTip":"Ctrl+K"
+      "label": "Loop",
+      "toolTip": "Ctrl+K"
     },
-      "buttonWriteCoils05": "Write",
-      "buttonWriteCoils05_B": "Write",
-      "buttonWriteCoils15": "Write",
-      "buttonGoToCoilAddress": "Vai",
-      "buttonReadInput02": {
-        "label":"Read",
-        "toolTip":"Ctrl+R"
-      },
-      "buttonLoopInput02": {
-        "label":"Loop",
-        "toolTip":"Ctrl+P"
-      },
-      "buttonReadInputRange": {
-        "label":"Read",
-        "toolTip":"Ctrl+E"
-      },
-      "buttonLoopInputRange": {
-        "label":"Loop",
-        "toolTip":"Ctrl+K"
-      },
-      "buttonGoToInputAddress": "Vai",
-      "buttonReadInputRegister04": {
-        "label":"Read",
-        "toolTip":"Ctrl+R"
-      },
-      "buttonLoopInputRegister04": {
-        "label":"Loop",
-        "toolTip":"Ctrl+P"
-      },
-      "buttonReadInputRegisterRange": {
-        "label":"Read",
-        "toolTip":"Ctrl+E"
-      },
-      "buttonLoopInputRegisterRange": {
-        "label":"Loop",
-        "toolTip":"Ctrl+K"
-      },
-      "buttonGoToInputRegisterAddress": "Vai",
-      "buttonReadHolding03": {
-        "label":"Read",
-        "toolTip":"Ctrl+R"
-      },
-      "buttonLoopHolding03": {
-        "label":"Loop",
-        "toolTip":"Ctrl+P"
-      },
-      "buttonReadHoldingRange": {
-        "label":"Read",
-        "toolTip":"Ctrl+E"
-      },
-      "buttonLoopHoldingRange": {
-        "label":"Loop",
-        "toolTip":"Ctrl+K"
-      },
-      "buttonWriteHolding06": "Write",
-      "buttonWriteHolding06_b": "Write",
-      "buttonWriteHolding16": "Write",
-      "buttonGoToHoldingAddress": "Vai",
-      "buttonExportSentPackets": "Export",
-      "buttonExportReceivedPackets": "Export",
-      "buttonColorCellRead": "Color",
-      "buttonCellWrote": "Color",
-      "buttonColorCellError": "Color",
-      "buttonOpen": "Carica",
-      "buttonSave": "Salva",
-      "buttonOpenFileLocation": "Apri cartella",
-      "buttonPingIp":{
-        "label":"Ping",
-        "toolTip":"Ctrl+P"
-      }
+    "buttonWriteCoils05": "Write",
+    "buttonWriteCoils05_B": "Write",
+    "buttonWriteCoils15": "Write",
+    "buttonGoToCoilAddress": "Vai",
+    "buttonReadInput02": {
+      "label": "Read",
+      "toolTip": "Ctrl+R"
     },
+    "buttonLoopInput02": {
+      "label": "Loop",
+      "toolTip": "Ctrl+P"
+    },
+    "buttonReadInputRange": {
+      "label": "Read",
+      "toolTip": "Ctrl+E"
+    },
+    "buttonLoopInputRange": {
+      "label": "Loop",
+      "toolTip": "Ctrl+K"
+    },
+    "buttonGoToInputAddress": "Vai",
+    "buttonReadInputRegister04": {
+      "label": "Read",
+      "toolTip": "Ctrl+R"
+    },
+    "buttonLoopInputRegister04": {
+      "label": "Loop",
+      "toolTip": "Ctrl+P"
+    },
+    "buttonReadInputRegisterRange": {
+      "label": "Read",
+      "toolTip": "Ctrl+E"
+    },
+    "buttonLoopInputRegisterRange": {
+      "label": "Loop",
+      "toolTip": "Ctrl+K"
+    },
+    "buttonGoToInputRegisterAddress": "Vai",
+    "buttonReadHolding03": {
+      "label": "Read",
+      "toolTip": "Ctrl+R"
+    },
+    "buttonLoopHolding03": {
+      "label": "Loop",
+      "toolTip": "Ctrl+P"
+    },
+    "buttonReadHoldingRange": {
+      "label": "Read",
+      "toolTip": "Ctrl+E"
+    },
+    "buttonLoopHoldingRange": {
+      "label": "Loop",
+      "toolTip": "Ctrl+K"
+    },
+    "buttonWriteHolding06": "Write",
+    "buttonWriteHolding06_b": "Write",
+    "buttonWriteHolding16": "Write",
+    "buttonGoToHoldingAddress": "Vai",
+    "buttonExportSentPackets": "Export",
+    "buttonExportReceivedPackets": "Export",
+    "buttonColorCellRead": "Color",
+    "buttonCellWrote": "Color",
+    "buttonColorCellError": "Color",
+    "buttonOpen": "Carica",
+    "buttonSave": "Salva",
+    "buttonOpenFileLocation": "Apri cartella",
+    "buttonPingIp": {
+      "label": "Ping",
+      "toolTip": "Ctrl+P"
+    },
+    "ButtonDeleteProfile": {
+      "label": "Cancella"
+    }
+  },
   "textBoxes": {
     "textBoxTcpClientIpAddress": {
       "toolTip": "Inserire l'IP del server ModBus"
@@ -422,6 +425,14 @@
     "saveFileCoils": "Salva tabella coils",
     "saveFileInputs": "Salva tabella inputs",
     "saveFileInputRegisters": "Salva tabella input registers",
-    "saveFileHoldingRegisters": "Salva tabella holding registers"
+    "saveFileHoldingRegisters": "Salva tabella holding registers",
+    "openFileCoils": "Carica tabella coils",
+    "openFileHoldingRegisters": "Carica tabella holding registers",
+    "writeMultipleCoils": "Write multiple coils (FC15)",
+    "writeMultipleRegisters": "Write multiple registers (FC16)",
+    "labelMultipleCoils": "Nr. of coils",
+    "labelMultipleRegisters": "Nr. of registers",
+    "overwriteProfile": "Il profilo corrente esiste già, sovrascriverlo?",
+    "deleteProfile": "Cancellare il profilo selezionato?"
   }
 }

@@ -14,7 +14,7 @@
     "labelIp": "Ip:",
     "labelPort1": "Port:",
     "labelCoils_0": "Registers:",
-    "labelCoils_1": "Offset",
+    "labelCoils_1": "Offset:",
     "labelCoils_2": "Read Coil Status (FC01):",
     "labelCoils_3": "Address:",
     "labelCoils_4": "Num.:",
@@ -204,9 +204,12 @@
     "buttonCellWrote": "Color",
     "buttonColorCellError": "Color",
     "buttonOpenFileLocation": "Open directory",
-    "buttonPingIp":{
-      "label":"Ping",
-      "toolTip":"Ctrl+P"
+    "buttonPingIp": {
+      "label": "Ping",
+      "toolTip": "Ctrl+P"
+    },
+    "ButtonDeleteProfile": {
+      "label": "Delete"
     }
   },
   "textBlocks": {
@@ -327,6 +330,14 @@
     "saveFileCoils": "Save coils table",
     "saveFileInputs": "Save inputs table",
     "saveFileInputRegisters": "Save input registers table",
-    "saveFileHoldingRegisters": "Save holding registers table"
+    "saveFileHoldingRegisters": "Save holding registers table",
+    "openFileCoils": "Open coils file",
+    "openFileHoldingRegisters": "Open holding register file",
+    "writeMultipleCoils": "Write multiple coils (FC15)",
+    "writeMultipleRegisters": "Write multiple registers (FC16)",
+    "labelMultipleCoils": "Nr. of coils",
+    "labelMultipleRegisters": "Nr. of registers",
+    "overwriteProfile": "Current profile already exists, overwrite?",
+    "deleteProfile": "Delete selected profile?"
   }
 }

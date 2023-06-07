@@ -97,6 +97,9 @@
     <Compile Include="LogView.xaml.cs">
       <DependentUpon>LogView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="PreviewImport.xaml.cs">
+      <DependentUpon>PreviewImport.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Raccolta_funzioni_parser.cs" />
     <Compile Include="Salva_impianto.xaml.cs">
       <DependentUpon>Salva_impianto.xaml</DependentUpon>
@@ -152,6 +155,10 @@
       <DependentUpon>ModBus_Client.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="PreviewImport.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Salva_impianto.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

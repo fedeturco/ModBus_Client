@@ -400,13 +400,18 @@ namespace ModBusMaster_Chicco
                 NetworkStream stream = client.GetStream();
                 stream.WriteTimeout = readTimeout;
                 stream.ReadTimeout = readTimeout;
+
+                response = new Byte[buffer_dimension];
+                int Length = 0;
+
+                // Flush di eventuali dati presenti
+                if (type == def.TYPE_TCP_SOCK && stream.DataAvailable)
+                    stream.Read(response, 0, response.Length);
+
                 stream.Write(query, 0, query.Length);
 
                 Console_printByte("Tx: ", query, query.Length);
                 Console_print(" Tx -> ", query, query.Length);
-
-                response = new Byte[buffer_dimension];
-                int Length = 0;
 
                 try
                 {
@@ -633,17 +638,21 @@ namespace ModBusMaster_Chicco
 
                 TX_set = true;
 
+                response = new Byte[buffer_dimension];
+                int Length = 0;
+
                 NetworkStream stream = client.GetStream();
                 stream.WriteTimeout = readTimeout;
                 stream.ReadTimeout = readTimeout;
+
+                // Flush di eventuali dati presenti
+                if (type == def.TYPE_TCP_SOCK && stream.DataAvailable)
+                    stream.Read(response, 0, response.Length);
+
                 stream.Write(query, 0, query.Length);
 
                 Console_printByte("Tx: ", query, query.Length);
                 Console_print(" Tx -> ", query, query.Length);
-
-                response = new Byte[buffer_dimension];
-
-                int Length = 0;
 
                 try
                 {
@@ -866,17 +875,21 @@ namespace ModBusMaster_Chicco
 
                 TX_set = true;       // pictureBox gialla
 
+                response = new Byte[buffer_dimension];
+                int Length = 0;
+
                 NetworkStream stream = client.GetStream();
                 stream.WriteTimeout = readTimeout;
                 stream.ReadTimeout = readTimeout;
+
+                // Flush di eventuali dati presenti
+                if (type == def.TYPE_TCP_SOCK && stream.DataAvailable)
+                    stream.Read(response, 0, response.Length);
+
                 stream.Write(query, 0, query.Length);
 
                 Console_printByte("Tx: ", query, query.Length);
                 Console_print(" Tx -> ", query, query.Length);
-
-                response = new Byte[buffer_dimension];
-
-                int Length = 0;
 
                 try
                 {
@@ -1062,17 +1075,21 @@ namespace ModBusMaster_Chicco
 
                 TX_set = true;       // pictureBox gialla
 
+                response = new Byte[buffer_dimension];
+                int Length = 0;
+
                 NetworkStream stream = client.GetStream();
                 stream.WriteTimeout = readTimeout;
                 stream.ReadTimeout = readTimeout;
+
+                // Flush di eventuali dati presenti
+                if (type == def.TYPE_TCP_SOCK && stream.DataAvailable)
+                    stream.Read(response, 0, response.Length);
+
                 stream.Write(query, 0, query.Length);
 
                 Console_printByte("Tx: ", query, query.Length);
                 Console_print(" Tx -> ", query, query.Length);
-
-                response = new Byte[buffer_dimension];
-                
-                int Length = 0;
 
                 try
                 {
@@ -1265,17 +1282,21 @@ namespace ModBusMaster_Chicco
 
                 TX_set = true;       // pictureBox gialla
 
+                response = new Byte[buffer_dimension];
+                int Length = 0;
+
                 NetworkStream stream = client.GetStream();
                 stream.WriteTimeout = readTimeout;
                 stream.ReadTimeout = readTimeout;
+
+                // Flush di eventuali dati presenti
+                if (type == def.TYPE_TCP_SOCK && stream.DataAvailable)
+                    stream.Read(response, 0, response.Length);
+
                 stream.Write(query, 0, query.Length);
 
                 Console_printByte("Tx: ", query, query.Length);
                 Console_print(" Tx -> ", query, query.Length);
-
-                response = new Byte[buffer_dimension];
-
-                int Length = 0;
 
                 try
                 {
@@ -1458,17 +1479,21 @@ namespace ModBusMaster_Chicco
 
                 TX_set = true;       // pictureBox gialla
 
+                response = new Byte[buffer_dimension];
+                int Length = 0;
+
                 NetworkStream stream = client.GetStream();
                 stream.WriteTimeout = readTimeout;
                 stream.ReadTimeout = readTimeout;
+
+                // Flush di eventuali dati presenti
+                if (type == def.TYPE_TCP_SOCK && stream.DataAvailable)
+                    stream.Read(response, 0, response.Length);
+
                 stream.Write(query, 0, query.Length);
 
                 Console_printByte("Tx: ", query, query.Length);
                 Console_print(" Tx -> ", query, query.Length);
-
-                response = new Byte[buffer_dimension];
-
-                int Length = 0;
 
                 try
                 {
@@ -1644,17 +1669,21 @@ namespace ModBusMaster_Chicco
 
                 TX_set = true;       // pictureBox gialla
 
+                response = new Byte[buffer_dimension];
+                int Length = 0;
+
                 NetworkStream stream = client.GetStream();
                 stream.WriteTimeout = readTimeout;
                 stream.ReadTimeout = readTimeout;
+
+                // Flush di eventuali dati presenti
+                if (type == def.TYPE_TCP_SOCK && stream.DataAvailable)
+                    stream.Read(response, 0, response.Length);
+
                 stream.Write(query, 0, query.Length);
 
                 Console_printByte("Tx: ", query, query.Length);
                 Console_print(" Tx -> ", query, query.Length);
-
-                response = new Byte[buffer_dimension];
-
-                int Length = 0;
 
                 try
                 {
@@ -1909,17 +1938,21 @@ namespace ModBusMaster_Chicco
 
                 TX_set = true;       // pictureBox gialla
 
+                response = new Byte[buffer_dimension];
+                int Length = 0;
+
                 NetworkStream stream = client.GetStream();
                 stream.WriteTimeout = readTimeout;
                 stream.ReadTimeout = readTimeout;
+
+                // Flush di eventuali dati presenti
+                if (type == def.TYPE_TCP_SOCK && stream.DataAvailable)
+                    stream.Read(response, 0, response.Length);
+
                 stream.Write(query, 0, query.Length);
 
                 Console_printByte("Tx: ", query, query.Length);
                 Console_print(" Tx -> ", query, query.Length);
-
-                response = new Byte[buffer_dimension];
-
-                int Length = 0;
 
                 try
                 {
@@ -2158,17 +2191,21 @@ namespace ModBusMaster_Chicco
 
                 TX_set = true;       // pictureBox gialla
 
+                response = new Byte[buffer_dimension];
+                int Length = 0;
+
                 NetworkStream stream = client.GetStream();
                 stream.WriteTimeout = readTimeout;
                 stream.ReadTimeout = readTimeout;
+
+                // Flush di eventuali dati presenti
+                if (type == def.TYPE_TCP_SOCK && stream.DataAvailable)
+                    stream.Read(response, 0, response.Length);
+
                 stream.Write(query, 0, query.Length);
 
                 Console_printByte("Tx: ", query, query.Length);
                 Console_print(" Tx -> ", query, query.Length);
-
-                response = new Byte[buffer_dimension];
-
-                int Length = 0;
 
                 try
                 {
