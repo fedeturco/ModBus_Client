@@ -3,8 +3,8 @@ Client ModBus TCP/RTU per interrogare slave ModBus.
 
 ## Release
 
-### v2.27 Stable
-https://github.com/Fedex1515/ModBus_Client/releases/download/2.27/ModBus_Client_v2.27.zip
+### v2.28 Stable
+https://github.com/Fedex1515/ModBus_Client/releases/download/2.28/ModBus_Client_v2.28.zip
 
 ### Manuale
 https://github.com/Fedex1515/ModBus_Client/blob/master/ModBus_Client/Manuali/Guida_ModBus_Client_IT.pdf

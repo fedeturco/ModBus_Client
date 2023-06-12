@@ -168,6 +168,7 @@ namespace ModBus_Client
         public ObservableCollection<ModBus_Item> list_template_holdingRegistersTable = new ObservableCollection<ModBus_Item>();
         public ObservableCollection<ModBus_Item> list_template_inputRegistersTable = new ObservableCollection<ModBus_Item>();
 
+        public ModBus_Item lastEditModbusItem;
 
         // Stati loop interrogazioni
         public int pauseLoop = 1000;
@@ -3705,19 +3706,17 @@ namespace ModBus_Client
                 {
                     ModBus_Item row = new ModBus_Item();
 
+                    // Valore reale registro modbus
                     row.RegisterUInt = (UInt16)(address_start + i);
-
-                    if (useOffsetInTable)
-                        row.RegisterUInt += (UInt16)user_offset;
 
                     // Cella con numero del registro
                     if (formatRegister == "DEC" || formatRegister == null)
                     {
-                        row.Register = (address_start + i).ToString();
+                        row.Register = (address_start + i - (useOffsetInTable ? user_offset : 0)).ToString();
                     }
                     else
                     {
-                        row.Register = "0x" + (address_start + i).ToString("X").PadLeft(4, '0');
+                        row.Register = "0x" + (address_start + i - (useOffsetInTable ? user_offset : 0)).ToString("X").PadLeft(4, '0');
                     }
 
                     // Cella con valore letto
@@ -3756,7 +3755,7 @@ namespace ModBus_Client
                         }
                     }
 
-                    ModBus_Item found = template.FirstOrDefault(x => (x.RegisterUInt + template_offset) == (address_start + i + user_offset));
+                    ModBus_Item found = template.FirstOrDefault(x => (x.RegisterUInt + template_offset) == (address_start + i));
                     if (found != null)
                     {
                         String convertedValue;
@@ -4518,7 +4517,7 @@ namespace ModBus_Client
                 try
                 {
                     var tmp = e.EditingElement as TextBox;
-                    dataGridViewHolding.SelectedItem = (ModBus_Item)e.Row.Item;
+                    lastEditModbusItem = (ModBus_Item)e.Row.Item;
 
                     String[] params_ = new String[2];
 
@@ -4540,354 +4539,302 @@ namespace ModBus_Client
         {
             try
             {
-                ModBus_Item currentItem = new ModBus_Item();
-
-                this.Dispatcher.Invoke((Action)delegate
+                if (lastEditModbusItem != null)
                 {
-                    currentItem = (ModBus_Item)dataGridViewHolding.SelectedItem;
-                });
+                    // Debug
+                    Console.WriteLine("Register: " + lastEditModbusItem.Register);
+                    Console.WriteLine("Value: " + lastEditModbusItem.Value);
+                    Console.WriteLine("Notes: " + lastEditModbusItem.Notes);
 
-                // Debug
-                Console.WriteLine("Register: " + currentItem.Register);
-                Console.WriteLine("Value: " + currentItem.Value);
-                Console.WriteLine("Notes: " + currentItem.Notes);
+                    String[] params__ = params_ as String[];
 
-                String[] params__ = params_ as String[];
+                    String obj = params__[0];
+                    String columnName = params__[1];
 
-                String obj = params__[0];
-                String columnName = params__[1];
-
-                // Converted Value (colonna valori convertiti, applico la conversione e invio le word corrispondenti)
-                if (columnName.ToLower().IndexOf("converted") != -1)
-                {
-                    // Estraggo il datatype
-                    ModBus_Item tmp = list_template_holdingRegistersTable.FirstOrDefault(x => x.RegisterUInt == (UInt16)((int)(currentItem.RegisterUInt) + int.Parse(textBoxHoldingOffset_, comboBoxHoldingOffset_.IndexOf("HEX") != -1 ? System.Globalization.NumberStyles.HexNumber : System.Globalization.NumberStyles.Integer) - template_HoldingOffset));
-
-                    String test = "";
-                    int offset = 0;     // Offset starting word 32bit / 64bit variables
-
-                    if (tmp != null)
+                    // Converted Value (colonna valori convertiti, applico la conversione e invio le word corrispondenti)
+                    if (columnName.ToLower().IndexOf("converted") != -1)
                     {
-                        if (tmp.Mappings != null)
+                        // Estraggo il datatype
+                        ModBus_Item tmp = list_template_holdingRegistersTable.FirstOrDefault(x => x.RegisterUInt == (UInt16)((int)(lastEditModbusItem.RegisterUInt) + int.Parse(textBoxHoldingOffset_, comboBoxHoldingOffset_.IndexOf("HEX") != -1 ? System.Globalization.NumberStyles.HexNumber : System.Globalization.NumberStyles.Integer) - template_HoldingOffset));
+
+                        String test = "";
+                        int offset = 0;     // Offset starting word 32bit / 64bit variables
+
+                        if (tmp != null)
                         {
-                            test = tmp.Mappings.Replace(" ", "");
+                            if (tmp.Mappings != null)
+                            {
+                                test = tmp.Mappings.Replace(" ", "");
+                            }
                         }
-                    }
 
-                    if (obj.IndexOf(":") != -1)
-                        obj = obj.Split(':')[1];
+                        if (obj.IndexOf(":") != -1)
+                            obj = obj.Split(':')[1];
 
-                    UInt16[] toSend = null;
+                        UInt16[] toSend = null;
 
-                    // byte (low byte or high byte)
-                    if (test.ToLower().IndexOf("byte") == 0)
-                    {
-                        toSend = new UInt16[1];
-                        toSend[0] = (UInt16)(UInt16.Parse(obj) & 0x00FF);
-                    }
-
-                    // bitmap (type 1)
-                    else if (test.IndexOf("b") == 0)
-                    {
-                        MessageBox.Show("Datatype not suppported", "Info", MessageBoxButton.OK, MessageBoxImage.Warning);
-                    }
-
-                    // bytemap (type 2)
-                    else if (test.IndexOf("B") == 0)
-                    {
-                        MessageBox.Show("Datatype not suppported", "Info", MessageBoxButton.OK, MessageBoxImage.Warning);
-                    }
-
-                    // float (type 3)
-                    else if (test.IndexOf("F") == 0 || test.ToLower().IndexOf("float") == 0)
-                    {
-                        byte[] conv = BitConverter.GetBytes(float.Parse(obj, System.Globalization.CultureInfo.InvariantCulture));
-                        toSend = new UInt16[2];
-
-                        if (test.ToLower().IndexOf("+") == -1)
-                            offset = -1;
-
-                        if (test.ToLower().IndexOf("-") != -1 || test.ToLower().IndexOf("_swap") != -1)
-                        {
-                            toSend[1] = (UInt16)((conv[3] << 8) + (conv[2]));
-                            toSend[0] = (UInt16)((conv[1] << 8) + (conv[0]));
-                        }
-                        else
-                        {
-                            toSend[0] = (UInt16)((conv[3] << 8) + (conv[2]));
-                            toSend[1] = (UInt16)((conv[1] << 8) + (conv[0]));
-                        }
-                    }
-
-                    // double (type 7)
-                    else if (test.IndexOf("d") == 0 || test.ToLower().IndexOf("double") == 0)
-                    {
-                        byte[] conv = BitConverter.GetBytes(double.Parse(obj, System.Globalization.CultureInfo.InvariantCulture));
-                        toSend = new UInt16[2];
-
-                        if (test.ToLower().IndexOf("+") == -1)
-                            offset = -2;
-
-                        if (test.ToLower().IndexOf("-") != -1 || test.ToLower().IndexOf("_swap") != -1)
-                        {
-                            toSend[3] = (UInt16)((conv[7] << 8) + (conv[6]));
-                            toSend[2] = (UInt16)((conv[5] << 8) + (conv[4]));
-                            toSend[1] = (UInt16)((conv[3] << 8) + (conv[2]));
-                            toSend[0] = (UInt16)((conv[1] << 8) + (conv[0]));
-                        }
-                        else
-                        {
-                            toSend[0] = (UInt16)((conv[7] << 8) + (conv[6]));
-                            toSend[1] = (UInt16)((conv[5] << 8) + (conv[4]));
-                            toSend[2] = (UInt16)((conv[3] << 8) + (conv[2]));
-                            toSend[3] = (UInt16)((conv[1] << 8) + (conv[0]));
-                        }
-                    }
-
-                    // uint64 (type 6)
-                    else if (test.ToLower().IndexOf("uint64") == 0)
-                    {
-                        byte[] conv = BitConverter.GetBytes(UInt64.Parse(obj));
-                        toSend = new UInt16[4];
-
-                        if (test.ToLower().IndexOf("+") == -1)
-                            offset = -3;
-
-                        if (test.ToLower().IndexOf("-") != -1 || test.ToLower().IndexOf("_swap") != -1)
-                        {
-                            toSend[3] = (UInt16)((conv[7] << 8) + (conv[6]));
-                            toSend[2] = (UInt16)((conv[5] << 8) + (conv[4]));
-                            toSend[1] = (UInt16)((conv[3] << 8) + (conv[2]));
-                            toSend[0] = (UInt16)((conv[1] << 8) + (conv[0]));
-                        }
-                        else
-                        {
-                            toSend[0] = (UInt16)((conv[7] << 8) + (conv[6]));
-                            toSend[1] = (UInt16)((conv[5] << 8) + (conv[4]));
-                            toSend[2] = (UInt16)((conv[3] << 8) + (conv[2]));
-                            toSend[3] = (UInt16)((conv[1] << 8) + (conv[0]));
-                        }
-                    }
-
-                    // int64 (type 6)
-                    else if (test.ToLower().IndexOf("int64") == 0)
-                    {
-                        byte[] conv = BitConverter.GetBytes(Int64.Parse(obj));
-                        toSend = new UInt16[4];
-
-                        if (test.ToLower().IndexOf("+") == -1)
-                            offset = -3;
-
-                        if (test.ToLower().IndexOf("-") != -1 || test.ToLower().IndexOf("_swap") != -1)
-                        {
-                            toSend[3] = (UInt16)((conv[7] << 8) + (conv[6]));
-                            toSend[2] = (UInt16)((conv[5] << 8) + (conv[4]));
-                            toSend[1] = (UInt16)((conv[3] << 8) + (conv[2]));
-                            toSend[0] = (UInt16)((conv[1] << 8) + (conv[0]));
-                        }
-                        else
-                        {
-                            toSend[0] = (UInt16)((conv[7] << 8) + (conv[6]));
-                            toSend[1] = (UInt16)((conv[5] << 8) + (conv[4]));
-                            toSend[2] = (UInt16)((conv[3] << 8) + (conv[2]));
-                            toSend[3] = (UInt16)((conv[1] << 8) + (conv[0]));
-                        }
-                    }
-
-                    // uint32 (type 5)
-                    else if (test.ToLower().IndexOf("uint32") == 0)
-                    {
-                        byte[] conv = BitConverter.GetBytes(UInt32.Parse(obj));
-                        toSend = new UInt16[2];
-
-                        if (test.ToLower().IndexOf("+") == -1)
-                            offset = -1;
-
-                        if (test.ToLower().IndexOf("-") != -1 || test.ToLower().IndexOf("_swap") != -1)
-                        {
-                            toSend[1] = (UInt16)((conv[3] << 8) + (conv[2]));
-                            toSend[0] = (UInt16)((conv[1] << 8) + (conv[0]));
-                        }
-                        else
-                        {
-                            toSend[0] = (UInt16)((conv[3] << 8) + (conv[2]));
-                            toSend[1] = (UInt16)((conv[1] << 8) + (conv[0]));
-                        }
-                    }
-
-                    // int32 (type 5)
-                    else if (test.ToLower().IndexOf("int32") == 0)
-                    {
-                        byte[] conv = BitConverter.GetBytes(Int32.Parse(obj));
-                        toSend = new UInt16[2];
-
-                        if (test.ToLower().IndexOf("+") == -1)
-                            offset = -1;
-
-                        if (test.ToLower().IndexOf("-") != -1 || test.ToLower().IndexOf("_swap") != -1)
-                        {
-                            toSend[1] = (UInt16)((conv[3] << 8) + (conv[2]));
-                            toSend[0] = (UInt16)((conv[1] << 8) + (conv[0]));
-                        }
-                        else
-                        {
-                            toSend[0] = (UInt16)((conv[3] << 8) + (conv[2]));
-                            toSend[1] = (UInt16)((conv[1] << 8) + (conv[0]));
-                        }
-                    }
-
-                    // uint16 (type 4)
-                    else if (test.ToLower().IndexOf("uint") == 0 || test.ToLower().IndexOf("uint16") == 0)
-                    {
-                        toSend = new UInt16[1];
-                        toSend[0] = UInt16.Parse(obj);
-                    }
-
-                    // int16 (type 4)
-                    else if (test.ToLower().IndexOf("int") == 0 || test.ToLower().IndexOf("int16") == 0)
-                    {
-                        byte[] conv = BitConverter.GetBytes(Int16.Parse(obj));
-                        toSend = new UInt16[1];
-
-                        toSend[0] = (UInt16)((conv[0] << 0) + (conv[1] << 8));
-                    }
-
-                    // String (type 255)
-                    else if (test.ToLower().IndexOf("string") == 0)
-                    {
-                        MessageBox.Show("Datatype not suppported", "Info", MessageBoxButton.OK, MessageBoxImage.Warning);
-                    }
-                    else
-                    {
-                        UInt16 dummy;
-
-                        if (UInt16.TryParse(obj, out dummy))
+                        // byte (low byte or high byte)
+                        if (test.ToLower().IndexOf("byte") == 0)
                         {
                             toSend = new UInt16[1];
-                            toSend[0] = dummy;
-                        }
-                    }
-
-                    if (toSend != null)
-                    {
-                        long address_start = P.uint_parser(textBoxHoldingOffset_, comboBoxHoldingOffset_) + P.uint_parser(currentItem.Register, comboBoxHoldingRegistri_) + offset;
-
-                        if (address_start > 9999 && correctModbusAddressAuto)    //Se indirizzo espresso in 30001+ imposto offset a 0
-                        {
-                            address_start = address_start - 40001;
+                            toSend[0] = (UInt16)(UInt16.Parse(obj) & 0x00FF);
                         }
 
-                        uint value_ = P.uint_parser(currentItem.Value, comboBoxHoldingValori_);
-
-                        if (address_start >= 0)
+                        // bitmap (type 1)
+                        else if (test.IndexOf("b") == 0)
                         {
-                            UInt16[] result = ModBus.presetMultipleRegisters_16(byte.Parse(textBoxModbusAddress_), (UInt16)(address_start), toSend, readTimeout);
+                            MessageBox.Show("Datatype not suppported", "Info", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        }
 
-                            if (result != null)
+                        // bytemap (type 2)
+                        else if (test.IndexOf("B") == 0)
+                        {
+                            MessageBox.Show("Datatype not suppported", "Info", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        }
+
+                        // float (type 3)
+                        else if (test.IndexOf("F") == 0 || test.ToLower().IndexOf("float") == 0)
+                        {
+                            byte[] conv = BitConverter.GetBytes(float.Parse(obj, System.Globalization.CultureInfo.InvariantCulture));
+                            toSend = new UInt16[2];
+
+                            if (test.ToLower().IndexOf("+") == -1)
+                                offset = -1;
+
+                            if (test.ToLower().IndexOf("-") != -1 || test.ToLower().IndexOf("_swap") != -1)
                             {
-                                for (int i = 0; i < result.Length; i++)
+                                toSend[1] = (UInt16)((conv[3] << 8) + (conv[2]));
+                                toSend[0] = (UInt16)((conv[1] << 8) + (conv[0]));
+                            }
+                            else
+                            {
+                                toSend[0] = (UInt16)((conv[3] << 8) + (conv[2]));
+                                toSend[1] = (UInt16)((conv[1] << 8) + (conv[0]));
+                            }
+                        }
+
+                        // double (type 7)
+                        else if (test.IndexOf("d") == 0 || test.ToLower().IndexOf("double") == 0)
+                        {
+                            byte[] conv = BitConverter.GetBytes(double.Parse(obj, System.Globalization.CultureInfo.InvariantCulture));
+                            toSend = new UInt16[2];
+
+                            if (test.ToLower().IndexOf("+") == -1)
+                                offset = -2;
+
+                            if (test.ToLower().IndexOf("-") != -1 || test.ToLower().IndexOf("_swap") != -1)
+                            {
+                                toSend[3] = (UInt16)((conv[7] << 8) + (conv[6]));
+                                toSend[2] = (UInt16)((conv[5] << 8) + (conv[4]));
+                                toSend[1] = (UInt16)((conv[3] << 8) + (conv[2]));
+                                toSend[0] = (UInt16)((conv[1] << 8) + (conv[0]));
+                            }
+                            else
+                            {
+                                toSend[0] = (UInt16)((conv[7] << 8) + (conv[6]));
+                                toSend[1] = (UInt16)((conv[5] << 8) + (conv[4]));
+                                toSend[2] = (UInt16)((conv[3] << 8) + (conv[2]));
+                                toSend[3] = (UInt16)((conv[1] << 8) + (conv[0]));
+                            }
+                        }
+
+                        // uint64 (type 6)
+                        else if (test.ToLower().IndexOf("uint64") == 0)
+                        {
+                            byte[] conv = BitConverter.GetBytes(UInt64.Parse(obj));
+                            toSend = new UInt16[4];
+
+                            if (test.ToLower().IndexOf("+") == -1)
+                                offset = -3;
+
+                            if (test.ToLower().IndexOf("-") != -1 || test.ToLower().IndexOf("_swap") != -1)
+                            {
+                                toSend[3] = (UInt16)((conv[7] << 8) + (conv[6]));
+                                toSend[2] = (UInt16)((conv[5] << 8) + (conv[4]));
+                                toSend[1] = (UInt16)((conv[3] << 8) + (conv[2]));
+                                toSend[0] = (UInt16)((conv[1] << 8) + (conv[0]));
+                            }
+                            else
+                            {
+                                toSend[0] = (UInt16)((conv[7] << 8) + (conv[6]));
+                                toSend[1] = (UInt16)((conv[5] << 8) + (conv[4]));
+                                toSend[2] = (UInt16)((conv[3] << 8) + (conv[2]));
+                                toSend[3] = (UInt16)((conv[1] << 8) + (conv[0]));
+                            }
+                        }
+
+                        // int64 (type 6)
+                        else if (test.ToLower().IndexOf("int64") == 0)
+                        {
+                            byte[] conv = BitConverter.GetBytes(Int64.Parse(obj));
+                            toSend = new UInt16[4];
+
+                            if (test.ToLower().IndexOf("+") == -1)
+                                offset = -3;
+
+                            if (test.ToLower().IndexOf("-") != -1 || test.ToLower().IndexOf("_swap") != -1)
+                            {
+                                toSend[3] = (UInt16)((conv[7] << 8) + (conv[6]));
+                                toSend[2] = (UInt16)((conv[5] << 8) + (conv[4]));
+                                toSend[1] = (UInt16)((conv[3] << 8) + (conv[2]));
+                                toSend[0] = (UInt16)((conv[1] << 8) + (conv[0]));
+                            }
+                            else
+                            {
+                                toSend[0] = (UInt16)((conv[7] << 8) + (conv[6]));
+                                toSend[1] = (UInt16)((conv[5] << 8) + (conv[4]));
+                                toSend[2] = (UInt16)((conv[3] << 8) + (conv[2]));
+                                toSend[3] = (UInt16)((conv[1] << 8) + (conv[0]));
+                            }
+                        }
+
+                        // uint32 (type 5)
+                        else if (test.ToLower().IndexOf("uint32") == 0)
+                        {
+                            byte[] conv = BitConverter.GetBytes(UInt32.Parse(obj));
+                            toSend = new UInt16[2];
+
+                            if (test.ToLower().IndexOf("+") == -1)
+                                offset = -1;
+
+                            if (test.ToLower().IndexOf("-") != -1 || test.ToLower().IndexOf("_swap") != -1)
+                            {
+                                toSend[1] = (UInt16)((conv[3] << 8) + (conv[2]));
+                                toSend[0] = (UInt16)((conv[1] << 8) + (conv[0]));
+                            }
+                            else
+                            {
+                                toSend[0] = (UInt16)((conv[3] << 8) + (conv[2]));
+                                toSend[1] = (UInt16)((conv[1] << 8) + (conv[0]));
+                            }
+                        }
+
+                        // int32 (type 5)
+                        else if (test.ToLower().IndexOf("int32") == 0)
+                        {
+                            byte[] conv = BitConverter.GetBytes(Int32.Parse(obj));
+                            toSend = new UInt16[2];
+
+                            if (test.ToLower().IndexOf("+") == -1)
+                                offset = -1;
+
+                            if (test.ToLower().IndexOf("-") != -1 || test.ToLower().IndexOf("_swap") != -1)
+                            {
+                                toSend[1] = (UInt16)((conv[3] << 8) + (conv[2]));
+                                toSend[0] = (UInt16)((conv[1] << 8) + (conv[0]));
+                            }
+                            else
+                            {
+                                toSend[0] = (UInt16)((conv[3] << 8) + (conv[2]));
+                                toSend[1] = (UInt16)((conv[1] << 8) + (conv[0]));
+                            }
+                        }
+
+                        // uint16 (type 4)
+                        else if (test.ToLower().IndexOf("uint") == 0 || test.ToLower().IndexOf("uint16") == 0)
+                        {
+                            toSend = new UInt16[1];
+                            toSend[0] = UInt16.Parse(obj);
+                        }
+
+                        // int16 (type 4)
+                        else if (test.ToLower().IndexOf("int") == 0 || test.ToLower().IndexOf("int16") == 0)
+                        {
+                            byte[] conv = BitConverter.GetBytes(Int16.Parse(obj));
+                            toSend = new UInt16[1];
+
+                            toSend[0] = (UInt16)((conv[0] << 0) + (conv[1] << 8));
+                        }
+
+                        // String (type 255)
+                        else if (test.ToLower().IndexOf("string") == 0)
+                        {
+                            MessageBox.Show("Datatype not suppported", "Info", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        }
+                        else
+                        {
+                            UInt16 dummy;
+
+                            if (UInt16.TryParse(obj, out dummy))
+                            {
+                                toSend = new UInt16[1];
+                                toSend[0] = dummy;
+                            }
+                        }
+
+                        if (toSend != null)
+                        {
+                            long address_start = P.uint_parser(textBoxHoldingOffset_, comboBoxHoldingOffset_) + P.uint_parser(lastEditModbusItem.Register, comboBoxHoldingRegistri_) + offset;
+
+                            if (address_start > 9999 && correctModbusAddressAuto)    //Se indirizzo espresso in 30001+ imposto offset a 0
+                            {
+                                address_start = address_start - 40001;
+                            }
+
+                            uint value_ = P.uint_parser(lastEditModbusItem.Value, comboBoxHoldingValori_);
+
+                            if (address_start >= 0)
+                            {
+                                UInt16[] result = ModBus.presetMultipleRegisters_16(byte.Parse(textBoxModbusAddress_), (UInt16)(address_start), toSend, readTimeout);
+
+                                if (result != null)
                                 {
-                                    ModBus_Item select = list_holdingRegistersTable.FirstOrDefault(x => x.RegisterUInt == (UInt16)(address_start) + i);
-                                    if (select != null)
+                                    for (int i = 0; i < result.Length; i++)
                                     {
-                                        this.Dispatcher.Invoke((Action)delegate
+                                        ModBus_Item select = list_holdingRegistersTable.FirstOrDefault(x => x.RegisterUInt == (UInt16)(address_start) + i);
+                                        if (select != null)
                                         {
-                                            select.Value = result[i].ToString();
-                                            select.ValueBin = Convert.ToString(result[i] >> 8, 2).PadLeft(8, '0') + " " + Convert.ToString((UInt16)(result[i] << 8) >> 8, 2).PadLeft(8, '0');
-                                            select.Foreground = ForeGroundLight.ToString();
-                                            select.Background = colorDefaultWriteCell.ToString();
-                                        });
+                                            this.Dispatcher.Invoke((Action)delegate
+                                            {
+                                                select.Value = result[i].ToString();
+                                                select.ValueBin = Convert.ToString(result[i] >> 8, 2).PadLeft(8, '0') + " " + Convert.ToString((UInt16)(result[i] << 8) >> 8, 2).PadLeft(8, '0');
+                                                select.Foreground = ForeGroundLight.ToString();
+                                                select.Background = colorDefaultWriteCell.ToString();
+                                            });
+                                        }
                                     }
+                                }
+                                else
+                                {
+                                    SetTableTimeoutError(list_holdingRegistersTable, true);
                                 }
                             }
                             else
                             {
-                                SetTableTimeoutError(list_holdingRegistersTable, true);
+                                SetTableInternalError(list_holdingRegistersTable, true);
                             }
                         }
-                        else
+
+                        this.Dispatcher.Invoke((Action)delegate
                         {
-                            SetTableInternalError(list_holdingRegistersTable, true);
-                        }
+                            dataGridViewHolding.Items.Refresh();
+                            dataGridViewHolding.SelectedItem = lastEditModbusItem;
+                        });
                     }
 
-                    this.Dispatcher.Invoke((Action)delegate
+                    // Binary value
+                    else if (columnName.ToLower().IndexOf("binary") != -1)
                     {
-                        dataGridViewHolding.Items.Refresh();
-                        dataGridViewHolding.SelectedItem = currentItem;
-                    });
-                }
-
-                // Binary value
-                else if (columnName.ToLower().IndexOf("binary") != -1)
-                {
-                    UInt16 dummy_ = Convert.ToUInt16(obj.Replace(" ", ""), 2); ;
-                    uint address_start = P.uint_parser(textBoxHoldingOffset_, comboBoxHoldingOffset_) + P.uint_parser(currentItem.Register, comboBoxHoldingRegistri_);
-
-                    if (address_start > 9999 && correctModbusAddressAuto)    //Se indirizzo espresso in 30001+ imposto offset a 0
-                    {
-                        address_start = address_start - 40001;
-                    }
-
-                    bool? result = ModBus.presetSingleRegister_06(byte.Parse(textBoxModbusAddress_), address_start, dummy_, readTimeout);
-
-                    if (result != null)
-                    {
-                        if (result == true)
-                        {
-                            this.Dispatcher.Invoke((Action)delegate
-                            {
-                                currentItem.Value = comboBoxHoldingValori_.IndexOf("HEX") == -1 ? dummy_.ToString() : dummy_.ToString("x");
-                                currentItem.ValueBin = Convert.ToString(dummy_ >> 8, 2).PadLeft(8, '0') + " " + Convert.ToString((UInt16)(dummy_ << 8) >> 8, 2).PadLeft(8, '0');
-                                currentItem.Foreground = ForeGroundLight.ToString();
-                                currentItem.Background = colorDefaultWriteCell.ToString();
-                            });
-                        }
-                        else
-                        {
-                            SetTableCrcError(list_holdingRegistersTable, true);
-                        }
-                    }
-                    else
-                    {
-                        SetTableTimeoutError(list_holdingRegistersTable, true);
-                    }
-
-                    this.Dispatcher.Invoke((Action)delegate
-                    {
-                        dataGridViewHolding.Items.Refresh();
-                        dataGridViewHolding.SelectedItem = currentItem;
-                    });
-                }
-
-                // Standard value
-                else if (columnName.ToLower().IndexOf("value") != -1)
-                {
-                    UInt16 dummy_ = 0;
-                    if (UInt16.TryParse(obj, out dummy_))
-                    {
-                        uint address_start = P.uint_parser(textBoxHoldingOffset_, comboBoxHoldingOffset_) + P.uint_parser(currentItem.Register, comboBoxHoldingRegistri_);
+                        UInt16 dummy_ = Convert.ToUInt16(obj.Replace(" ", ""), 2); ;
+                        uint address_start = P.uint_parser(textBoxHoldingOffset_, comboBoxHoldingOffset_) + P.uint_parser(lastEditModbusItem.Register, comboBoxHoldingRegistri_);
 
                         if (address_start > 9999 && correctModbusAddressAuto)    //Se indirizzo espresso in 30001+ imposto offset a 0
                         {
                             address_start = address_start - 40001;
                         }
 
-                        uint value_ = P.uint_parser(currentItem.Value, comboBoxHoldingValori_);
-                        bool? result = ModBus.presetSingleRegister_06(byte.Parse(textBoxModbusAddress_), address_start, value_, readTimeout);
+                        bool? result = ModBus.presetSingleRegister_06(byte.Parse(textBoxModbusAddress_), address_start, dummy_, readTimeout);
 
                         if (result != null)
                         {
                             if (result == true)
                             {
-                                String[] value = { value_.ToString() };
-
                                 this.Dispatcher.Invoke((Action)delegate
                                 {
-                                    currentItem.Value = obj;
-                                    currentItem.ValueBin = Convert.ToString(value_ >> 8, 2).PadLeft(8, '0') + " " + Convert.ToString((UInt16)(value_ << 8) >> 8, 2).PadLeft(8, '0');
-                                    currentItem.Foreground = ForeGroundLight.ToString();
-                                    currentItem.Background = colorDefaultWriteCell.ToString();
+                                    lastEditModbusItem.Value = comboBoxHoldingValori_.IndexOf("HEX") == -1 ? dummy_.ToString() : dummy_.ToString("x");
+                                    lastEditModbusItem.ValueBin = Convert.ToString(dummy_ >> 8, 2).PadLeft(8, '0') + " " + Convert.ToString((UInt16)(dummy_ << 8) >> 8, 2).PadLeft(8, '0');
+                                    lastEditModbusItem.Foreground = ForeGroundLight.ToString();
+                                    lastEditModbusItem.Background = colorDefaultWriteCell.ToString();
                                 });
                             }
                             else
@@ -4899,13 +4846,61 @@ namespace ModBus_Client
                         {
                             SetTableTimeoutError(list_holdingRegistersTable, true);
                         }
+
+                        this.Dispatcher.Invoke((Action)delegate
+                        {
+                            dataGridViewHolding.Items.Refresh();
+                            dataGridViewHolding.SelectedItem = lastEditModbusItem;
+                        });
                     }
 
-                    this.Dispatcher.Invoke((Action)delegate
+                    // Standard value
+                    else if (columnName.ToLower().IndexOf("value") != -1)
                     {
-                        dataGridViewHolding.Items.Refresh();
-                        dataGridViewHolding.SelectedItem = currentItem;
-                    });
+                        UInt16 dummy_ = 0;
+                        if (UInt16.TryParse(obj, out dummy_))
+                        {
+                            uint address_start = P.uint_parser(textBoxHoldingOffset_, comboBoxHoldingOffset_) + P.uint_parser(lastEditModbusItem.Register, comboBoxHoldingRegistri_);
+
+                            if (address_start > 9999 && correctModbusAddressAuto)    //Se indirizzo espresso in 30001+ imposto offset a 0
+                            {
+                                address_start = address_start - 40001;
+                            }
+
+                            uint value_ = P.uint_parser(lastEditModbusItem.Value, comboBoxHoldingValori_);
+                            bool? result = ModBus.presetSingleRegister_06(byte.Parse(textBoxModbusAddress_), address_start, value_, readTimeout);
+
+                            if (result != null)
+                            {
+                                if (result == true)
+                                {
+                                    String[] value = { value_.ToString() };
+
+                                    this.Dispatcher.Invoke((Action)delegate
+                                    {
+                                        lastEditModbusItem.Value = obj;
+                                        lastEditModbusItem.ValueBin = Convert.ToString(value_ >> 8, 2).PadLeft(8, '0') + " " + Convert.ToString((UInt16)(value_ << 8) >> 8, 2).PadLeft(8, '0');
+                                        lastEditModbusItem.Foreground = ForeGroundLight.ToString();
+                                        lastEditModbusItem.Background = colorDefaultWriteCell.ToString();
+                                    });
+                                }
+                                else
+                                {
+                                    SetTableCrcError(list_holdingRegistersTable, true);
+                                }
+                            }
+                            else
+                            {
+                                SetTableTimeoutError(list_holdingRegistersTable, true);
+                            }
+                        }
+
+                        this.Dispatcher.Invoke((Action)delegate
+                        {
+                            dataGridViewHolding.Items.Refresh();
+                            dataGridViewHolding.SelectedItem = lastEditModbusItem;
+                        });
+                    }
                 }
             }
             catch (ModbusException err)
@@ -4972,7 +4967,7 @@ namespace ModBus_Client
                 try
                 {
                     var tmp = e.EditingElement as TextBox;
-                    dataGridViewHolding.SelectedItem = (ModBus_Item)e.Row.Item;
+                    lastEditModbusItem = (ModBus_Item)e.Row.Item;
 
                     UInt16 out_;
                     if (UInt16.TryParse(tmp.Text, out out_))
@@ -4993,53 +4988,50 @@ namespace ModBus_Client
         {
             try
             {
-                ModBus_Item currentItem = new ModBus_Item();
-
-                this.Dispatcher.Invoke((Action)delegate
+                if (lastEditModbusItem != null)
                 {
-                    currentItem = (ModBus_Item)dataGridViewCoils.SelectedItem;
-                    currentItem.Value = obj as String;
-                });
+                    lastEditModbusItem.Value = obj as String;
 
-                // Debug
-                Console.WriteLine("Register: " + currentItem.Register);
-                Console.WriteLine("Value: " + currentItem.Value);
-                Console.WriteLine("Notes: " + currentItem.Notes);
+                    // Debug
+                    Console.WriteLine("Register: " + lastEditModbusItem.Register);
+                    Console.WriteLine("Value: " + lastEditModbusItem.Value);
+                    Console.WriteLine("Notes: " + lastEditModbusItem.Notes);
 
-                uint address_start = P.uint_parser(textBoxCoilsOffset_, comboBoxCoilsOffset_) + P.uint_parser(currentItem.Register, comboBoxCoilsAddress05_);
+                    uint address_start = P.uint_parser(textBoxCoilsOffset_, comboBoxCoilsOffset_) + P.uint_parser(lastEditModbusItem.Register, comboBoxCoilsAddress05_);
 
-                bool? result = ModBus.forceSingleCoil_05(byte.Parse(textBoxModbusAddress_), address_start, uint.Parse(currentItem.Value), readTimeout);
+                    bool? result = ModBus.forceSingleCoil_05(byte.Parse(textBoxModbusAddress_), address_start, uint.Parse(lastEditModbusItem.Value), readTimeout);
 
-                if (result != null)
-                {
-                    if (result == true)
+                    if (result != null)
                     {
-                        this.Dispatcher.Invoke((Action)delegate
+                        if (result == true)
                         {
-                            currentItem.Foreground = ForeGroundLight.ToString();
-                            currentItem.Background = colorDefaultWriteCell.ToString();
+                            this.Dispatcher.Invoke((Action)delegate
+                            {
+                                lastEditModbusItem.Foreground = ForeGroundLight.ToString();
+                                lastEditModbusItem.Background = colorDefaultWriteCell.ToString();
 
                             /*if(index + 1 < dataGridViewCoils.Items.Count)
                                 dataGridViewCoils.SelectedItem = list_coilsTable[index + 1];*/
 
-                            dataGridViewCoils.Items.Refresh();
-                        });
+                                dataGridViewCoils.Items.Refresh();
+                            });
+                        }
+                        else
+                        {
+                            SetTableCrcError(list_coilsTable, true);
+                        }
                     }
                     else
                     {
-                        SetTableCrcError(list_coilsTable, true);
+                        SetTableTimeoutError(list_coilsTable, true);
                     }
-                }
-                else
-                {
-                    SetTableTimeoutError(list_coilsTable, true);
-                }
 
-                this.Dispatcher.Invoke((Action)delegate
-                {
-                    dataGridViewCoils.Items.Refresh();
-                    dataGridViewCoils.SelectedItem = currentItem;
-                });
+                    this.Dispatcher.Invoke((Action)delegate
+                    {
+                        dataGridViewCoils.Items.Refresh();
+                        dataGridViewCoils.SelectedItem = lastEditModbusItem;
+                    });
+                }
             }
             catch (ModbusException err)
             {
@@ -6650,13 +6642,19 @@ namespace ModBus_Client
                     comboBoxInputGroup.Items.Clear();
                     comboBoxCoilsGroup.Items.Clear();
 
-                    for (int i = 0; i < template.Groups.Count(); i++)
+                    comboBoxCoilsGroup.IsEnabled = template.Groups.Count() > 0;
+                    comboBoxHoldingGroup.IsEnabled = template.Groups.Count() > 0;
+
+                    if (template.Groups.Count() > 0)
                     {
-                        KeyValuePair<Group_Item, String> kp = new KeyValuePair<Group_Item, String>(template.Groups[i], template.Groups[i].Group + " - " + template.Groups[i].Label);
-                        comboBoxHoldingGroup.Items.Add(kp);
-                        comboBoxInputRegisterGroup.Items.Add(kp);
-                        comboBoxInputGroup.Items.Add(kp);
-                        comboBoxCoilsGroup.Items.Add(kp);
+                        for (int i = 0; i < template.Groups.Count(); i++)
+                        {
+                            KeyValuePair<Group_Item, String> kp = new KeyValuePair<Group_Item, String>(template.Groups[i], template.Groups[i].Group + " - " + template.Groups[i].Label);
+                            comboBoxHoldingGroup.Items.Add(kp);
+                            comboBoxInputRegisterGroup.Items.Add(kp);
+                            comboBoxInputGroup.Items.Add(kp);
+                            comboBoxCoilsGroup.Items.Add(kp);
+                        }
                     }
                 }
             }
@@ -6754,6 +6752,9 @@ namespace ModBus_Client
             buttonSendManualDiagnosticQuery.IsEnabled = enabled;
 
             comboBoxTcpConnectionMode.IsEnabled = !enabled;
+
+            menuItemImportCoils.IsEnabled = enabled;
+            menuItemImportHoldingRegisters.IsEnabled = enabled;
         }
 
         private void comboBoxHoldingAddress03_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -7541,7 +7542,7 @@ namespace ModBus_Client
                         if (item == null)
                             continue;
 
-                        uint address_start = (uint)(item.RegisterUInt + template_HoldingOffset - P.uint_parser(textBoxHoldingOffset_, comboBoxHoldingOffset_));
+                        uint address_start = (uint)(item.RegisterUInt + template_HoldingOffset); // - P.uint_parser(textBoxHoldingOffset_, comboBoxHoldingOffset_));
                         uint num_regs = 1;
 
                         if (item.Mappings != null)
@@ -7620,11 +7621,14 @@ namespace ModBus_Client
 
         private void buttonReadHoldingTemplateGroup_Click(object sender, RoutedEventArgs e)
         {
-            buttonReadHoldingTemplateGroup.IsEnabled = false;
+            if (comboBoxHoldingGroup.IsEnabled)
+            {
+                buttonReadHoldingTemplateGroup.IsEnabled = false;
 
-            Thread t = new Thread(new ThreadStart(readHoldingTemplateGroup));
-            t.Priority = threadPriority;
-            t.Start();
+                Thread t = new Thread(new ThreadStart(readHoldingTemplateGroup));
+                t.Priority = threadPriority;
+                t.Start();
+            }
         }
 
         public void readHoldingTemplateGroup()
@@ -7658,7 +7662,7 @@ namespace ModBus_Client
                                 continue;
                         }
 
-                        uint address_start = (uint)(item.RegisterUInt + template_HoldingOffset - P.uint_parser(textBoxHoldingOffset_, comboBoxHoldingOffset_));
+                        uint address_start = (uint)(item.RegisterUInt + template_HoldingOffset); // - P.uint_parser(textBoxHoldingOffset_, comboBoxHoldingOffset_));
                         uint num_regs = 1;
 
                         if (item.Mappings != null)
@@ -7737,10 +7741,12 @@ namespace ModBus_Client
 
         private void comboBoxHoldingGroup_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (comboBoxHoldingGroup.SelectedItem != null)
+            if (comboBoxHoldingGroup.SelectedItem != null && buttonReadHoldingTemplateGroup.IsEnabled)
             {
                 KeyValuePair<Group_Item, String> kp = (KeyValuePair<Group_Item, String>)comboBoxHoldingGroup.SelectedItem;
                 comboBoxHoldingGroup_ = kp.Key.Group;
+
+                buttonReadHoldingTemplateGroup_Click(null, null);
             }
         }
 
@@ -7769,7 +7775,7 @@ namespace ModBus_Client
                         if (item == null)
                             continue;
 
-                        uint address_start = (uint)(item.RegisterUInt + template_inputRegistersOffset - P.uint_parser(textBoxInputRegOffset_, comboBoxInputRegOffset_));
+                        uint address_start = (uint)(item.RegisterUInt + template_inputRegistersOffset); // - P.uint_parser(textBoxInputRegOffset_, comboBoxInputRegOffset_));
                         uint num_regs = 1;
 
                         if (item.Mappings != null)
@@ -7886,7 +7892,7 @@ namespace ModBus_Client
                                 continue;
                         }
 
-                        uint address_start = (uint)(item.RegisterUInt + template_inputRegistersOffset - P.uint_parser(textBoxInputRegOffset_, comboBoxInputRegOffset_));
+                        uint address_start = (uint)(item.RegisterUInt + template_inputRegistersOffset); // - P.uint_parser(textBoxInputRegOffset_, comboBoxInputRegOffset_));
                         uint num_regs = 1;
 
                         if (item.Mappings != null)
@@ -7997,7 +8003,7 @@ namespace ModBus_Client
                         if (item == null)
                             continue;
 
-                        uint address_start = (uint)(item.RegisterUInt + template_inputsOffset - P.uint_parser(textBoxInputOffset_, comboBoxInputOffset_));
+                        uint address_start = (uint)(item.RegisterUInt + template_inputsOffset); // - P.uint_parser(textBoxInputOffset_, comboBoxInputOffset_));
                         uint num_regs = 1;
 
                         UInt16[] response = ModBus.readInputStatus_02(
@@ -8099,7 +8105,7 @@ namespace ModBus_Client
                                 continue;
                         }
 
-                        uint address_start = (uint)(item.RegisterUInt + template_inputsOffset - P.uint_parser(textBoxInputOffset_, comboBoxInputOffset_));
+                        uint address_start = (uint)(item.RegisterUInt + template_inputsOffset); // - P.uint_parser(textBoxInputOffset_, comboBoxInputOffset_));
                         uint num_regs = 1;
 
                         UInt16[] response = ModBus.readInputStatus_02(
@@ -8195,7 +8201,7 @@ namespace ModBus_Client
                         if (item == null)
                             continue;
 
-                        uint address_start = (uint)(item.RegisterUInt + template_coilsOffset - P.uint_parser(textBoxCoilsOffset_, comboBoxCoilsOffset_));
+                        uint address_start = (uint)(item.RegisterUInt + template_coilsOffset); // - P.uint_parser(textBoxCoilsOffset_, comboBoxCoilsOffset_));
                         uint num_regs = 1;
 
                         UInt16[] response = ModBus.readCoilStatus_01(
@@ -8259,11 +8265,14 @@ namespace ModBus_Client
 
         private void buttonReadCoilsTemplateGroup_Click(object sender, RoutedEventArgs e)
         {
-            buttonReadCoilsTemplateGroup.IsEnabled = false;
+            if (comboBoxCoilsGroup.IsEnabled)
+            {
+                buttonReadCoilsTemplateGroup.IsEnabled = false;
 
-            Thread t = new Thread(new ThreadStart(readCoilsTemplateGroup));
-            t.Priority = threadPriority;
-            t.Start();
+                Thread t = new Thread(new ThreadStart(readCoilsTemplateGroup));
+                t.Priority = threadPriority;
+                t.Start();
+            }
         }
 
         public void readCoilsTemplateGroup()
@@ -8297,7 +8306,7 @@ namespace ModBus_Client
                                 continue;
                         }
 
-                        uint address_start = (uint)(item.RegisterUInt + template_coilsOffset - P.uint_parser(textBoxCoilsOffset_, comboBoxCoilsOffset_));
+                        uint address_start = (uint)(item.RegisterUInt + template_coilsOffset); // - P.uint_parser(textBoxCoilsOffset_, comboBoxCoilsOffset_));
                         uint num_regs = 1;
 
                         UInt16[] response = ModBus.readCoilStatus_01(
@@ -8361,10 +8370,12 @@ namespace ModBus_Client
 
         private void comboBoxCoilsGroup_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (comboBoxCoilsGroup.SelectedItem != null)
+            if (comboBoxCoilsGroup.SelectedItem != null && buttonReadCoilsTemplateGroup.IsEnabled)
             {
                 KeyValuePair<Group_Item, String> kp = (KeyValuePair<Group_Item, String>)comboBoxCoilsGroup.SelectedItem;
                 comboBoxCoilsGroup_ = kp.Key.Group;
+
+                buttonReadCoilsTemplateGroup_Click(null, null);
             }
         }
     }

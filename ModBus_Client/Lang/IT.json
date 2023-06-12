@@ -433,6 +433,7 @@
     "labelMultipleCoils": "Nr. of coils",
     "labelMultipleRegisters": "Nr. of registers",
     "overwriteProfile": "Il profilo corrente esiste già, sovrascriverlo?",
-    "deleteProfile": "Cancellare il profilo selezionato?"
+    "deleteProfile": "Cancellare il profilo selezionato?",
+    "importProfileWarning": "Importando il profilo selezionato verrà sovrascritto completamente quello corrente. Procedere?"
   }
 }

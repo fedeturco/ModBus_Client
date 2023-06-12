@@ -71,6 +71,9 @@ namespace ModBus_Client
         ObservableCollection<ModBus_Item> list_holdingRegistersTable = new ObservableCollection<ModBus_Item>();
 
         ObservableCollection<Group_Item> list_groups = new ObservableCollection<Group_Item>();
+
+        Language lang;
+
         public TemplateEditor(MainWindow main_)
         {
             InitializeComponent();
@@ -93,8 +96,8 @@ namespace ModBus_Client
                 }
             });
 
-            Language lib = new Language(this);
-            lib.loadLanguageTemplate(main.language);
+            lang = new Language(this);
+            lang.loadLanguageTemplate(main.language);
 
             // Centro la finestra
             double screenWidth = System.Windows.SystemParameters.PrimaryScreenWidth;
@@ -450,33 +453,35 @@ namespace ModBus_Client
 
         private void importProfileModbusSimulatorMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            // Cancello le liste attuali
-            list_coilsTable.Clear();
-            list_inputsTable.Clear();
-            list_inputRegistersTable.Clear();
-            list_holdingRegistersTable.Clear();
-
-            // Resetto le varie combo a decimal
-            comboBoxCoilsRegistri.SelectedIndex = 0;
-            comboBoxCoilsOffset.SelectedIndex = 0;
-
-            comboBoxInputRegistri.SelectedIndex = 0;
-            comboBoxInputOffset.SelectedIndex = 0;
-
-            comboBoxInputRegRegistri.SelectedIndex = 0;
-            comboBoxInputRegOffset.SelectedIndex = 0;
-            
-            comboBoxHoldingRegistri.SelectedIndex = 0;
-            comboBoxHoldingOffset.SelectedIndex = 0;
-
-            // Riporto gli offset a 0
-            textBoxCoilsOffset.Text = "0";
-            textBoxInputOffset.Text = "0";
-            textBoxInputRegOffset.Text = "0";
-            textBoxHoldingOffset.Text = "0";
-
-            if (MessageBox.Show("Importing the profile will erase the actual template (including custom mappings). Do you want to proceed?", "Alert", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+            if (MessageBox.Show(lang.languageTemplate["strings"]["importProfileWarning"], "Alert", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
             {
+                // Cancello le liste attuali
+                list_coilsTable.Clear();
+                list_inputsTable.Clear();
+                list_inputRegistersTable.Clear();
+                list_holdingRegistersTable.Clear();
+
+                list_groups.Clear();
+
+                // Resetto le varie combo a decimal
+                comboBoxCoilsRegistri.SelectedIndex = 0;
+                comboBoxCoilsOffset.SelectedIndex = 0;
+
+                comboBoxInputRegistri.SelectedIndex = 0;
+                comboBoxInputOffset.SelectedIndex = 0;
+
+                comboBoxInputRegRegistri.SelectedIndex = 0;
+                comboBoxInputRegOffset.SelectedIndex = 0;
+
+                comboBoxHoldingRegistri.SelectedIndex = 0;
+                comboBoxHoldingOffset.SelectedIndex = 0;
+
+                // Riporto gli offset a 0
+                textBoxCoilsOffset.Text = "0";
+                textBoxInputOffset.Text = "0";
+                textBoxInputRegOffset.Text = "0";
+                textBoxHoldingOffset.Text = "0";
+
                 OpenFileDialog window = new OpenFileDialog();
 
                 window.Filter = "json Files | *.json";
@@ -532,6 +537,12 @@ namespace ModBus_Client
                             item.Notes = regConfig["label"];
                             item.Mappings = "";
 
+                            if (regConfig.ContainsKey("mappings"))
+                                item.Mappings = regConfig["mappings"];
+
+                            if (regConfig.ContainsKey("group"))
+                                item.Group = regConfig["group"];
+
                             switch (key)
                             {
                                 case "di":
@@ -551,6 +562,12 @@ namespace ModBus_Client
                                     break;
                             }
                         }
+                    }
+
+                    foreach(dynamic group in profile["groups"])
+                    {
+                        Group_Item newGroup = (Group_Item)group;
+                        list_groups.Add(newGroup);
                     }
                 }
             }
@@ -620,6 +637,8 @@ namespace ModBus_Client
                         md.reg = (P.uint_parser(item.Register, comboBoxInputRegistri) + P.uint_parser(textBoxInputOffset.Text, comboBoxInputOffset)).ToString();
                         md.label = item.Notes;
                         md.value = 0;
+                        md.mappings = "";
+                        md.group = item.Group;
 
                         if ((int.Parse(md.reg) + 1) > slave.di.len)
                             slave.di.len = int.Parse(md.reg) + 1;
@@ -635,6 +654,8 @@ namespace ModBus_Client
                         md.reg = (P.uint_parser(item.Register, comboBoxCoilsRegistri) + P.uint_parser(textBoxCoilsOffset.Text, comboBoxCoilsOffset)).ToString();
                         md.label = item.Notes;
                         md.value = 0;
+                        md.mappings = "";
+                        md.group = item.Group;
 
                         if ((int.Parse(md.reg) + 1) > slave.co.len)
                             slave.co.len = int.Parse(md.reg) + 1;
@@ -650,6 +671,8 @@ namespace ModBus_Client
                         md.reg = (P.uint_parser(item.Register, comboBoxInputRegRegistri) + P.uint_parser(textBoxInputRegOffset.Text, comboBoxInputRegOffset)).ToString();
                         md.label = item.Notes;
                         md.value = 0;
+                        md.mappings = item.Mappings;
+                        md.group = item.Group;
 
                         if ((int.Parse(md.reg) + 1) > slave.ir.len)
                             slave.ir.len = int.Parse(md.reg) + 1;
@@ -665,12 +688,20 @@ namespace ModBus_Client
                         md.reg = (P.uint_parser(item.Register, comboBoxHoldingRegistri) + P.uint_parser(textBoxHoldingOffset.Text, comboBoxHoldingOffset)).ToString();
                         md.label = item.Notes;
                         md.value = 0;
+                        md.mappings = item.Mappings;
+                        md.group = item.Group;
 
                         if ((int.Parse(md.reg) + 1) > slave.hr.len)
                             slave.hr.len = int.Parse(md.reg) + 1;
 
                         slave.hr.data.Add(md);
                     }
+
+                    slave.groups = new List<Group_Item>();
+
+                    // Groups
+                    foreach (Group_Item group in list_groups)
+                        slave.groups.Add(group);
 
                     JavaScriptSerializer jss = new JavaScriptSerializer();
                     jss.MaxJsonLength = main.MaxJsonLength;
@@ -681,6 +712,70 @@ namespace ModBus_Client
             {
                 Console.WriteLine(err);
                 MessageBox.Show("Errore salvataggio configurazione", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void ButtonImportCsvGroups_Click(object sender, RoutedEventArgs e)
+        {
+            list_groups.Clear();
+
+            OpenFileDialog window = new OpenFileDialog();
+
+            window.Filter = "csv Files | *.csv";
+            window.DefaultExt = ".csv";
+
+            if ((bool)window.ShowDialog())
+            {
+                string content = File.ReadAllText(window.FileName);
+                string[] splitted = content.Split('\n');
+
+                for (int i = 1; i < splitted.Count(); i++)
+                {
+                    ModBus_Item item = new ModBus_Item();
+
+                    try
+                    {
+                        if (splitted[i].Length > 1)
+                        {
+                            Group_Item group = new Group_Item();
+
+                            group.Group = splitted[i].Split(',')[0];
+                            group.Label = splitted[i].Split(',')[1];
+
+                            list_groups.Add(group);
+                        }
+                    }
+                    catch
+                    {
+                    }
+                }
+            }
+        }
+
+        private void ButtonExportCsvGroups_Click(object sender, RoutedEventArgs e)
+        {
+            SaveFileDialog window = new SaveFileDialog();
+
+            window.Filter = "csv Files | *.csv";
+            window.DefaultExt = ".csv";
+            window.FileName = main.pathToConfiguration + "_Groups.csv";
+
+            if ((bool)window.ShowDialog())
+            {
+                if (window.FileName.IndexOf("csv") != -1)
+                {
+                    String content = "Group,Label,\n";
+
+                    foreach (Group_Item group in list_groups)
+                    {
+                        if (group != null)
+                        {
+                            content += group.Group + "," + group.Label + ",\n";
+                        }
+                    }
+
+                    File.WriteAllText(window.FileName, content);
+                }
             }
         }
     }
@@ -743,6 +838,8 @@ namespace ModBus_Client
         public MOD_RegProfile co { get; set; }
         public MOD_RegProfile ir { get; set; }
         public MOD_RegProfile hr { get; set; }
+
+        public List<Group_Item> groups { get; set; }
     }
     public class MOD_RegProfile
     {
@@ -755,5 +852,7 @@ namespace ModBus_Client
         public string reg { get; set; }
         public Int32 value { get; set; }
         public string label { get; set; }
+        public string mappings { get; set; }
+        public string group { get; set; }
     }
 }

@@ -338,6 +338,7 @@
     "labelMultipleCoils": "Nr. of coils",
     "labelMultipleRegisters": "Nr. of registers",
     "overwriteProfile": "Current profile already exists, overwrite?",
-    "deleteProfile": "Delete selected profile?"
+    "deleteProfile": "Delete selected profile?",
+    "importProfileWarning": "Importing the profile will erase the actual template (including custom mappings). Do you want to proceed?"
   }
 }
