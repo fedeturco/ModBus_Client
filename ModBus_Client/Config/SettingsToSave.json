@@ -78,7 +78,9 @@
       "viewTabHoldingRegistersBinaryValues": {},
       "viewTabHoldingRegistersConvertedValues": {},
       "viewTabHoldingRegistersNotes": {},
-      "viewTabHoldingRegistersMappings": {}
+      "viewTabHoldingRegistersMappings": {},
+
+      "ViewFullSizeTables": {}
     },
     "radioButtons": {
       "radioButtonModeSerial": {},

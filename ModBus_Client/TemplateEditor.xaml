@@ -37,7 +37,7 @@
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Register" Binding="{Binding Register}" Width="100"/>
                             <DataGridTextColumn Header="Notes" Binding="{Binding Notes}" Width="600"/>
-                            <DataGridTextColumn Header="Group" Binding="{Binding Group}" Width="60"/>
+                            <DataGridTextColumn Header="Group" Binding="{Binding Group}" Width="120"/>
                         </DataGrid.Columns>
                     </DataGrid>
                     <Button x:Name="ButtonExportCsvCoils" Content="Export csv" Margin="0,10,10.429,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="75" Height="25" RenderTransformOrigin="0.502,0.5" Click="ButtonExportCsvCoils_Click"/>

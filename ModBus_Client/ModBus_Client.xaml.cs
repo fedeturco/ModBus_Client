@@ -157,11 +157,6 @@ namespace ModBus_Client
         SaveFileDialog saveFileDialogBox;
         //OpenFileDialog openFileDialogBox;
 
-        public int template_coilsOffset = 0;
-        public int template_inputsOffset = 0;
-        public int template_inputRegistersOffset = 0;
-        public int template_HoldingOffset = 0;
-
         // Le liste seguenti contengono il registro già convertito in DEC duramte il caricamento del file Template.json
         public ObservableCollection<ModBus_Item> list_template_coilsTable = new ObservableCollection<ModBus_Item>();
         public ObservableCollection<ModBus_Item> list_template_inputsTable = new ObservableCollection<ModBus_Item>();
@@ -1321,18 +1316,13 @@ namespace ModBus_Client
                 Console.WriteLine("Error loading configuration\n");
             }
 
+            // Al termine del caricamento della configurazione carico il template
             try
             {
-                string file_content = File.ReadAllText("Json/" + pathToConfiguration + "/Template.json");
-
+                string file_content = File.ReadAllText(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "\\Json\\" + pathToConfiguration + "\\Template.json");
                 JavaScriptSerializer jss = new JavaScriptSerializer();
                 jss.MaxJsonLength = this.MaxJsonLength;
                 TEMPLATE template = jss.Deserialize<TEMPLATE>(file_content);
-
-                template_coilsOffset = 0;
-                template_inputsOffset = 0;
-                template_inputRegistersOffset = 0;
-                template_HoldingOffset = 0;
 
                 list_template_coilsTable.Clear();
                 list_template_inputsTable.Clear();
@@ -1342,23 +1332,23 @@ namespace ModBus_Client
                 UInt16 tmp = 0;
 
                 // Coils
-                template_coilsOffset = int.Parse(template.textBoxCoilsOffset_, template.comboBoxCoilsOffset_ == "HEX" ? System.Globalization.NumberStyles.HexNumber : System.Globalization.NumberStyles.Integer);
+                int template_coilsOffset = int.Parse(template.textBoxCoilsOffset_, template.comboBoxCoilsOffset_ == "HEX" ? System.Globalization.NumberStyles.HexNumber : System.Globalization.NumberStyles.Integer);
 
                 // Inputs
-                template_inputsOffset = int.Parse(template.textBoxInputOffset_, template.comboBoxInputOffset_ == "HEX" ? System.Globalization.NumberStyles.HexNumber : System.Globalization.NumberStyles.Integer);
+                int template_inputsOffset = int.Parse(template.textBoxInputOffset_, template.comboBoxInputOffset_ == "HEX" ? System.Globalization.NumberStyles.HexNumber : System.Globalization.NumberStyles.Integer);
 
                 // Input registers
-                template_inputRegistersOffset = int.Parse(template.textBoxInputRegOffset_, template.comboBoxInputRegOffset_ == "HEX" ? System.Globalization.NumberStyles.HexNumber : System.Globalization.NumberStyles.Integer);
+                int template_inputRegistersOffset = int.Parse(template.textBoxInputRegOffset_, template.comboBoxInputRegOffset_ == "HEX" ? System.Globalization.NumberStyles.HexNumber : System.Globalization.NumberStyles.Integer);
 
                 // Holding registers
-                template_HoldingOffset = int.Parse(template.textBoxHoldingOffset_, template.comboBoxHoldingOffset_ == "HEX" ? System.Globalization.NumberStyles.HexNumber : System.Globalization.NumberStyles.Integer);
+                int template_HoldingOffset = int.Parse(template.textBoxHoldingOffset_, template.comboBoxHoldingOffset_ == "HEX" ? System.Globalization.NumberStyles.HexNumber : System.Globalization.NumberStyles.Integer);
 
                 // Tabella coils
                 for (int i = 0; i < template.dataGridViewCoils.Count(); i++)
                 {
                     if (UInt16.TryParse(template.dataGridViewCoils[i].Register, template.comboBoxCoilsRegistri_ == "HEX" ? System.Globalization.NumberStyles.HexNumber : System.Globalization.NumberStyles.Integer, null, out tmp))
                     {
-                        template.dataGridViewCoils[i].RegisterUInt = tmp;
+                        template.dataGridViewCoils[i].RegisterUInt = (UInt16)(tmp + template_coilsOffset);
                         template.dataGridViewCoils[i].Register = tmp.ToString();
                         list_template_coilsTable.Add(template.dataGridViewCoils[i]);
                     }
@@ -1369,7 +1359,7 @@ namespace ModBus_Client
                 {
                     if (UInt16.TryParse(template.dataGridViewInput[i].Register, template.comboBoxInputRegistri_ == "HEX" ? System.Globalization.NumberStyles.HexNumber : System.Globalization.NumberStyles.Integer, null, out tmp))
                     {
-                        template.dataGridViewInput[i].RegisterUInt = tmp;
+                        template.dataGridViewInput[i].RegisterUInt = (UInt16)(tmp + template_inputsOffset);
                         template.dataGridViewInput[i].Register = tmp.ToString();
                         list_template_inputsTable.Add(template.dataGridViewInput[i]);
                     }
@@ -1380,8 +1370,8 @@ namespace ModBus_Client
                 {
                     if (UInt16.TryParse(template.dataGridViewInputRegister[i].Register, template.comboBoxInputRegRegistri_ == "HEX" ? System.Globalization.NumberStyles.HexNumber : System.Globalization.NumberStyles.Integer, null, out tmp))
                     {
-                        template.dataGridViewInputRegister[i].RegisterUInt = tmp;
-                        template.dataGridViewInputRegister[i].Register = tmp.ToString();
+                        template.dataGridViewInputRegister[i].RegisterUInt = (UInt16)(tmp + template_inputRegistersOffset);
+                        template.dataGridViewInputRegister[i].Register = template.dataGridViewInputRegister[i].RegisterUInt.ToString();
                         list_template_inputRegistersTable.Add(template.dataGridViewInputRegister[i]);
                     }
                 }
@@ -1391,10 +1381,51 @@ namespace ModBus_Client
                 {
                     if (UInt16.TryParse(template.dataGridViewHolding[i].Register, template.comboBoxHoldingRegistri_ == "HEX" ? System.Globalization.NumberStyles.HexNumber : System.Globalization.NumberStyles.Integer, null, out tmp))
                     {
-                        template.dataGridViewHolding[i].RegisterUInt = tmp;
-                        template.dataGridViewHolding[i].Register = tmp.ToString();
+                        template.dataGridViewHolding[i].RegisterUInt = (UInt16)(tmp + template_HoldingOffset);
+                        template.dataGridViewHolding[i].Register = template.dataGridViewHolding[i].RegisterUInt.ToString();
                         list_template_holdingRegistersTable.Add(template.dataGridViewHolding[i]);
                     }
+                }
+
+                // Tabella groups
+                comboBoxHoldingGroup.Items.Clear();
+                comboBoxInputRegisterGroup.Items.Clear();
+                comboBoxInputGroup.Items.Clear();
+                comboBoxCoilsGroup.Items.Clear();
+
+                if (template.Groups != null)
+                {
+                    comboBoxHoldingGroup.IsEnabled = template.Groups.Count() > 0;
+                    comboBoxInputRegisterGroup.IsEnabled = template.Groups.Count() > 0;
+                    comboBoxInputGroup.IsEnabled = template.Groups.Count() > 0;
+                    comboBoxCoilsGroup.IsEnabled = template.Groups.Count() > 0;
+
+                    if (template.Groups.Count() > 0)
+                    {
+                        try
+                        {
+                            foreach (Group_Item gr in template.Groups.OrderBy(x => int.Parse(x.Group)))
+                            {
+                                KeyValuePair<Group_Item, String> kp = new KeyValuePair<Group_Item, String>(gr, gr.Group + " - " + gr.Label);
+                                comboBoxHoldingGroup.Items.Add(kp);
+                                comboBoxInputRegisterGroup.Items.Add(kp);
+                                comboBoxInputGroup.Items.Add(kp);
+                                comboBoxCoilsGroup.Items.Add(kp);
+                            }
+                        }
+                        catch (Exception err)
+                        {
+                            Console.WriteLine("Error loading group items\n");
+                            Console.WriteLine(err);
+                        }
+                    }
+                }
+                else
+                {
+                    comboBoxHoldingGroup.IsEnabled = false;
+                    comboBoxInputRegisterGroup.IsEnabled = false;
+                    comboBoxInputGroup.IsEnabled = false;
+                    comboBoxCoilsGroup.IsEnabled = false;
                 }
             }
             catch (Exception err)
@@ -1625,7 +1656,7 @@ namespace ModBus_Client
                         if (response.Length > 0)
                         {
                             // Cancello la tabella e inserisco le nuove righe
-                            insertRowsTable(list_coilsTable, list_template_coilsTable, template_coilsOffset, P.uint_parser(textBoxCoilsOffset_, comboBoxCoilsOffset_), address_start, response, colorDefaultReadCellStr, comboBoxCoilsRegistri_, "DEC", true);
+                            insertRowsTable(list_coilsTable, list_template_coilsTable, P.uint_parser(textBoxCoilsOffset_, comboBoxCoilsOffset_), address_start, response, colorDefaultReadCellStr, comboBoxCoilsRegistri_, "DEC", true);
                         }
                     }
                 }
@@ -1736,7 +1767,7 @@ namespace ModBus_Client
                 }
 
                 // Cancello la tabella e inserisco le nuove righe
-                insertRowsTable(list_coilsTable, list_template_coilsTable, template_coilsOffset, P.uint_parser(textBoxCoilsOffset_, comboBoxCoilsOffset_),  address_start, response, colorDefaultReadCellStr, comboBoxCoilsRegistri_, "DEC", true);
+                insertRowsTable(list_coilsTable, list_template_coilsTable, P.uint_parser(textBoxCoilsOffset_, comboBoxCoilsOffset_),  address_start, response, colorDefaultReadCellStr, comboBoxCoilsRegistri_, "DEC", true);
 
                 this.Dispatcher.Invoke((Action)delegate
                 {
@@ -1786,7 +1817,7 @@ namespace ModBus_Client
             }
         }
 
-        private void SetTableInternalError(ObservableCollection<ModBus_Item> list_, bool clear)
+        public void SetTableInternalError(ObservableCollection<ModBus_Item> list_, bool clear)
         {
             ModBus_Item tmp = new ModBus_Item();
 
@@ -1804,7 +1835,7 @@ namespace ModBus_Client
             });
         }
 
-        private void SetTableCrcError(ObservableCollection<ModBus_Item> list_, bool clear)
+        public void SetTableCrcError(ObservableCollection<ModBus_Item> list_, bool clear)
         {
             ModBus_Item tmp = new ModBus_Item();
 
@@ -1822,7 +1853,7 @@ namespace ModBus_Client
             });
         }
 
-        private void SetTableTimeoutError(ObservableCollection<ModBus_Item> list_, bool clear)
+        public void SetTableTimeoutError(ObservableCollection<ModBus_Item> list_, bool clear)
         {
             ModBus_Item tmp = new ModBus_Item();
 
@@ -1840,7 +1871,7 @@ namespace ModBus_Client
             });
         }
 
-        private void SetTableModBusError(ObservableCollection<ModBus_Item> list_, ModbusException err, bool clear)
+        public void SetTableModBusError(ObservableCollection<ModBus_Item> list_, ModbusException err, bool clear)
         {
             ModBus_Item tmp = new ModBus_Item();
 
@@ -1885,7 +1916,7 @@ namespace ModBus_Client
                         UInt16[] value = { UInt16.Parse(textBoxCoilsValue05_) };
 
                         // Cancello la tabella e inserisco le nuove righe
-                        insertRowsTable(list_coilsTable, list_template_coilsTable, template_coilsOffset, P.uint_parser(textBoxCoilsOffset_, comboBoxCoilsOffset_), address_start, value, colorDefaultWriteCellStr, comboBoxCoilsRegistri_, "DEC", true);
+                        insertRowsTable(list_coilsTable, list_template_coilsTable, P.uint_parser(textBoxCoilsOffset_, comboBoxCoilsOffset_), address_start, value, colorDefaultWriteCellStr, comboBoxCoilsRegistri_, "DEC", true);
                     }
                 }
 
@@ -1962,7 +1993,7 @@ namespace ModBus_Client
                         UInt16[] value = { UInt16.Parse(textBoxCoilsValue05_b_) };
 
                         // Cancello la tabella e inserisco le nuove righe
-                        insertRowsTable(list_coilsTable, list_template_coilsTable, template_coilsOffset, P.uint_parser(textBoxCoilsOffset_, comboBoxCoilsOffset_), address_start, value, colorDefaultWriteCellStr, comboBoxCoilsRegistri_, "DEC", true);
+                        insertRowsTable(list_coilsTable, list_template_coilsTable, P.uint_parser(textBoxCoilsOffset_, comboBoxCoilsOffset_), address_start, value, colorDefaultWriteCellStr, comboBoxCoilsRegistri_, "DEC", true);
                     }
                 }
 
@@ -2053,7 +2084,7 @@ namespace ModBus_Client
                         }
 
                         // Cancello la tabella e inserisco le nuove righe
-                        insertRowsTable(list_coilsTable, list_template_coilsTable, template_coilsOffset, P.uint_parser(textBoxCoilsOffset_, comboBoxCoilsOffset_), address_start, value, colorDefaultWriteCellStr, comboBoxCoilsRegistri_, null, true);
+                        insertRowsTable(list_coilsTable, list_template_coilsTable, P.uint_parser(textBoxCoilsOffset_, comboBoxCoilsOffset_), address_start, value, colorDefaultWriteCellStr, comboBoxCoilsRegistri_, null, true);
                     }
                 }
 
@@ -2153,7 +2184,7 @@ namespace ModBus_Client
                         if (response.Length > 0)
                         {
                             // Cancello la tabella e inserisco le nuove righe
-                            insertRowsTable(list_inputsTable, list_template_inputsTable, template_inputsOffset, P.uint_parser(textBoxInputOffset_, comboBoxInputOffset_), address_start, response, colorDefaultReadCellStr, comboBoxInputRegistri_, "DEC", true);
+                            insertRowsTable(list_inputsTable, list_template_inputsTable, P.uint_parser(textBoxInputOffset_, comboBoxInputOffset_), address_start, response, colorDefaultReadCellStr, comboBoxInputRegistri_, "DEC", true);
                         }
                     }
                 }
@@ -2273,7 +2304,7 @@ namespace ModBus_Client
                 }
 
                 // Cancello la tabella e inserisco le nuove righe
-                insertRowsTable(list_inputsTable, list_template_inputsTable, template_inputsOffset, P.uint_parser(textBoxInputOffset_, comboBoxInputOffset_), address_start, response, colorDefaultReadCellStr, comboBoxInputRegistri_, "DEC", true);
+                insertRowsTable(list_inputsTable, list_template_inputsTable, P.uint_parser(textBoxInputOffset_, comboBoxInputOffset_), address_start, response, colorDefaultReadCellStr, comboBoxInputRegistri_, "DEC", true);
 
                 this.Dispatcher.Invoke((Action)delegate
                 {
@@ -2376,7 +2407,7 @@ namespace ModBus_Client
                         if (response.Length > 0)
                         {
                             // Cancello la tabella e inserisco le nuove righe
-                            insertRowsTable(list_inputRegistersTable, list_template_inputRegistersTable, template_inputRegistersOffset, P.uint_parser(textBoxInputRegOffset_, comboBoxInputRegOffset_), address_start, response, colorDefaultReadCellStr, comboBoxInputRegRegistri_, comboBoxInputRegValori_, true);
+                            insertRowsTable(list_inputRegistersTable, list_template_inputRegistersTable, P.uint_parser(textBoxInputRegOffset_, comboBoxInputRegOffset_), address_start, response, colorDefaultReadCellStr, comboBoxInputRegRegistri_, comboBoxInputRegValori_, true);
                         }
                     }
                 }
@@ -2501,7 +2532,7 @@ namespace ModBus_Client
                 }
 
                 // Cancello la tabella e inserisco le nuove righe
-                insertRowsTable(list_inputRegistersTable, list_template_inputRegistersTable, template_inputRegistersOffset, P.uint_parser(textBoxInputRegOffset_, comboBoxInputRegOffset_), address_start, response, colorDefaultReadCellStr, comboBoxInputRegRegistri_, comboBoxInputRegValori_, true);
+                insertRowsTable(list_inputRegistersTable, list_template_inputRegistersTable, P.uint_parser(textBoxInputRegOffset_, comboBoxInputRegOffset_), address_start, response, colorDefaultReadCellStr, comboBoxInputRegRegistri_, comboBoxInputRegValori_, true);
 
                 this.Dispatcher.Invoke((Action)delegate
                 {
@@ -2605,8 +2636,7 @@ namespace ModBus_Client
                             // Cancello la tabella e inserisco le nuove righe
                             insertRowsTable(
                                 list_holdingRegistersTable, 
-                                list_template_holdingRegistersTable, 
-                                template_HoldingOffset,
+                                list_template_holdingRegistersTable,
                                 P.uint_parser(textBoxHoldingOffset_, comboBoxHoldingOffset_),
                                 address_start,
                                 response, 
@@ -2695,7 +2725,7 @@ namespace ModBus_Client
                         UInt16[] value = { (UInt16)P.uint_parser(textBoxHoldingValue06_, comboBoxHoldingValue06_) };
 
                         // Cancello la tabella e inserisco le nuove righe
-                        insertRowsTable(list_holdingRegistersTable, list_template_holdingRegistersTable, template_HoldingOffset, P.uint_parser(textBoxHoldingOffset_, comboBoxHoldingOffset_), address_start, value, colorDefaultWriteCellStr, comboBoxHoldingRegistri_, comboBoxHoldingValori_, true);
+                        insertRowsTable(list_holdingRegistersTable, list_template_holdingRegistersTable, P.uint_parser(textBoxHoldingOffset_, comboBoxHoldingOffset_), address_start, value, colorDefaultWriteCellStr, comboBoxHoldingRegistri_, comboBoxHoldingValori_, true);
                     }
                 }
 
@@ -2793,7 +2823,7 @@ namespace ModBus_Client
                         if (writtenRegs.Length == word_count)
                         {
                             // Cancello la tabella e inserisco le nuove righe
-                            insertRowsTable(list_holdingRegistersTable, list_template_holdingRegistersTable, template_HoldingOffset, P.uint_parser(textBoxHoldingOffset_, comboBoxHoldingOffset_), address_start, writtenRegs, colorDefaultWriteCellStr, comboBoxHoldingRegistri_, comboBoxHoldingValori_, true);
+                            insertRowsTable(list_holdingRegistersTable, list_template_holdingRegistersTable, P.uint_parser(textBoxHoldingOffset_, comboBoxHoldingOffset_), address_start, writtenRegs, colorDefaultWriteCellStr, comboBoxHoldingRegistri_, comboBoxHoldingValori_, true);
                         }
                         else
                         {
@@ -2823,7 +2853,7 @@ namespace ModBus_Client
                         if (writtenRegs.Length == word_count)
                         {
                             // Cancello la tabella e inserisco le nuove righe
-                            insertRowsTable(list_holdingRegistersTable, list_template_holdingRegistersTable, template_HoldingOffset, P.uint_parser(textBoxHoldingOffset_, comboBoxHoldingOffset_), address_start, writtenRegs, colorDefaultWriteCellStr, comboBoxHoldingRegistri_, comboBoxHoldingValori_, true);
+                            insertRowsTable(list_holdingRegistersTable, list_template_holdingRegistersTable, P.uint_parser(textBoxHoldingOffset_, comboBoxHoldingOffset_), address_start, writtenRegs, colorDefaultWriteCellStr, comboBoxHoldingRegistri_, comboBoxHoldingValori_, true);
                         }
                         else
                         {
@@ -2968,7 +2998,7 @@ namespace ModBus_Client
                 }
 
                 // Cancello la tabella e inserisco le nuove righe
-                insertRowsTable(list_holdingRegistersTable, list_template_holdingRegistersTable, template_HoldingOffset, P.uint_parser(textBoxHoldingOffset_, comboBoxHoldingOffset_), address_start, response, colorDefaultReadCellStr, comboBoxHoldingRegistri_, comboBoxHoldingValori_, true);
+                insertRowsTable(list_holdingRegistersTable, list_template_holdingRegistersTable, P.uint_parser(textBoxHoldingOffset_, comboBoxHoldingOffset_), address_start, response, colorDefaultReadCellStr, comboBoxHoldingRegistri_, comboBoxHoldingValori_, true);
 
                 this.Dispatcher.Invoke((Action)delegate
                 {
@@ -3690,7 +3720,7 @@ namespace ModBus_Client
         }
 
         // Funzione inserimento righe nelle collections
-        public void insertRowsTable(ObservableCollection<ModBus_Item> tab_1, IEnumerable<ModBus_Item> template, int template_offset, uint user_offset, uint address_start, UInt16[] response, String cellBackGround, String formatRegister, String formatVal, bool clearTable)
+        public void insertRowsTable(ObservableCollection<ModBus_Item> tab_1, IEnumerable<ModBus_Item> template, uint user_offset, uint address_start, UInt16[] response, String cellBackGround, String formatRegister, String formatVal, bool clearTable)
         {
             if (clearTable)
             {
@@ -3755,7 +3785,7 @@ namespace ModBus_Client
                         }
                     }
 
-                    ModBus_Item found = template.FirstOrDefault(x => (x.RegisterUInt + template_offset) == (address_start + i));
+                    ModBus_Item found = template.FirstOrDefault(x => x.RegisterUInt == (address_start + i));
                     if (found != null)
                     {
                         String convertedValue;
@@ -3968,7 +3998,7 @@ namespace ModBus_Client
                         UInt16[] value = { (UInt16)P.uint_parser(textBoxHoldingValue06_b_, comboBoxHoldingValue06_b_) };
 
                         // Cancello la tabella e inserisco le nuove righe
-                        insertRowsTable(list_holdingRegistersTable, list_template_holdingRegistersTable, template_HoldingOffset, P.uint_parser(textBoxHoldingOffset_, comboBoxHoldingOffset_), address_start, value, colorDefaultWriteCellStr, comboBoxHoldingRegistri_, comboBoxHoldingValori_, true);
+                        insertRowsTable(list_holdingRegistersTable, list_template_holdingRegistersTable, P.uint_parser(textBoxHoldingOffset_, comboBoxHoldingOffset_), address_start, value, colorDefaultWriteCellStr, comboBoxHoldingRegistri_, comboBoxHoldingValori_, true);
                     }
                 }
 
@@ -4534,7 +4564,6 @@ namespace ModBus_Client
                 }
             }
         }
-
         public void writeRegisterDatagrid(object params_)
         {
             try
@@ -4555,7 +4584,7 @@ namespace ModBus_Client
                     if (columnName.ToLower().IndexOf("converted") != -1)
                     {
                         // Estraggo il datatype
-                        ModBus_Item tmp = list_template_holdingRegistersTable.FirstOrDefault(x => x.RegisterUInt == (UInt16)((int)(lastEditModbusItem.RegisterUInt) + int.Parse(textBoxHoldingOffset_, comboBoxHoldingOffset_.IndexOf("HEX") != -1 ? System.Globalization.NumberStyles.HexNumber : System.Globalization.NumberStyles.Integer) - template_HoldingOffset));
+                        ModBus_Item tmp = list_template_holdingRegistersTable.FirstOrDefault(x => x.RegisterUInt == lastEditModbusItem.RegisterUInt);
 
                         String test = "";
                         int offset = 0;     // Offset starting word 32bit / 64bit variables
@@ -4807,6 +4836,8 @@ namespace ModBus_Client
 
                         this.Dispatcher.Invoke((Action)delegate
                         {
+                            dataGridViewHolding.CommitEdit();   // Stackover consiglia due volte one evitare exception
+                            dataGridViewHolding.CommitEdit();
                             dataGridViewHolding.Items.Refresh();
                             dataGridViewHolding.SelectedItem = lastEditModbusItem;
                         });
@@ -4849,6 +4880,8 @@ namespace ModBus_Client
 
                         this.Dispatcher.Invoke((Action)delegate
                         {
+                            dataGridViewHolding.CommitEdit();   // Stackover consiglia due volte one evitare exception
+                            dataGridViewHolding.CommitEdit();
                             dataGridViewHolding.Items.Refresh();
                             dataGridViewHolding.SelectedItem = lastEditModbusItem;
                         });
@@ -4867,7 +4900,7 @@ namespace ModBus_Client
                                 address_start = address_start - 40001;
                             }
 
-                            uint value_ = P.uint_parser(lastEditModbusItem.Value, comboBoxHoldingValori_);
+                            uint value_ = P.uint_parser(obj, comboBoxHoldingValori_);
                             bool? result = ModBus.presetSingleRegister_06(byte.Parse(textBoxModbusAddress_), address_start, value_, readTimeout);
 
                             if (result != null)
@@ -4897,6 +4930,8 @@ namespace ModBus_Client
 
                         this.Dispatcher.Invoke((Action)delegate
                         {
+                            dataGridViewHolding.CommitEdit();   // Stackover consiglia due volte one evitare exception
+                            dataGridViewHolding.CommitEdit();
                             dataGridViewHolding.Items.Refresh();
                             dataGridViewHolding.SelectedItem = lastEditModbusItem;
                         });
@@ -5410,6 +5445,63 @@ namespace ModBus_Client
                             tabControlMain.SelectedIndex = tabControlMain.SelectedIndex + 1;
                         }
                         break;*/
+
+                    case Key.F:
+                        ViewFullSizeTables.IsChecked = !ViewFullSizeTables.IsChecked;
+                        ViewFullSizeTables_Checked(null, null);
+                        break;
+
+                    // Comandi export table
+                    case Key.Y:
+
+                        // Coils
+                        if (tabControlMain.SelectedIndex == 1)
+                        {
+                            if (buttonExportCoils.IsEnabled)
+                                buttonExportCoils_Click(sender, e);
+                        }
+
+                        // Inputs
+                        if (tabControlMain.SelectedIndex == 2)
+                        {
+                            if (buttonExportInput.IsEnabled)
+                                buttonExportInput_Click(sender, e);
+                        }
+
+                        // Input registers
+                        if (tabControlMain.SelectedIndex == 3)
+                        {
+                            if (buttonExportInputReg.IsEnabled)
+                                buttonExportInputReg_Click(sender, e);
+                        }
+
+                        // Holding registers
+                        if (tabControlMain.SelectedIndex == 4)
+                        {
+                            if (buttonExportHoldingReg.IsEnabled)
+                                buttonExportHoldingReg_Click(sender, e);
+                        }
+
+                        break;
+
+                    // Comandi import table
+                    case Key.U:
+
+                        // Coils
+                        if (tabControlMain.SelectedIndex == 1)
+                        {
+                            if (buttonImportCoils.IsEnabled)
+                                buttonImportCoils_Click(sender, e);
+                        }
+
+                        // Holding registers
+                        if (tabControlMain.SelectedIndex == 4)
+                        {
+                            if (buttonImportHoldingReg.IsEnabled)
+                                buttonImportHoldingReg_Click(sender, e);
+                        }
+
+                        break;
 
                 }
 
@@ -6566,11 +6658,6 @@ namespace ModBus_Client
                 jss.MaxJsonLength = this.MaxJsonLength;
                 TEMPLATE template = jss.Deserialize<TEMPLATE>(file_content);
 
-                template_coilsOffset = 0;
-                template_inputsOffset = 0;
-                template_inputRegistersOffset = 0;
-                template_HoldingOffset = 0;
-
                 list_template_coilsTable.Clear();
                 list_template_inputsTable.Clear();
                 list_template_inputRegistersTable.Clear();
@@ -6579,23 +6666,23 @@ namespace ModBus_Client
                 UInt16 tmp = 0;
 
                 // Coils
-                template_coilsOffset = int.Parse(template.textBoxCoilsOffset_, template.comboBoxCoilsOffset_ == "HEX" ? System.Globalization.NumberStyles.HexNumber : System.Globalization.NumberStyles.Integer);
+                int template_coilsOffset = int.Parse(template.textBoxCoilsOffset_, template.comboBoxCoilsOffset_ == "HEX" ? System.Globalization.NumberStyles.HexNumber : System.Globalization.NumberStyles.Integer);
 
                 // Inputs
-                template_inputsOffset = int.Parse(template.textBoxInputOffset_, template.comboBoxInputOffset_ == "HEX" ? System.Globalization.NumberStyles.HexNumber : System.Globalization.NumberStyles.Integer);
+                int template_inputsOffset = int.Parse(template.textBoxInputOffset_, template.comboBoxInputOffset_ == "HEX" ? System.Globalization.NumberStyles.HexNumber : System.Globalization.NumberStyles.Integer);
 
                 // Input registers
-                template_inputRegistersOffset = int.Parse(template.textBoxInputRegOffset_, template.comboBoxInputRegOffset_ == "HEX" ? System.Globalization.NumberStyles.HexNumber : System.Globalization.NumberStyles.Integer);
+                int template_inputRegistersOffset = int.Parse(template.textBoxInputRegOffset_, template.comboBoxInputRegOffset_ == "HEX" ? System.Globalization.NumberStyles.HexNumber : System.Globalization.NumberStyles.Integer);
 
                 // Holding registers
-                template_HoldingOffset = int.Parse(template.textBoxHoldingOffset_, template.comboBoxHoldingOffset_ == "HEX" ? System.Globalization.NumberStyles.HexNumber : System.Globalization.NumberStyles.Integer);
+                int template_HoldingOffset = int.Parse(template.textBoxHoldingOffset_, template.comboBoxHoldingOffset_ == "HEX" ? System.Globalization.NumberStyles.HexNumber : System.Globalization.NumberStyles.Integer);
 
                 // Tabella coils
                 for (int i = 0; i < template.dataGridViewCoils.Count(); i++)
                 {
                     if (UInt16.TryParse(template.dataGridViewCoils[i].Register, template.comboBoxCoilsRegistri_ == "HEX" ? System.Globalization.NumberStyles.HexNumber : System.Globalization.NumberStyles.Integer, null, out tmp))
                     {
-                        template.dataGridViewCoils[i].RegisterUInt = tmp;
+                        template.dataGridViewCoils[i].RegisterUInt = (UInt16)(tmp + template_coilsOffset);
                         template.dataGridViewCoils[i].Register = tmp.ToString();
                         list_template_coilsTable.Add(template.dataGridViewCoils[i]);
                     }
@@ -6606,7 +6693,7 @@ namespace ModBus_Client
                 {
                     if (UInt16.TryParse(template.dataGridViewInput[i].Register, template.comboBoxInputRegistri_ == "HEX" ? System.Globalization.NumberStyles.HexNumber : System.Globalization.NumberStyles.Integer, null, out tmp))
                     {
-                        template.dataGridViewInput[i].RegisterUInt = tmp;
+                        template.dataGridViewInput[i].RegisterUInt = (UInt16)(tmp + template_inputsOffset);
                         template.dataGridViewInput[i].Register = tmp.ToString();
                         list_template_inputsTable.Add(template.dataGridViewInput[i]);
                     }
@@ -6617,7 +6704,7 @@ namespace ModBus_Client
                 {
                     if (UInt16.TryParse(template.dataGridViewInputRegister[i].Register, template.comboBoxInputRegRegistri_ == "HEX" ? System.Globalization.NumberStyles.HexNumber : System.Globalization.NumberStyles.Integer, null, out tmp))
                     {
-                        template.dataGridViewInputRegister[i].RegisterUInt = tmp;
+                        template.dataGridViewInputRegister[i].RegisterUInt = (UInt16)(tmp + template_inputRegistersOffset);
                         template.dataGridViewInputRegister[i].Register = template.dataGridViewInputRegister[i].RegisterUInt.ToString();
                         list_template_inputRegistersTable.Add(template.dataGridViewInputRegister[i]);
                     }
@@ -6628,34 +6715,51 @@ namespace ModBus_Client
                 {
                     if (UInt16.TryParse(template.dataGridViewHolding[i].Register, template.comboBoxHoldingRegistri_ == "HEX" ? System.Globalization.NumberStyles.HexNumber : System.Globalization.NumberStyles.Integer, null, out tmp))
                     {
-                        template.dataGridViewHolding[i].RegisterUInt = tmp;
+                        template.dataGridViewHolding[i].RegisterUInt = (UInt16)(tmp + template_HoldingOffset);
                         template.dataGridViewHolding[i].Register = template.dataGridViewHolding[i].RegisterUInt.ToString();
                         list_template_holdingRegistersTable.Add(template.dataGridViewHolding[i]);
                     }
                 }
 
                 // Tabella groups
+                comboBoxHoldingGroup.Items.Clear();
+                comboBoxInputRegisterGroup.Items.Clear();
+                comboBoxInputGroup.Items.Clear();
+                comboBoxCoilsGroup.Items.Clear();
+
                 if (template.Groups != null)
                 {
-                    comboBoxHoldingGroup.Items.Clear();
-                    comboBoxInputRegisterGroup.Items.Clear();
-                    comboBoxInputGroup.Items.Clear();
-                    comboBoxCoilsGroup.Items.Clear();
-
-                    comboBoxCoilsGroup.IsEnabled = template.Groups.Count() > 0;
                     comboBoxHoldingGroup.IsEnabled = template.Groups.Count() > 0;
+                    comboBoxInputRegisterGroup.IsEnabled = template.Groups.Count() > 0;
+                    comboBoxInputGroup.IsEnabled = template.Groups.Count() > 0;
+                    comboBoxCoilsGroup.IsEnabled = template.Groups.Count() > 0;
 
                     if (template.Groups.Count() > 0)
                     {
-                        for (int i = 0; i < template.Groups.Count(); i++)
+                        try
                         {
-                            KeyValuePair<Group_Item, String> kp = new KeyValuePair<Group_Item, String>(template.Groups[i], template.Groups[i].Group + " - " + template.Groups[i].Label);
-                            comboBoxHoldingGroup.Items.Add(kp);
-                            comboBoxInputRegisterGroup.Items.Add(kp);
-                            comboBoxInputGroup.Items.Add(kp);
-                            comboBoxCoilsGroup.Items.Add(kp);
+                            foreach (Group_Item gr in template.Groups.OrderBy(x => int.Parse(x.Group)))
+                            {
+                                KeyValuePair<Group_Item, String> kp = new KeyValuePair<Group_Item, String>(gr, gr.Group + " - " + gr.Label);
+                                comboBoxHoldingGroup.Items.Add(kp);
+                                comboBoxInputRegisterGroup.Items.Add(kp);
+                                comboBoxInputGroup.Items.Add(kp);
+                                comboBoxCoilsGroup.Items.Add(kp);
+                            }
+                        }
+                        catch(Exception err)
+                        {
+                            Console.WriteLine("Error loading group items\n");
+                            Console.WriteLine(err);
                         }
                     }
+                }
+                else
+                {
+                    comboBoxHoldingGroup.IsEnabled = false;
+                    comboBoxInputRegisterGroup.IsEnabled = false;
+                    comboBoxInputGroup.IsEnabled = false;
+                    comboBoxCoilsGroup.IsEnabled = false;
                 }
             }
             catch (Exception err)
@@ -7542,7 +7646,7 @@ namespace ModBus_Client
                         if (item == null)
                             continue;
 
-                        uint address_start = (uint)(item.RegisterUInt + template_HoldingOffset); // - P.uint_parser(textBoxHoldingOffset_, comboBoxHoldingOffset_));
+                        uint address_start = item.RegisterUInt;
                         uint num_regs = 1;
 
                         if (item.Mappings != null)
@@ -7574,7 +7678,6 @@ namespace ModBus_Client
                                 insertRowsTable(
                                     list_holdingRegistersTable,
                                     list_template_holdingRegistersTable,
-                                    template_HoldingOffset,
                                     P.uint_parser(textBoxHoldingOffset_, comboBoxHoldingOffset_),
                                     address_start,
                                     response,
@@ -7658,11 +7761,22 @@ namespace ModBus_Client
 
                         if (item.Group != null)
                         {
-                            if (int.Parse(item.Group) != int.Parse(comboBoxHoldingGroup_))
+                            bool found = false;
+
+                            foreach (string str in item.Group.Split(';'))
+                            {
+                                if (int.Parse(str) == int.Parse(comboBoxHoldingGroup_))
+                                {
+                                    found = true;
+                                    break;
+                                }
+                            }
+
+                            if (!found)
                                 continue;
                         }
 
-                        uint address_start = (uint)(item.RegisterUInt + template_HoldingOffset); // - P.uint_parser(textBoxHoldingOffset_, comboBoxHoldingOffset_));
+                        uint address_start = item.RegisterUInt;
                         uint num_regs = 1;
 
                         if (item.Mappings != null)
@@ -7694,7 +7808,6 @@ namespace ModBus_Client
                                 insertRowsTable(
                                     list_holdingRegistersTable,
                                     list_template_holdingRegistersTable,
-                                    template_HoldingOffset,
                                     P.uint_parser(textBoxHoldingOffset_, comboBoxHoldingOffset_),
                                     address_start,
                                     response,
@@ -7775,7 +7888,7 @@ namespace ModBus_Client
                         if (item == null)
                             continue;
 
-                        uint address_start = (uint)(item.RegisterUInt + template_inputRegistersOffset); // - P.uint_parser(textBoxInputRegOffset_, comboBoxInputRegOffset_));
+                        uint address_start = item.RegisterUInt;
                         uint num_regs = 1;
 
                         if (item.Mappings != null)
@@ -7807,7 +7920,6 @@ namespace ModBus_Client
                                 insertRowsTable(
                                     list_inputRegistersTable,
                                     list_template_inputRegistersTable,
-                                    template_inputRegistersOffset,
                                     P.uint_parser(textBoxInputRegOffset_, comboBoxInputRegOffset_),
                                     address_start,
                                     response,
@@ -7888,11 +8000,22 @@ namespace ModBus_Client
 
                         if (item.Group != null)
                         {
-                            if (int.Parse(item.Group) != int.Parse(comboBoxInputRegisterGroup_))
+                            bool found = false;
+
+                            foreach (string str in item.Group.Split(';'))
+                            {
+                                if (int.Parse(str) == int.Parse(comboBoxHoldingGroup_))
+                                {
+                                    found = true;
+                                    break;
+                                }
+                            }
+
+                            if (!found)
                                 continue;
                         }
 
-                        uint address_start = (uint)(item.RegisterUInt + template_inputRegistersOffset); // - P.uint_parser(textBoxInputRegOffset_, comboBoxInputRegOffset_));
+                        uint address_start = item.RegisterUInt;
                         uint num_regs = 1;
 
                         if (item.Mappings != null)
@@ -7924,7 +8047,6 @@ namespace ModBus_Client
                                 insertRowsTable(
                                     list_inputRegistersTable,
                                     list_template_inputRegistersTable,
-                                    template_inputRegistersOffset,
                                     P.uint_parser(textBoxInputRegOffset_, comboBoxInputRegOffset_),
                                     address_start,
                                     response,
@@ -8003,7 +8125,7 @@ namespace ModBus_Client
                         if (item == null)
                             continue;
 
-                        uint address_start = (uint)(item.RegisterUInt + template_inputsOffset); // - P.uint_parser(textBoxInputOffset_, comboBoxInputOffset_));
+                        uint address_start = item.RegisterUInt;
                         uint num_regs = 1;
 
                         UInt16[] response = ModBus.readInputStatus_02(
@@ -8020,7 +8142,6 @@ namespace ModBus_Client
                                 insertRowsTable(
                                     list_inputsTable,
                                     list_template_inputsTable,
-                                    template_inputsOffset,
                                     P.uint_parser(textBoxInputOffset_, comboBoxInputOffset_),
                                     address_start,
                                     response,
@@ -8101,11 +8222,22 @@ namespace ModBus_Client
 
                         if (item.Group != null)
                         {
-                            if (int.Parse(item.Group) != int.Parse(comboBoxInputGroup_))
+                            bool found = false;
+
+                            foreach (string str in item.Group.Split(';'))
+                            {
+                                if (int.Parse(str) == int.Parse(comboBoxHoldingGroup_))
+                                {
+                                    found = true;
+                                    break;
+                                }
+                            }
+
+                            if (!found)
                                 continue;
                         }
 
-                        uint address_start = (uint)(item.RegisterUInt + template_inputsOffset); // - P.uint_parser(textBoxInputOffset_, comboBoxInputOffset_));
+                        uint address_start = item.RegisterUInt;
                         uint num_regs = 1;
 
                         UInt16[] response = ModBus.readInputStatus_02(
@@ -8122,7 +8254,6 @@ namespace ModBus_Client
                                 insertRowsTable(
                                     list_inputsTable,
                                     list_template_inputsTable,
-                                    template_inputsOffset,
                                     P.uint_parser(textBoxInputOffset_, comboBoxInputOffset_),
                                     address_start,
                                     response,
@@ -8201,7 +8332,7 @@ namespace ModBus_Client
                         if (item == null)
                             continue;
 
-                        uint address_start = (uint)(item.RegisterUInt + template_coilsOffset); // - P.uint_parser(textBoxCoilsOffset_, comboBoxCoilsOffset_));
+                        uint address_start = item.RegisterUInt;
                         uint num_regs = 1;
 
                         UInt16[] response = ModBus.readCoilStatus_01(
@@ -8218,7 +8349,6 @@ namespace ModBus_Client
                                 insertRowsTable(
                                     list_coilsTable,
                                     list_template_coilsTable,
-                                    template_coilsOffset,
                                     P.uint_parser(textBoxCoilsOffset_, comboBoxCoilsOffset_),
                                     address_start,
                                     response,
@@ -8302,11 +8432,22 @@ namespace ModBus_Client
 
                         if (item.Group != null)
                         {
-                            if (int.Parse(item.Group) != int.Parse(comboBoxCoilsGroup_))
+                            bool found = false;
+
+                            foreach (string str in item.Group.Split(';'))
+                            {
+                                if (int.Parse(str) == int.Parse(comboBoxHoldingGroup_))
+                                {
+                                    found = true;
+                                    break;
+                                }
+                            }
+
+                            if (!found)
                                 continue;
                         }
 
-                        uint address_start = (uint)(item.RegisterUInt + template_coilsOffset); // - P.uint_parser(textBoxCoilsOffset_, comboBoxCoilsOffset_));
+                        uint address_start = item.RegisterUInt;
                         uint num_regs = 1;
 
                         UInt16[] response = ModBus.readCoilStatus_01(
@@ -8323,7 +8464,6 @@ namespace ModBus_Client
                                 insertRowsTable(
                                     list_coilsTable,
                                     list_template_coilsTable,
-                                    template_coilsOffset,
                                     P.uint_parser(textBoxCoilsOffset_, comboBoxCoilsOffset_),
                                     address_start,
                                     response,
@@ -8376,6 +8516,26 @@ namespace ModBus_Client
                 comboBoxCoilsGroup_ = kp.Key.Group;
 
                 buttonReadCoilsTemplateGroup_Click(null, null);
+            }
+        }
+
+        private void ViewFullSizeTables_Checked(object sender, RoutedEventArgs e)
+        {
+            if(ViewFullSizeTables.IsChecked)
+            {
+                Thickness marg = new Thickness(10, 50, 10, 10);
+                dataGridViewCoils.Margin = marg;
+                dataGridViewInput.Margin = marg;
+                dataGridViewInputRegister.Margin = marg;
+                dataGridViewHolding.Margin = marg;
+            }
+            else
+            {
+                Thickness marg = new Thickness(10, 50, 415, 10);
+                dataGridViewCoils.Margin = marg;
+                dataGridViewInput.Margin = marg;
+                dataGridViewInputRegister.Margin = marg;
+                dataGridViewHolding.Margin = marg;
             }
         }
     }

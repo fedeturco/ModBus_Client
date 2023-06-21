@@ -56,6 +56,8 @@
                         <MenuItem x:Name="viewTabHoldingRegistersNotes" Header="Notes" IsCheckable="True" Checked="changeColumnVisibility" Unchecked="changeColumnVisibility" Foreground="#2d2d30"></MenuItem>
                         <MenuItem x:Name="viewTabHoldingRegistersMappings" Header="Mappings" IsCheckable="True" Checked="changeColumnVisibility" Unchecked="changeColumnVisibility" Foreground="#2d2d30"></MenuItem>
                     </MenuItem>
+                    <Separator />
+                    <MenuItem x:Name="ViewFullSizeTables" Header="Full size table" IsCheckable="True" Checked="ViewFullSizeTables_Checked" Unchecked="ViewFullSizeTables_Checked"/>
                 </MenuItem>
 
                 <MenuItem x:Name="databaseToolStripMenuItem" Header="Database">
@@ -230,27 +232,6 @@
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
-                    <DataGrid x:Name="dataGridViewCoils" Margin="10,50,415,10" AutoGenerateColumns="False" HorizontalGridLinesBrush="LightGray" VerticalGridLinesBrush="LightGray" BorderThickness="1" FontSize="14" CellEditEnding="dataGridViewCoils_KeyUp"  RowBackground="White">
-                        <DataGrid.Columns>
-                            <DataGridTextColumn x:Name="dataGridTabCoilsRegisters" Header="Register" Binding="{Binding Register}" Width="100" Visibility="Collapsed">
-                                <DataGridTextColumn.ElementStyle>
-                                    <Style TargetType="TextBlock">
-                                        <Setter Property="Foreground" Value="{Binding Foreground}"/>
-                                        <Setter Property="Background" Value="{Binding Background}"/>
-                                    </Style>
-                                </DataGridTextColumn.ElementStyle>
-                            </DataGridTextColumn>
-                            <DataGridTextColumn x:Name="dataGridTabCoilsValues" Header="Value" Binding="{Binding Value}" Width="100" Visibility="Collapsed">
-                                <DataGridTextColumn.ElementStyle>
-                                    <Style TargetType="TextBlock">
-                                        <Setter Property="Foreground" Value="{Binding Foreground}"/>
-                                        <Setter Property="Background" Value="{Binding Background}"/>
-                                    </Style>
-                                </DataGridTextColumn.ElementStyle>
-                            </DataGridTextColumn>
-                            <DataGridTextColumn x:Name="dataGridTabCoilsNotes" Header="Notes" Binding="{Binding Notes}" Width="600" Visibility="Collapsed"/>
-                        </DataGrid.Columns>
-                    </DataGrid>
                     <ComboBox x:Name="comboBoxCoilsRegistri" HorizontalAlignment="Left" Margin="74,10,0,0" VerticalAlignment="Top" Width="55" FontSize="12" Height="25" SelectionChanged="comboBoxCoilsRegistri_SelectionChanged">
                         <ComboBoxItem Content="DEC"/>
                         <ComboBoxItem Content="HEX"/>
@@ -428,32 +409,32 @@
                     </Button>
                     <Button x:Name="buttonReadCoilsTemplate" Content="Read all" Height="25" Margin="0,10,10,0" FontSize="12" RenderTransformOrigin="0.5,0.5" Click="buttonReadCoilsTemplate_Click" HorizontalAlignment="Right" Width="80" VerticalAlignment="Top"/>
                     <Button x:Name="buttonReadCoilsTemplateGroup" Content="Read group" Height="25" Margin="0,10,95,0" FontSize="12" RenderTransformOrigin="0.5,0.5" VerticalAlignment="Top" Click="buttonReadCoilsTemplateGroup_Click" Width="80" HorizontalAlignment="Right"/>
-                    <ComboBox x:Name="comboBoxCoilsGroup" Margin="580,10,180,0" VerticalAlignment="Top" SelectionChanged="comboBoxCoilsGroup_SelectionChanged" DisplayMemberPath="Value" Height="25" MaxWidth="150"/>
+                    <ComboBox x:Name="comboBoxCoilsGroup" Margin="0,10,180,0" VerticalAlignment="Top" SelectionChanged="comboBoxCoilsGroup_SelectionChanged" DisplayMemberPath="Value" Height="25" Width="205" HorizontalAlignment="Right"/>
+                    <DataGrid x:Name="dataGridViewCoils" Margin="10,50,415,10" AutoGenerateColumns="False" HorizontalGridLinesBrush="LightGray" VerticalGridLinesBrush="LightGray" BorderThickness="1" FontSize="14" CellEditEnding="dataGridViewCoils_KeyUp"  RowBackground="White">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn x:Name="dataGridTabCoilsRegisters" Header="Register" Binding="{Binding Register}" Width="100" Visibility="Collapsed">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="Foreground" Value="{Binding Foreground}"/>
+                                        <Setter Property="Background" Value="{Binding Background}"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn x:Name="dataGridTabCoilsValues" Header="Value" Binding="{Binding Value}" Width="100" Visibility="Collapsed">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="Foreground" Value="{Binding Foreground}"/>
+                                        <Setter Property="Background" Value="{Binding Background}"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn x:Name="dataGridTabCoilsNotes" Header="Notes" Binding="{Binding Notes}" Width="600" Visibility="Collapsed"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
                 </Grid>
             </TabItem>
             <TabItem x:Name="tabItem2" Header="Inputs (1 bit)" FontSize="12">
                 <Grid x:Name="GridInputs" Background="#FFE5E5E5">
-                    <DataGrid x:Name="dataGridViewInput" Margin="10,50,415,10" AutoGenerateColumns="False" HorizontalGridLinesBrush="LightGray" VerticalGridLinesBrush="LightGray" BorderThickness="1" FontSize="14"  RowBackground="#FFF1F1F1">
-                        <DataGrid.Columns>
-                            <DataGridTextColumn x:Name="dataGridTabInputsRegisters" Header="Register" Binding="{Binding Register}" Width="100" Visibility="Collapsed">
-                                <DataGridTextColumn.ElementStyle>
-                                    <Style TargetType="TextBlock">
-                                        <Setter Property="Foreground" Value="{Binding Foreground}"/>
-                                        <Setter Property="Background" Value="{Binding Background}"/>
-                                    </Style>
-                                </DataGridTextColumn.ElementStyle>
-                            </DataGridTextColumn>
-                            <DataGridTextColumn x:Name="dataGridTabInputsValues" Header="Value" Binding="{Binding Value}" Width="100" Visibility="Collapsed">
-                                <DataGridTextColumn.ElementStyle>
-                                    <Style TargetType="TextBlock">
-                                        <Setter Property="Foreground" Value="{Binding Foreground}"/>
-                                        <Setter Property="Background" Value="{Binding Background}"/>
-                                    </Style>
-                                </DataGridTextColumn.ElementStyle>
-                            </DataGridTextColumn>
-                            <DataGridTextColumn x:Name="dataGridTabInputsNotes" Header="Notes" Binding="{Binding Notes}" Width="600" Visibility="Collapsed"/>
-                        </DataGrid.Columns>
-                    </DataGrid>
                     <ComboBox x:Name="comboBoxInputRegistri" HorizontalAlignment="Left" Margin="74,10,0,0" VerticalAlignment="Top" Width="55" FontSize="12" Height="25" SelectionChanged="comboBoxInputRegistri_SelectionChanged">
                         <ComboBoxItem Content="DEC"/>
                         <ComboBoxItem Content="HEX"/>
@@ -547,51 +528,32 @@
                     </Button>
                     <Button x:Name="buttonReadInputTemplate" Content="Read all" Height="25" Margin="0,10,10,0" FontSize="12" RenderTransformOrigin="0.5,0.5" Click="buttonReadInputTemplate_Click" HorizontalAlignment="Right" Width="80" VerticalAlignment="Top"/>
                     <Button x:Name="buttonReadInputTemplateGroup" Content="Read group" Height="25" Margin="0,10,95,0" FontSize="12" RenderTransformOrigin="0.5,0.5" VerticalAlignment="Top" Click="buttonReadInputTemplateGroup_Click" Width="80" HorizontalAlignment="Right"/>
-                    <ComboBox x:Name="comboBoxInputGroup" Margin="0,10,180,0" VerticalAlignment="Top" SelectionChanged="comboBoxInputGroup_SelectionChanged" DisplayMemberPath="Value" Height="25" HorizontalAlignment="Right" Width="86"/>
+                    <ComboBox x:Name="comboBoxInputGroup" Margin="0,10,180,0" VerticalAlignment="Top" SelectionChanged="comboBoxInputGroup_SelectionChanged" DisplayMemberPath="Value" Height="25" HorizontalAlignment="Right" Width="205"/>
+                    <DataGrid x:Name="dataGridViewInput" Margin="10,50,415,10" AutoGenerateColumns="False" HorizontalGridLinesBrush="LightGray" VerticalGridLinesBrush="LightGray" BorderThickness="1" FontSize="14"  RowBackground="#FFF1F1F1">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn x:Name="dataGridTabInputsRegisters" Header="Register" Binding="{Binding Register}" Width="100" Visibility="Collapsed">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="Foreground" Value="{Binding Foreground}"/>
+                                        <Setter Property="Background" Value="{Binding Background}"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn x:Name="dataGridTabInputsValues" Header="Value" Binding="{Binding Value}" Width="100" Visibility="Collapsed">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="Foreground" Value="{Binding Foreground}"/>
+                                        <Setter Property="Background" Value="{Binding Background}"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn x:Name="dataGridTabInputsNotes" Header="Notes" Binding="{Binding Notes}" Width="600" Visibility="Collapsed"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
                 </Grid>
             </TabItem>
             <TabItem x:Name="tabItem3" Header="Input registers (1 word)" FontSize="12">
                 <Grid x:Name="GridInputRegisters" Background="#FFE5E5E5">
-                    <DataGrid x:Name="dataGridViewInputRegister" Margin="10,50,415,10" AutoGenerateColumns="False"  HorizontalGridLinesBrush="LightGray" VerticalGridLinesBrush="LightGray" BorderThickness="1" FontSize="14"  RowBackground="White">
-                        <DataGrid.RowStyle>
-                            <Style TargetType="DataGridRow">
-                                <Setter Property="ToolTip">
-                                    <Setter.Value>
-                                        <TextBlock Text="{Binding Mappings}" />
-                                    </Setter.Value>
-                                </Setter>
-                            </Style>
-                        </DataGrid.RowStyle>
-                        <DataGrid.Columns>
-                            <DataGridTextColumn x:Name="dataGridTabInputRegistersRegisters" Header="Register" Binding="{Binding Register}" Width="80" Visibility="Collapsed">
-                                <DataGridTextColumn.ElementStyle>
-                                    <Style TargetType="TextBlock">
-                                        <Setter Property="Foreground" Value="{Binding Foreground}"/>
-                                        <Setter Property="Background" Value="{Binding Background}"/>
-                                    </Style>
-                                </DataGridTextColumn.ElementStyle>
-                            </DataGridTextColumn>
-                            <DataGridTextColumn x:Name="dataGridTabInputRegistersValues" Header="Value" Binding="{Binding Value}" Width="80" Visibility="Collapsed">
-                                <DataGridTextColumn.ElementStyle>
-                                    <Style TargetType="TextBlock">
-                                        <Setter Property="Foreground" Value="{Binding Foreground}"/>
-                                        <Setter Property="Background" Value="{Binding Background}"/>
-                                    </Style>
-                                </DataGridTextColumn.ElementStyle>
-                            </DataGridTextColumn>
-                            <DataGridTextColumn x:Name="dataGridTabInputRegistersBinaryValues" Header="Binary value" Binding="{Binding ValueBin}" Width="170" Visibility="Collapsed">
-                                <DataGridTextColumn.ElementStyle>
-                                    <Style TargetType="TextBlock">
-                                        <Setter Property="Foreground" Value="{Binding Foreground}"/>
-                                        <Setter Property="Background" Value="{Binding Background}"/>
-                                    </Style>
-                                </DataGridTextColumn.ElementStyle>
-                            </DataGridTextColumn>
-                            <DataGridTextColumn x:Name="dataGridTabInputRegistersConvertedValues" Header="Converted value" Binding="{Binding ValueConverted}" Width="130" Visibility="Collapsed"/>
-                            <DataGridTextColumn x:Name="dataGridTabInputRegistersNotes" Header="Notes" Binding="{Binding Notes}" Width="600" Visibility="Collapsed"/>
-                            <DataGridTextColumn x:Name="dataGridTabInputRegistersMappings" Header="Mappings" Binding="{Binding Mappings}" Width="600" Visibility="Collapsed"/>
-                        </DataGrid.Columns>
-                    </DataGrid>
                     <ComboBox x:Name="comboBoxInputRegRegistri" HorizontalAlignment="Left" Margin="74,10,0,0" VerticalAlignment="Top" Width="55" FontSize="12" Height="25" SelectionChanged="comboBoxInputRegRegistri_SelectionChanged">
                         <ComboBoxItem Content="DEC"/>
                         <ComboBoxItem Content="HEX"/>
@@ -689,12 +651,8 @@
                     </Button>
                     <Button x:Name="buttonReadInputRegisterTemplate" Content="Read all" Height="25" Margin="0,10,10,0" FontSize="12" RenderTransformOrigin="0.5,0.5" Click="buttonReadInputRegisterTemplate_Click" HorizontalAlignment="Right" Width="80" VerticalAlignment="Top"/>
                     <Button x:Name="buttonReadInputRegisterTemplateGroup" Content="Read group" Height="25" Margin="0,10,95,0" FontSize="12" RenderTransformOrigin="0.5,0.5" VerticalAlignment="Top" Click="buttonReadInputRegisterTemplateGroup_Click" Width="80" HorizontalAlignment="Right"/>
-                    <ComboBox x:Name="comboBoxInputRegisterGroup" Margin="0,10,180,0" VerticalAlignment="Top" SelectionChanged="comboBoxInputRegisterGroup_SelectionChanged" DisplayMemberPath="Value" Height="25" HorizontalAlignment="Right" Width="86"/>
-                </Grid>
-            </TabItem>
-            <TabItem x:Name="tabItem4" Header="Holding registers (1 word)" FontSize="12">
-                <Grid x:Name="GridHoldingRegisters" Background="#FFE5E5E5">
-                    <DataGrid x:Name="dataGridViewHolding" Margin="10,50,415,10" AutoGenerateColumns="False"  HorizontalGridLinesBrush="LightGray" VerticalGridLinesBrush="LightGray" BorderThickness="1" FontSize="14" CellEditEnding="dataGridViewHolding_KeyUp" RowBackground="#FFF1F1F1" Width="Auto">
+                    <ComboBox x:Name="comboBoxInputRegisterGroup" Margin="0,10,180,0" VerticalAlignment="Top" SelectionChanged="comboBoxInputRegisterGroup_SelectionChanged" DisplayMemberPath="Value" Height="25" HorizontalAlignment="Right" Width="205"/>
+                    <DataGrid x:Name="dataGridViewInputRegister" Margin="10,50,415,10" AutoGenerateColumns="False"  HorizontalGridLinesBrush="LightGray" VerticalGridLinesBrush="LightGray" BorderThickness="1" FontSize="14"  RowBackground="White">
                         <DataGrid.RowStyle>
                             <Style TargetType="DataGridRow">
                                 <Setter Property="ToolTip">
@@ -705,7 +663,7 @@
                             </Style>
                         </DataGrid.RowStyle>
                         <DataGrid.Columns>
-                            <DataGridTextColumn x:Name="dataGridTabHoldingRegistersRegisters" Header="Register" Binding="{Binding Register}" Width="80" Visibility="Collapsed">
+                            <DataGridTextColumn x:Name="dataGridTabInputRegistersRegisters" Header="Register" Binding="{Binding Register}" Width="80" Visibility="Collapsed">
                                 <DataGridTextColumn.ElementStyle>
                                     <Style TargetType="TextBlock">
                                         <Setter Property="Foreground" Value="{Binding Foreground}"/>
@@ -713,7 +671,7 @@
                                     </Style>
                                 </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>
-                            <DataGridTextColumn x:Name="dataGridTabHoldingRegistersValues" Header="Value" Binding="{Binding Value}" Width="80" Visibility="Collapsed">
+                            <DataGridTextColumn x:Name="dataGridTabInputRegistersValues" Header="Value" Binding="{Binding Value}" Width="80" Visibility="Collapsed">
                                 <DataGridTextColumn.ElementStyle>
                                     <Style TargetType="TextBlock">
                                         <Setter Property="Foreground" Value="{Binding Foreground}"/>
@@ -721,7 +679,7 @@
                                     </Style>
                                 </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>
-                            <DataGridTextColumn x:Name="dataGridTabHoldingRegistersBinaryValues" Header="Binary value" Binding="{Binding ValueBin}" Width="170" Visibility="Collapsed">
+                            <DataGridTextColumn x:Name="dataGridTabInputRegistersBinaryValues" Header="Binary value" Binding="{Binding ValueBin}" Width="170" Visibility="Collapsed">
                                 <DataGridTextColumn.ElementStyle>
                                     <Style TargetType="TextBlock">
                                         <Setter Property="Foreground" Value="{Binding Foreground}"/>
@@ -729,12 +687,15 @@
                                     </Style>
                                 </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>
-                            <DataGridTextColumn x:Name="dataGridTabHoldingRegistersConvertedValues" Header="Converted value" Binding="{Binding ValueConverted}" Width="130" Visibility="Collapsed"/>
-                            <DataGridTextColumn x:Name="dataGridTabHoldingRegistersNotes" Header="Notes" Binding="{Binding Notes}" Width="600" Visibility="Collapsed"/>
-                            <DataGridTextColumn x:Name="dataGridTabHoldingRegistersMappings" Header="Mappings" Binding="{Binding Mappings}" Width="600" Visibility="Collapsed"/>
+                            <DataGridTextColumn x:Name="dataGridTabInputRegistersConvertedValues" Header="Converted value" Binding="{Binding ValueConverted}" Width="130" Visibility="Collapsed"/>
+                            <DataGridTextColumn x:Name="dataGridTabInputRegistersNotes" Header="Notes" Binding="{Binding Notes}" Width="600" Visibility="Collapsed"/>
+                            <DataGridTextColumn x:Name="dataGridTabInputRegistersMappings" Header="Mappings" Binding="{Binding Mappings}" Width="600" Visibility="Collapsed"/>
                         </DataGrid.Columns>
-
                     </DataGrid>
+                </Grid>
+            </TabItem>
+            <TabItem x:Name="tabItem4" Header="Holding registers (1 word)" FontSize="12">
+                <Grid x:Name="GridHoldingRegisters" Background="#FFE5E5E5">
                     <ComboBox x:Name="comboBoxHoldingRegistri" HorizontalAlignment="Left" Margin="74,10,0,0" VerticalAlignment="Top" Width="55" FontSize="12" Height="25" SelectionChanged="comboBoxHoldingRegistri_SelectionChanged">
                         <ComboBoxItem Content="DEC"/>
                         <ComboBoxItem Content="HEX"/>
@@ -928,9 +889,48 @@
                     </Button>
                     <Button x:Name="buttonReadHoldingTemplate" Content="Read all" Height="25" Margin="0,10,10,0" FontSize="12" RenderTransformOrigin="0.5,0.5" Click="buttonReadHoldingTemplate_Click" HorizontalAlignment="Right" Width="80" VerticalAlignment="Top"/>
                     <Button x:Name="buttonReadHoldingTemplateGroup" Content="Read group" Height="25" Margin="0,10,95,0" FontSize="12" RenderTransformOrigin="0.5,0.5" VerticalAlignment="Top" Click="buttonReadHoldingTemplateGroup_Click" Width="80" HorizontalAlignment="Right"/>
-                    <ComboBox x:Name="comboBoxHoldingGroup" Margin="580,10,180,0" VerticalAlignment="Top" SelectionChanged="comboBoxHoldingGroup_SelectionChanged" DisplayMemberPath="Value" Height="25" MaxWidth="150"/>
+                    <ComboBox x:Name="comboBoxHoldingGroup" Margin="0,10,180,0" VerticalAlignment="Top" SelectionChanged="comboBoxHoldingGroup_SelectionChanged" DisplayMemberPath="Value" Height="25"  HorizontalAlignment="Right" Width="205"/>
+                    <DataGrid x:Name="dataGridViewHolding" Margin="10,50,415,10" AutoGenerateColumns="False"  HorizontalGridLinesBrush="LightGray" VerticalGridLinesBrush="LightGray" BorderThickness="1" FontSize="14" CellEditEnding="dataGridViewHolding_KeyUp" RowBackground="#FFF1F1F1" Width="Auto">
+                        <DataGrid.RowStyle>
+                            <Style TargetType="DataGridRow">
+                                <Setter Property="ToolTip">
+                                    <Setter.Value>
+                                        <TextBlock Text="{Binding Mappings}" />
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </DataGrid.RowStyle>
+                        <DataGrid.Columns>
+                            <DataGridTextColumn x:Name="dataGridTabHoldingRegistersRegisters" Header="Register" Binding="{Binding Register}" Width="80" Visibility="Collapsed">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="Foreground" Value="{Binding Foreground}"/>
+                                        <Setter Property="Background" Value="{Binding Background}"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn x:Name="dataGridTabHoldingRegistersValues" Header="Value" Binding="{Binding Value}" Width="80" Visibility="Collapsed">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="Foreground" Value="{Binding Foreground}"/>
+                                        <Setter Property="Background" Value="{Binding Background}"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn x:Name="dataGridTabHoldingRegistersBinaryValues" Header="Binary value" Binding="{Binding ValueBin}" Width="170" Visibility="Collapsed">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="Foreground" Value="{Binding Foreground}"/>
+                                        <Setter Property="Background" Value="{Binding Background}"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn x:Name="dataGridTabHoldingRegistersConvertedValues" Header="Converted value" Binding="{Binding ValueConverted}" Width="130" Visibility="Collapsed"/>
+                            <DataGridTextColumn x:Name="dataGridTabHoldingRegistersNotes" Header="Notes" Binding="{Binding Notes}" Width="600" Visibility="Collapsed"/>
+                            <DataGridTextColumn x:Name="dataGridTabHoldingRegistersMappings" Header="Mappings" Binding="{Binding Mappings}" Width="600" Visibility="Collapsed"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
                 </Grid>
-
             </TabItem>
             <TabItem Header="Diagnostic (FC08)" FontSize="12">
                 <Grid x:Name="GridDiagnostic" Background="#FFE5E5E5">
