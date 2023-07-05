@@ -500,8 +500,64 @@ namespace ModBus_Client
                     MessageBox.Show("Valore inserito non valido: " + value.ToString(), "Alert");
                 }
             }
-            catch { }
+            catch (InvalidOperationException err)
+            {
+                if (err.Message.IndexOf("non-connected socket") != -1)
+                {
+                    main.SetTableDisconnectError(main.list_coilsTable, true);
 
+                    if (main.ModBus.type == main.ModBus_Def.TYPE_RTU || main.ModBus.type == main.ModBus_Def.TYPE_ASCII)
+                    {
+                        this.Dispatcher.Invoke((Action)delegate
+                        {
+                            main.buttonSerialActive_Click(null, null);
+                        });
+                    }
+                    else
+                    {
+                        this.Dispatcher.Invoke((Action)delegate
+                        {
+                            main.buttonTcpActive_Click(null, null);
+                        });
+                    }
+                }
+
+                Console.WriteLine(err);
+            }
+            catch (ModbusException err)
+            {
+                if (err.Message.IndexOf("Timed out") != -1)
+                {
+                    main.SetTableTimeoutError(main.list_holdingRegistersTable, true);
+                }
+                if (err.Message.IndexOf("ModBus ErrCode") != -1)
+                {
+                    main.SetTableModBusError(main.list_holdingRegistersTable, err, true);
+                }
+                if (err.Message.IndexOf("CRC Error") != -1)
+                {
+                    main.SetTableCrcError(main.list_holdingRegistersTable, true);
+                }
+
+                Console.WriteLine(err);
+
+                this.Dispatcher.Invoke((Action)delegate
+                {
+                    main.dataGridViewHolding.ItemsSource = null;
+                    main.dataGridViewHolding.ItemsSource = main.list_holdingRegistersTable;
+                });
+            }
+            catch (Exception err)
+            {
+                main.SetTableInternalError(main.list_holdingRegistersTable, true);
+                Console.WriteLine(err);
+
+                this.Dispatcher.Invoke((Action)delegate
+                {
+                    main.dataGridViewHolding.ItemsSource = null;
+                    main.dataGridViewHolding.ItemsSource = main.list_holdingRegistersTable;
+                });
+            }
 
             pictureBoxBusy.Background = Brushes.LightGray;
             DoEvents();

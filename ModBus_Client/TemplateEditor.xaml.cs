@@ -109,6 +109,84 @@ namespace ModBus_Client
             this.Top = (screenHeight / 2) - (windowHeight / 2);
 
             this.Title = main_.Title + " - Template Editor";
+
+            // Predisposizione DarkMode
+            /*if ((bool)main.CheckBoxDarkMode.IsChecked)
+            {
+                GridMain.Background = main.darkMode ? main.BackGroundDark : main.BackGroundLight;
+
+                textBoxCoilsOffset.Foreground = main.darkMode ? main.ForeGroundDark : main.ForeGroundLight;
+                textBoxCoilsOffset.Background = main.darkMode ? main.BackGroundDark : main.BackGroundLight;
+
+                textBoxInputOffset.Foreground = main.darkMode ? main.ForeGroundDark : main.ForeGroundLight;
+                textBoxInputOffset.Background = main.darkMode ? main.BackGroundDark : main.BackGroundLight;
+
+                textBoxInputRegOffset.Foreground = main.darkMode ? main.ForeGroundDark : main.ForeGroundLight;
+                textBoxInputRegOffset.Background = main.darkMode ? main.BackGroundDark : main.BackGroundLight;
+
+                textBoxHoldingOffset.Foreground = main.darkMode ? main.ForeGroundDark : main.ForeGroundLight;
+                textBoxHoldingOffset.Background = main.darkMode ? main.BackGroundDark : main.BackGroundLight;
+
+                TextBoxTemplateLabel.Foreground = main.darkMode ? main.ForeGroundDark : main.ForeGroundLight;
+                TextBoxTemplateLabel.Background = main.darkMode ? main.BackGroundDark : main.BackGroundLight;
+
+                TextBoxTemplateNotes.Foreground = main.darkMode ? main.ForeGroundDark : main.ForeGroundLight;
+                TextBoxTemplateNotes.Background = main.darkMode ? main.BackGroundDark : main.BackGroundLight;
+
+                LabelInfoMappings.Foreground = main.darkMode ? main.ForeGroundDark : main.ForeGroundLight;
+                LabelInfoMappings.Background = main.darkMode ? main.BackGroundDark : main.BackGroundLight;
+
+                LabelRegCoils.Foreground = main.darkMode ? main.ForeGroundDark : main.ForeGroundLight;
+                LabelOffCoil.Foreground = main.darkMode ? main.ForeGroundDark : main.ForeGroundLight;
+
+                LabelRegInput.Foreground = main.darkMode ? main.ForeGroundDark : main.ForeGroundLight;
+                LabelOffInput.Foreground = main.darkMode ? main.ForeGroundDark : main.ForeGroundLight;
+
+                LabelRegInputReg.Foreground = main.darkMode ? main.ForeGroundDark : main.ForeGroundLight;
+                LabelOffInputReg.Foreground = main.darkMode ? main.ForeGroundDark : main.ForeGroundLight;
+
+                LabelRegHolding.Foreground = main.darkMode ? main.ForeGroundDark : main.ForeGroundLight;
+                LabelOffHolding.Foreground = main.darkMode ? main.ForeGroundDark : main.ForeGroundLight;
+
+                LabelNotesLabel.Foreground = main.darkMode ? main.ForeGroundDark : main.ForeGroundLight;
+                LabelNotesNotes.Foreground = main.darkMode ? main.ForeGroundDark : main.ForeGroundLight;
+                LabelNotesGroups.Foreground = main.darkMode ? main.ForeGroundDark : main.ForeGroundLight; ;
+
+                LabelImportExport.Foreground = main.darkMode ? main.ForeGroundDark : main.ForeGroundLight; ;
+
+                if (main.darkMode)
+                {
+                    GridCoils.Background = main.BackGroundDark;
+                    GridInputs.Background = main.BackGroundDark;
+                    GridInputRegister.Background = main.BackGroundDark;
+                    GridHoldingRegister.Background = main.BackGroundDark;
+
+                    GridNotes.Background = main.BackGroundDark;
+                    GridInfoMappings.Background = main.BackGroundDark;
+                }
+
+                // BorderBrush
+                Setter SetBorderBrush = new Setter();
+                SetBorderBrush.Property = BorderBrushProperty;
+                SetBorderBrush.Value = main.darkMode ? main.BackGroundDark : main.BackGroundLight2;
+
+                // Background
+                Setter SetBackgroundProperty = new Setter();
+                SetBackgroundProperty.Property = BackgroundProperty;
+                SetBackgroundProperty.Value = main.darkMode ? main.BackGroundDark : main.BackGroundLight2;
+
+                // Stile custom per cella standard
+                Style NewStyle = new Style();
+                NewStyle.Setters.Add(SetBorderBrush);
+                NewStyle.Setters.Add(SetBackgroundProperty);
+
+                dataGridViewCoils.CellStyle = NewStyle;
+                dataGridViewInput.CellStyle = NewStyle;
+                dataGridViewInputRegister.CellStyle = NewStyle;
+                dataGridViewHolding.CellStyle = NewStyle;
+
+                dataGridViewGroups.CellStyle = NewStyle;
+            }*/
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)

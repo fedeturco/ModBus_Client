@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:ModBus_Client"
         mc:Ignorable="d"
         Title="Template Editor" Height="556.5" Width="800" Closing="Window_Closing" Loaded="Window_Loaded" KeyDown="Window_KeyDown" KeyUp="Window_KeyUp">
-    <Grid>
+    <Grid x:Name="GridMain">
         <!--<DockPanel>
             <Menu x:Name="menuStrip" DockPanel.Dock="Top" Grid.Row="0" FontSize="14">
                 <MenuItem x:Name="fileToolStripMenuItem" Header="File">
@@ -18,22 +18,22 @@
         </DockPanel>-->
         <Button x:Name="ButtonImportJson" Content="Import Json" Margin="0,7,122,0" Width="75" HorizontalAlignment="Right" Height="25" VerticalAlignment="Top" Click="importProfileModbusSimulatorMenuItem_Click"/>
         <Button x:Name="ButtonExportJson" Content="Export Json" Margin="0,7,42,0" Width="75" HorizontalAlignment="Right" Height="25" VerticalAlignment="Top" Click="exportProfileModbusSimulatorMenuItem_Click"/>
-        <Label Content="Import/Export profile:" Margin="0,6,202,0" Height="28" VerticalAlignment="Top" HorizontalAlignment="Right" Width="125"/>
+        <Label x:Name="LabelImportExport" Content="Import/Export profile:" Margin="0,6,202,0" Height="28" VerticalAlignment="Top" HorizontalAlignment="Right" Width="125"/>
         <TabControl x:Name="tabControlTemplate" Margin="10,18,10,10">
             <TabItem Header="Coils">
-                <Grid Background="#FFE5E5E5">
+                <Grid x:Name="GridCoils" Background="#FFE5E5E5">
                     <ComboBox x:Name="comboBoxCoilsRegistri" HorizontalAlignment="Left" Margin="74,10,0,0" VerticalAlignment="Top" Width="55" FontSize="12" Height="25">
                         <ComboBoxItem Content="DEC"/>
                         <ComboBoxItem Content="HEX"/>
                     </ComboBox>
-                    <Label Content="Register:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontSize="12" Height="26" Width="59"/>
-                    <Label Content="Offset:" HorizontalAlignment="Left" Margin="140,10,0,0" VerticalAlignment="Top" FontSize="12" Height="26" Width="45"/>
+                    <Label x:Name="LabelRegCoils" Content="Register:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontSize="12" Height="26" Width="59"/>
+                    <Label x:Name="LabelOffCoil" Content="Offset:" HorizontalAlignment="Left" Margin="140,10,0,0" VerticalAlignment="Top" FontSize="12" Height="26" Width="45"/>
                     <ComboBox x:Name="comboBoxCoilsOffset" HorizontalAlignment="Left" Margin="195,10,0,0" VerticalAlignment="Top" Width="55" FontSize="12" Height="25">
                         <ComboBoxItem Content="DEC"/>
                         <ComboBoxItem Content="HEX"/>
                     </ComboBox>
                     <TextBox x:Name="textBoxCoilsOffset" HorizontalAlignment="Left" Height="25" Margin="255,10,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="65" FontSize="12" VerticalContentAlignment="Center"/>
-                    <DataGrid x:Name="dataGridViewCoils" Margin="10,50,10.429,9.714" AutoGenerateColumns="False" HorizontalGridLinesBrush="LightGray" VerticalGridLinesBrush="LightGray" BorderThickness="1" FontSize="14">
+                    <DataGrid x:Name="dataGridViewCoils" Margin="10,50,10.429,9.714" AutoGenerateColumns="False" HorizontalGridLinesBrush="LightGray" VerticalGridLinesBrush="LightGray" BorderThickness="1" FontSize="14" RowBackground="White" Width="Auto">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Register" Binding="{Binding Register}" Width="100"/>
                             <DataGridTextColumn Header="Notes" Binding="{Binding Notes}" Width="600"/>
@@ -45,13 +45,13 @@
                 </Grid>
             </TabItem>
             <TabItem Header="Input">
-                <Grid Background="#FFE5E5E5">
+                <Grid x:Name="GridInputs" Background="#FFE5E5E5">
                     <ComboBox x:Name="comboBoxInputRegistri" HorizontalAlignment="Left" Margin="74,10,0,0" VerticalAlignment="Top" Width="55" FontSize="12" Height="25">
                         <ComboBoxItem Content="DEC"/>
                         <ComboBoxItem Content="HEX"/>
                     </ComboBox>
-                    <Label Content="Register:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontSize="12" Height="26" Width="59"/>
-                    <Label Content="Offset:" HorizontalAlignment="Left" Margin="140,10,0,0" VerticalAlignment="Top" FontSize="12" Height="26" Width="45"/>
+                    <Label x:Name="LabelRegInput" Content="Register:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontSize="12" Height="26" Width="59"/>
+                    <Label x:Name="LabelOffInput" Content="Offset:" HorizontalAlignment="Left" Margin="140,10,0,0" VerticalAlignment="Top" FontSize="12" Height="26" Width="45"/>
                     <ComboBox x:Name="comboBoxInputOffset" HorizontalAlignment="Left" Margin="195,10,0,0" VerticalAlignment="Top" Width="55" FontSize="12" Height="25">
                         <ComboBoxItem Content="DEC"/>
                         <ComboBoxItem Content="HEX"/>
@@ -69,13 +69,13 @@
                 </Grid>
             </TabItem>
             <TabItem Header="Input Registers">
-                <Grid Background="#FFE5E5E5">
+                <Grid x:Name="GridInputRegister" Background="#FFE5E5E5">
                     <ComboBox x:Name="comboBoxInputRegRegistri" HorizontalAlignment="Left" Margin="74,10,0,0" VerticalAlignment="Top" Width="55" FontSize="12" Height="25">
                         <ComboBoxItem Content="DEC"/>
                         <ComboBoxItem Content="HEX"/>
                     </ComboBox>
-                    <Label Content="Register:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontSize="12" Height="26" Width="59"/>
-                    <Label Content="Offset:" HorizontalAlignment="Left" Margin="140,10,0,0" VerticalAlignment="Top" FontSize="12" Height="26" Width="45"/>
+                    <Label x:Name="LabelRegInputReg" Content="Register:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontSize="12" Height="26" Width="59"/>
+                    <Label x:Name="LabelOffInputReg" Content="Offset:" HorizontalAlignment="Left" Margin="140,10,0,0" VerticalAlignment="Top" FontSize="12" Height="26" Width="45"/>
                     <ComboBox x:Name="comboBoxInputRegOffset" HorizontalAlignment="Left" Margin="195,10,0,0" VerticalAlignment="Top" Width="55" FontSize="12" Height="25">
                         <ComboBoxItem Content="DEC"/>
                         <ComboBoxItem Content="HEX"/>
@@ -94,7 +94,7 @@
                 </Grid>
             </TabItem>
             <TabItem Header="Holding Registers">
-                <Grid Background="#FFE5E5E5">
+                <Grid x:Name="GridHoldingRegister" Background="#FFE5E5E5">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
@@ -102,8 +102,8 @@
                         <ComboBoxItem Content="DEC"/>
                         <ComboBoxItem Content="HEX"/>
                     </ComboBox>
-                    <Label Content="Register:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontSize="12" Height="26" Width="59"/>
-                    <Label Content="Offset:" HorizontalAlignment="Left" Margin="140,10,0,0" VerticalAlignment="Top" FontSize="12" Height="26" Width="45"/>
+                    <Label x:Name="LabelRegHolding" Content="Register:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontSize="12" Height="26" Width="59"/>
+                    <Label x:Name="LabelOffHolding" Content="Offset:" HorizontalAlignment="Left" Margin="140,10,0,0" VerticalAlignment="Top" FontSize="12" Height="26" Width="45"/>
                     <ComboBox x:Name="comboBoxHoldingOffset" HorizontalAlignment="Left" Margin="195,10,0,0" VerticalAlignment="Top" Width="55" FontSize="12" Height="25">
                         <ComboBoxItem Content="DEC"/>
                         <ComboBoxItem Content="HEX"/>
@@ -122,10 +122,10 @@
                 </Grid>
             </TabItem>
             <TabItem Header="Notes">
-                <Grid Background="#FFE5E5E5">
-                    <Label Content="Label:" HorizontalAlignment="Left" Margin="10,12,0,0" VerticalAlignment="Top"/>
+                <Grid x:Name="GridNotes" Background="#FFE5E5E5">
+                    <Label x:Name="LabelNotesLabel" Content="Label:" HorizontalAlignment="Left" Margin="10,12,0,0" VerticalAlignment="Top"/>
                     <TextBox x:Name="TextBoxTemplateLabel" HorizontalAlignment="Left" Height="23" Margin="66,14,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="408"/>
-                    <Label Content="Notes:" HorizontalAlignment="Left" Margin="10,43,0,0" VerticalAlignment="Top"/>
+                    <Label x:Name="LabelNotesNotes" Content="Notes:" HorizontalAlignment="Left" Margin="10,43,0,0" VerticalAlignment="Top"/>
                     <TextBox x:Name="TextBoxTemplateNotes" HorizontalAlignment="Left" Height="132" Margin="66,46,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="408"/>
                     <DataGrid x:Name="dataGridViewGroups" Margin="66,221,10,10" AutoGenerateColumns="False" HorizontalGridLinesBrush="LightGray" VerticalGridLinesBrush="LightGray" BorderThickness="1" FontSize="14">
                         <DataGrid.Columns>
@@ -133,14 +133,14 @@
                             <DataGridTextColumn Header="Label" Binding="{Binding Label}" Width="600"/>
                         </DataGrid.Columns>
                     </DataGrid>
-                    <Label Content="Groups:" HorizontalAlignment="Left" Margin="10,223,0,0" VerticalAlignment="Top"/>
+                    <Label x:Name="LabelNotesGroups" Content="Groups:" HorizontalAlignment="Left" Margin="10,223,0,0" VerticalAlignment="Top"/>
                     <Button x:Name="ButtonExportCsvGroups" Content="Export csv" Margin="0,182,10,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="75" Height="25" RenderTransformOrigin="0.502,0.5" Click="ButtonExportCsvGroups_Click"/>
                     <Button x:Name="ButtonImportCsvGroups" Content="Import csv" HorizontalAlignment="Right" Margin="0,182,90,0" VerticalAlignment="Top" Width="75" Height="25" Click="ButtonImportCsvGroups_Click"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Info Mappings" HorizontalAlignment="Left" Height="20" VerticalAlignment="Top">
-                <Grid Background="#FFE5E5E5">
-                    <Label Content="Nella colonna mappings è possibile inserite alcune informazioni sul tipo di risorsa per una visualizzazione più comoda:&#xA;- Bit map:&#x9;&quot;b0:Presenza tensione,b1:Stato 1,b15:Stato2&quot; -&gt; Mostra i singoli bit della word nella toolTip della riga divisi per risorsa.&#xA;- Byte map:&#x9;&quot;B0:Ora,B1:Minuti&quot; -&gt; Mostra i due byte della word nella toolTip della riga divisi per risorsa.&#xA;- Int16:&#x9;&#x9;&quot;Int16:Temp. 1&quot; -&gt; Mostra la word nel corrispondente valore con segno e visualizza il dato in int 16 nella tooltip della riga.&#xA;- UInt16:&#x9;&#x9;&quot;UInt16:Hum. 1&quot; -&gt; Mostra la word nel corrispondente valore senza segno e visualizza il dato in uint 16 nella tooltip della riga.&#xD;&#xA;- Byte:&#x9;&#x9;&quot;Byte:Error code&quot; -&gt; Mostra solo il low byte della word nella colonna &quot;Converted Values&quot; (Byte-: per l'high byte)&#xA;&#xA;Le variabili seguenti a 32 bit (due word) utilizzano la word del registro precedente (High Word) e corrente (Low Word) a cui fa riferimento &#xA;nel formato Big Endian: &#xA;- Float:&#x9;&#x9;&quot;Float:Temperatura locale 1&quot; -&gt; Raccoglie due word e visualizza il dato in float nella tooltip della riga.&#xA;- Int32:&#x9;&#x9;&quot;Int32:Temperatura locale 1&quot; -&gt; Raccoglie due word e visualizza il dato in int32 nella tooltip della riga.&#xA;- UInt32:&#x9;&#x9;&quot;UInt32:Temperatura locale 1&quot; -&gt; Raccoglie due word e visualizza il dato in uint32 nella tooltip della riga.&#xA;&#xA;Le variabili seguenti a 64 bit (quattro word) utilizzano le 3 word del registro precedente (High Word) e corrente (Low Word) a cui fa riferimento &#xA;nel formato Big Endian:&#xA;- Double:&#x9;&quot;Double:CosFi&quot; -&gt; Raccoglie 4 word e visualizza il dato in double nella tooltip della riga.&#xA;- Int64:&#x9;&#x9;&quot;Int64:Energia totale&quot; -&gt; Raccoglie 4 word e visualizza il dato in int64 nella tooltip della riga.&#xA;- UInt64:&#x9;&#x9;&quot;UInt64:Energia prodotta&quot; -&gt; Raccoglie 4 word e visualizza il dato in uint64 nella tooltip della riga.&#xA;&#xA;Altri formati:&#xA;- String(len): &#x9;&#x9;&quot;String(8):Modello&quot; -&gt; Converte 8 byte in caratteri ASCII partendo dal registro corrente in poi.&#xA;- String(len, offset): &#x9;&quot;String(8,-2):Modello&quot; -&gt; Converte 8 byte in caratteri ASCII con un offset di -2 (la stringa inizia dal registro precedente).&#xA;&#xA;Modificatori del formato:&#xA;&quot;UInt32-:&quot; o &quot;UInt32_swap:&quot; -&gt; Utilizza le due word invertite, formato Little Endian.&#xA;&quot;UInt32+:&quot; -&gt; Utilizza il registro corrente come High Word e la successiva come Low Word (Big Endian).&#xA;&quot;UInt32-+:&quot; o &quot;UInt32_swap+:&quot; -&gt; Combina le due precedenti, usa il regsitro corrente e successivo nel formato Little Endian.&#xD;&#xA;&quot;Byte-:&quot; o &quot;Byte_swap:&quot; -&gt; Usa l'high byte al posto del low byte per il valore convertito." HorizontalAlignment="Left" Margin="10,10,0,10" Width="747" FontSize="11"/>
+                <Grid x:Name="GridInfoMappings" Background="#FFE5E5E5">
+                    <Label x:Name="LabelInfoMappings" Content="Nella colonna mappings è possibile inserite alcune informazioni sul tipo di risorsa per una visualizzazione più comoda:&#xA;- Bit map:&#x9;&quot;b0:Presenza tensione,b1:Stato 1,b15:Stato2&quot; -&gt; Mostra i singoli bit della word nella toolTip della riga divisi per risorsa.&#xA;- Byte map:&#x9;&quot;B0:Ora,B1:Minuti&quot; -&gt; Mostra i due byte della word nella toolTip della riga divisi per risorsa.&#xA;- Int16:&#x9;&#x9;&quot;Int16:Temp. 1&quot; -&gt; Mostra la word nel corrispondente valore con segno e visualizza il dato in int 16 nella tooltip della riga.&#xA;- UInt16:&#x9;&#x9;&quot;UInt16:Hum. 1&quot; -&gt; Mostra la word nel corrispondente valore senza segno e visualizza il dato in uint 16 nella tooltip della riga.&#xD;&#xA;- Byte:&#x9;&#x9;&quot;Byte:Error code&quot; -&gt; Mostra solo il low byte della word nella colonna &quot;Converted Values&quot; (Byte-: per l'high byte)&#xA;&#xA;Le variabili seguenti a 32 bit (due word) utilizzano la word del registro precedente (High Word) e corrente (Low Word) a cui fa riferimento &#xA;nel formato Big Endian: &#xA;- Float:&#x9;&#x9;&quot;Float:Temperatura locale 1&quot; -&gt; Raccoglie due word e visualizza il dato in float nella tooltip della riga.&#xA;- Int32:&#x9;&#x9;&quot;Int32:Temperatura locale 1&quot; -&gt; Raccoglie due word e visualizza il dato in int32 nella tooltip della riga.&#xA;- UInt32:&#x9;&#x9;&quot;UInt32:Temperatura locale 1&quot; -&gt; Raccoglie due word e visualizza il dato in uint32 nella tooltip della riga.&#xA;&#xA;Le variabili seguenti a 64 bit (quattro word) utilizzano le 3 word del registro precedente (High Word) e corrente (Low Word) a cui fa riferimento &#xA;nel formato Big Endian:&#xA;- Double:&#x9;&quot;Double:CosFi&quot; -&gt; Raccoglie 4 word e visualizza il dato in double nella tooltip della riga.&#xA;- Int64:&#x9;&#x9;&quot;Int64:Energia totale&quot; -&gt; Raccoglie 4 word e visualizza il dato in int64 nella tooltip della riga.&#xA;- UInt64:&#x9;&#x9;&quot;UInt64:Energia prodotta&quot; -&gt; Raccoglie 4 word e visualizza il dato in uint64 nella tooltip della riga.&#xA;&#xA;Altri formati:&#xA;- String(len): &#x9;&#x9;&quot;String(8):Modello&quot; -&gt; Converte 8 byte in caratteri ASCII partendo dal registro corrente in poi.&#xA;- String(len, offset): &#x9;&quot;String(8,-2):Modello&quot; -&gt; Converte 8 byte in caratteri ASCII con un offset di -2 (la stringa inizia dal registro precedente).&#xA;&#xA;Modificatori del formato:&#xA;&quot;UInt32-:&quot; o &quot;UInt32_swap:&quot; -&gt; Utilizza le due word invertite, formato Little Endian.&#xA;&quot;UInt32+:&quot; -&gt; Utilizza il registro corrente come High Word e la successiva come Low Word (Big Endian).&#xA;&quot;UInt32-+:&quot; o &quot;UInt32_swap+:&quot; -&gt; Combina le due precedenti, usa il regsitro corrente e successivo nel formato Little Endian.&#xD;&#xA;&quot;Byte-:&quot; o &quot;Byte_swap:&quot; -&gt; Usa l'high byte al posto del low byte per il valore convertito." HorizontalAlignment="Left" Margin="10,10,0,10" Width="747" FontSize="11"/>
                 </Grid>
             </TabItem>
         </TabControl>

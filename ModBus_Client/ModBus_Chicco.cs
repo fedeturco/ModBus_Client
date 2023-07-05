@@ -97,7 +97,7 @@ namespace ModBusMaster_Chicco
         String ip_address;
         String port;
 
-        int type;    //"RTU", "ASCII", "TCP"
+        public int type;    //"RTU", "ASCII", "TCP"
         ModBus_Def def = new ModBus_Def();
 
         Border pictureBoxSending = new Border();

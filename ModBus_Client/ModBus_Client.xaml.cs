@@ -409,8 +409,8 @@ namespace ModBus_Client
             comboBoxTcpConnectionMode.SelectedIndex = 0;
 
             pictureBoxRunningAs.Background = Brushes.LightGray;
-            pictureBoxIsSending.Background = Brushes.LightGray;
-            pictureBoxIsResponding.Background = Brushes.LightGray;
+            pictureBoxRx.Background = Brushes.LightGray;
+            pictureBoxTx.Background = Brushes.LightGray;
 
             richTextBoxStatus.AppendText("\n");
 
@@ -701,7 +701,7 @@ namespace ModBus_Client
             }
         }
 
-        private void buttonSerialActive_Click(object sender, RoutedEventArgs e)
+        public void buttonSerialActive_Click(object sender, RoutedEventArgs e)
         {
             if (pictureBoxSerial.Background == Brushes.LightGray)
             {
@@ -783,7 +783,7 @@ namespace ModBus_Client
                     serialPort.ReadTimeout = 50;
                     serialPort.WriteTimeout = 50;
 
-                    ModBus = new ModBus_Chicco(serialPort, textBoxTcpClientIpAddress.Text, textBoxTcpClientPort.Text, ModBus_Def.TYPE_RTU, pictureBoxIsResponding, pictureBoxIsSending);
+                    ModBus = new ModBus_Chicco(serialPort, textBoxTcpClientIpAddress.Text, textBoxTcpClientPort.Text, ModBus_Def.TYPE_RTU, pictureBoxTx, pictureBoxRx);
                     ModBus.open();
 
                     serialPort.Open();
@@ -1510,7 +1510,7 @@ namespace ModBus_Client
             Thread.CurrentThread.Abort();
         }
 
-        private void buttonTcpActive_Click(object sender, RoutedEventArgs e)
+        public void buttonTcpActive_Click(object sender, RoutedEventArgs e)
         {
             buttonTcpActive.IsEnabled = false;
 
@@ -1546,7 +1546,7 @@ namespace ModBus_Client
                     this.Dispatcher.Invoke((Action)delegate
                     {
                         // Initialise Modbus Object
-                        ModBus = new ModBus_Chicco(serialPort, textBoxTcpClientIpAddress.Text, textBoxTcpClientPort.Text, TCPMode, pictureBoxIsResponding, pictureBoxIsSending);
+                        ModBus = new ModBus_Chicco(serialPort, textBoxTcpClientIpAddress.Text, textBoxTcpClientPort.Text, TCPMode, pictureBoxTx, pictureBoxRx);
                         ModBus.open();
 
                         pictureBoxTcp.Background = Brushes.Lime;
@@ -1669,6 +1669,30 @@ namespace ModBus_Client
                     dataGridViewCoils.ItemsSource = list_coilsTable;
                 });
             }
+            catch (InvalidOperationException err)
+            {
+                if (err.Message.IndexOf("non-connected socket") != -1)
+                {
+                    SetTableDisconnectError(list_coilsTable, true);
+
+                    if (ModBus.type == ModBus_Def.TYPE_RTU || ModBus.type == ModBus_Def.TYPE_ASCII)
+                    {
+                        this.Dispatcher.Invoke((Action)delegate
+                        {
+                            buttonSerialActive_Click(null, null);
+                        });
+                    }
+                    else
+                    {
+                        this.Dispatcher.Invoke((Action)delegate
+                        {
+                            buttonTcpActive_Click(null, null);
+                        });
+                    }
+                }
+
+                Console.WriteLine(err);
+            }
             catch (ModbusException err)
             {
                 if (err.Message.IndexOf("Timed out") != -1)
@@ -1776,6 +1800,30 @@ namespace ModBus_Client
                     dataGridViewCoils.ItemsSource = null;
                     dataGridViewCoils.ItemsSource = list_coilsTable;
                 });
+            }
+            catch (InvalidOperationException err)
+            {
+                if (err.Message.IndexOf("non-connected socket") != -1)
+                {
+                    SetTableDisconnectError(list_coilsTable, true);
+
+                    if (ModBus.type == ModBus_Def.TYPE_RTU || ModBus.type == ModBus_Def.TYPE_ASCII)
+                    {
+                        this.Dispatcher.Invoke((Action)delegate
+                        {
+                            buttonSerialActive_Click(null, null);
+                        });
+                    }
+                    else
+                    {
+                        this.Dispatcher.Invoke((Action)delegate
+                        {
+                            buttonTcpActive_Click(null, null);
+                        });
+                    }
+                }
+
+                Console.WriteLine(err);
             }
             catch (ModbusException err)
             {
@@ -1892,6 +1940,28 @@ namespace ModBus_Client
             });
         }
 
+        public void SetTableDisconnectError(ObservableCollection<ModBus_Item> list_, bool clear)
+        {
+            ModBus_Item tmp = new ModBus_Item();
+
+            tmp.Register = "Sock err";
+            tmp.Value = "";
+            tmp.ValueBin = "Socket closed";
+            tmp.Foreground = ForeGroundLightStr;
+            tmp.Background = Brushes.LightBlue.ToString();
+
+            this.Dispatcher.Invoke((Action)delegate
+            {
+                pictureBoxTx.Background = Brushes.LightGray;
+                pictureBoxRx.Background = Brushes.LightGray;
+
+                if (clear)
+                    list_.Clear();
+
+                list_.Add(tmp);
+            });
+        }
+
         private void buttonWriteCoils05_Click(object sender, RoutedEventArgs e)
         {
             buttonWriteCoils05.IsEnabled = false;
@@ -1927,6 +1997,30 @@ namespace ModBus_Client
                     dataGridViewCoils.ItemsSource = null;
                     dataGridViewCoils.ItemsSource = list_coilsTable;
                 });
+            }
+            catch (InvalidOperationException err)
+            {
+                if (err.Message.IndexOf("non-connected socket") != -1)
+                {
+                    SetTableDisconnectError(list_coilsTable, true);
+
+                    if (ModBus.type == ModBus_Def.TYPE_RTU || ModBus.type == ModBus_Def.TYPE_ASCII)
+                    {
+                        this.Dispatcher.Invoke((Action)delegate
+                        {
+                            buttonSerialActive_Click(null, null);
+                        });
+                    }
+                    else
+                    {
+                        this.Dispatcher.Invoke((Action)delegate
+                        {
+                            buttonTcpActive_Click(null, null);
+                        });
+                    }
+                }
+
+                Console.WriteLine(err);
             }
             catch (ModbusException err)
             {
@@ -2004,6 +2098,30 @@ namespace ModBus_Client
                     dataGridViewCoils.ItemsSource = null;
                     dataGridViewCoils.ItemsSource = list_coilsTable;
                 });
+            }
+            catch (InvalidOperationException err)
+            {
+                if (err.Message.IndexOf("non-connected socket") != -1)
+                {
+                    SetTableDisconnectError(list_coilsTable, true);
+
+                    if (ModBus.type == ModBus_Def.TYPE_RTU || ModBus.type == ModBus_Def.TYPE_ASCII)
+                    {
+                        this.Dispatcher.Invoke((Action)delegate
+                        {
+                            buttonSerialActive_Click(null, null);
+                        });
+                    }
+                    else
+                    {
+                        this.Dispatcher.Invoke((Action)delegate
+                        {
+                            buttonTcpActive_Click(null, null);
+                        });
+                    }
+                }
+
+                Console.WriteLine(err);
             }
             catch (ModbusException err)
             {
@@ -2095,6 +2213,30 @@ namespace ModBus_Client
                     dataGridViewCoils.ItemsSource = null;
                     dataGridViewCoils.ItemsSource = list_coilsTable;
                 });
+            }
+            catch (InvalidOperationException err)
+            {
+                if (err.Message.IndexOf("non-connected socket") != -1)
+                {
+                    SetTableDisconnectError(list_coilsTable, true);
+
+                    if (ModBus.type == ModBus_Def.TYPE_RTU || ModBus.type == ModBus_Def.TYPE_ASCII)
+                    {
+                        this.Dispatcher.Invoke((Action)delegate
+                        {
+                            buttonSerialActive_Click(null, null);
+                        });
+                    }
+                    else
+                    {
+                        this.Dispatcher.Invoke((Action)delegate
+                        {
+                            buttonTcpActive_Click(null, null);
+                        });
+                    }
+                }
+
+                Console.WriteLine(err);
             }
             catch (ModbusException err)
             {
@@ -2196,6 +2338,30 @@ namespace ModBus_Client
                     dataGridViewInput.ItemsSource = null;
                     dataGridViewInput.ItemsSource = list_inputsTable;
                 });
+            }
+            catch (InvalidOperationException err)
+            {
+                if (err.Message.IndexOf("non-connected socket") != -1)
+                {
+                    SetTableDisconnectError(list_inputsTable, true);
+
+                    if (ModBus.type == ModBus_Def.TYPE_RTU || ModBus.type == ModBus_Def.TYPE_ASCII)
+                    {
+                        this.Dispatcher.Invoke((Action)delegate
+                        {
+                            buttonSerialActive_Click(null, null);
+                        });
+                    }
+                    else
+                    {
+                        this.Dispatcher.Invoke((Action)delegate
+                        {
+                            buttonTcpActive_Click(null, null);
+                        });
+                    }
+                }
+
+                Console.WriteLine(err);
             }
             catch (ModbusException err)
             {
@@ -2314,6 +2480,30 @@ namespace ModBus_Client
                     dataGridViewInput.ItemsSource = list_inputsTable;
                 });
             }
+            catch (InvalidOperationException err)
+            {
+                if (err.Message.IndexOf("non-connected socket") != -1)
+                {
+                    SetTableDisconnectError(list_inputsTable, true);
+
+                    if (ModBus.type == ModBus_Def.TYPE_RTU || ModBus.type == ModBus_Def.TYPE_ASCII)
+                    {
+                        this.Dispatcher.Invoke((Action)delegate
+                        {
+                            buttonSerialActive_Click(null, null);
+                        });
+                    }
+                    else
+                    {
+                        this.Dispatcher.Invoke((Action)delegate
+                        {
+                            buttonTcpActive_Click(null, null);
+                        });
+                    }
+                }
+
+                Console.WriteLine(err);
+            }
             catch (ModbusException err)
             {
                 if (err.Message.IndexOf("Timed out") != -1)
@@ -2419,6 +2609,30 @@ namespace ModBus_Client
                     dataGridViewInputRegister.ItemsSource = null;
                     dataGridViewInputRegister.ItemsSource = list_inputRegistersTable;
                 });
+            }
+            catch (InvalidOperationException err)
+            {
+                if (err.Message.IndexOf("non-connected socket") != -1)
+                {
+                    SetTableDisconnectError(list_inputRegistersTable, true);
+
+                    if (ModBus.type == ModBus_Def.TYPE_RTU || ModBus.type == ModBus_Def.TYPE_ASCII)
+                    {
+                        this.Dispatcher.Invoke((Action)delegate
+                        {
+                            buttonSerialActive_Click(null, null);
+                        });
+                    }
+                    else
+                    {
+                        this.Dispatcher.Invoke((Action)delegate
+                        {
+                            buttonTcpActive_Click(null, null);
+                        });
+                    }
+                }
+
+                Console.WriteLine(err);
             }
             catch (ModbusException err)
             {
@@ -2542,6 +2756,30 @@ namespace ModBus_Client
                     dataGridViewInputRegister.ItemsSource = list_inputRegistersTable;
                 });
             }
+            catch (InvalidOperationException err)
+            {
+                if (err.Message.IndexOf("non-connected socket") != -1)
+                {
+                    SetTableDisconnectError(list_inputRegistersTable, true);
+
+                    if (ModBus.type == ModBus_Def.TYPE_RTU || ModBus.type == ModBus_Def.TYPE_ASCII)
+                    {
+                        this.Dispatcher.Invoke((Action)delegate
+                        {
+                            buttonSerialActive_Click(null, null);
+                        });
+                    }
+                    else
+                    {
+                        this.Dispatcher.Invoke((Action)delegate
+                        {
+                            buttonTcpActive_Click(null, null);
+                        });
+                    }
+                }
+
+                Console.WriteLine(err);
+            }
             catch (ModbusException err)
             {
                 if (err.Message.IndexOf("Timed out") != -1)
@@ -2656,6 +2894,30 @@ namespace ModBus_Client
                     dataGridViewHolding.ItemsSource = list_holdingRegistersTable;
                 });
             }
+            catch(InvalidOperationException err)
+            {
+                if (err.Message.IndexOf("non-connected socket") != -1)
+                {
+                    SetTableDisconnectError(list_holdingRegistersTable, true);
+
+                    if (ModBus.type == ModBus_Def.TYPE_RTU || ModBus.type == ModBus_Def.TYPE_ASCII)
+                    {
+                        this.Dispatcher.Invoke((Action)delegate
+                        {
+                            buttonSerialActive_Click(null, null);
+                        });
+                    }
+                    else
+                    {
+                        this.Dispatcher.Invoke((Action)delegate
+                        {
+                            buttonTcpActive_Click(null, null);
+                        });
+                    }
+                }
+
+                Console.WriteLine(err);
+            }
             catch (ModbusException err)
             {
                 if (err.Message.IndexOf("Timed out") != -1)
@@ -2736,6 +2998,30 @@ namespace ModBus_Client
                     dataGridViewHolding.ItemsSource = null;
                     dataGridViewHolding.ItemsSource = list_holdingRegistersTable;
                 });
+            }
+            catch (InvalidOperationException err)
+            {
+                if (err.Message.IndexOf("non-connected socket") != -1)
+                {
+                    SetTableDisconnectError(list_holdingRegistersTable, true);
+
+                    if (ModBus.type == ModBus_Def.TYPE_RTU || ModBus.type == ModBus_Def.TYPE_ASCII)
+                    {
+                        this.Dispatcher.Invoke((Action)delegate
+                        {
+                            buttonSerialActive_Click(null, null);
+                        });
+                    }
+                    else
+                    {
+                        this.Dispatcher.Invoke((Action)delegate
+                        {
+                            buttonTcpActive_Click(null, null);
+                        });
+                    }
+                }
+
+                Console.WriteLine(err);
             }
             catch (ModbusException err)
             {
@@ -2871,6 +3157,30 @@ namespace ModBus_Client
                     dataGridViewHolding.ItemsSource = null;
                     dataGridViewHolding.ItemsSource = list_holdingRegistersTable;
                 });
+            }
+            catch (InvalidOperationException err)
+            {
+                if (err.Message.IndexOf("non-connected socket") != -1)
+                {
+                    SetTableDisconnectError(list_holdingRegistersTable, true);
+
+                    if (ModBus.type == ModBus_Def.TYPE_RTU || ModBus.type == ModBus_Def.TYPE_ASCII)
+                    {
+                        this.Dispatcher.Invoke((Action)delegate
+                        {
+                            buttonSerialActive_Click(null, null);
+                        });
+                    }
+                    else
+                    {
+                        this.Dispatcher.Invoke((Action)delegate
+                        {
+                            buttonTcpActive_Click(null, null);
+                        });
+                    }
+                }
+
+                Console.WriteLine(err);
             }
             catch (ModbusException err)
             {
@@ -3008,6 +3318,30 @@ namespace ModBus_Client
                     dataGridViewHolding.ItemsSource = list_holdingRegistersTable;
                 });
             }
+            catch (InvalidOperationException err)
+            {
+                if (err.Message.IndexOf("non-connected socket") != -1)
+                {
+                    SetTableDisconnectError(list_holdingRegistersTable, true);
+
+                    if (ModBus.type == ModBus_Def.TYPE_RTU || ModBus.type == ModBus_Def.TYPE_ASCII)
+                    {
+                        this.Dispatcher.Invoke((Action)delegate
+                        {
+                            buttonSerialActive_Click(null, null);
+                        });
+                    }
+                    else
+                    {
+                        this.Dispatcher.Invoke((Action)delegate
+                        {
+                            buttonTcpActive_Click(null, null);
+                        });
+                    }
+                }
+
+                Console.WriteLine(err);
+            }
             catch (ModbusException err)
             {
                 if (err.Message.IndexOf("Timed out") != -1)
@@ -3076,6 +3410,30 @@ namespace ModBus_Client
                 try
                 {
                     textBoxDiagnosticResponse.Text = ModBus.diagnostics_08(byte.Parse(textBoxModbusAddress.Text), diagnostic_codes[comboBoxDiagnosticFunction.SelectedIndex], UInt16.Parse(textBoxDiagnosticData.Text), readTimeout);
+                }
+                catch (InvalidOperationException err)
+                {
+                    if (err.Message.IndexOf("non-connected socket") != -1)
+                    {
+                        textBoxDiagnosticData.Text = "Socket error, disconnected";
+
+                        if (ModBus.type == ModBus_Def.TYPE_RTU || ModBus.type == ModBus_Def.TYPE_ASCII)
+                        {
+                            this.Dispatcher.Invoke((Action)delegate
+                            {
+                                buttonSerialActive_Click(null, null);
+                            });
+                        }
+                        else
+                        {
+                            this.Dispatcher.Invoke((Action)delegate
+                            {
+                                buttonTcpActive_Click(null, null);
+                            });
+                        }
+                    }
+
+                    Console.WriteLine(err);
                 }
                 catch (ModbusException err)
                 {
@@ -4010,6 +4368,30 @@ namespace ModBus_Client
                     dataGridViewHolding.ItemsSource = list_holdingRegistersTable;
                 });
             }
+            catch (InvalidOperationException err)
+            {
+                if (err.Message.IndexOf("non-connected socket") != -1)
+                {
+                    SetTableDisconnectError(list_holdingRegistersTable, true);
+
+                    if (ModBus.type == ModBus_Def.TYPE_RTU || ModBus.type == ModBus_Def.TYPE_ASCII)
+                    {
+                        this.Dispatcher.Invoke((Action)delegate
+                        {
+                            buttonSerialActive_Click(null, null);
+                        });
+                    }
+                    else
+                    {
+                        this.Dispatcher.Invoke((Action)delegate
+                        {
+                            buttonTcpActive_Click(null, null);
+                        });
+                    }
+                }
+
+                Console.WriteLine(err);
+            }
             catch (ModbusException err)
             {
                 if (err.Message.IndexOf("Timed out") != -1)
@@ -4938,6 +5320,30 @@ namespace ModBus_Client
                     }
                 }
             }
+            catch (InvalidOperationException err)
+            {
+                if (err.Message.IndexOf("non-connected socket") != -1)
+                {
+                    SetTableDisconnectError(list_holdingRegistersTable, true);
+
+                    if (ModBus.type == ModBus_Def.TYPE_RTU || ModBus.type == ModBus_Def.TYPE_ASCII)
+                    {
+                        this.Dispatcher.Invoke((Action)delegate
+                        {
+                            buttonSerialActive_Click(null, null);
+                        });
+                    }
+                    else
+                    {
+                        this.Dispatcher.Invoke((Action)delegate
+                        {
+                            buttonTcpActive_Click(null, null);
+                        });
+                    }
+                }
+
+                Console.WriteLine(err);
+            }
             catch (ModbusException err)
             {
                 if (err.Message.IndexOf("Timed out") != -1)
@@ -5067,6 +5473,30 @@ namespace ModBus_Client
                         dataGridViewCoils.SelectedItem = lastEditModbusItem;
                     });
                 }
+            }
+            catch (InvalidOperationException err)
+            {
+                if (err.Message.IndexOf("non-connected socket") != -1)
+                {
+                    SetTableDisconnectError(list_coilsTable, true);
+
+                    if (ModBus.type == ModBus_Def.TYPE_RTU || ModBus.type == ModBus_Def.TYPE_ASCII)
+                    {
+                        this.Dispatcher.Invoke((Action)delegate
+                        {
+                            buttonSerialActive_Click(null, null);
+                        });
+                    }
+                    else
+                    {
+                        this.Dispatcher.Invoke((Action)delegate
+                        {
+                            buttonTcpActive_Click(null, null);
+                        });
+                    }
+                }
+
+                Console.WriteLine(err);
             }
             catch (ModbusException err)
             {
@@ -7595,11 +8025,9 @@ namespace ModBus_Client
                 if(File.Exists(openFileDialog.FileName))
                 {
                     PreviewImport previewImport = new PreviewImport(this, openFileDialog.FileName, 5);
-                    previewImport.ShowDialog();
+                    previewImport.Show();
                 }
             }
-
-            // TODO
         }
 
         private void buttonImportHoldingReg_Click(object sender, RoutedEventArgs e)
@@ -7616,7 +8044,7 @@ namespace ModBus_Client
                 if (File.Exists(openFileDialog.FileName))
                 {
                     PreviewImport previewImport = new PreviewImport(this, openFileDialog.FileName, 6);
-                    previewImport.ShowDialog();
+                    previewImport.Show();
                 }
             }
         }
@@ -7687,6 +8115,30 @@ namespace ModBus_Client
                                     false);
                             }
                         }
+                    }
+                    catch (InvalidOperationException err)
+                    {
+                        if (err.Message.IndexOf("non-connected socket") != -1)
+                        {
+                            SetTableDisconnectError(list_holdingRegistersTable, true);
+
+                            if (ModBus.type == ModBus_Def.TYPE_RTU || ModBus.type == ModBus_Def.TYPE_ASCII)
+                            {
+                                this.Dispatcher.Invoke((Action)delegate
+                                {
+                                    buttonSerialActive_Click(null, null);
+                                });
+                            }
+                            else
+                            {
+                                this.Dispatcher.Invoke((Action)delegate
+                                {
+                                    buttonTcpActive_Click(null, null);
+                                });
+                            }
+                        }
+
+                        Console.WriteLine(err);
                     }
                     catch (ModbusException err)
                     {
@@ -7818,6 +8270,30 @@ namespace ModBus_Client
                             }
                         }
                     }
+                    catch (InvalidOperationException err)
+                    {
+                        if (err.Message.IndexOf("non-connected socket") != -1)
+                        {
+                            SetTableDisconnectError(list_holdingRegistersTable, true);
+
+                            if (ModBus.type == ModBus_Def.TYPE_RTU || ModBus.type == ModBus_Def.TYPE_ASCII)
+                            {
+                                this.Dispatcher.Invoke((Action)delegate
+                                {
+                                    buttonSerialActive_Click(null, null);
+                                });
+                            }
+                            else
+                            {
+                                this.Dispatcher.Invoke((Action)delegate
+                                {
+                                    buttonTcpActive_Click(null, null);
+                                });
+                            }
+                        }
+
+                        Console.WriteLine(err);
+                    }
                     catch (ModbusException err)
                     {
                         if (err.Message.IndexOf("Timed out") != -1)
@@ -7929,6 +8405,30 @@ namespace ModBus_Client
                                     false);
                             }
                         }
+                    }
+                    catch (InvalidOperationException err)
+                    {
+                        if (err.Message.IndexOf("non-connected socket") != -1)
+                        {
+                            SetTableDisconnectError(list_inputRegistersTable, true);
+
+                            if (ModBus.type == ModBus_Def.TYPE_RTU || ModBus.type == ModBus_Def.TYPE_ASCII)
+                            {
+                                this.Dispatcher.Invoke((Action)delegate
+                                {
+                                    buttonSerialActive_Click(null, null);
+                                });
+                            }
+                            else
+                            {
+                                this.Dispatcher.Invoke((Action)delegate
+                                {
+                                    buttonTcpActive_Click(null, null);
+                                });
+                            }
+                        }
+
+                        Console.WriteLine(err);
                     }
                     catch (ModbusException err)
                     {
@@ -8057,6 +8557,30 @@ namespace ModBus_Client
                             }
                         }
                     }
+                    catch (InvalidOperationException err)
+                    {
+                        if (err.Message.IndexOf("non-connected socket") != -1)
+                        {
+                            SetTableDisconnectError(list_inputRegistersTable, true);
+
+                            if (ModBus.type == ModBus_Def.TYPE_RTU || ModBus.type == ModBus_Def.TYPE_ASCII)
+                            {
+                                this.Dispatcher.Invoke((Action)delegate
+                                {
+                                    buttonSerialActive_Click(null, null);
+                                });
+                            }
+                            else
+                            {
+                                this.Dispatcher.Invoke((Action)delegate
+                                {
+                                    buttonTcpActive_Click(null, null);
+                                });
+                            }
+                        }
+
+                        Console.WriteLine(err);
+                    }
                     catch (ModbusException err)
                     {
                         if (err.Message.IndexOf("Timed out") != -1)
@@ -8151,6 +8675,30 @@ namespace ModBus_Client
                                     false);
                             }
                         }
+                    }
+                    catch (InvalidOperationException err)
+                    {
+                        if (err.Message.IndexOf("non-connected socket") != -1)
+                        {
+                            SetTableDisconnectError(list_inputsTable, true);
+
+                            if (ModBus.type == ModBus_Def.TYPE_RTU || ModBus.type == ModBus_Def.TYPE_ASCII)
+                            {
+                                this.Dispatcher.Invoke((Action)delegate
+                                {
+                                    buttonSerialActive_Click(null, null);
+                                });
+                            }
+                            else
+                            {
+                                this.Dispatcher.Invoke((Action)delegate
+                                {
+                                    buttonTcpActive_Click(null, null);
+                                });
+                            }
+                        }
+
+                        Console.WriteLine(err);
                     }
                     catch (ModbusException err)
                     {
@@ -8264,6 +8812,30 @@ namespace ModBus_Client
                             }
                         }
                     }
+                    catch (InvalidOperationException err)
+                    {
+                        if (err.Message.IndexOf("non-connected socket") != -1)
+                        {
+                            SetTableDisconnectError(list_inputsTable, true);
+
+                            if (ModBus.type == ModBus_Def.TYPE_RTU || ModBus.type == ModBus_Def.TYPE_ASCII)
+                            {
+                                this.Dispatcher.Invoke((Action)delegate
+                                {
+                                    buttonSerialActive_Click(null, null);
+                                });
+                            }
+                            else
+                            {
+                                this.Dispatcher.Invoke((Action)delegate
+                                {
+                                    buttonTcpActive_Click(null, null);
+                                });
+                            }
+                        }
+
+                        Console.WriteLine(err);
+                    }
                     catch (ModbusException err)
                     {
                         if (err.Message.IndexOf("Timed out") != -1)
@@ -8358,6 +8930,30 @@ namespace ModBus_Client
                                     false);
                             }
                         }
+                    }
+                    catch (InvalidOperationException err)
+                    {
+                        if (err.Message.IndexOf("non-connected socket") != -1)
+                        {
+                            SetTableDisconnectError(list_coilsTable, true);
+
+                            if (ModBus.type == ModBus_Def.TYPE_RTU || ModBus.type == ModBus_Def.TYPE_ASCII)
+                            {
+                                this.Dispatcher.Invoke((Action)delegate
+                                {
+                                    buttonSerialActive_Click(null, null);
+                                });
+                            }
+                            else
+                            {
+                                this.Dispatcher.Invoke((Action)delegate
+                                {
+                                    buttonTcpActive_Click(null, null);
+                                });
+                            }
+                        }
+
+                        Console.WriteLine(err);
                     }
                     catch (ModbusException err)
                     {
@@ -8473,6 +9069,30 @@ namespace ModBus_Client
                                     false);
                             }
                         }
+                    }
+                    catch (InvalidOperationException err)
+                    {
+                        if (err.Message.IndexOf("non-connected socket") != -1)
+                        {
+                            SetTableDisconnectError(list_coilsTable, true);
+
+                            if (ModBus.type == ModBus_Def.TYPE_RTU || ModBus.type == ModBus_Def.TYPE_ASCII)
+                            {
+                                this.Dispatcher.Invoke((Action)delegate
+                                {
+                                    buttonSerialActive_Click(null, null);
+                                });
+                            }
+                            else
+                            {
+                                this.Dispatcher.Invoke((Action)delegate
+                                {
+                                    buttonTcpActive_Click(null, null);
+                                });
+                            }
+                        }
+
+                        Console.WriteLine(err);
                     }
                     catch (ModbusException err)
                     {
