@@ -8217,10 +8217,14 @@ namespace ModBus_Client
 
                             foreach (string str in item.Group.Split(';'))
                             {
-                                if (int.Parse(str) == int.Parse(comboBoxHoldingGroup_))
+                                int dummy = -1;
+                                if (int.TryParse(str, out dummy))
                                 {
-                                    found = true;
-                                    break;
+                                    if (dummy == int.Parse(comboBoxHoldingGroup_))
+                                    {
+                                        found = true;
+                                        break;
+                                    }
                                 }
                             }
 
@@ -8504,10 +8508,14 @@ namespace ModBus_Client
 
                             foreach (string str in item.Group.Split(';'))
                             {
-                                if (int.Parse(str) == int.Parse(comboBoxHoldingGroup_))
+                                int dummy = -1;
+                                if (int.TryParse(str, out dummy))
                                 {
-                                    found = true;
-                                    break;
+                                    if (dummy == int.Parse(comboBoxInputRegisterGroup_))
+                                    {
+                                        found = true;
+                                        break;
+                                    }
                                 }
                             }
 
@@ -8721,7 +8729,7 @@ namespace ModBus_Client
             }
             catch (Exception err)
             {
-                SetTableInternalError(list_inputRegistersTable, false);
+                SetTableInternalError(list_inputsTable, false);
                 Console.WriteLine(err);
             }
 
@@ -8774,10 +8782,14 @@ namespace ModBus_Client
 
                             foreach (string str in item.Group.Split(';'))
                             {
-                                if (int.Parse(str) == int.Parse(comboBoxHoldingGroup_))
+                                int dummy = -1;
+                                if (int.TryParse(str, out dummy))
                                 {
-                                    found = true;
-                                    break;
+                                    if (dummy == int.Parse(comboBoxInputGroup_))
+                                    {
+                                        found = true;
+                                        break;
+                                    }
                                 }
                             }
 
@@ -9032,10 +9044,14 @@ namespace ModBus_Client
 
                             foreach (string str in item.Group.Split(';'))
                             {
-                                if (int.Parse(str) == int.Parse(comboBoxHoldingGroup_))
+                                int dummy = -1;
+                                if (int.TryParse(str, out dummy))
                                 {
-                                    found = true;
-                                    break;
+                                    if (dummy == int.Parse(comboBoxCoilsGroup_))
+                                    {
+                                        found = true;
+                                        break;
+                                    }
                                 }
                             }
 
