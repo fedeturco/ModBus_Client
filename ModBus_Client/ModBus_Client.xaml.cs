@@ -1151,7 +1151,6 @@ namespace ModBus_Client
                 textBoxCoilsValue15.Text = config.textBoxCoilsValue15;
                 textBoxGoToCoilAddress.Text = config.textBoxGoToCoilAddress;
 
-
                 // TabPage2 (inputs)
                 textBoxInputAddress02.Text = config.textBoxInputAddress02;
                 textBoxInputNumber.Text = config.textBoxInputNumber;
@@ -1407,9 +1406,14 @@ namespace ModBus_Client
                             foreach (Group_Item gr in template.Groups.OrderBy(x => int.Parse(x.Group)))
                             {
                                 KeyValuePair<Group_Item, String> kp = new KeyValuePair<Group_Item, String>(gr, gr.Group + " - " + gr.Label);
-                                comboBoxHoldingGroup.Items.Add(kp);
+                                
+                                if(template.dataGridViewCoils.First<ModBus_Item>(x => x.Group.IndexOf(kp.Key.Group) != -1) != null)
+                                    comboBoxHoldingGroup.Items.Add(kp);
+                                
                                 comboBoxInputRegisterGroup.Items.Add(kp);
+                                
                                 comboBoxInputGroup.Items.Add(kp);
+                                
                                 comboBoxCoilsGroup.Items.Add(kp);
                             }
                         }
@@ -1739,6 +1743,8 @@ namespace ModBus_Client
             {
                 buttonReadCoilsRange.IsEnabled = false;
             }
+
+            list_coilsTable.Clear();
 
             Thread t = new Thread(new ThreadStart(readColisRange));
             t.Priority = threadPriority;
@@ -2411,6 +2417,8 @@ namespace ModBus_Client
                 buttonReadInputRange.IsEnabled = false;
             }
 
+            list_inputsTable.Clear();
+
             Thread t = new Thread(new ThreadStart(readInputsRange));
             t.Priority = threadPriority;
             t.Start();
@@ -2681,6 +2689,8 @@ namespace ModBus_Client
             {
                 buttonReadInputRegisterRange.IsEnabled = false;
             }
+
+            list_inputRegistersTable.Clear();
 
             Thread t = new Thread(new ThreadStart(readInputRegistersRange));
             t.Priority = threadPriority;
@@ -3229,6 +3239,8 @@ namespace ModBus_Client
             {
                 buttonReadHoldingRange.IsEnabled = false;
             }
+
+            list_holdingRegistersTable.Clear();
 
             Thread t = new Thread(new ThreadStart(readHoldingRegistersRange));
             t.Priority = threadPriority;
@@ -7171,10 +7183,18 @@ namespace ModBus_Client
                             foreach (Group_Item gr in template.Groups.OrderBy(x => int.Parse(x.Group)))
                             {
                                 KeyValuePair<Group_Item, String> kp = new KeyValuePair<Group_Item, String>(gr, gr.Group + " - " + gr.Label);
-                                comboBoxHoldingGroup.Items.Add(kp);
-                                comboBoxInputRegisterGroup.Items.Add(kp);
-                                comboBoxInputGroup.Items.Add(kp);
-                                comboBoxCoilsGroup.Items.Add(kp);
+
+                                if (template.dataGridViewCoils.FirstOrDefault<ModBus_Item>(x => (x.Group != null ? x.Group : "").Split(';').FirstOrDefault<string>(y => String.Compare(y, kp.Key.Group) == 0) != null) != null)
+                                    comboBoxCoilsGroup.Items.Add(kp);
+
+                                if (template.dataGridViewInput.FirstOrDefault<ModBus_Item>(x => (x.Group != null ? x.Group : "").Split(';').FirstOrDefault<string>(y => String.Compare(y, kp.Key.Group) == 0) != null) != null)
+                                    comboBoxInputGroup.Items.Add(kp);
+
+                                if (template.dataGridViewInputRegister.FirstOrDefault<ModBus_Item>(x => (x.Group != null ? x.Group : "").Split(';').FirstOrDefault<string>(y => String.Compare(y, kp.Key.Group) == 0) != null) != null)
+                                    comboBoxInputRegisterGroup.Items.Add(kp);
+
+                                if (template.dataGridViewHolding.FirstOrDefault<ModBus_Item>(x => (x.Group != null ? x.Group : "").Split(';').FirstOrDefault<string>(y => String.Compare(y, kp.Key.Group) == 0) != null) != null)
+                                    comboBoxHoldingGroup.Items.Add(kp);
                             }
                         }
                         catch(Exception err)
@@ -8629,6 +8649,8 @@ namespace ModBus_Client
             {
                 KeyValuePair<Group_Item, String> kp = (KeyValuePair<Group_Item, String>)comboBoxInputRegisterGroup.SelectedItem;
                 comboBoxInputRegisterGroup_ = kp.Key.Group;
+
+                buttonReadInputRegisterTemplateGroup_Click(null, null);
             }
         }
 
@@ -8888,6 +8910,8 @@ namespace ModBus_Client
             {
                 KeyValuePair<Group_Item, String> kp = (KeyValuePair<Group_Item, String>)comboBoxInputGroup.SelectedItem;
                 comboBoxInputGroup_ = kp.Key.Group;
+
+                buttonReadInputTemplateGroup_Click(null, null);
             }
         }
 

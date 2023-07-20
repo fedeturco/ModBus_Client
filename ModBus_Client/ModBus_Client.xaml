@@ -150,7 +150,7 @@
                     <Label x:Name="labelIp" Content="IP:" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="14" Margin="10.143,65,0,0" Grid.Column="1"/>
                     <TextBox x:Name="textBoxTcpClientIpAddress" HorizontalAlignment="Left" Height="30" Margin="85.143,64,0,0" TextWrapping="Wrap" Text="192.168.1.100" VerticalAlignment="Top" Width="271" FontSize="16" Grid.Column="1"/>
                     <TextBox x:Name="textBoxTcpClientPort" HorizontalAlignment="Left" Height="30" Margin="85.143,96,0,0" TextWrapping="Wrap" Text="502" VerticalAlignment="Top" Width="93" FontSize="16" Grid.Column="1"/>
-                    <Button x:Name="buttonSerialActive" HorizontalAlignment="Left" Margin="263,232,0,0" VerticalAlignment="Top" Width="110" Grid.Column="0" Click="buttonSerialActive_Click" FontSize="16" Height="29">
+                    <Button x:Name="buttonSerialActive" HorizontalAlignment="Left" Margin="263,232,0,0" VerticalAlignment="Top" Width="110" Grid.Column="0" Click="buttonSerialActive_Click" FontSize="16" Height="29" ToolTip="Ctrl+B">
                         <StackPanel Orientation="Horizontal">
                             <Viewbox Width="16" Height="16" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
                                 <Rectangle Width="16" Height="16">
@@ -173,7 +173,7 @@
                             <TextBlock x:Name="textBlockSerialActive" Text="Connect" Margin="3,0,0,0"/>
                         </StackPanel>
                     </Button>
-                    <Button x:Name="buttonTcpActive" HorizontalAlignment="Left" Margin="264.143,232,0,0" VerticalAlignment="Top" Width="110" Grid.Column="1" Click="buttonTcpActive_Click" FontSize="16" Height="29">
+                    <Button x:Name="buttonTcpActive" HorizontalAlignment="Left" Margin="264.143,232,0,0" VerticalAlignment="Top" Width="110" Grid.Column="1" Click="buttonTcpActive_Click" FontSize="16" Height="29" ToolTip="Ctrl+B">
                         <StackPanel Orientation="Horizontal">
                             <Viewbox Width="16" Height="16" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
                                 <Rectangle Width="16" Height="16">
