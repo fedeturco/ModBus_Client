@@ -644,7 +644,11 @@ namespace ModBus_Client
 
                     foreach(dynamic group in profile["groups"])
                     {
-                        Group_Item newGroup = (Group_Item)group;
+                        Group_Item newGroup = new Group_Item();
+
+                        newGroup.Group = group["Group"];
+                        newGroup.Label = group["Label"];
+
                         list_groups.Add(newGroup);
                     }
                 }

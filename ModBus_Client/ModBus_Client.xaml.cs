@@ -1407,14 +1407,17 @@ namespace ModBus_Client
                             {
                                 KeyValuePair<Group_Item, String> kp = new KeyValuePair<Group_Item, String>(gr, gr.Group + " - " + gr.Label);
                                 
-                                if(template.dataGridViewCoils.First<ModBus_Item>(x => x.Group.IndexOf(kp.Key.Group) != -1) != null)
+                                if(template.dataGridViewHolding.First<ModBus_Item>(x => x.Group.IndexOf(kp.Key.Group) != -1) != null)
                                     comboBoxHoldingGroup.Items.Add(kp);
-                                
-                                comboBoxInputRegisterGroup.Items.Add(kp);
-                                
-                                comboBoxInputGroup.Items.Add(kp);
-                                
-                                comboBoxCoilsGroup.Items.Add(kp);
+
+                                if (template.dataGridViewInputRegister.First<ModBus_Item>(x => x.Group.IndexOf(kp.Key.Group) != -1) != null)
+                                    comboBoxInputRegisterGroup.Items.Add(kp);
+
+                                if (template.dataGridViewInput.First<ModBus_Item>(x => x.Group.IndexOf(kp.Key.Group) != -1) != null)
+                                    comboBoxInputGroup.Items.Add(kp);
+
+                                if (template.dataGridViewCoils.First<ModBus_Item>(x => x.Group.IndexOf(kp.Key.Group) != -1) != null)
+                                    comboBoxCoilsGroup.Items.Add(kp);
                             }
                         }
                         catch (Exception err)
@@ -3932,12 +3935,12 @@ namespace ModBus_Client
                         // String (type 255)
                         else if (test.ToLower().IndexOf("string") == 0)
                         {
-                            int length = int.Parse(test.Split(')')[0].Split('(')[1].Split(',')[0]);
+                            int length = int.Parse(test.Split(')')[0].Split('(')[1].Split('.')[0]);
                             int offset = 0;
 
-                            if (test.Split(')')[0].Split('(')[1].IndexOf(',') != -1)
+                            if (test.Split(')')[0].Split('(')[1].IndexOf('.') != -1)
                             {
-                                int.TryParse(test.Split(')')[0].Split('(')[1].Split(',')[1], out offset);
+                                int.TryParse(test.Split(')')[0].Split('(')[1].Split('.')[1], out offset);
                             }
 
                             byte[] tmp = new byte[length];
@@ -8087,11 +8090,15 @@ namespace ModBus_Client
                     list_holdingRegistersTable.Clear();
                 });
 
+                List<uint> toRemove = new List<uint>();
                 foreach (ModBus_Item item in list_template_holdingRegistersTable.OrderBy(x => x.RegisterUInt))
                 {
                     try
                     {
                         if (item == null)
+                            continue;
+
+                        if (toRemove.Contains(item.RegisterUInt))
                             continue;
 
                         uint address_start = item.RegisterUInt;
@@ -8105,11 +8112,27 @@ namespace ModBus_Client
                             if (item.Mappings.ToLower().IndexOf("64") != -1 || item.Mappings.ToLower().IndexOf("double") != -1)
                                 num_regs = 4;
 
-                            if (item.Mappings.ToLower().IndexOf("String") != -1)
-                                num_regs = uint.Parse(item.Mappings.Split(';')[0].Replace("String(", ""));
+                            if (item.Mappings.ToLower().IndexOf("string") != -1)
+                            {
+                                uint offset = uint.Parse(item.Mappings.Split('.')[1].ToLower().Split(')')[0]);
+                                address_start = address_start - (offset / 2 + offset % 2);
 
-                            if (item.Mappings.IndexOf("+") == -1)
-                                address_start = address_start - num_regs + 1;
+                                num_regs = uint.Parse(item.Mappings.Split('.')[0].Replace("string(", ""));
+                                num_regs = num_regs / 2 + num_regs % 2;
+                            }
+                            else
+                            {
+                                if (item.Mappings.IndexOf("+") == -1)
+                                    address_start = address_start - num_regs + 1;
+                            }
+
+                            if (num_regs > 1)
+                            {
+                                for (int i = 1; i < num_regs; i++)
+                                {
+                                    toRemove.Add((uint)(item.RegisterUInt + i));
+                                }
+                            }
                         }
 
                         UInt16[] response = ModBus.readHoldingRegister_03(
@@ -8215,6 +8238,7 @@ namespace ModBus_Client
                     list_holdingRegistersTable.Clear();
                 });
 
+                List<uint> toRemove = new List<uint>();
                 foreach (ModBus_Item item in list_template_holdingRegistersTable.OrderBy(x => x.RegisterUInt))
                 {
                     try
@@ -8230,6 +8254,9 @@ namespace ModBus_Client
                             if (int.Parse(comboBoxHoldingGroup_) != 0)
                                 continue;
                         }
+
+                        if (toRemove.Contains(item.RegisterUInt))
+                            continue;
 
                         if (item.Group != null)
                         {
@@ -8263,11 +8290,27 @@ namespace ModBus_Client
                             if (item.Mappings.ToLower().IndexOf("64") != -1 || item.Mappings.ToLower().IndexOf("double") != -1)
                                 num_regs = 4;
 
-                            if (item.Mappings.ToLower().IndexOf("String") != -1)
-                                num_regs = uint.Parse(item.Mappings.Split(';')[0].Replace("String(", ""));
+                            if (item.Mappings.ToLower().IndexOf("string") != -1)
+                            {
+                                uint offset = uint.Parse(item.Mappings.Split('.')[1].ToLower().Split(')')[0]);
+                                address_start = address_start - (offset / 2 + offset % 2);
 
-                            if (item.Mappings.IndexOf("+") == -1)
-                                address_start = address_start - num_regs + 1;
+                                num_regs = uint.Parse(item.Mappings.Split('.')[0].Replace("string(", ""));
+                                num_regs = num_regs / 2 + num_regs % 2;
+                            }
+                            else
+                            {
+                                if (item.Mappings.IndexOf("+") == -1)
+                                    address_start = address_start - num_regs + 1;
+                            }
+
+                            if (num_regs > 1)
+                            {
+                                for (int i = 1; i < num_regs; i++)
+                                {
+                                    toRemove.Add((uint)(item.RegisterUInt + i));
+                                }
+                            }
                         }
 
                         UInt16[] response = ModBus.readHoldingRegister_03(
@@ -8381,11 +8424,15 @@ namespace ModBus_Client
                     list_inputRegistersTable.Clear();
                 });
 
+                List<uint> toRemove = new List<uint>();
                 foreach (ModBus_Item item in list_template_inputRegistersTable.OrderBy(x => x.RegisterUInt))
                 {
                     try
                     {
                         if (item == null)
+                            continue;
+
+                        if (toRemove.Contains(item.RegisterUInt))
                             continue;
 
                         uint address_start = item.RegisterUInt;
@@ -8399,11 +8446,27 @@ namespace ModBus_Client
                             if (item.Mappings.ToLower().IndexOf("64") != -1 || item.Mappings.ToLower().IndexOf("double") != -1)
                                 num_regs = 4;
 
-                            if (item.Mappings.ToLower().IndexOf("String") != -1)
-                                num_regs = uint.Parse(item.Mappings.Split(';')[0].Replace("String(", ""));
+                            if (item.Mappings.ToLower().IndexOf("string") != -1)
+                            {
+                                uint offset = uint.Parse(item.Mappings.Split('.')[1].ToLower().Split(')')[0]);
+                                address_start = address_start - (offset / 2 + offset % 2);
 
-                            if (item.Mappings.IndexOf("+") == -1)
-                                address_start = address_start - num_regs + 1;
+                                num_regs = uint.Parse(item.Mappings.Split('.')[0].Replace("string(", ""));
+                                num_regs = num_regs / 2 + num_regs % 2;
+                            }
+                            else
+                            {
+                                if (item.Mappings.IndexOf("+") == -1)
+                                    address_start = address_start - num_regs + 1;
+                            }
+
+                            if (num_regs > 1)
+                            {
+                                for (int i = 1; i < num_regs; i++)
+                                {
+                                    toRemove.Add((uint)(item.RegisterUInt + i));
+                                }
+                            }
                         }
 
                         UInt16[] response = ModBus.readInputRegister_04(
@@ -8424,8 +8487,8 @@ namespace ModBus_Client
                                     address_start,
                                     response,
                                     colorDefaultReadCellStr,
-                                    comboBoxHoldingRegistri_,
-                                    comboBoxHoldingValori_,
+                                    comboBoxInputRegRegistri_,
+                                    comboBoxInputRegValori_,
                                     false);
                             }
                         }
@@ -8506,7 +8569,8 @@ namespace ModBus_Client
                     list_inputRegistersTable.Clear();
                 });
 
-                foreach (ModBus_Item item in list_template_inputRegistersTable.OrderBy(x => x.RegisterUInt))
+                List<uint> toRemove = new List<uint>();
+                foreach (ModBus_Item item in list_template_inputRegistersTable.OrderBy(x => x.RegisterUInt).ToList<ModBus_Item>())
                 {
                     try
                     {
@@ -8521,6 +8585,9 @@ namespace ModBus_Client
                             if (int.Parse(comboBoxInputRegisterGroup_) != 0)
                                 continue;
                         }
+
+                        if (toRemove.Contains(item.RegisterUInt))
+                            continue;
 
                         if (item.Group != null)
                         {
@@ -8554,11 +8621,27 @@ namespace ModBus_Client
                             if (item.Mappings.ToLower().IndexOf("64") != -1 || item.Mappings.ToLower().IndexOf("double") != -1)
                                 num_regs = 4;
 
-                            if (item.Mappings.ToLower().IndexOf("String") != -1)
-                                num_regs = uint.Parse(item.Mappings.Split(';')[0].Replace("String(", ""));
+                            if (item.Mappings.ToLower().IndexOf("string") != -1)
+                            {
+                                uint offset = uint.Parse(item.Mappings.Split('.')[1].ToLower().Split(')')[0]);
+                                address_start = address_start - (offset / 2 + offset % 2);
 
-                            if (item.Mappings.IndexOf("+") == -1)
-                                address_start = address_start - num_regs + 1;
+                                num_regs = uint.Parse(item.Mappings.Split('.')[0].Replace("string(", ""));
+                                num_regs = num_regs / 2 + num_regs % 2;
+                            }
+                            else
+                            {
+                                if (item.Mappings.IndexOf("+") == -1)
+                                    address_start = address_start - num_regs + 1;
+                            }
+
+                            if(num_regs > 1)
+                            {
+                                for(int i = 1; i < num_regs; i++)
+                                {
+                                    toRemove.Add((uint)(item.RegisterUInt + i));
+                                }
+                            }
                         }
 
                         UInt16[] response = ModBus.readInputRegister_04(
@@ -8579,8 +8662,8 @@ namespace ModBus_Client
                                     address_start,
                                     response,
                                     colorDefaultReadCellStr,
-                                    comboBoxHoldingRegistri_,
-                                    comboBoxHoldingValori_,
+                                    comboBoxInputRegRegistri_,
+                                    comboBoxInputRegValori_,
                                     false);
                             }
                         }
