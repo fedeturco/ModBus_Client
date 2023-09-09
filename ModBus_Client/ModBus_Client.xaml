@@ -225,6 +225,7 @@
                         </StackPanel>
                     </Button>
                     <Button x:Name="buttonPingIp" Content="Ping" Margin="301.143,96,0,0" FontSize="14" Grid.Column="1" HorizontalAlignment="Left" Width="55" Height="30" VerticalAlignment="Top" Click="buttonPingIp_Click"/>
+                    <Image Grid.Column="1" HorizontalAlignment="Right" Height="40" Margin="0,14,14,0" VerticalAlignment="Top" Width="40" Source="Logo/Modbus_logo_Lens_256.ico"/>
                 </Grid>
             </TabItem>
             <TabItem x:Name="tabItem1" Header="Coils (1bit)" FontSize="12">

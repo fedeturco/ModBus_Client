@@ -54,7 +54,7 @@
     <StartupObject />
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>Logo\Modbus_logo_Lens.ico</ApplicationIcon>
+    <ApplicationIcon>Logo\Modbus_logo_Lens_48.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
     <SignManifests>false</SignManifests>
@@ -329,7 +329,10 @@
     <Resource Include="Logo\Modbus_logo_M.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Logo\Modbus_logo_Lens.ico" />
+    <Resource Include="Logo\Modbus_logo_Lens_48.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Logo\Modbus_logo_Lens_256.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
