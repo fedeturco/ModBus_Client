@@ -3666,7 +3666,7 @@ namespace ModBus_Client
                         if (test.ToLower().IndexOf("byte") == 0)
                         {
                             // Soluzione bug sul fatto che ragiono a blocchi di 8 byte ma prendo gli utlimi 4
-                            if(test.ToLower().IndexOf("+") != -1)
+                            if (test.ToLower().IndexOf("+") != -1)
                                 values_[3] = values_[0];
 
                             if (test.ToLower().IndexOf("-") != -1)
@@ -3695,8 +3695,20 @@ namespace ModBus_Client
                             labels[index] = match.Split(':')[1];
                             type = 2;
 
-                            //convertedValue = labels[1] + ((values_[3]) >> 8).ToString() + " " + labels[0] + (values_[3] & 0xFF).ToString();
                             convertedValue = String.Format("H: {0} L: {1}", ((values_[3]) >> 8), (values_[3] & 0xFF));
+                        }
+
+                        // enum (type 10)
+                        else if (test.IndexOf("E") == 0)
+                        {
+                            if(UInt16.Parse(test.Substring(1)) == values_[3])
+                            {
+                                convertedValue = String.Format("(enum): {1}", match.Split(':')[0], match.Split(':')[1]);
+                                type = 10;
+                            }
+
+                            result += labels[0] + String.Format("{0}: {1}", match.Split(':')[0], match.Split(':')[1]);
+                            labels[0] = "\n";
                         }
 
                         // float (type 3)
