@@ -17,6 +17,6 @@
         <Label x:Name="LabelBuildDate" Content="Build Date" HorizontalAlignment="Left" Margin="127,126,0,0" VerticalAlignment="Top" FontSize="14"/>
         <Label x:Name="LabelLinkRepository" Content="https://github.com/fedeturco" HorizontalAlignment="Left" Margin="127,170,0,0" VerticalAlignment="Top" FontSize="14" MouseUp="LabelLinkRepository_MouseUp" Foreground="#FF0E72B8"/>
         <Label Content="Repository:" HorizontalAlignment="Left" Margin="27,170,0,0" VerticalAlignment="Top" FontSize="14"/>
-        <Image HorizontalAlignment="Right" Margin="0,25,29,149" Width="68" Source="Logo\Modbus_logo_Lens_256.ico"/>
+        <Image HorizontalAlignment="Right" Margin="0,25,29,114" Width="103" Source="/Logo/Modbus_logo_Lens_256_B.ico"/>
     </Grid>
 </Window>

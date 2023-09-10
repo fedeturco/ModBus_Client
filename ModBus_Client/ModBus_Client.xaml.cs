@@ -686,6 +686,8 @@ namespace ModBus_Client
 
             //richTextBoxStatus.IsEnabled = !(bool)radioButtonModeSerial.IsChecked;
             buttonTcpActive.IsEnabled = !(bool)radioButtonModeSerial.IsChecked;
+            ImageLogoRTU.Visibility = (bool)radioButtonModeSerial.IsChecked ? Visibility.Visible : Visibility.Hidden;
+            ImageLogoTCP.Visibility = !(bool)radioButtonModeSerial.IsChecked ? Visibility.Visible : Visibility.Hidden;
 
             if ((bool)radioButtonModeSerial.IsChecked)
             {
