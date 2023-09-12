@@ -187,6 +187,12 @@ namespace ModBus_Client
 
                 dataGridViewGroups.CellStyle = NewStyle;
             }*/
+
+            RichTextBoxInfo.Document.Blocks.Clear();
+            RichTextBoxInfo.AppendText("\n");
+
+            if(File.Exists(Directory.GetCurrentDirectory() + "\\Config\\Mappings.info"))
+                RichTextBoxInfo.AppendText(File.ReadAllText(Directory.GetCurrentDirectory() + "\\Config\\Mappings.info"));
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)

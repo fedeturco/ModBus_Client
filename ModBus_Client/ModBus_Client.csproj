@@ -341,6 +341,9 @@
     <Resource Include="Logo\Modbus_logo_Lens_256_B.ico" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Config\Mappings.info">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <Content Include="Logo\Modbus_logo.svg" />
     <Content Include="Logo\Modbus_logo_2.svg" />
   </ItemGroup>

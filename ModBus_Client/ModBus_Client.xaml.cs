@@ -3989,7 +3989,7 @@ namespace ModBus_Client
                                 }
                             }
 
-                            labels[0] = "value (String): " + output;
+                            labels[0] = "value (string): " + output;
                             convertedValue = labels[0].Replace("value ", "");
                             type = 7;
                         }
@@ -8131,7 +8131,7 @@ namespace ModBus_Client
                                 uint offset = uint.Parse(item.Mappings.Split('.')[1].ToLower().Split(')')[0]);
                                 address_start = address_start - (offset / 2 + offset % 2);
 
-                                num_regs = uint.Parse(item.Mappings.Split('.')[0].Replace("string(", ""));
+                                num_regs = uint.Parse(item.Mappings.Split('.')[0].ToLower().Replace("string(", ""));
                                 num_regs = num_regs / 2 + num_regs % 2;
                             }
                             else
@@ -8309,7 +8309,7 @@ namespace ModBus_Client
                                 uint offset = uint.Parse(item.Mappings.Split('.')[1].ToLower().Split(')')[0]);
                                 address_start = address_start - (offset / 2 + offset % 2);
 
-                                num_regs = uint.Parse(item.Mappings.Split('.')[0].Replace("string(", ""));
+                                num_regs = uint.Parse(item.Mappings.Split('.')[0].ToLower().Replace("string(", ""));
                                 num_regs = num_regs / 2 + num_regs % 2;
                             }
                             else
@@ -8465,7 +8465,7 @@ namespace ModBus_Client
                                 uint offset = uint.Parse(item.Mappings.Split('.')[1].ToLower().Split(')')[0]);
                                 address_start = address_start - (offset / 2 + offset % 2);
 
-                                num_regs = uint.Parse(item.Mappings.Split('.')[0].Replace("string(", ""));
+                                num_regs = uint.Parse(item.Mappings.Split('.')[0].ToLower().Replace("string(", ""));
                                 num_regs = num_regs / 2 + num_regs % 2;
                             }
                             else
@@ -8640,7 +8640,7 @@ namespace ModBus_Client
                                 uint offset = uint.Parse(item.Mappings.Split('.')[1].ToLower().Split(')')[0]);
                                 address_start = address_start - (offset / 2 + offset % 2);
 
-                                num_regs = uint.Parse(item.Mappings.Split('.')[0].Replace("string(", ""));
+                                num_regs = uint.Parse(item.Mappings.Split('.')[0].ToLower().Replace("string(", ""));
                                 num_regs = num_regs / 2 + num_regs % 2;
                             }
                             else
@@ -8727,7 +8727,7 @@ namespace ModBus_Client
             }
             catch (Exception err)
             {
-                SetTableInternalError(list_holdingRegistersTable, false);
+                SetTableInternalError(list_inputRegistersTable, false);
                 Console.WriteLine(err);
             }
 

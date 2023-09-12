@@ -1,0 +1,78 @@
+
+Nella colonna mappings è possibile inserite alcune informazioni sul tipo di risorsa per una visualizzazione più comoda:
+
+-----------------------------------------------------------------------
+- Bit map:	"b0:Presenza tensione;b1:Stato 1;b15:Stato2"
+  -> Mostra i singoli bit della word nella toolTip della riga divisi per risorsa.
+-----------------------------------------------------------------------
+- Byte map:	"B0:Ora;B1:Minuti"
+ -> Mostra i due byte della word nella toolTip della riga divisi per risorsa.
+-----------------------------------------------------------------------
+- Byte:		"Byte:Error code"
+ -> Mostra solo il low byte della word nella colonna "Converted Values" (Byte-: per l'high byte).
+-----------------------------------------------------------------------
+- Int16:	"Int16:Temp. 1"
+ -> Mostra la word nel corrispondente valore con segno e visualizza il dato in int 16 nella tooltip della riga.
+-----------------------------------------------------------------------
+- UInt16:	"UInt16:Hum. 1"
+ -> Mostra la word nel corrispondente valore senza segno e visualizza il dato in uint 16 nella tooltip della riga.
+-----------------------------------------------------------------------
+- Enum:	    "E1:Idle;E2:Run;E3:Stop"
+ -> Mostra l'etichetta corrispondente al valore presente nel registro.
+-----------------------------------------------------------------------
+
+Le variabili seguenti a 32 bit (due word) utilizzano la word del registro precedente (High Word) e corrente (Low Word) a cui fa riferimento 
+nel formato Big Endian: 
+
+-----------------------------------------------------------------------
+- Float:	"Float:Temperatura locale 1"
+ -> Raccoglie due word e visualizza il dato in float nella tooltip della riga.
+-----------------------------------------------------------------------
+- Int32:	"Int32:Temperatura locale 1"
+ -> Raccoglie due word e visualizza il dato in int32 nella tooltip della riga.
+-----------------------------------------------------------------------
+- UInt32:	"UInt32:Temperatura locale 1"
+ -> Raccoglie due word e visualizza il dato in uint32 nella tooltip della riga.
+-----------------------------------------------------------------------
+
+Le variabili seguenti a 64 bit (quattro word) utilizzano le 3 word del registro precedente (High Word) e corrente (Low Word) a cui fa riferimento 
+nel formato Big Endian:
+
+-----------------------------------------------------------------------
+- Double:	"Double:CosFi"
+ -> Raccoglie 4 word e visualizza il dato in double nella tooltip della riga.
+-----------------------------------------------------------------------
+- Int64:	"Int64:Energia totale"
+ -> Raccoglie 4 word e visualizza il dato in int64 nella tooltip della riga.
+-----------------------------------------------------------------------
+- UInt64:	"UInt64:Energia prodotta"
+ -> Raccoglie 4 word e visualizza il dato in uint64 nella tooltip della riga.
+-----------------------------------------------------------------------
+
+Altri formati:
+
+-----------------------------------------------------------------------
+- String(len): 			"String(8):Modello"
+ -> Converte 8 byte in caratteri ASCII partendo dal registro corrente in poi.
+
+- String(len, offset): 	"String(8,-2):Modello"
+ -> Converte 8 byte in caratteri ASCII con un offset di -2 (la stringa inizia dal registro precedente).
+-----------------------------------------------------------------------
+
+Modificatori del formato:
+
+-----------------------------------------------------------------------
+"UInt32-:" o "UInt32_swap:" 
+ -> Utilizza le due word invertite, formato Little Endian.
+-----------------------------------------------------------------------
+"UInt32+:"
+ -> Utilizza il registro corrente come High Word e la successiva come Low Word (Big Endian).
+-----------------------------------------------------------------------
+"UInt32-+:" o "UInt32_swap+:" 
+ -> Combina le due precedenti, usa il regsitro corrente e successivo nel formato Little Endian.
+-----------------------------------------------------------------------
+"Byte-:" o "Byte_swap:" 
+ -> Usa l'high byte al posto del low byte per il valore convertito.
+-----------------------------------------------------------------------
+
+A parte byte map, bitmap ed enum, tutte gli altri datatype possono essere scritte sia in maiuscolo che in minuscolo indifferentemente, all'interno del programma vengono convertite tutte in minuscolo.
