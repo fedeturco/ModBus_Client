@@ -98,6 +98,9 @@
     <Compile Include="ComandiWord.xaml.cs">
       <DependentUpon>ComandiWord.xaml</DependentUpon>
     </Compile>
+    <None Include="Lang\Mappings_EN.info">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Logo\Bozzetto_logo_client_modbus.xcf" />
     <Compile Include="DatabaseManager.xaml.cs">
       <DependentUpon>DatabaseManager.xaml</DependentUpon>
@@ -341,7 +344,7 @@
     <Resource Include="Logo\Modbus_logo_Lens_256_B.ico" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Config\Mappings.info">
+    <None Include="Lang\Mappings_IT.info">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <Content Include="Logo\Modbus_logo.svg" />

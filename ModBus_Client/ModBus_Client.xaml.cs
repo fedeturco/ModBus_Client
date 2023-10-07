@@ -5215,7 +5215,19 @@ namespace ModBus_Client
 
                             if (address_start >= 0)
                             {
-                                UInt16[] result = ModBus.presetMultipleRegisters_16(byte.Parse(textBoxModbusAddress_), (UInt16)(address_start), toSend, readTimeout);
+                                UInt16[] result = null;
+
+                                if (toSend.Length == 1)
+                                {
+                                    if ((bool)ModBus.presetSingleRegister_06(byte.Parse(textBoxModbusAddress_), (UInt16)(address_start), toSend[0], readTimeout))
+                                    {
+                                        result = new UInt16[] { toSend[0] };
+                                    }
+                                }
+                                else
+                                {
+                                    result = ModBus.presetMultipleRegisters_16(byte.Parse(textBoxModbusAddress_), (UInt16)(address_start), toSend, readTimeout);
+                                }
 
                                 if (result != null)
                                 {
@@ -5230,6 +5242,14 @@ namespace ModBus_Client
                                                 select.ValueBin = Convert.ToString(result[i] >> 8, 2).PadLeft(8, '0') + " " + Convert.ToString((UInt16)(result[i] << 8) >> 8, 2).PadLeft(8, '0');
                                                 select.Foreground = ForeGroundLight.ToString();
                                                 select.Background = colorDefaultWriteCell.ToString();
+
+                                                ModBus_Item found = list_template_holdingRegistersTable.FirstOrDefault(x => x.RegisterUInt == (address_start + i));
+                                                if (found != null)
+                                                {
+                                                    String convertedValue;
+                                                    select.Mappings = GetMappingValue2(result, i, found.Mappings, out convertedValue);
+                                                    select.ValueConverted = convertedValue;
+                                                }
                                             });
                                         }
                                     }
@@ -5302,7 +5322,8 @@ namespace ModBus_Client
                     else if (columnName.ToLower().IndexOf("value") != -1)
                     {
                         UInt16 dummy_ = 0;
-                        if (UInt16.TryParse(obj, out dummy_))
+
+                        if (UInt16.TryParse(obj.Replace("0x", "").Replace("x", "").Replace("h", ""), (obj.ToLower().IndexOf("x") != -1 || obj.ToLower().IndexOf("h") != -1) ? System.Globalization.NumberStyles.HexNumber : System.Globalization.NumberStyles.Integer, null, out dummy_))
                         {
                             uint address_start = P.uint_parser(textBoxHoldingOffset_, comboBoxHoldingOffset_) + P.uint_parser(lastEditModbusItem.Register, comboBoxHoldingRegistri_);
 
@@ -5311,7 +5332,9 @@ namespace ModBus_Client
                                 address_start = address_start - 40001;
                             }
 
-                            uint value_ = P.uint_parser(obj, comboBoxHoldingValori_);
+                            //uint value_ = P.uint_parser(obj, comboBoxHoldingValori_);
+                            uint value_ = dummy_;
+
                             bool? result = ModBus.presetSingleRegister_06(byte.Parse(textBoxModbusAddress_), address_start, value_, readTimeout);
 
                             if (result != null)

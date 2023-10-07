@@ -191,8 +191,8 @@ namespace ModBus_Client
             RichTextBoxInfo.Document.Blocks.Clear();
             RichTextBoxInfo.AppendText("\n");
 
-            if(File.Exists(Directory.GetCurrentDirectory() + "\\Config\\Mappings.info"))
-                RichTextBoxInfo.AppendText(File.ReadAllText(Directory.GetCurrentDirectory() + "\\Config\\Mappings.info"));
+            if(File.Exists(Directory.GetCurrentDirectory() + "\\Lang\\Mappings_" + main.language + ".info"))
+                RichTextBoxInfo.AppendText(File.ReadAllText(Directory.GetCurrentDirectory() + "\\Lang\\Mappings_" + main.language + ".info"));
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)

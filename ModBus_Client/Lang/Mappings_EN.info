@@ -1,0 +1,75 @@
+
+-----------------------------------------------------------------------
+- Bit map:	"b0:Sensor alarm;b1:Status 1;b15:Status 2"
+  -> Show single bit information inside a register
+-----------------------------------------------------------------------
+- Byte map:	"B0:Ora;B1:Minuti"
+ -> Show the values of the single byte inside a register
+-----------------------------------------------------------------------
+- Byte:		"Byte:Error code"
+ -> Show only low byte of the register
+-----------------------------------------------------------------------
+- Int16:	"Int16:Temp. 1"
+ -> Show the word value converted as integer in the column and in the tooltip of the register
+-----------------------------------------------------------------------
+- UInt16:	"UInt16:Hum. 1"
+ -> Show the word value converted as unsigned integer in the column and in the tooltip of the register
+-----------------------------------------------------------------------
+- Enum:	    "E1:Idle;E2:Run;E3:Stop"
+ -> Show different labels according to register value (enum datatype)
+-----------------------------------------------------------------------
+
+32 bit values uses two word in big endian format, the current one and the previous register: 
+
+-----------------------------------------------------------------------
+- Float:	"Float:Temperatura locale 1"
+ -> Show the value converted as float
+-----------------------------------------------------------------------
+- Int32:	"Int32:Temperatura locale 1"
+ -> Show the value converted as integer 32
+-----------------------------------------------------------------------
+- UInt32:	"UInt32:Temperatura locale 1"
+ -> Show the value converted as unsigned integer 32
+-----------------------------------------------------------------------
+
+32 bit values uses 4 word, the current one and the previous 3 registers (big endian format):
+
+-----------------------------------------------------------------------
+- Double:	"Double:CosFi"
+ -> Show the value converted as double
+-----------------------------------------------------------------------
+- Int64:	"Int64:Energia totale"
+ -> Show the value converted as integer 64
+-----------------------------------------------------------------------
+- UInt64:	"UInt64:Energia prodotta"
+ -> Show the value converted as unsigned integer 64
+-----------------------------------------------------------------------
+
+Altri formati:
+
+-----------------------------------------------------------------------
+- String(len): 			"String(8):Model"
+ -> Convert 8 bytes (4 words) as ASCII string starting from current register
+
+- String(len, offset): 	"String(8,-2):Model"
+ -> Convert 8 bytes (4 words) as ASCII string starting from previous register (offset of -2 bytes)
+-----------------------------------------------------------------------
+
+Format modifiers:
+
+-----------------------------------------------------------------------
+"UInt32-:" o "UInt32_swap:" 
+ -> Swap two words inside a double word value
+-----------------------------------------------------------------------
+"UInt32+:"
+ -> Use current register and following ones instead of previous ones
+-----------------------------------------------------------------------
+"UInt32-+:" o "UInt32_swap+:" 
+ -> Both previous modifiers, word swap and word offset
+-----------------------------------------------------------------------
+"Byte-:" o "Byte_swap:" 
+ -> For Byte mapping only uses shows the value of the high byte instead of low byte
+-----------------------------------------------------------------------
+
+All modifiers instead of "byte map","bit map" and "enum" are case insensitive
+
