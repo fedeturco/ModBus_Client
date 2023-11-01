@@ -57,8 +57,6 @@ namespace ModBus_Client
     /// </summary>
     public partial class DatabaseManager : Window
     {
-        ObservableCollection<profile> db = new ObservableCollection<profile>();
-
         Language lang;
         public string SelectedProfile = "";
 
@@ -67,8 +65,6 @@ namespace ModBus_Client
             InitializeComponent();
 
             lang = new Language(this);
-
-            DataGridDb.ItemsSource = db;
 
             // Centro la finestra
             double screenWidth = System.Windows.SystemParameters.PrimaryScreenWidth;
@@ -88,15 +84,11 @@ namespace ModBus_Client
         {
             String[] subFolders = Directory.GetDirectories(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "\\Json\\");
 
-            db.Clear();
+            ListBoxProfiles.Items.Clear();
 
             for (int i = 0; i < subFolders.Length; i++)
             {
-                profile tmp = new profile();
-
-                tmp.name = subFolders[i].Split('\\')[subFolders[i].Split('\\').Length - 1];
-
-                db.Add(tmp);
+                ListBoxProfiles.Items.Add(subFolders[i].Split('\\')[subFolders[i].Split('\\').Length - 1]);
             }
         }
 
@@ -125,13 +117,13 @@ namespace ModBus_Client
 
         private void ButtonExportZip_Click(object sender, RoutedEventArgs e)
         {
-            profile currItem = (profile)DataGridDb.SelectedItem;
+            String currItem = ListBoxProfiles.SelectedItem.ToString();
             
             SaveFileDialog window = new SaveFileDialog();
 
             window.Filter = "Zip Files | *.zip";
             window.DefaultExt = ".zip";
-            window.FileName = currItem.name + ".zip";
+            window.FileName = currItem + ".zip";
 
             if ((bool)window.ShowDialog())
             {
@@ -139,7 +131,7 @@ namespace ModBus_Client
                 if (File.Exists(window.FileName))
                     File.Delete(window.FileName);
 
-                ZipFile.CreateFromDirectory("Json\\" + currItem.name, window.FileName);
+                ZipFile.CreateFromDirectory("Json\\" + currItem, window.FileName);
             }
         }
 
@@ -170,30 +162,6 @@ namespace ModBus_Client
             LoadDb();
         }
 
-        private void DataGridDb_SelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e)
-        {
-            try
-            {
-                if (DataGridDb.SelectedItem != null)
-                {
-                    profile selected = (profile)DataGridDb.SelectedItem;
-
-                    labelProfileSelected.Content = labelProfileSelected.Content.ToString().Split(':')[0] + ": " + selected.name;
-                    labelProfileSelected.Visibility = Visibility.Visible;
-
-                    ButtonExportZip.IsEnabled = true;
-                    //ButtonImportZip.IsEnabled = true;
-                    ButtonDeleteProfile.IsEnabled = true;
-                }
-            }
-            catch
-            {
-                ButtonExportZip.IsEnabled = false;
-                //ButtonImportZip.IsEnabled = false;
-                ButtonDeleteProfile.IsEnabled = false;
-            }
-        }
-
         private void Window_KeyUp(object sender, KeyEventArgs e)
         {
             if(e.Key == Key.Escape)
@@ -206,14 +174,13 @@ namespace ModBus_Client
         {
             this.DialogResult = false;
 
-            if (DataGridDb.SelectedItem != null)
+            if (ListBoxProfiles.SelectedItem != null)
             {
-                profile selected = (profile)DataGridDb.SelectedItem;
-                this.SelectedProfile = selected.name;
+                this.SelectedProfile = ListBoxProfiles.SelectedItem.ToString();
                 this.DialogResult = true;
 
                 // debug
-                Console.WriteLine("Selected: {0}", selected.name);
+                Console.WriteLine("Selected: {0}", this.SelectedProfile);
             }
         }
 
@@ -221,18 +188,18 @@ namespace ModBus_Client
         {
             try
             {
-                if (DataGridDb.SelectedItem != null)
+                if (ListBoxProfiles.SelectedItem != null)
                 {
-                    profile selected = (profile)DataGridDb.SelectedItem;
+                    String selected = ListBoxProfiles.SelectedItem.ToString();
 
-                    labelProfileSelected.Content = labelProfileSelected.Content.ToString().Split(':')[0] + ": " + selected.name;
+                    labelProfileSelected.Content = labelProfileSelected.Content.ToString().Split(':')[0] + ": " + selected;
                     labelProfileSelected.Visibility = Visibility.Visible;
 
-                    if (Directory.Exists(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "\\Json\\" + selected.name))
+                    if (Directory.Exists(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "\\Json\\" + selected))
                     {
                         if (MessageBox.Show(lang.languageTemplate["strings"]["deleteProfile"], "Info", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
                         {
-                            Directory.Delete(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "\\Json\\" + selected.name, true);
+                            Directory.Delete(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "\\Json\\" + selected, true);
 
                             ButtonExportZip.IsEnabled = false;
                             ButtonDeleteProfile.IsEnabled = false;
@@ -251,10 +218,31 @@ namespace ModBus_Client
                 ButtonDeleteProfile.IsEnabled = false;
             }
         }
-    }
 
-    public class profile
-    {
-        public String name { get; set; }
+        private void ListBoxProfiles_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            try
+            {
+                if (ListBoxProfiles.SelectedItem != null)
+                {
+                    String selected = ListBoxProfiles.SelectedItem.ToString();
+
+                    labelProfileSelected.Content = labelProfileSelected.Content.ToString().Split(':')[0] + ": " + selected;
+                    labelProfileSelected.Visibility = Visibility.Visible;
+
+                    ButtonExportZip.IsEnabled = true;
+
+                    if (selected == "Default")
+                        ButtonDeleteProfile.IsEnabled = false;
+                    else
+                        ButtonDeleteProfile.IsEnabled = true;
+                }
+            }
+            catch
+            {
+                ButtonExportZip.IsEnabled = false;
+                ButtonDeleteProfile.IsEnabled = false;
+            }
+        }
     }
 }

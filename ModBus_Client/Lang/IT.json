@@ -7,12 +7,12 @@
     "labelRx": "Rx",
     "labelSerialRtu": "RTU",
     "labelTcp": "TCP",
-    "labelPort": "Porta:",
+    "labelPortRtu": "Porta:",
     "labelBaudRate": "Baud rate:",
     "labelParity": "Parità:",
     "labelStopBits": "Bit di stop:",
     "labelIp": "Ip:",
-    "labelPort1": "Porta:",
+    "labelPortTcp": "Porta:",
     "labelCoils_0": "Registri:",
     "labelCoils_1": "Offset:",
     "labelCoils_2": "Read Coil Status (FC01):",
@@ -212,6 +212,9 @@
     },
     "ButtonDeleteProfile": {
       "label": "Cancella"
+    },
+    "ButtonFullSize": {
+      "toolTip": "Visualizza tabelle a schermo intero (Ctrl+F)"
     }
   },
   "textBoxes": {
@@ -315,11 +318,11 @@
   },
   "tabItems": {
     "tabItem0": "Connessione",
-    "tabItem1": "Coils (1bit)",
-    "tabItem2": "Inputs (1 bit)",
-    "tabItem3": "Input registers (1 word)",
-    "tabItem4": "Holding registers (1 word)",
-    "tabItem5": "Diagnostic (FC08)",
+    "tabItem1": "Coils FC01",
+    "tabItem2": "Inputs FC02",
+    "tabItem3": "Input registers FC04",
+    "tabItem4": "Holding registers FC03",
+    "tabItem5": "Diagnostic FC08",
     "tabItem6": "Log",
     "tabItem7": "Settings"
   },
@@ -417,7 +420,7 @@
     "disconnected": "Disconnesso",
     "connectedTo": "Connesso a",
     "failedToConnect": "Fallita connessione a",
-    "connectingTo": "Connessione in corso a ",
+    "connectingTo": "Connessione in corso a",
     "maxRegNumber": "Numero di registri troppo elevato",
     "errSetReg": "Errore nel settaggio del registro",
     "infoSaveConfig": "Salvataggio configurazione avvenuto. Al prossimo avvio verrà caricata la configurazione corrente.",
@@ -434,6 +437,7 @@
     "labelMultipleRegisters": "Nr. of registers",
     "overwriteProfile": "Il profilo corrente esiste già, sovrascriverlo?",
     "deleteProfile": "Cancellare il profilo selezionato?",
-    "importProfileWarning": "Importando il profilo selezionato verrà sovrascritto completamente quello corrente. Procedere?"
+    "importProfileWarning": "Importando il profilo selezionato verrà sovrascritto completamente quello corrente. Procedere?",
+    "selectedProfile": "Profilo selezionato:"
   }
 }

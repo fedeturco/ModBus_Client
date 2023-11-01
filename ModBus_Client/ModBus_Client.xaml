@@ -5,11 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ModBus_Client"
         mc:Ignorable="d"
-        Title="MainWindow" Height="627" Width="880" Loaded="Form1_Load" KeyUp="Window_KeyUp">
+        Title="MainWindow" Height="630" Width="880" Loaded="Form1_Load" KeyUp="Window_KeyUp" MinWidth="880" MinHeight="630">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="30px" />
-            <RowDefinition Height="35px" />
+            <RowDefinition Height="25" />
+            <RowDefinition Height="34" />
             <RowDefinition />
         </Grid.RowDefinitions>
         <DockPanel>
@@ -90,7 +90,7 @@
                 </MenuItem>
             </Menu>
         </DockPanel>
-        <ToolBarTray x:Name="ToolBarTrayMain" Background="White" Grid.Row="1" Margin="0,0,0,0">
+        <ToolBarTray x:Name="ToolBarTrayMain" Background="White" Grid.Row="1">
             <ToolBar x:Name="ToolBarMain" Band="1" BandIndex="1" FontSize="14" Margin="0,0,0,0" Height="35" HorizontalAlignment="Left" Width="Auto">
                 <StackPanel Orientation="Horizontal">
                     <Label x:Name="labelConnection" Content="Connection:" FontSize="12"></Label>
@@ -109,24 +109,25 @@
                 </StackPanel>
             </ToolBar>
         </ToolBarTray>
-        <StackPanel HorizontalAlignment="Left" Height="100" Margin="267,46.429,0,-145.857" Grid.Row="2" VerticalAlignment="Top" Width="100"/>
-        <TabControl x:Name="tabControlMain" Margin="10,9.857,10.286,10.429" Grid.Row="2" FontSize="14">
-            <TabItem x:Name="tabItem0" Header="Connection" FontSize="12">
+        <StackPanel HorizontalAlignment="Left" Height="100" Margin="267,46,0,0" Grid.Row="2" VerticalAlignment="Top" Width="100"/>
+        <TabControl x:Name="tabControlMain" Margin="10,5,10,10" Grid.Row="2" FontSize="14">
+            <TabItem x:Name="tabItem0" Header="Connection" FontSize="12" Height="26">
                 <Grid x:Name="GridConnection" Background="#FFE5E5E5" Margin="1,1,1,1">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition></ColumnDefinition>
-                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
-                    <Border x:Name="pictureBoxSerial" Margin="19,20,0,0" Height="25" VerticalAlignment="Top" HorizontalAlignment="Left" Width="25"/>
-                    <Label x:Name="labelSerialRtu" Content="RTU" HorizontalAlignment="Left" Margin="49,16,0,0" VerticalAlignment="Top" FontSize="18" Grid.Column="0"/>
-                    <Label x:Name="labelTcp" Content="TCP" HorizontalAlignment="Left" Margin="49,16,0,0" VerticalAlignment="Top" FontSize="18" Grid.Column="1"/>
-                    <Label x:Name="labelBaudRate" Content="Baud rate:" HorizontalAlignment="Left" Margin="10,94,0,0" VerticalAlignment="Top" FontSize="14" Grid.Column="0"/>
-                    <Label HorizontalAlignment="Left" Margin="10,68,0,0" VerticalAlignment="Top" FontSize="18" Grid.Column="0"/>
-                    <Label HorizontalAlignment="Left" Margin="10,68,0,0" VerticalAlignment="Top" FontSize="18" Grid.Column="0"/>
-                    <Label x:Name="labelParity" Content="Parity:" HorizontalAlignment="Left" Margin="10,129,0,0" VerticalAlignment="Top" FontSize="14"/>
-                    <Label x:Name="labelStopBits" Content="Stop bits:" HorizontalAlignment="Left" Margin="10,164,0,0" VerticalAlignment="Top" FontSize="14"/>
-                    <ComboBox x:Name="comboBoxSerialPort" HorizontalAlignment="Left" Margin="138,64,0,0" VerticalAlignment="Top" Width="120" FontSize="14" Height="30"/>
-                    <ComboBox x:Name="comboBoxSerialSpeed" HorizontalAlignment="Left" Margin="138,99,0,0" VerticalAlignment="Top" Width="120" FontSize="14" Height="29">
+                    <Border BorderBrush="Gray" BorderThickness="2,1,2,2" Grid.ColumnSpan="2" Height="211" VerticalAlignment="Bottom" Opacity="0.5"/>
+                    <Border BorderBrush="Gray" BorderThickness="1,2,2,1" Grid.Column="1" Margin="0,0,0,211" Opacity="0.5"/>
+                    <Border BorderBrush="Gray" BorderThickness="2,2,1,1" Margin="0,0,0,211" Opacity="0.5"/>
+                    <Border x:Name="pictureBoxSerial" Margin="17,20,0,0" Height="25" VerticalAlignment="Top" HorizontalAlignment="Left" Width="25" Grid.Column="0"/>
+                    <Label x:Name="labelSerialRtu" Content="RTU" HorizontalAlignment="Left" Margin="47,16,0,0" VerticalAlignment="Top" FontSize="18" Grid.Column="0" Height="34"/>
+                    <Label x:Name="labelTcp" Content="TCP" HorizontalAlignment="Left" Margin="49,16,0,0" VerticalAlignment="Top" FontSize="18" Grid.Column="1" Height="34" Width="40"/>
+                    <Label x:Name="labelBaudRate" Content="Baud rate:" HorizontalAlignment="Left" Margin="10,99,0,0" VerticalAlignment="Top" FontSize="14" Grid.Column="0" Height="29" Width="121" />
+                    <Label x:Name="labelParity" Content="Parity:" HorizontalAlignment="Left" Margin="10,134,0,0" VerticalAlignment="Top" FontSize="14" Grid.Column="0" Height="29" Width="121" />
+                    <Label x:Name="labelStopBits" Content="Stop bits:" HorizontalAlignment="Left" Margin="10,169,0,0" VerticalAlignment="Top" FontSize="14" Grid.Column="0" Height="29" Width="121" />
+                    <ComboBox x:Name="comboBoxSerialPort" HorizontalAlignment="Left" Margin="136,64,0,0" VerticalAlignment="Top" Width="120" FontSize="14" Height="30" Grid.Column="0"/>
+                    <ComboBox x:Name="comboBoxSerialSpeed" HorizontalAlignment="Left" Margin="136,99,0,0" VerticalAlignment="Top" Width="120" FontSize="14" Height="29" Grid.Column="0">
                         <ComboBoxItem Content="4800"/>
                         <ComboBoxItem Content="9600"/>
                         <ComboBoxItem Content="19200"/>
@@ -135,35 +136,32 @@
                         <ComboBoxItem Content="74880"/>
                         <ComboBoxItem Content="115200"/>
                     </ComboBox>
-                    <ComboBox x:Name="comboBoxSerialParity" HorizontalAlignment="Left" Margin="138,134,0,0" VerticalAlignment="Top" Width="120" FontSize="14" Height="29">
+                    <ComboBox x:Name="comboBoxSerialParity" HorizontalAlignment="Left" Margin="136,134,0,0" VerticalAlignment="Top" Width="120" FontSize="14" Height="29" Grid.Column="0">
                         <ComboBoxItem Content="None"/>
                         <ComboBoxItem Content="Even (Pari)"/>
                         <ComboBoxItem Content="Odd (Dispari)"/>
                     </ComboBox>
-                    <ComboBox x:Name="comboBoxSerialStop" HorizontalAlignment="Left" Margin="138,169,0,0" VerticalAlignment="Top" Width="120" FontSize="14" Height="29">
+                    <ComboBox x:Name="comboBoxSerialStop" HorizontalAlignment="Left" Margin="136,169,0,0" VerticalAlignment="Top" Width="120" FontSize="14" Height="29" Grid.Column="0">
                         <ComboBoxItem Content="1"/>
                         <ComboBoxItem Content="1.5"/>
                         <ComboBoxItem Content="2"/>
                     </ComboBox>
-                    <Label x:Name="labelPort" Content="Port:" HorizontalAlignment="Left" Margin="10,62,0,0" VerticalAlignment="Top" FontSize="14" Grid.Column="0"/>
-                    <Label x:Name="labelPort1" Content="Port:" HorizontalAlignment="Left" Margin="10.143,97,0,0" VerticalAlignment="Top" FontSize="14" Grid.Column="1"/>
-                    <Label x:Name="labelIp" Content="IP:" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="14" Margin="10.143,65,0,0" Grid.Column="1"/>
-                    <TextBox x:Name="textBoxTcpClientIpAddress" HorizontalAlignment="Left" Height="30" Margin="85.143,64,0,0" TextWrapping="Wrap" Text="192.168.1.100" VerticalAlignment="Top" Width="271" FontSize="16" Grid.Column="1"/>
-                    <TextBox x:Name="textBoxTcpClientPort" HorizontalAlignment="Left" Height="30" Margin="85.143,96,0,0" TextWrapping="Wrap" Text="502" VerticalAlignment="Top" Width="93" FontSize="16" Grid.Column="1"/>
-                    <Button x:Name="buttonSerialActive" HorizontalAlignment="Left" Margin="263,232,0,0" VerticalAlignment="Top" Width="110" Grid.Column="0" Click="buttonSerialActive_Click" FontSize="16" Height="29" ToolTip="Ctrl+B">
+                    <Label x:Name="labelIp" Content="IP:" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="14" Margin="10,65,0,0" Grid.Column="1" Height="29" Width="70"/>
+                    <Label x:Name="labelPortTcp" Content="Port:" HorizontalAlignment="Left" Margin="10,97,0,0" VerticalAlignment="Top" FontSize="14" Grid.Column="1" Height="29" Width="70"/>
+                    <TextBox x:Name="textBoxTcpClientIpAddress" HorizontalAlignment="Left" Height="30" Margin="85,64,0,0" TextWrapping="Wrap" Text="192.168.1.100" VerticalAlignment="Top" Width="271" FontSize="16" Grid.Column="1"/>
+                    <TextBox x:Name="textBoxTcpClientPort" HorizontalAlignment="Left" Height="30" Margin="85,96,0,0" TextWrapping="Wrap" Text="502" VerticalAlignment="Top" Width="93" FontSize="16" Grid.Column="1"/>
+                    <Button x:Name="buttonSerialActive" HorizontalAlignment="Left" Margin="275,223,0,0" Width="110" Grid.Column="0" Click="buttonSerialActive_Click" FontSize="16" ToolTip="Ctrl+B" Height="29" VerticalAlignment="Top">
                         <StackPanel Orientation="Horizontal">
-                            <Viewbox Width="16" Height="16" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+                            <Viewbox xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" Width="16" Height="16">
                                 <Rectangle Width="16" Height="16">
                                     <Rectangle.Fill>
                                         <DrawingBrush>
                                             <DrawingBrush.Drawing>
                                                 <DrawingGroup>
-                                                    <DrawingGroup.Children>
-                                                        <GeometryDrawing Brush="#00FFFFFF" Geometry="F1M16,16L0,16 0,0 16,0z" />
-                                                        <GeometryDrawing Brush="#FFF6F6F6" Geometry="F1M13,3L13,8C13,10.199,11.546,12.107,9.5,12.75L9.5,16 6.5,16 6.5,12.75C4.454,12.107,3,10.199,3,8L3,3 5,3 5,0 11,0 11,3z" />
-                                                        <GeometryDrawing Brush="#FFEFEFF0" Geometry="F1M11,5L11,8C11,9.654 9.654,11 8,11 6.346,11 5,9.654 5,8L5,5z" />
-                                                        <GeometryDrawing Brush="#FF388934" Geometry="F1M8,11C6.346,11,5,9.654,5,8L5,5 11,5 11,8C11,9.654,9.654,11,8,11 M10,4L10,1 9,1 9,4 7,4 7,1 6,1 6,4 4,4 4,8C4,10.035,5.532,11.7,7.5,11.949L7.5,15 8.5,15 8.5,11.949C10.468,11.7,12,10.035,12,8L12,4z" />
-                                                    </DrawingGroup.Children>
+                                                    <GeometryDrawing Brush="#00FFFFFF" Geometry="F1M16,16L0,16 0,0 16,0z" />
+                                                    <GeometryDrawing Brush="#FFF6F6F6" Geometry="F1M13,3L13,8C13,10.199,11.546,12.107,9.5,12.75L9.5,16 6.5,16 6.5,12.75C4.454,12.107,3,10.199,3,8L3,3 5,3 5,0 11,0 11,3z" />
+                                                    <GeometryDrawing Brush="#FFEFEFF0" Geometry="F1M11,5L11,8C11,9.654 9.654,11 8,11 6.346,11 5,9.654 5,8L5,5z" />
+                                                    <GeometryDrawing Brush="#FF388934" Geometry="F1M8,11C6.346,11,5,9.654,5,8L5,5 11,5 11,8C11,9.654,9.654,11,8,11 M10,4L10,1 9,1 9,4 7,4 7,1 6,1 6,4 4,4 4,8C4,10.035,5.532,11.7,7.5,11.949L7.5,15 8.5,15 8.5,11.949C10.468,11.7,12,10.035,12,8L12,4z" />
                                                 </DrawingGroup>
                                             </DrawingBrush.Drawing>
                                         </DrawingBrush>
@@ -173,20 +171,18 @@
                             <TextBlock x:Name="textBlockSerialActive" Text="Connect" Margin="3,0,0,0"/>
                         </StackPanel>
                     </Button>
-                    <Button x:Name="buttonTcpActive" HorizontalAlignment="Left" Margin="264.143,232,0,0" VerticalAlignment="Top" Width="110" Grid.Column="1" Click="buttonTcpActive_Click" FontSize="16" Height="29" ToolTip="Ctrl+B">
+                    <Button x:Name="buttonTcpActive" HorizontalAlignment="Left" Margin="278,223,0,0" VerticalAlignment="Top" Width="110" Grid.Column="1" Click="buttonTcpActive_Click" FontSize="16" Height="29" ToolTip="Ctrl+B">
                         <StackPanel Orientation="Horizontal">
-                            <Viewbox Width="16" Height="16" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+                            <Viewbox xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" Width="16" Height="16">
                                 <Rectangle Width="16" Height="16">
                                     <Rectangle.Fill>
                                         <DrawingBrush>
                                             <DrawingBrush.Drawing>
                                                 <DrawingGroup>
-                                                    <DrawingGroup.Children>
-                                                        <GeometryDrawing Brush="#00FFFFFF" Geometry="F1M16,16L0,16 0,0 16,0z" />
-                                                        <GeometryDrawing Brush="#FFF6F6F6" Geometry="F1M13,3L13,8C13,10.199,11.546,12.107,9.5,12.75L9.5,16 6.5,16 6.5,12.75C4.454,12.107,3,10.199,3,8L3,3 5,3 5,0 11,0 11,3z" />
-                                                        <GeometryDrawing Brush="#FFEFEFF0" Geometry="F1M11,5L11,8C11,9.654 9.654,11 8,11 6.346,11 5,9.654 5,8L5,5z" />
-                                                        <GeometryDrawing Brush="#FF388934" Geometry="F1M8,11C6.346,11,5,9.654,5,8L5,5 11,5 11,8C11,9.654,9.654,11,8,11 M10,4L10,1 9,1 9,4 7,4 7,1 6,1 6,4 4,4 4,8C4,10.035,5.532,11.7,7.5,11.949L7.5,15 8.5,15 8.5,11.949C10.468,11.7,12,10.035,12,8L12,4z" />
-                                                    </DrawingGroup.Children>
+                                                    <GeometryDrawing Brush="#00FFFFFF" Geometry="F1M16,16L0,16 0,0 16,0z" />
+                                                    <GeometryDrawing Brush="#FFF6F6F6" Geometry="F1M13,3L13,8C13,10.199,11.546,12.107,9.5,12.75L9.5,16 6.5,16 6.5,12.75C4.454,12.107,3,10.199,3,8L3,3 5,3 5,0 11,0 11,3z" />
+                                                    <GeometryDrawing Brush="#FFEFEFF0" Geometry="F1M11,5L11,8C11,9.654 9.654,11 8,11 6.346,11 5,9.654 5,8L5,5z" />
+                                                    <GeometryDrawing Brush="#FF388934" Geometry="F1M8,11C6.346,11,5,9.654,5,8L5,5 11,5 11,8C11,9.654,9.654,11,8,11 M10,4L10,1 9,1 9,4 7,4 7,1 6,1 6,4 4,4 4,8C4,10.035,5.532,11.7,7.5,11.949L7.5,15 8.5,15 8.5,11.949C10.468,11.7,12,10.035,12,8L12,4z" />
                                                 </DrawingGroup>
                                             </DrawingBrush.Drawing>
                                         </DrawingBrush>
@@ -196,25 +192,23 @@
                             <TextBlock x:Name="textBlockTcpActive" Text="Connect" Margin="3,0,0,0"/>
                         </StackPanel>
                     </Button>
-                    <RichTextBox x:Name="richTextBoxStatus" Margin="10,273,10,10" Grid.ColumnSpan="2" Block.LineHeight="2" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" FontFamily="Consolas" Background="#FF353535" Foreground="#FFFAFAFA" IsReadOnly="True" FontSize="14">
+                    <RichTextBox x:Name="richTextBoxStatus" Margin="8,0,10,10" Block.LineHeight="2" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" FontFamily="Consolas" Background="#FF353535" Foreground="#FFFAFAFA" IsReadOnly="True" FontSize="14" Grid.ColumnSpan="2" Height="141" VerticalAlignment="Bottom">
                         <FlowDocument/>
                     </RichTextBox>
-                    <Button x:Name="buttonUpdateSerialList" Content="Update" HorizontalAlignment="Left" Margin="263,64,0,0" VerticalAlignment="Top" Width="75" Grid.Column="0" Height="29" Click="buttonUpdateSerialList_Click" FontSize="14"/>
+                    <Button x:Name="buttonUpdateSerialList" Content="Update" HorizontalAlignment="Left" Margin="261,64,0,0" VerticalAlignment="Top" Width="75" Grid.Column="0" Height="29" Click="buttonUpdateSerialList_Click" FontSize="14"/>
                     <Border x:Name="pictureBoxTcp" Height="25" Margin="19,20,0,0" Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Left" Width="25"/>
-                    <Button x:Name="buttonClearSerialStatus" HorizontalAlignment="Left" Margin="10,240,0,0" VerticalAlignment="Top" Width="98" Click="buttonClearSerialStatus_Click" FontSize="16" Height="29">
+                    <Button x:Name="buttonClearSerialStatus" HorizontalAlignment="Right" Margin="0,0,30,166" VerticalAlignment="Bottom" Width="98" Click="buttonClearSerialStatus_Click" FontSize="16" Height="29" Grid.Column="1">
                         <StackPanel Orientation="Horizontal">
-                            <Viewbox Width="16" Height="16" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+                            <Viewbox xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" Width="16" Height="16">
                                 <Rectangle Width="16" Height="16">
                                     <Rectangle.Fill>
                                         <DrawingBrush>
                                             <DrawingBrush.Drawing>
                                                 <DrawingGroup>
-                                                    <DrawingGroup.Children>
-                                                        <GeometryDrawing Brush="#00FFFFFF" Geometry="F1M16,16L0,16 0,0 16,0z" />
-                                                        <GeometryDrawing Brush="#FFF6F6F6" Geometry="F1M5.1104,7.0122L9.0634,10.9662 8.4684,11.7832 4.2934,7.6072z M9.1094,16.0002L12.4094,11.4682 12.4634,11.5212 13.1614,10.6452C14.5844,8.8592,14.7054,6.4432,13.6314,4.5282L15.5614,2.5982C15.8534,2.3062,16.0004,1.9232,16.0004,1.5392L16.0004,1.5362C16.0004,1.1532 15.8534,0.7692 15.5614,0.4772 15.3644,0.2802 15.1204,0.1492 14.8554,0.0852000000000004L14.1464,0.0852000000000004C13.8814,0.1492,13.6374,0.2802,13.4404,0.4772L11.5094,2.4072C10.6934,1.9482 9.7814,1.6802 8.8204,1.6802 7.5784,1.6802 6.3614,2.1052 5.3924,2.8762L4.5164,3.5742 4.6094,3.6672 0.000399999999999956,7.0212 0.000399999999999956,7.5582 8.4414,16.0002z" />
-                                                        <GeometryDrawing Brush="#FF424242" Geometry="F1M14.8545,1.8911L12.3465,4.3991C13.6705,6.0511,13.6845,8.3841,12.3785,10.0231L6.0155,3.6591C7.6545,2.3531,9.9875,2.3681,11.6395,3.6921L14.1475,1.1841C14.3415,0.9901 14.6605,0.9901 14.8545,1.1841 15.0485,1.3781 15.0485,1.6971 14.8545,1.8911 M8.5885,13.3171L2.7585,7.4881 5.2125,5.7001 10.3755,10.8631z M1.2235,7.3681L8.7085,14.8521 11.6875,10.7601 5.3165,4.3891z" />
-                                                        <GeometryDrawing Brush="#FFF0EFF1" Geometry="F1M10.375,10.8633L8.589,13.3173 2.759,7.4883 5.213,5.7003z" />
-                                                    </DrawingGroup.Children>
+                                                    <GeometryDrawing Brush="#00FFFFFF" Geometry="F1M16,16L0,16 0,0 16,0z" />
+                                                    <GeometryDrawing Brush="#FFF6F6F6" Geometry="F1M5.1104,7.0122L9.0634,10.9662 8.4684,11.7832 4.2934,7.6072z M9.1094,16.0002L12.4094,11.4682 12.4634,11.5212 13.1614,10.6452C14.5844,8.8592,14.7054,6.4432,13.6314,4.5282L15.5614,2.5982C15.8534,2.3062,16.0004,1.9232,16.0004,1.5392L16.0004,1.5362C16.0004,1.1532 15.8534,0.7692 15.5614,0.4772 15.3644,0.2802 15.1204,0.1492 14.8554,0.0852000000000004L14.1464,0.0852000000000004C13.8814,0.1492,13.6374,0.2802,13.4404,0.4772L11.5094,2.4072C10.6934,1.9482 9.7814,1.6802 8.8204,1.6802 7.5784,1.6802 6.3614,2.1052 5.3924,2.8762L4.5164,3.5742 4.6094,3.6672 0.000399999999999956,7.0212 0.000399999999999956,7.5582 8.4414,16.0002z" />
+                                                    <GeometryDrawing Brush="#FF424242" Geometry="F1M14.8545,1.8911L12.3465,4.3991C13.6705,6.0511,13.6845,8.3841,12.3785,10.0231L6.0155,3.6591C7.6545,2.3531,9.9875,2.3681,11.6395,3.6921L14.1475,1.1841C14.3415,0.9901 14.6605,0.9901 14.8545,1.1841 15.0485,1.3781 15.0485,1.6971 14.8545,1.8911 M8.5885,13.3171L2.7585,7.4881 5.2125,5.7001 10.3755,10.8631z M1.2235,7.3681L8.7085,14.8521 11.6875,10.7601 5.3165,4.3891z" />
+                                                    <GeometryDrawing Brush="#FFF0EFF1" Geometry="F1M10.375,10.8633L8.589,13.3173 2.759,7.4883 5.213,5.7003z" />
                                                 </DrawingGroup>
                                             </DrawingBrush.Drawing>
                                         </DrawingBrush>
@@ -224,12 +218,19 @@
                             <TextBlock x:Name="textBlockClearSerialStatus" Text="Clear" Margin="3,0,0,0"/>
                         </StackPanel>
                     </Button>
-                    <Button x:Name="buttonPingIp" Content="Ping" Margin="301.143,96,0,0" FontSize="14" Grid.Column="1" HorizontalAlignment="Left" Width="55" Height="30" VerticalAlignment="Top" Click="buttonPingIp_Click"/>
+                    <Button x:Name="buttonPingIp" Content="Ping" Margin="301,96,0,0" FontSize="14" Grid.Column="1" HorizontalAlignment="Left" Width="55" Height="30" VerticalAlignment="Top" Click="buttonPingIp_Click"/>
                     <Image x:Name="ImageLogoTCP" Grid.Column="1" HorizontalAlignment="Right" Height="40" Margin="0,10,10,0" VerticalAlignment="Top" Width="40" Source="/Logo/Modbus_logo_Lens_256_B.ico"/>
                     <Image x:Name="ImageLogoRTU" HorizontalAlignment="Right" Height="40" Margin="0,10,10,0" VerticalAlignment="Top" Width="40" Source="/Logo/Modbus_logo_Lens_256_B.ico"/>
+                    <Label x:Name="labelStopBits_Copy" Content="Load profile:" HorizontalAlignment="Left" Margin="8,0,0,166" VerticalAlignment="Bottom" FontSize="14" Grid.Column="0" Height="29"/>
+                    <ComboBox x:Name="comboBoxProfileHome" HorizontalAlignment="Left" Margin="136,0,0,166" VerticalAlignment="Bottom" Width="278" FontSize="14" Height="29">
+                        <ComboBoxItem Content="1"/>
+                        <ComboBoxItem Content="1.5"/>
+                        <ComboBoxItem Content="2"/>
+                    </ComboBox>
+                    <Label x:Name="labelPortRtu" Content="Port:" HorizontalAlignment="Left" Margin="10,65,0,0" VerticalAlignment="Top" FontSize="14" Grid.Column="0" Height="29" Width="121" />
                 </Grid>
             </TabItem>
-            <TabItem x:Name="tabItem1" Header="Coils (1bit)" FontSize="12">
+            <TabItem x:Name="tabItem1" Header="Coils FC01" FontSize="12">
                 <Grid x:Name="GridCoils" Background="#FFE5E5E5">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
@@ -435,7 +436,7 @@
                     </DataGrid>
                 </Grid>
             </TabItem>
-            <TabItem x:Name="tabItem2" Header="Inputs (1 bit)" FontSize="12">
+            <TabItem x:Name="tabItem2" Header="Inputs FC02" FontSize="12">
                 <Grid x:Name="GridInputs" Background="#FFE5E5E5">
                     <ComboBox x:Name="comboBoxInputRegistri" HorizontalAlignment="Left" Margin="74,10,0,0" VerticalAlignment="Top" Width="55" FontSize="12" Height="25" SelectionChanged="comboBoxInputRegistri_SelectionChanged">
                         <ComboBoxItem Content="DEC"/>
@@ -554,149 +555,7 @@
                     </DataGrid>
                 </Grid>
             </TabItem>
-            <TabItem x:Name="tabItem3" Header="Input registers (1 word)" FontSize="12">
-                <Grid x:Name="GridInputRegisters" Background="#FFE5E5E5">
-                    <ComboBox x:Name="comboBoxInputRegRegistri" HorizontalAlignment="Left" Margin="74,10,0,0" VerticalAlignment="Top" Width="55" FontSize="12" Height="25" SelectionChanged="comboBoxInputRegRegistri_SelectionChanged">
-                        <ComboBoxItem Content="DEC"/>
-                        <ComboBoxItem Content="HEX"/>
-                    </ComboBox>
-                    <Label x:Name="labelInputRegisters_0" Content="Registers:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontSize="12"/>
-                    <Label x:Name="labelInputRegisters_2" Content="Offset:" HorizontalAlignment="Left" Margin="265,10,0,0" VerticalAlignment="Top" FontSize="12"/>
-                    <ComboBox x:Name="comboBoxInputRegOffset" HorizontalAlignment="Left" Margin="320,10,0,0" VerticalAlignment="Top" Width="55" RenderTransformOrigin="0.091,0.48" FontSize="12" Height="25" SelectionChanged="comboBoxInputRegOffset_SelectionChanged">
-                        <ComboBoxItem Content="DEC"/>
-                        <ComboBoxItem Content="HEX"/>
-                    </ComboBox>
-                    <TextBox x:Name="textBoxInputRegOffset" HorizontalAlignment="Left" Height="25" Margin="380,10,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="65" FontSize="12" TextChanged="textBoxInputRegOffset_TextChanged" VerticalContentAlignment="Center"/>
-                    <Label x:Name="labelOffsetHiddenInputRegister" Content="Offset hidden in table" HorizontalAlignment="Left" Margin="450,10,0,0" VerticalAlignment="Top" FontSize="12"/>
-                    <ComboBox x:Name="comboBoxInputRegValori" HorizontalAlignment="Left" Margin="195,10,0,0" VerticalAlignment="Top" Width="55" FontSize="12" Height="25" SelectionChanged="comboBoxInputRegValori_SelectionChanged">
-                        <ComboBoxItem Content="DEC"/>
-                        <ComboBoxItem Content="HEX"/>
-                    </ComboBox>
-                    <Label x:Name="labelInputRegisters_1" Content="Values:" HorizontalAlignment="Left" Margin="140,10,0,0" VerticalAlignment="Top" FontSize="12"/>
-                    <Label x:Name="labelInputRegisters_3" Content="Read Input Register (FC04):" Height="26" Margin="0,50,147,0" VerticalAlignment="Top" FontSize="12" HorizontalAlignment="Right" Width="263"/>
-                    <StackPanel x:Name="StackPanelInputRegisters0" Margin="0,76,10,0" Background="AliceBlue" Height="40" Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Right" Width="400">
-                        <Label x:Name="labelInputRegisters_4" Content="Address:" Height="25" FontSize="12"/>
-                        <ComboBox x:Name="comboBoxInputRegisterAddress04" Width="55" Height="25" FontSize="12" SelectionChanged="comboBoxInputRegisterAddress04_SelectionChanged">
-                            <ComboBoxItem Content="DEC"/>
-                            <ComboBoxItem Content="HEX"/>
-                        </ComboBox>
-                        <TextBox x:Name="textBoxInputRegisterAddress04" TextWrapping="Wrap" Width="50"  Height="25" Margin="10,0,0,0" FontSize="12" TextChanged="textBoxInputRegisterAddress04_TextChanged" VerticalContentAlignment="Center"/>
-                        <Label x:Name="labelInputRegisters_5" Content="Num.:" Height="25" FontSize="12"/>
-                        <TextBox x:Name="textBoxInputRegisterNumber" TextWrapping="Wrap" Width="50"  Height="25" Margin="0,0,0,0" FontSize="12" TextChanged="textBoxInputRegisterNumber_TextChanged" VerticalContentAlignment="Center"/>
-                        <Button x:Name="buttonReadInputRegister04" Content="Read" Width="55" Height="25" Margin="10,0,0,7" Click="buttonReadInputRegister04_Click" FontSize="12" VerticalAlignment="Bottom"/>
-                        <Button x:Name="buttonLoopInputRegister04" Content="Loop" Width="55" Height="25" Margin="10,0,0,0" FontSize="12" Click="buttonLoopInputRegister04_Click"/>
-                    </StackPanel>
-                    <Label x:Name="labelInputRegisters_6" Content="Read Input Register Range:" Height="26" Margin="0,121,147,0" VerticalAlignment="Top" FontSize="12" HorizontalAlignment="Right" Width="263"/>
-                    <StackPanel x:Name="StackPanelInputRegisters1" Margin="0,148,10,0" Background="AliceBlue" Height="40" Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Right" Width="400">
-                        <Label x:Name="labelInputRegisters_7" Content="Start:" Height="30" FontSize="12"/>
-                        <ComboBox x:Name="comboBoxInputRegisterRange_A" Width="55" Height="25" FontSize="12" SelectionChanged="comboBoxInputRegisterRange_A_SelectionChanged">
-                            <ComboBoxItem Content="DEC"/>
-                            <ComboBoxItem Content="HEX"/>
-                        </ComboBox>
-                        <TextBox x:Name="textBoxInputRegisterRange_A" TextWrapping="Wrap" Width="50"  Height="25" Margin="10,0,0,0" FontSize="12" TextChanged="textBoxInputRegisterRange_A_TextChanged" VerticalContentAlignment="Center"/>
-                        <Label x:Name="labelInputRegisters_8" Content="Stop:" Height="30" FontSize="12"/>
-                        <TextBox x:Name="textBoxInputRegisterRange_B" TextWrapping="Wrap" Width="50"  Height="25" Margin="0,0,0,0" FontSize="12" TextChanged="textBoxInputRegisterRange_B_TextChanged" VerticalContentAlignment="Center"/>
-                        <Button x:Name="buttonReadInputRegisterRange" Content="Read" Width="55" Height="25" Margin="10,0,0,0" Click="buttonReadInputRegisterRange_Click" FontSize="12" RenderTransformOrigin="0.5,0.5"/>
-                        <Button x:Name="buttonLoopInputRegisterRange" Content="Loop" Width="55" Height="25" Margin="10,0,0,0" FontSize="12" RenderTransformOrigin="0.501,0.5" Click="buttonLoopInputRegisterRange_Click"/>
-                    </StackPanel>
-                    <StackPanel x:Name="stackGoToInputRegister" Margin="0,430,10,0" Background="AliceBlue" Height="40" Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Right" Width="324" Visibility="Hidden">
-                        <Label x:Name="labelGoToInputRegister" Content="Go to Input Register address:" Height="30"/>
-                        <TextBox x:Name="textBoxGoToInputRegisterAddress" TextWrapping="Wrap" Width="55"  Height="25" Margin="10,0,0,0"/>
-                        <Button x:Name="buttonGoToInputRegisterAddress" Content="Vai" Width="55" Height="25" Margin="10,0,0,0" Click="buttonGoToInputRegisterAddress_Click"/>
-                    </StackPanel>
-                    <Button x:Name="buttonClearInputReg" Height="25" Margin="0,0,338,10" FontSize="12" HorizontalAlignment="Right" Width="72" VerticalAlignment="Bottom" Click="buttonClearInputReg_Click">
-                        <StackPanel Orientation="Horizontal">
-                            <Viewbox Width="16" Height="16" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
-                                <Rectangle Width="16" Height="16">
-                                    <Rectangle.Fill>
-                                        <DrawingBrush>
-                                            <DrawingBrush.Drawing>
-                                                <DrawingGroup>
-                                                    <DrawingGroup.Children>
-                                                        <GeometryDrawing Brush="#00FFFFFF" Geometry="F1M16,16L0,16 0,0 16,0z" />
-                                                        <GeometryDrawing Brush="#FFF6F6F6" Geometry="F1M5.1104,7.0122L9.0634,10.9662 8.4684,11.7832 4.2934,7.6072z M9.1094,16.0002L12.4094,11.4682 12.4634,11.5212 13.1614,10.6452C14.5844,8.8592,14.7054,6.4432,13.6314,4.5282L15.5614,2.5982C15.8534,2.3062,16.0004,1.9232,16.0004,1.5392L16.0004,1.5362C16.0004,1.1532 15.8534,0.7692 15.5614,0.4772 15.3644,0.2802 15.1204,0.1492 14.8554,0.0852000000000004L14.1464,0.0852000000000004C13.8814,0.1492,13.6374,0.2802,13.4404,0.4772L11.5094,2.4072C10.6934,1.9482 9.7814,1.6802 8.8204,1.6802 7.5784,1.6802 6.3614,2.1052 5.3924,2.8762L4.5164,3.5742 4.6094,3.6672 0.000399999999999956,7.0212 0.000399999999999956,7.5582 8.4414,16.0002z" />
-                                                        <GeometryDrawing Brush="#FF424242" Geometry="F1M14.8545,1.8911L12.3465,4.3991C13.6705,6.0511,13.6845,8.3841,12.3785,10.0231L6.0155,3.6591C7.6545,2.3531,9.9875,2.3681,11.6395,3.6921L14.1475,1.1841C14.3415,0.9901 14.6605,0.9901 14.8545,1.1841 15.0485,1.3781 15.0485,1.6971 14.8545,1.8911 M8.5885,13.3171L2.7585,7.4881 5.2125,5.7001 10.3755,10.8631z M1.2235,7.3681L8.7085,14.8521 11.6875,10.7601 5.3165,4.3891z" />
-                                                        <GeometryDrawing Brush="#FFF0EFF1" Geometry="F1M10.375,10.8633L8.589,13.3173 2.759,7.4883 5.213,5.7003z" />
-                                                    </DrawingGroup.Children>
-                                                </DrawingGroup>
-                                            </DrawingBrush.Drawing>
-                                        </DrawingBrush>
-                                    </Rectangle.Fill>
-                                </Rectangle>
-                            </Viewbox>
-                            <TextBlock x:Name="textBlockClearInputReg" Text="Clear" Margin="3,0,0,0"/>
-                        </StackPanel>
-                    </Button>
-                    <Button x:Name="buttonExportInputReg" Height="25" Margin="0,0,261,10" FontSize="12" HorizontalAlignment="Right" Width="72" VerticalAlignment="Bottom" Click="buttonExportInputReg_Click">
-                        <StackPanel Orientation="Horizontal">
-                            <Viewbox Width="16" Height="16" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
-                                <Rectangle Width="16" Height="16">
-                                    <Rectangle.Fill>
-                                        <DrawingBrush>
-                                            <DrawingBrush.Drawing>
-                                                <DrawingGroup>
-                                                    <DrawingGroup.Children>
-                                                        <GeometryDrawing Brush="#00FFFFFF" Geometry="F1M16,16L0,16 0,0 16,0z" />
-                                                        <GeometryDrawing Brush="#FFF6F6F6" Geometry="F1M5,7L5.223,7C5.083,7.355,5,7.739,5,8.143z M3.006,5.578C3.002,5.553 3,5.526 3,5.5 3,5.224 3.224,5 3.5,5L3.587,5z M13.571,5L8.424,5 9.914,3.519 6.416,0 1.596,0 3.584,2 3.5,2C1.57,2 0,3.57 0,5.5 0,7.43 1.57,9 3.5,9L5,9 5,12 4,12 4,13C4,13.52 4.143,14.039 4.413,14.503 4.95,15.427 5.941,16 7,16L11.215,16C12.751,16,14,14.75,14,13.214L14,10 16,10 16,7.429C16,6.09,14.91,5,13.571,5" />
-                                                        <GeometryDrawing Brush="#FF414141" Geometry="F1M12,13.2139C12,13.6479,11.647,13.9999,11.215,13.9999L11,13.9999C10.447,13.9999,10,13.5529,10,12.9999L7,12.9999 7,8.1429C7,7.5129,7.513,6.9999,8.143,6.9999L12,6.9999z M13.571,5.9999L8.143,5.9999C6.959,5.9999,6,6.9589,6,8.1429L6,12.9999 5,12.9999C5,13.3659 5.105,13.7049 5.277,13.9999 5.624,14.5959 6.262,14.9999 7,14.9999L11.215,14.9999C12.201,14.9999,13,14.1999,13,13.2139L13,8.9999 15,8.9999 15,7.4289C15,6.6399,14.36,5.9999,13.571,5.9999" />
-                                                        <GeometryDrawing Brush="#FF00529C" Geometry="F1M4,6L6.013,4 3.5,4C2.673,4 2,4.672 2,5.5 2,6.326 2.673,7 3.5,7L4,7 4,8 3.5,8C2.119,8 1,6.881 1,5.5 1,4.119 2.119,3 3.5,3L5.988,3 4,1 6,1 8.5,3.515 6,6z" />
-                                                        <GeometryDrawing Brush="#FFF0EFF1" Geometry="F1M7,8.1426L7,12.9996 10,12.9996C10,13.5526,10.447,13.9996,11,13.9996L11.215,13.9996C11.647,13.9996,12,13.6476,12,13.2136L12,6.9996 8.143,6.9996C7.513,6.9996,7,7.5126,7,8.1426" />
-                                                    </DrawingGroup.Children>
-                                                </DrawingGroup>
-                                            </DrawingBrush.Drawing>
-                                        </DrawingBrush>
-                                    </Rectangle.Fill>
-                                </Rectangle>
-                            </Viewbox>
-                            <TextBlock x:Name="textBlockExportInputReg" Text="Export" Margin="3,0,0,0"/>
-                        </StackPanel>
-                    </Button>
-                    <Button x:Name="buttonReadInputRegisterTemplate" Content="Read all" Height="25" Margin="0,10,10,0" FontSize="12" RenderTransformOrigin="0.5,0.5" Click="buttonReadInputRegisterTemplate_Click" HorizontalAlignment="Right" Width="80" VerticalAlignment="Top"/>
-                    <Button x:Name="buttonReadInputRegisterTemplateGroup" Content="Read group" Height="25" Margin="0,10,95,0" FontSize="12" RenderTransformOrigin="0.5,0.5" VerticalAlignment="Top" Click="buttonReadInputRegisterTemplateGroup_Click" Width="80" HorizontalAlignment="Right"/>
-                    <ComboBox x:Name="comboBoxInputRegisterGroup" Margin="0,10,180,0" VerticalAlignment="Top" SelectionChanged="comboBoxInputRegisterGroup_SelectionChanged" DisplayMemberPath="Value" Height="25" HorizontalAlignment="Right" Width="205"/>
-                    <DataGrid x:Name="dataGridViewInputRegister" Margin="10,50,415,10" AutoGenerateColumns="False"  HorizontalGridLinesBrush="LightGray" VerticalGridLinesBrush="LightGray" BorderThickness="1" FontSize="14"  RowBackground="White">
-                        <DataGrid.RowStyle>
-                            <Style TargetType="DataGridRow">
-                                <Setter Property="ToolTip">
-                                    <Setter.Value>
-                                        <TextBlock Text="{Binding Mappings}" />
-                                    </Setter.Value>
-                                </Setter>
-                            </Style>
-                        </DataGrid.RowStyle>
-                        <DataGrid.Columns>
-                            <DataGridTextColumn x:Name="dataGridTabInputRegistersRegisters" Header="Register" Binding="{Binding Register}" Width="80" Visibility="Collapsed">
-                                <DataGridTextColumn.ElementStyle>
-                                    <Style TargetType="TextBlock">
-                                        <Setter Property="Foreground" Value="{Binding Foreground}"/>
-                                        <Setter Property="Background" Value="{Binding Background}"/>
-                                    </Style>
-                                </DataGridTextColumn.ElementStyle>
-                            </DataGridTextColumn>
-                            <DataGridTextColumn x:Name="dataGridTabInputRegistersValues" Header="Value" Binding="{Binding Value}" Width="80" Visibility="Collapsed">
-                                <DataGridTextColumn.ElementStyle>
-                                    <Style TargetType="TextBlock">
-                                        <Setter Property="Foreground" Value="{Binding Foreground}"/>
-                                        <Setter Property="Background" Value="{Binding Background}"/>
-                                    </Style>
-                                </DataGridTextColumn.ElementStyle>
-                            </DataGridTextColumn>
-                            <DataGridTextColumn x:Name="dataGridTabInputRegistersBinaryValues" Header="Binary value" Binding="{Binding ValueBin}" Width="170" Visibility="Collapsed">
-                                <DataGridTextColumn.ElementStyle>
-                                    <Style TargetType="TextBlock">
-                                        <Setter Property="Foreground" Value="{Binding Foreground}"/>
-                                        <Setter Property="Background" Value="{Binding Background}"/>
-                                    </Style>
-                                </DataGridTextColumn.ElementStyle>
-                            </DataGridTextColumn>
-                            <DataGridTextColumn x:Name="dataGridTabInputRegistersConvertedValues" Header="Converted value" Binding="{Binding ValueConverted}" Width="130" Visibility="Collapsed"/>
-                            <DataGridTextColumn x:Name="dataGridTabInputRegistersNotes" Header="Notes" Binding="{Binding Notes}" Width="600" Visibility="Collapsed"/>
-                            <DataGridTextColumn x:Name="dataGridTabInputRegistersMappings" Header="Mappings" Binding="{Binding Mappings}" Width="600" Visibility="Collapsed"/>
-                        </DataGrid.Columns>
-                    </DataGrid>
-                </Grid>
-            </TabItem>
-            <TabItem x:Name="tabItem4" Header="Holding registers (1 word)" FontSize="12">
+            <TabItem x:Name="tabItem4" Header="Holding registers FC03" FontSize="12">
                 <Grid x:Name="GridHoldingRegisters" Background="#FFE5E5E5">
                     <ComboBox x:Name="comboBoxHoldingRegistri" HorizontalAlignment="Left" Margin="74,10,0,0" VerticalAlignment="Top" Width="55" FontSize="12" Height="25" SelectionChanged="comboBoxHoldingRegistri_SelectionChanged">
                         <ComboBoxItem Content="DEC"/>
@@ -892,7 +751,7 @@
                     <Button x:Name="buttonReadHoldingTemplate" Content="Read all" Height="25" Margin="0,10,10,0" FontSize="12" RenderTransformOrigin="0.5,0.5" Click="buttonReadHoldingTemplate_Click" HorizontalAlignment="Right" Width="80" VerticalAlignment="Top"/>
                     <Button x:Name="buttonReadHoldingTemplateGroup" Content="Read group" Height="25" Margin="0,10,95,0" FontSize="12" RenderTransformOrigin="0.5,0.5" VerticalAlignment="Top" Click="buttonReadHoldingTemplateGroup_Click" Width="80" HorizontalAlignment="Right"/>
                     <ComboBox x:Name="comboBoxHoldingGroup" Margin="0,10,180,0" VerticalAlignment="Top" SelectionChanged="comboBoxHoldingGroup_SelectionChanged" DisplayMemberPath="Value" Height="25"  HorizontalAlignment="Right" Width="205"/>
-                    <DataGrid x:Name="dataGridViewHolding" Margin="10,50,415,10" AutoGenerateColumns="False"  HorizontalGridLinesBrush="LightGray" VerticalGridLinesBrush="LightGray" BorderThickness="1" FontSize="14" CellEditEnding="dataGridViewHolding_KeyUp" RowBackground="#FFF1F1F1" Width="Auto">
+                    <DataGrid x:Name="dataGridViewHolding" Margin="10,50,415,10" AutoGenerateColumns="False"  HorizontalGridLinesBrush="LightGray" VerticalGridLinesBrush="LightGray" BorderThickness="1" FontSize="14" CellEditEnding="dataGridViewHolding_KeyUp" RowBackground="#FFF1F1F1" Width="Auto" BeginningEdit="dataGridViewHolding_BeginningEdit">
                         <DataGrid.RowStyle>
                             <Style TargetType="DataGridRow">
                                 <Setter Property="ToolTip">
@@ -934,7 +793,149 @@
                     </DataGrid>
                 </Grid>
             </TabItem>
-            <TabItem Header="Diagnostic (FC08)" FontSize="12">
+            <TabItem x:Name="tabItem3" Header="Input registers FC04" FontSize="12">
+                <Grid x:Name="GridInputRegisters" Background="#FFE5E5E5">
+                    <ComboBox x:Name="comboBoxInputRegRegistri" HorizontalAlignment="Left" Margin="74,10,0,0" VerticalAlignment="Top" Width="55" FontSize="12" Height="25" SelectionChanged="comboBoxInputRegRegistri_SelectionChanged">
+                        <ComboBoxItem Content="DEC"/>
+                        <ComboBoxItem Content="HEX"/>
+                    </ComboBox>
+                    <Label x:Name="labelInputRegisters_0" Content="Registers:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontSize="12"/>
+                    <Label x:Name="labelInputRegisters_2" Content="Offset:" HorizontalAlignment="Left" Margin="265,10,0,0" VerticalAlignment="Top" FontSize="12"/>
+                    <ComboBox x:Name="comboBoxInputRegOffset" HorizontalAlignment="Left" Margin="320,10,0,0" VerticalAlignment="Top" Width="55" RenderTransformOrigin="0.091,0.48" FontSize="12" Height="25" SelectionChanged="comboBoxInputRegOffset_SelectionChanged">
+                        <ComboBoxItem Content="DEC"/>
+                        <ComboBoxItem Content="HEX"/>
+                    </ComboBox>
+                    <TextBox x:Name="textBoxInputRegOffset" HorizontalAlignment="Left" Height="25" Margin="380,10,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="65" FontSize="12" TextChanged="textBoxInputRegOffset_TextChanged" VerticalContentAlignment="Center"/>
+                    <Label x:Name="labelOffsetHiddenInputRegister" Content="Offset hidden in table" HorizontalAlignment="Left" Margin="450,10,0,0" VerticalAlignment="Top" FontSize="12"/>
+                    <ComboBox x:Name="comboBoxInputRegValori" HorizontalAlignment="Left" Margin="195,10,0,0" VerticalAlignment="Top" Width="55" FontSize="12" Height="25" SelectionChanged="comboBoxInputRegValori_SelectionChanged">
+                        <ComboBoxItem Content="DEC"/>
+                        <ComboBoxItem Content="HEX"/>
+                    </ComboBox>
+                    <Label x:Name="labelInputRegisters_1" Content="Values:" HorizontalAlignment="Left" Margin="140,10,0,0" VerticalAlignment="Top" FontSize="12"/>
+                    <Label x:Name="labelInputRegisters_3" Content="Read Input Register (FC04):" Height="26" Margin="0,50,147,0" VerticalAlignment="Top" FontSize="12" HorizontalAlignment="Right" Width="263"/>
+                    <StackPanel x:Name="StackPanelInputRegisters0" Margin="0,76,10,0" Background="AliceBlue" Height="40" Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Right" Width="400">
+                        <Label x:Name="labelInputRegisters_4" Content="Address:" Height="25" FontSize="12"/>
+                        <ComboBox x:Name="comboBoxInputRegisterAddress04" Width="55" Height="25" FontSize="12" SelectionChanged="comboBoxInputRegisterAddress04_SelectionChanged">
+                            <ComboBoxItem Content="DEC"/>
+                            <ComboBoxItem Content="HEX"/>
+                        </ComboBox>
+                        <TextBox x:Name="textBoxInputRegisterAddress04" TextWrapping="Wrap" Width="50"  Height="25" Margin="10,0,0,0" FontSize="12" TextChanged="textBoxInputRegisterAddress04_TextChanged" VerticalContentAlignment="Center"/>
+                        <Label x:Name="labelInputRegisters_5" Content="Num.:" Height="25" FontSize="12"/>
+                        <TextBox x:Name="textBoxInputRegisterNumber" TextWrapping="Wrap" Width="50"  Height="25" Margin="0,0,0,0" FontSize="12" TextChanged="textBoxInputRegisterNumber_TextChanged" VerticalContentAlignment="Center"/>
+                        <Button x:Name="buttonReadInputRegister04" Content="Read" Width="55" Height="25" Margin="10,0,0,7" Click="buttonReadInputRegister04_Click" FontSize="12" VerticalAlignment="Bottom"/>
+                        <Button x:Name="buttonLoopInputRegister04" Content="Loop" Width="55" Height="25" Margin="10,0,0,0" FontSize="12" Click="buttonLoopInputRegister04_Click"/>
+                    </StackPanel>
+                    <Label x:Name="labelInputRegisters_6" Content="Read Input Register Range:" Height="26" Margin="0,121,147,0" VerticalAlignment="Top" FontSize="12" HorizontalAlignment="Right" Width="263"/>
+                    <StackPanel x:Name="StackPanelInputRegisters1" Margin="0,148,10,0" Background="AliceBlue" Height="40" Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Right" Width="400">
+                        <Label x:Name="labelInputRegisters_7" Content="Start:" Height="30" FontSize="12"/>
+                        <ComboBox x:Name="comboBoxInputRegisterRange_A" Width="55" Height="25" FontSize="12" SelectionChanged="comboBoxInputRegisterRange_A_SelectionChanged">
+                            <ComboBoxItem Content="DEC"/>
+                            <ComboBoxItem Content="HEX"/>
+                        </ComboBox>
+                        <TextBox x:Name="textBoxInputRegisterRange_A" TextWrapping="Wrap" Width="50"  Height="25" Margin="10,0,0,0" FontSize="12" TextChanged="textBoxInputRegisterRange_A_TextChanged" VerticalContentAlignment="Center"/>
+                        <Label x:Name="labelInputRegisters_8" Content="Stop:" Height="30" FontSize="12"/>
+                        <TextBox x:Name="textBoxInputRegisterRange_B" TextWrapping="Wrap" Width="50"  Height="25" Margin="0,0,0,0" FontSize="12" TextChanged="textBoxInputRegisterRange_B_TextChanged" VerticalContentAlignment="Center"/>
+                        <Button x:Name="buttonReadInputRegisterRange" Content="Read" Width="55" Height="25" Margin="10,0,0,0" Click="buttonReadInputRegisterRange_Click" FontSize="12" RenderTransformOrigin="0.5,0.5"/>
+                        <Button x:Name="buttonLoopInputRegisterRange" Content="Loop" Width="55" Height="25" Margin="10,0,0,0" FontSize="12" RenderTransformOrigin="0.501,0.5" Click="buttonLoopInputRegisterRange_Click"/>
+                    </StackPanel>
+                    <StackPanel x:Name="stackGoToInputRegister" Margin="0,430,10,0" Background="AliceBlue" Height="40" Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Right" Width="324" Visibility="Hidden">
+                        <Label x:Name="labelGoToInputRegister" Content="Go to Input Register address:" Height="30"/>
+                        <TextBox x:Name="textBoxGoToInputRegisterAddress" TextWrapping="Wrap" Width="55"  Height="25" Margin="10,0,0,0"/>
+                        <Button x:Name="buttonGoToInputRegisterAddress" Content="Vai" Width="55" Height="25" Margin="10,0,0,0" Click="buttonGoToInputRegisterAddress_Click"/>
+                    </StackPanel>
+                    <Button x:Name="buttonClearInputReg" Height="25" Margin="0,0,338,10" FontSize="12" HorizontalAlignment="Right" Width="72" VerticalAlignment="Bottom" Click="buttonClearInputReg_Click">
+                        <StackPanel Orientation="Horizontal">
+                            <Viewbox Width="16" Height="16" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+                                <Rectangle Width="16" Height="16">
+                                    <Rectangle.Fill>
+                                        <DrawingBrush>
+                                            <DrawingBrush.Drawing>
+                                                <DrawingGroup>
+                                                    <DrawingGroup.Children>
+                                                        <GeometryDrawing Brush="#00FFFFFF" Geometry="F1M16,16L0,16 0,0 16,0z" />
+                                                        <GeometryDrawing Brush="#FFF6F6F6" Geometry="F1M5.1104,7.0122L9.0634,10.9662 8.4684,11.7832 4.2934,7.6072z M9.1094,16.0002L12.4094,11.4682 12.4634,11.5212 13.1614,10.6452C14.5844,8.8592,14.7054,6.4432,13.6314,4.5282L15.5614,2.5982C15.8534,2.3062,16.0004,1.9232,16.0004,1.5392L16.0004,1.5362C16.0004,1.1532 15.8534,0.7692 15.5614,0.4772 15.3644,0.2802 15.1204,0.1492 14.8554,0.0852000000000004L14.1464,0.0852000000000004C13.8814,0.1492,13.6374,0.2802,13.4404,0.4772L11.5094,2.4072C10.6934,1.9482 9.7814,1.6802 8.8204,1.6802 7.5784,1.6802 6.3614,2.1052 5.3924,2.8762L4.5164,3.5742 4.6094,3.6672 0.000399999999999956,7.0212 0.000399999999999956,7.5582 8.4414,16.0002z" />
+                                                        <GeometryDrawing Brush="#FF424242" Geometry="F1M14.8545,1.8911L12.3465,4.3991C13.6705,6.0511,13.6845,8.3841,12.3785,10.0231L6.0155,3.6591C7.6545,2.3531,9.9875,2.3681,11.6395,3.6921L14.1475,1.1841C14.3415,0.9901 14.6605,0.9901 14.8545,1.1841 15.0485,1.3781 15.0485,1.6971 14.8545,1.8911 M8.5885,13.3171L2.7585,7.4881 5.2125,5.7001 10.3755,10.8631z M1.2235,7.3681L8.7085,14.8521 11.6875,10.7601 5.3165,4.3891z" />
+                                                        <GeometryDrawing Brush="#FFF0EFF1" Geometry="F1M10.375,10.8633L8.589,13.3173 2.759,7.4883 5.213,5.7003z" />
+                                                    </DrawingGroup.Children>
+                                                </DrawingGroup>
+                                            </DrawingBrush.Drawing>
+                                        </DrawingBrush>
+                                    </Rectangle.Fill>
+                                </Rectangle>
+                            </Viewbox>
+                            <TextBlock x:Name="textBlockClearInputReg" Text="Clear" Margin="3,0,0,0"/>
+                        </StackPanel>
+                    </Button>
+                    <Button x:Name="buttonExportInputReg" Height="25" Margin="0,0,261,10" FontSize="12" HorizontalAlignment="Right" Width="72" VerticalAlignment="Bottom" Click="buttonExportInputReg_Click">
+                        <StackPanel Orientation="Horizontal">
+                            <Viewbox Width="16" Height="16" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+                                <Rectangle Width="16" Height="16">
+                                    <Rectangle.Fill>
+                                        <DrawingBrush>
+                                            <DrawingBrush.Drawing>
+                                                <DrawingGroup>
+                                                    <DrawingGroup.Children>
+                                                        <GeometryDrawing Brush="#00FFFFFF" Geometry="F1M16,16L0,16 0,0 16,0z" />
+                                                        <GeometryDrawing Brush="#FFF6F6F6" Geometry="F1M5,7L5.223,7C5.083,7.355,5,7.739,5,8.143z M3.006,5.578C3.002,5.553 3,5.526 3,5.5 3,5.224 3.224,5 3.5,5L3.587,5z M13.571,5L8.424,5 9.914,3.519 6.416,0 1.596,0 3.584,2 3.5,2C1.57,2 0,3.57 0,5.5 0,7.43 1.57,9 3.5,9L5,9 5,12 4,12 4,13C4,13.52 4.143,14.039 4.413,14.503 4.95,15.427 5.941,16 7,16L11.215,16C12.751,16,14,14.75,14,13.214L14,10 16,10 16,7.429C16,6.09,14.91,5,13.571,5" />
+                                                        <GeometryDrawing Brush="#FF414141" Geometry="F1M12,13.2139C12,13.6479,11.647,13.9999,11.215,13.9999L11,13.9999C10.447,13.9999,10,13.5529,10,12.9999L7,12.9999 7,8.1429C7,7.5129,7.513,6.9999,8.143,6.9999L12,6.9999z M13.571,5.9999L8.143,5.9999C6.959,5.9999,6,6.9589,6,8.1429L6,12.9999 5,12.9999C5,13.3659 5.105,13.7049 5.277,13.9999 5.624,14.5959 6.262,14.9999 7,14.9999L11.215,14.9999C12.201,14.9999,13,14.1999,13,13.2139L13,8.9999 15,8.9999 15,7.4289C15,6.6399,14.36,5.9999,13.571,5.9999" />
+                                                        <GeometryDrawing Brush="#FF00529C" Geometry="F1M4,6L6.013,4 3.5,4C2.673,4 2,4.672 2,5.5 2,6.326 2.673,7 3.5,7L4,7 4,8 3.5,8C2.119,8 1,6.881 1,5.5 1,4.119 2.119,3 3.5,3L5.988,3 4,1 6,1 8.5,3.515 6,6z" />
+                                                        <GeometryDrawing Brush="#FFF0EFF1" Geometry="F1M7,8.1426L7,12.9996 10,12.9996C10,13.5526,10.447,13.9996,11,13.9996L11.215,13.9996C11.647,13.9996,12,13.6476,12,13.2136L12,6.9996 8.143,6.9996C7.513,6.9996,7,7.5126,7,8.1426" />
+                                                    </DrawingGroup.Children>
+                                                </DrawingGroup>
+                                            </DrawingBrush.Drawing>
+                                        </DrawingBrush>
+                                    </Rectangle.Fill>
+                                </Rectangle>
+                            </Viewbox>
+                            <TextBlock x:Name="textBlockExportInputReg" Text="Export" Margin="3,0,0,0"/>
+                        </StackPanel>
+                    </Button>
+                    <Button x:Name="buttonReadInputRegisterTemplate" Content="Read all" Height="25" Margin="0,10,10,0" FontSize="12" RenderTransformOrigin="0.5,0.5" Click="buttonReadInputRegisterTemplate_Click" HorizontalAlignment="Right" Width="80" VerticalAlignment="Top"/>
+                    <Button x:Name="buttonReadInputRegisterTemplateGroup" Content="Read group" Height="25" Margin="0,10,95,0" FontSize="12" RenderTransformOrigin="0.5,0.5" VerticalAlignment="Top" Click="buttonReadInputRegisterTemplateGroup_Click" Width="80" HorizontalAlignment="Right"/>
+                    <ComboBox x:Name="comboBoxInputRegisterGroup" Margin="0,10,180,0" VerticalAlignment="Top" SelectionChanged="comboBoxInputRegisterGroup_SelectionChanged" DisplayMemberPath="Value" Height="25" HorizontalAlignment="Right" Width="205"/>
+                    <DataGrid x:Name="dataGridViewInputRegister" Margin="10,50,415,10" AutoGenerateColumns="False"  HorizontalGridLinesBrush="LightGray" VerticalGridLinesBrush="LightGray" BorderThickness="1" FontSize="14"  RowBackground="White">
+                        <DataGrid.RowStyle>
+                            <Style TargetType="DataGridRow">
+                                <Setter Property="ToolTip">
+                                    <Setter.Value>
+                                        <TextBlock Text="{Binding Mappings}" />
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </DataGrid.RowStyle>
+                        <DataGrid.Columns>
+                            <DataGridTextColumn x:Name="dataGridTabInputRegistersRegisters" Header="Register" Binding="{Binding Register}" Width="80" Visibility="Collapsed">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="Foreground" Value="{Binding Foreground}"/>
+                                        <Setter Property="Background" Value="{Binding Background}"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn x:Name="dataGridTabInputRegistersValues" Header="Value" Binding="{Binding Value}" Width="80" Visibility="Collapsed">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="Foreground" Value="{Binding Foreground}"/>
+                                        <Setter Property="Background" Value="{Binding Background}"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn x:Name="dataGridTabInputRegistersBinaryValues" Header="Binary value" Binding="{Binding ValueBin}" Width="170" Visibility="Collapsed">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="Foreground" Value="{Binding Foreground}"/>
+                                        <Setter Property="Background" Value="{Binding Background}"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn x:Name="dataGridTabInputRegistersConvertedValues" Header="Converted value" Binding="{Binding ValueConverted}" Width="130" Visibility="Collapsed"/>
+                            <DataGridTextColumn x:Name="dataGridTabInputRegistersNotes" Header="Notes" Binding="{Binding Notes}" Width="600" Visibility="Collapsed"/>
+                            <DataGridTextColumn x:Name="dataGridTabInputRegistersMappings" Header="Mappings" Binding="{Binding Mappings}" Width="600" Visibility="Collapsed"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Diagnostic FC08" FontSize="12">
                 <Grid x:Name="GridDiagnostic" Background="#FFE5E5E5">
                     <Label x:Name="labelDiagnostic_0" Content="Diagnostic functions (FC08):" HorizontalAlignment="Left" Margin="28,34,0,0" VerticalAlignment="Top" FontWeight="Bold" FontSize="15"/>
                     <Label x:Name="labelDiagnostic_1" Content="Default SubFunction:" HorizontalAlignment="Left" Margin="28,69,0,0" VerticalAlignment="Top" FontSize="13"/>
@@ -1066,5 +1067,27 @@
                 </Grid>
             </TabItem>
         </TabControl>
+        <Button x:Name="ButtonFullSize" HorizontalAlignment="Right" Margin="0,4,18,0" Grid.Row="2" Height="25" VerticalAlignment="Top" Width="25" Click="ButtonFullSize_Click">
+            <StackPanel Orientation="Horizontal">
+                <Viewbox Width="16" Height="16" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+                    <Rectangle Width="16" Height="16">
+                        <Rectangle.Fill>
+                            <DrawingBrush>
+                                <DrawingBrush.Drawing>
+                                    <DrawingGroup>
+                                        <DrawingGroup.Children>
+                                            <GeometryDrawing Brush="#00FFFFFF" Geometry="F1M16,16L0,16 0,0 16,0z" />
+                                            <GeometryDrawing Brush="#FFF6F6F6" Geometry="F1M1,15L16,15 16,0 1,0z" />
+                                            <GeometryDrawing Brush="#FF424242" Geometry="F1M14,7L9,7 9,2 14,2z M14,13L9,13 9,8 14,8z M8,13L3,13 3,2 8,2z M2,14L15,14 15,1 2,1z" />
+                                            <GeometryDrawing Brush="#FFF0EFF1" Geometry="F1M3,13L8,13 8,2 3,2z M9,7L14,7 14,2 9,2z M9,8L14,8 14,13 9,13z" />
+                                        </DrawingGroup.Children>
+                                    </DrawingGroup>
+                                </DrawingBrush.Drawing>
+                            </DrawingBrush>
+                        </Rectangle.Fill>
+                    </Rectangle>
+                </Viewbox>
+            </StackPanel>
+        </Button>
     </Grid>
 </Window>

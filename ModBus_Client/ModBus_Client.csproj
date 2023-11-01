@@ -208,68 +208,68 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <None Include="Json\Generico\ComandiBit.json">
+    <None Include="Json\Default\ComandiBit.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Json\Generico\ComandiByte.json">
+    <None Include="Json\Default\ComandiByte.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Json\Generico\ComandiWord.json">
+    <None Include="Json\Default\ComandiWord.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Json\Generico\CONFIGURAZIONE.json" />
-    <None Include="Json\Generico\Config.json">
+    <None Include="Json\Default\CONFIGURAZIONE.json" />
+    <None Include="Json\Default\Config.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Json\Generico\Label_ComandiBit_15.json">
+    <None Include="Json\Default\Label_ComandiBit_15.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Json\Generico\Label_ComandiBit_14.json">
+    <None Include="Json\Default\Label_ComandiBit_14.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Json\Generico\Label_ComandiBit_13.json">
+    <None Include="Json\Default\Label_ComandiBit_13.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Json\Generico\Label_ComandiBit_12.json">
+    <None Include="Json\Default\Label_ComandiBit_12.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Json\Generico\Label_ComandiBit_11.json">
+    <None Include="Json\Default\Label_ComandiBit_11.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Json\Generico\Label_ComandiBit_10.json">
+    <None Include="Json\Default\Label_ComandiBit_10.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Json\Generico\Label_ComandiBit_9.json">
+    <None Include="Json\Default\Label_ComandiBit_9.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Json\Generico\Label_ComandiBit_8.json">
+    <None Include="Json\Default\Label_ComandiBit_8.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Json\Generico\Label_ComandiBit_0.json">
+    <None Include="Json\Default\Label_ComandiBit_0.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Json\Generico\Label_ComandiBit_1.json">
+    <None Include="Json\Default\Label_ComandiBit_1.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Json\Generico\Label_ComandiBit_2.json">
+    <None Include="Json\Default\Label_ComandiBit_2.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Json\Generico\Label_ComandiBit_3.json">
+    <None Include="Json\Default\Label_ComandiBit_3.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Json\Generico\Label_ComandiBit_4.json">
+    <None Include="Json\Default\Label_ComandiBit_4.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Json\Generico\Label_ComandiBit_5.json">
+    <None Include="Json\Default\Label_ComandiBit_5.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Json\Generico\Label_ComandiBit_6.json">
+    <None Include="Json\Default\Label_ComandiBit_6.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Json\Generico\Label_ComandiBit_7.json">
+    <None Include="Json\Default\Label_ComandiBit_7.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Json\Generico\Template.json">
+    <None Include="Json\Default\Template.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Lang\EN.json">

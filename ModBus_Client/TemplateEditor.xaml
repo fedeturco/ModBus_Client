@@ -16,11 +16,11 @@
                 </MenuItem>
             </Menu>
         </DockPanel>-->
-        <Button x:Name="ButtonImportJson" Content="Import Json" Margin="0,7,122,0" Width="75" HorizontalAlignment="Right" Height="25" VerticalAlignment="Top" Click="importProfileModbusSimulatorMenuItem_Click"/>
-        <Button x:Name="ButtonExportJson" Content="Export Json" Margin="0,7,42,0" Width="75" HorizontalAlignment="Right" Height="25" VerticalAlignment="Top" Click="exportProfileModbusSimulatorMenuItem_Click"/>
-        <Label x:Name="LabelImportExport" Content="Import/Export profile:" Margin="0,6,202,0" Height="28" VerticalAlignment="Top" HorizontalAlignment="Right" Width="125"/>
-        <TabControl x:Name="tabControlTemplate" Margin="10,18,10,10">
-            <TabItem Header="Coils">
+        <Button x:Name="ButtonImportJson" Content="Import Json" Margin="0,5,104,0" Width="75" HorizontalAlignment="Right" Height="25" VerticalAlignment="Top" Click="importProfileModbusSimulatorMenuItem_Click"/>
+        <Button x:Name="ButtonExportJson" Content="Export Json" Margin="0,5,24,0" Width="75" HorizontalAlignment="Right" Height="25" VerticalAlignment="Top" Click="exportProfileModbusSimulatorMenuItem_Click"/>
+        <Label x:Name="LabelImportExport" Content="Profile:" Margin="0,4,184,0" Height="28" VerticalAlignment="Top" HorizontalAlignment="Right" Width="50"/>
+        <TabControl x:Name="tabControlTemplate" Margin="10,13,10,10">
+            <TabItem Header="Coils FC01" Height="26">
                 <Grid x:Name="GridCoils" Background="#FFE5E5E5">
                     <ComboBox x:Name="comboBoxCoilsRegistri" HorizontalAlignment="Left" Margin="74,10,0,0" VerticalAlignment="Top" Width="55" FontSize="12" Height="25">
                         <ComboBoxItem Content="DEC"/>
@@ -44,7 +44,7 @@
                     <Button x:Name="ButtonImportCsvCoils" Content="Import csv" HorizontalAlignment="Right" Margin="0,10,90.429,0" VerticalAlignment="Top" Width="75" Height="25" Click="ButtonImportCsvCoils_Click"/>
                 </Grid>
             </TabItem>
-            <TabItem Header="Input">
+            <TabItem Header="Input FC02" Height="26">
                 <Grid x:Name="GridInputs" Background="#FFE5E5E5">
                     <ComboBox x:Name="comboBoxInputRegistri" HorizontalAlignment="Left" Margin="74,10,0,0" VerticalAlignment="Top" Width="55" FontSize="12" Height="25">
                         <ComboBoxItem Content="DEC"/>
@@ -68,32 +68,7 @@
                     <Button x:Name="ButtonImportCsvInputs" Content="Import csv" HorizontalAlignment="Right" Margin="0,10,90.429,0" VerticalAlignment="Top" Width="75" Height="25" Click="ButtonImportCsvInputs_Click"/>
                 </Grid>
             </TabItem>
-            <TabItem Header="Input Registers">
-                <Grid x:Name="GridInputRegister" Background="#FFE5E5E5">
-                    <ComboBox x:Name="comboBoxInputRegRegistri" HorizontalAlignment="Left" Margin="74,10,0,0" VerticalAlignment="Top" Width="55" FontSize="12" Height="25">
-                        <ComboBoxItem Content="DEC"/>
-                        <ComboBoxItem Content="HEX"/>
-                    </ComboBox>
-                    <Label x:Name="LabelRegInputReg" Content="Register:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontSize="12" Height="26" Width="59"/>
-                    <Label x:Name="LabelOffInputReg" Content="Offset:" HorizontalAlignment="Left" Margin="140,10,0,0" VerticalAlignment="Top" FontSize="12" Height="26" Width="45"/>
-                    <ComboBox x:Name="comboBoxInputRegOffset" HorizontalAlignment="Left" Margin="195,10,0,0" VerticalAlignment="Top" Width="55" FontSize="12" Height="25">
-                        <ComboBoxItem Content="DEC"/>
-                        <ComboBoxItem Content="HEX"/>
-                    </ComboBox>
-                    <TextBox x:Name="textBoxInputRegOffset" HorizontalAlignment="Left" Height="25" Margin="255,10,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="65" FontSize="12" VerticalContentAlignment="Center"/>
-                    <DataGrid x:Name="dataGridViewInputRegister" Margin="10,50,10.429,9.714" AutoGenerateColumns="False" HorizontalGridLinesBrush="LightGray" VerticalGridLinesBrush="LightGray" BorderThickness="1" FontSize="14">
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Header="Register" Binding="{Binding Register}" Width="100"/>
-                            <DataGridTextColumn Header="Notes" Binding="{Binding Notes}" Width="600"/>
-                            <DataGridTextColumn Header="Datatypes/Mapppings" Binding="{Binding Mappings}" Width="600"/>
-                            <DataGridTextColumn Header="Group" Binding="{Binding Group}" Width="120"/>
-                        </DataGrid.Columns>
-                    </DataGrid>
-                    <Button x:Name="ButtonExportCsvInputRegisters" Content="Export csv" Margin="0,10,10.429,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="75" Height="25" Click="ButtonExportCsvInputRegisters_Click"/>
-                    <Button x:Name="ButtonImportCsvInputRegisters" Content="Import csv" HorizontalAlignment="Right" Margin="0,10,90.429,0" VerticalAlignment="Top" Width="75" Height="25" RenderTransformOrigin="0.502,0.5" Click="ButtonImportCsvInputRegisters_Click"/>
-                </Grid>
-            </TabItem>
-            <TabItem Header="Holding Registers">
+            <TabItem Header="Holding Registers FC03" Height="26">
                 <Grid x:Name="GridHoldingRegister" Background="#FFE5E5E5">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
@@ -121,7 +96,32 @@
                     <Button x:Name="ButtonImportCsvHoldingRegisters" Content="Import csv" HorizontalAlignment="Right" Margin="0,10,90.429,0" VerticalAlignment="Top" Width="75" Height="25" Click="ButtonImportCsvHoldingRegisters_Click"/>
                 </Grid>
             </TabItem>
-            <TabItem Header="Notes">
+            <TabItem Header="Input Registers FC04" Height="26">
+                <Grid x:Name="GridInputRegister" Background="#FFE5E5E5">
+                    <ComboBox x:Name="comboBoxInputRegRegistri" HorizontalAlignment="Left" Margin="74,10,0,0" VerticalAlignment="Top" Width="55" FontSize="12" Height="25">
+                        <ComboBoxItem Content="DEC"/>
+                        <ComboBoxItem Content="HEX"/>
+                    </ComboBox>
+                    <Label x:Name="LabelRegInputReg" Content="Register:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontSize="12" Height="26" Width="59"/>
+                    <Label x:Name="LabelOffInputReg" Content="Offset:" HorizontalAlignment="Left" Margin="140,10,0,0" VerticalAlignment="Top" FontSize="12" Height="26" Width="45"/>
+                    <ComboBox x:Name="comboBoxInputRegOffset" HorizontalAlignment="Left" Margin="195,10,0,0" VerticalAlignment="Top" Width="55" FontSize="12" Height="25">
+                        <ComboBoxItem Content="DEC"/>
+                        <ComboBoxItem Content="HEX"/>
+                    </ComboBox>
+                    <TextBox x:Name="textBoxInputRegOffset" HorizontalAlignment="Left" Height="25" Margin="255,10,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="65" FontSize="12" VerticalContentAlignment="Center"/>
+                    <DataGrid x:Name="dataGridViewInputRegister" Margin="10,50,10.429,9.714" AutoGenerateColumns="False" HorizontalGridLinesBrush="LightGray" VerticalGridLinesBrush="LightGray" BorderThickness="1" FontSize="14">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Register" Binding="{Binding Register}" Width="100"/>
+                            <DataGridTextColumn Header="Notes" Binding="{Binding Notes}" Width="600"/>
+                            <DataGridTextColumn Header="Datatypes/Mapppings" Binding="{Binding Mappings}" Width="600"/>
+                            <DataGridTextColumn Header="Group" Binding="{Binding Group}" Width="120"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <Button x:Name="ButtonExportCsvInputRegisters" Content="Export csv" Margin="0,10,10.429,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="75" Height="25" Click="ButtonExportCsvInputRegisters_Click"/>
+                    <Button x:Name="ButtonImportCsvInputRegisters" Content="Import csv" HorizontalAlignment="Right" Margin="0,10,90.429,0" VerticalAlignment="Top" Width="75" Height="25" RenderTransformOrigin="0.502,0.5" Click="ButtonImportCsvInputRegisters_Click"/>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Notes" Height="26">
                 <Grid x:Name="GridNotes" Background="#FFE5E5E5">
                     <Label x:Name="LabelNotesLabel" Content="Label:" HorizontalAlignment="Left" Margin="10,12,0,0" VerticalAlignment="Top"/>
                     <TextBox x:Name="TextBoxTemplateLabel" HorizontalAlignment="Left" Height="23" Margin="66,14,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="408"/>
@@ -138,7 +138,7 @@
                     <Button x:Name="ButtonImportCsvGroups" Content="Import csv" HorizontalAlignment="Right" Margin="0,182,90,0" VerticalAlignment="Top" Width="75" Height="25" Click="ButtonImportCsvGroups_Click"/>
                 </Grid>
             </TabItem>
-            <TabItem Header="Info Mappings" HorizontalAlignment="Left" Height="20" VerticalAlignment="Top">
+            <TabItem Header="Info Mappings" HorizontalAlignment="Left" Height="26" VerticalAlignment="Top">
                 <Grid x:Name="GridInfoMappings" Background="#FFE5E5E5">
                     <RichTextBox x:Name="RichTextBoxInfo" Margin="10,10,10,10" VerticalScrollBarVisibility="Auto" Background="#303030" Foreground="White" FontFamily="Consolas" FontSize="14" IsReadOnly="True" Block.LineHeight="1">
                         <FlowDocument/>

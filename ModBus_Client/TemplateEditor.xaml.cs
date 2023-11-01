@@ -362,6 +362,34 @@ namespace ModBus_Client
 
         private void Window_KeyDown(object sender, KeyEventArgs e)
         {
+            if(Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl))
+            {
+                if(e.Key == Key.D1)
+                {
+                    tabControlTemplate.SelectedIndex = 0;
+                }
+                if(e.Key == Key.D2)
+                {
+                    tabControlTemplate.SelectedIndex = 1;
+                }
+                if(e.Key == Key.D3)
+                {
+                    tabControlTemplate.SelectedIndex = 2;
+                }
+                if(e.Key == Key.D4)
+                {
+                    tabControlTemplate.SelectedIndex = 3;
+                }
+                if(e.Key == Key.D5)
+                {
+                    tabControlTemplate.SelectedIndex = 4;
+                }
+                if(e.Key == Key.D6)
+                {
+                    tabControlTemplate.SelectedIndex = 5;
+                }
+            }
+
             if(e.Key == Key.Escape)
             {
                 this.Close();

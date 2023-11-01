@@ -7,12 +7,12 @@
     "labelRx": "Rx",
     "labelSerialRtu": "RTU",
     "labelTcp": "TCP",
-    "labelPort": "Port:",
+    "labelPortRtu": "Port:",
     "labelBaudRate": "Baud rate:",
     "labelParity": "Parity:",
     "labelStopBits": "Stop bits:",
     "labelIp": "Ip:",
-    "labelPort1": "Port:",
+    "labelPortTcp": "Port:",
     "labelCoils_0": "Registers:",
     "labelCoils_1": "Offset:",
     "labelCoils_2": "Read Coil Status (FC01):",
@@ -210,6 +210,9 @@
     },
     "ButtonDeleteProfile": {
       "label": "Delete"
+    },
+    "ButtonFullSize": {
+      "toolTip": "Switch to Fullscreen table (Ctrl+F)"
     }
   },
   "textBlocks": {
@@ -226,11 +229,11 @@
   },
   "tabItems": {
     "tabItem0": "Connection",
-    "tabItem1": "Coils (1bit)",
-    "tabItem2": "Inputs (1 bit)",
-    "tabItem3": "Input registers (1 word)",
-    "tabItem4": "Holding registers (1 word)",
-    "tabItem5": "Diagnostic (FC08)",
+    "tabItem1": "Coils FC01",
+    "tabItem2": "Inputs FC02",
+    "tabItem3": "Input registers FC04",
+    "tabItem4": "Holding registers FC03",
+    "tabItem5": "Diagnostic FC08",
     "tabItem6": "Log",
     "tabItem7": "Settings"
   },
@@ -339,6 +342,7 @@
     "labelMultipleRegisters": "Nr. of registers",
     "overwriteProfile": "Current profile already exists, overwrite?",
     "deleteProfile": "Delete selected profile?",
-    "importProfileWarning": "Importing the profile will erase the actual template (including custom mappings). Do you want to proceed?"
+    "importProfileWarning": "Importing the profile will erase the actual template (including custom mappings). Do you want to proceed?",
+    "selectedProfile": "Selected profile:"
   }
 }

@@ -96,7 +96,7 @@ namespace ModBus_Client
         public String version = "beta";    // Eventuale etichetta, major.minor lo recupera dall'assembly
         public String title = "ModBus Client";
 
-        String defaultPathToConfiguration = "Generico";
+        String defaultPathToConfiguration = "Default";
         public String pathToConfiguration;
         public String localPath = "";
 
@@ -201,6 +201,7 @@ namespace ModBus_Client
         public bool correctModbusAddressAuto = false;
         public bool colorMode = false;
         public bool darkMode = false;
+        public bool disableDeleteKey = false;
 
         public String textBoxModbusAddress_ = "";
         public String comboBoxCoilsRegistri_ = "";
@@ -512,12 +513,25 @@ namespace ModBus_Client
             {
                 var tmp = new MenuItem();
 
-                tmp.Header = System.IO.Path.GetFileNameWithoutExtension(lang);
-                tmp.IsCheckable = true;
-                tmp.Click += MenuItemLanguage_Click;
+                if (lang.IndexOf("Mappings") == -1)
+                {
+                    tmp.Header = System.IO.Path.GetFileNameWithoutExtension(lang);
+                    tmp.IsCheckable = true;
+                    tmp.Click += MenuItemLanguage_Click;
 
-                languageToolStripMenu.Items.Add(tmp);
+                    languageToolStripMenu.Items.Add(tmp);
+                }
             }
+
+            comboBoxProfileHome.Items.Clear();
+
+            foreach (String sub in Directory.GetDirectories(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "\\Json\\"))
+            {
+                comboBoxProfileHome.Items.Add(sub.Split('\\')[sub.Split('\\').Length - 1]);
+            }
+
+            comboBoxProfileHome.SelectedItem = pathToConfiguration;
+            comboBoxProfileHome.SelectionChanged += comboBoxProfileHome_SelectionChanged;
 
             // Se esiste una nuova versione del file di configurazione uso l'ultima, altrimenti carico il modello precedente
             if (File.Exists(localPath + "\\Json\\" + pathToConfiguration + "\\Config.json"))
@@ -551,7 +565,7 @@ namespace ModBus_Client
 
             // Command line parameters
             string[] argv = Environment.GetCommandLineArgs();
-            for(int i = 0; i < argv.Length; i++)
+            for (int i = 0; i < argv.Length; i++)
             {
                 // -h
                 // --help
@@ -614,7 +628,7 @@ namespace ModBus_Client
 
                     if ((i + 1) < argv.Length)
                     {
-                        for(int ii = 0; ii < comboBoxSerialPort.Items.Count; ii++)
+                        for (int ii = 0; ii < comboBoxSerialPort.Items.Count; ii++)
                         {
                             if (comboBoxSerialPort.Items[ii].ToString().IndexOf(argv[i + 1]) != -1)
                                 comboBoxSerialPort.SelectedIndex = ii;
@@ -649,8 +663,8 @@ namespace ModBus_Client
 
                 if (argv[i].IndexOf("--tab") != -1)
                 {
-                    if((i + 1) < argv.Length)
-                    { 
+                    if ((i + 1) < argv.Length)
+                    {
                         tabControlMain.SelectedIndex = int.Parse(argv[i + 1]);
                     }
                     else
@@ -721,7 +735,7 @@ namespace ModBus_Client
                 salvaConfigurazioneNelDatabaseToolStripMenuItem.IsEnabled = false;
                 caricaConfigurazioneDalDatabaseToolStripMenuItem.IsEnabled = false;
                 gestisciDatabaseToolStripMenuItem.IsEnabled = false;
-                 
+
 
                 try
                 {
@@ -801,7 +815,7 @@ namespace ModBus_Client
                     comboBoxSerialStop.IsEnabled = false;
                     languageToolStripMenu.IsEnabled = false;
                 }
-                catch(Exception err)
+                catch (Exception err)
                 {
                     pictureBoxSerial.Background = Brushes.LightGray;
                     pictureBoxRunningAs.Background = Brushes.LightGray;
@@ -876,11 +890,11 @@ namespace ModBus_Client
                 //comboBoxSerialPort.Items.Add("Seleziona porta seriale ...");
                 comboBoxSerialPort.Items.Clear();
 
-                foreach(String port in SerialPortList)
+                foreach (String port in SerialPortList)
                 {
                     comboBoxSerialPort.Items.Add(port);
                 }
-                
+
                 comboBoxSerialPort.SelectedIndex = 0;
             }
             catch
@@ -1408,8 +1422,8 @@ namespace ModBus_Client
                             foreach (Group_Item gr in template.Groups.OrderBy(x => int.Parse(x.Group)))
                             {
                                 KeyValuePair<Group_Item, String> kp = new KeyValuePair<Group_Item, String>(gr, gr.Group + " - " + gr.Label);
-                                
-                                if(template.dataGridViewHolding.First<ModBus_Item>(x => x.Group.IndexOf(kp.Key.Group) != -1) != null)
+
+                                if (template.dataGridViewHolding.First<ModBus_Item>(x => x.Group.IndexOf(kp.Key.Group) != -1) != null)
                                     comboBoxHoldingGroup.Items.Add(kp);
 
                                 if (template.dataGridViewInputRegister.First<ModBus_Item>(x => x.Group.IndexOf(kp.Key.Group) != -1) != null)
@@ -1539,8 +1553,8 @@ namespace ModBus_Client
                 ip_address = textBoxTcpClientIpAddress.Text;
                 port = textBoxTcpClientPort.Text;
                 check = pictureBoxTcp.Background == Brushes.LightGray;
-
-                richTextBoxAppend(richTextBoxStatus, lang.languageTemplate["strings"]["connectingTo"] + " " + ip_address + ":" + port);
+                if (check)
+                    richTextBoxAppend(richTextBoxStatus, lang.languageTemplate["strings"]["connectingTo"] + " " + ip_address + ":" + port);
                 TCPMode = comboBoxTcpConnectionMode.SelectedIndex == 0 ? ModBus_Def.TYPE_TCP_SOCK : ModBus_Def.TYPE_TCP_REOPEN;
             });
 
@@ -1802,7 +1816,7 @@ namespace ModBus_Client
                 }
 
                 // Cancello la tabella e inserisco le nuove righe
-                insertRowsTable(list_coilsTable, list_template_coilsTable, P.uint_parser(textBoxCoilsOffset_, comboBoxCoilsOffset_),  address_start, response, colorDefaultReadCellStr, comboBoxCoilsRegistri_, "DEC", true);
+                insertRowsTable(list_coilsTable, list_template_coilsTable, P.uint_parser(textBoxCoilsOffset_, comboBoxCoilsOffset_), address_start, response, colorDefaultReadCellStr, comboBoxCoilsRegistri_, "DEC", true);
 
                 this.Dispatcher.Invoke((Action)delegate
                 {
@@ -1887,7 +1901,7 @@ namespace ModBus_Client
 
             this.Dispatcher.Invoke((Action)delegate
             {
-                if(clear)
+                if (clear)
                     list_.Clear();
 
                 list_.Add(tmp);
@@ -1923,7 +1937,7 @@ namespace ModBus_Client
 
             this.Dispatcher.Invoke((Action)delegate
             {
-                if(clear)
+                if (clear)
                     list_.Clear();
 
                 list_.Add(tmp);
@@ -1938,13 +1952,13 @@ namespace ModBus_Client
 
             tmp.Register = "ErrCode:";
             tmp.Value = err.ToString().Split('-')[0].Split(':')[2];
-            tmp.ValueBin = err.ToString().Split('-')[1].Split('\n')[0].Replace("\r","");
+            tmp.ValueBin = err.ToString().Split('-')[1].Split('\n')[0].Replace("\r", "");
             tmp.Foreground = ForeGroundLightStr;
             tmp.Background = Brushes.OrangeRed.ToString();
 
             this.Dispatcher.Invoke((Action)delegate
             {
-                if(clear)
+                if (clear)
                     list_.Clear();
 
                 list_.Add(tmp);
@@ -2058,7 +2072,7 @@ namespace ModBus_Client
                     dataGridViewCoils.ItemsSource = list_coilsTable;
                 });
             }
-            catch(Exception err)
+            catch (Exception err)
             {
                 SetTableInternalError(list_coilsTable, true);
 
@@ -2073,7 +2087,7 @@ namespace ModBus_Client
                 });
             }
         }
-        
+
         private void buttonWriteCoils05_B_Click(object sender, RoutedEventArgs e)
         {
             buttonWriteCoils05_B.IsEnabled = false;
@@ -2556,7 +2570,7 @@ namespace ModBus_Client
                 });
             }
         }
-        
+
         // Go to digital input
         private void buttonGoToInputAddress_Click(object sender, RoutedEventArgs e)
         {
@@ -2888,14 +2902,14 @@ namespace ModBus_Client
                         {
                             // Cancello la tabella e inserisco le nuove righe
                             insertRowsTable(
-                                list_holdingRegistersTable, 
+                                list_holdingRegistersTable,
                                 list_template_holdingRegistersTable,
                                 P.uint_parser(textBoxHoldingOffset_, comboBoxHoldingOffset_),
                                 address_start,
-                                response, 
-                                colorDefaultReadCellStr, 
-                                comboBoxHoldingRegistri_, 
-                                comboBoxHoldingValori_, 
+                                response,
+                                colorDefaultReadCellStr,
+                                comboBoxHoldingRegistri_,
+                                comboBoxHoldingValori_,
                                 true);
                         }
                     }
@@ -2909,7 +2923,7 @@ namespace ModBus_Client
                     dataGridViewHolding.ItemsSource = list_holdingRegistersTable;
                 });
             }
-            catch(InvalidOperationException err)
+            catch (InvalidOperationException err)
             {
                 if (err.Message.IndexOf("non-connected socket") != -1)
                 {
@@ -3489,7 +3503,7 @@ namespace ModBus_Client
                 MessageBox.Show("Valore scelto non valido", "Alert");
             }
         }
-        
+
         private void buttonSendManualDiagnosticQuery_Click(object sender, RoutedEventArgs e)
         {
             // Elimino eventuali spazi in fondo
@@ -3703,7 +3717,7 @@ namespace ModBus_Client
                         // enum (type 10)
                         else if (test.IndexOf("E") == 0)
                         {
-                            if(UInt16.Parse(test.Substring(1)) == values_[3])
+                            if (UInt16.Parse(test.Substring(1)) == values_[3])
                             {
                                 convertedValue = String.Format("(enum): {1}", match.Split(':')[0], match.Split(':')[1]);
                                 type = 10;
@@ -4225,6 +4239,7 @@ namespace ModBus_Client
         private void richTextBoxAppend(RichTextBox richTextBox, String append)
         {
             richTextBox.AppendText(DateTime.Now.ToString("HH:mm:ss") + " " + append + "\n");
+            richTextBox.ScrollToEnd();
         }
 
         private void buttonClearSerialStatus_Click(object sender, RoutedEventArgs e)
@@ -4249,11 +4264,11 @@ namespace ModBus_Client
         {
             if (colorDialogBox.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                if(darkMode) 
+                if (darkMode)
                     colorDefaultReadCell_Dark = new SolidColorBrush(Color.FromArgb(colorDialogBox.Color.A, colorDialogBox.Color.R, colorDialogBox.Color.G, colorDialogBox.Color.B));
                 else
                     colorDefaultReadCell_Light = new SolidColorBrush(Color.FromArgb(colorDialogBox.Color.A, colorDialogBox.Color.R, colorDialogBox.Color.G, colorDialogBox.Color.B));
-                
+
                 colorDefaultReadCell = new SolidColorBrush(Color.FromArgb(colorDialogBox.Color.A, colorDialogBox.Color.R, colorDialogBox.Color.G, colorDialogBox.Color.B));
                 labelColorCellRead.Background = colorDefaultReadCell;
                 colorDefaultReadCellStr = colorDefaultReadCell.ToString();
@@ -4264,7 +4279,7 @@ namespace ModBus_Client
         {
             if (colorDialogBox.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                if(darkMode)
+                if (darkMode)
                     colorDefaultWriteCell_Dark = new SolidColorBrush(Color.FromArgb(colorDialogBox.Color.A, colorDialogBox.Color.R, colorDialogBox.Color.G, colorDialogBox.Color.B));
                 else
                     colorDefaultWriteCell_Light = new SolidColorBrush(Color.FromArgb(colorDialogBox.Color.A, colorDialogBox.Color.R, colorDialogBox.Color.G, colorDialogBox.Color.B));
@@ -4278,7 +4293,7 @@ namespace ModBus_Client
         {
             if (colorDialogBox.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                if(darkMode)
+                if (darkMode)
                     colorErrorCell_Dark = new SolidColorBrush(Color.FromArgb(colorDialogBox.Color.A, colorDialogBox.Color.R, colorDialogBox.Color.G, colorDialogBox.Color.B));
                 else
                     colorErrorCell_Light = new SolidColorBrush(Color.FromArgb(colorDialogBox.Color.A, colorDialogBox.Color.R, colorDialogBox.Color.G, colorDialogBox.Color.B));
@@ -4487,7 +4502,7 @@ namespace ModBus_Client
             richTextBoxPackets.Document.Blocks.Clear();
             richTextBoxPackets.AppendText("\n");
         }
-        
+
         private void gestisciDatabaseToolStripMenuItem_Click(object sender, RoutedEventArgs e)
         {
             DatabaseManager window = new DatabaseManager(this);
@@ -4495,6 +4510,15 @@ namespace ModBus_Client
 
             if ((bool)window.DialogResult)
             {
+                comboBoxProfileHome.Items.Clear();
+
+                foreach (String sub in Directory.GetDirectories(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "\\Json\\"))
+                {
+                    comboBoxProfileHome.Items.Add(sub.Split('\\')[sub.Split('\\').Length - 1]);
+                }
+
+                comboBoxProfileHome.SelectedValue = window.SelectedProfile;
+
                 LoadProfile(window.SelectedProfile);
             }
         }
@@ -4535,13 +4559,12 @@ namespace ModBus_Client
                 //SaveConfiguration_v1(false);
                 SaveConfiguration_v2(false);
 
-                pathToConfiguration = form_save.path;                
+                pathToConfiguration = form_save.path;
 
                 if (pathToConfiguration != defaultPathToConfiguration)
-                {
                     this.Title = title + " " + version + " - File: " + pathToConfiguration;
-                }
-
+                else
+                    this.Title = title + " " + version;
 
                 Directory.CreateDirectory(localPath + "\\Json\\" + pathToConfiguration);
 
@@ -4577,14 +4600,16 @@ namespace ModBus_Client
                 return;
             }
 
-           SaveConfiguration_v2(false);
+            SaveConfiguration_v2(false);
 
             pathToConfiguration = profile;
 
             if (pathToConfiguration != defaultPathToConfiguration)
-            {
                 this.Title = title + " " + version + " - File: " + pathToConfiguration;
-            }
+            else
+                this.Title = title + " " + version;
+
+            richTextBoxAppend(richTextBoxStatus, lang.languageTemplate["strings"]["selectedProfile"] + " " + profile);
 
             // Se esiste una nuova versione del file di configurazione uso l'ultima, altrimenti carico il modello precedente
             if (File.Exists(localPath + "\\Json\\" + pathToConfiguration + "\\Config.json"))
@@ -4635,7 +4660,7 @@ namespace ModBus_Client
             buttonLoopCoils01.Background = loopCoils01 ? Brushes.LightGreen : new SolidColorBrush(Color.FromArgb(0xFF, 0xDD, 0xDD, 0xDD));
             checkLoop();
         }
-       
+
         private void buttonLoopCoilsRange_Click(object sender, RoutedEventArgs e)
         {
             loopCoilsRange = !loopCoilsRange;
@@ -4810,7 +4835,7 @@ namespace ModBus_Client
 
         public bool checkLoopStartStop()
         {
-            if(loopCoils01 || loopCoilsRange || loopInput02 || loopInputRange || loopInputRegister04 || loopInputRegisterRange || loopHolding03 || loopHoldingRange)
+            if (loopCoils01 || loopCoilsRange || loopInput02 || loopInputRange || loopInputRegister04 || loopInputRegisterRange || loopHolding03 || loopHoldingRange)
             {
                 return true;
             }
@@ -4819,7 +4844,7 @@ namespace ModBus_Client
                 return false;
             }
         }
-    
+
         public void checkLoop()
         {
             if (checkLoopStartStop() != loopThreadRunning)
@@ -4865,9 +4890,9 @@ namespace ModBus_Client
         {
             int interval = 0;
 
-            if(int.TryParse(TextBoxPollingInterval.Text, out interval))
+            if (int.TryParse(TextBoxPollingInterval.Text, out interval))
             {
-                if(interval >= 500)
+                if (interval >= 500)
                 {
                     pauseLoop = interval;
                 }
@@ -4974,6 +4999,8 @@ namespace ModBus_Client
                     Console.WriteLine(err);
                 }
             }
+
+            disableDeleteKey = false;
         }
         public void writeRegisterDatagrid(object params_)
         {
@@ -5238,7 +5265,7 @@ namespace ModBus_Client
                                         {
                                             this.Dispatcher.Invoke((Action)delegate
                                             {
-                                                select.Value = result[i].ToString();
+                                                select.Value = comboBoxHoldingValori_ == "HEX" ? "0x" + result[i].ToString("X").PadLeft(4, '0') : result[i].ToString();
                                                 select.ValueBin = Convert.ToString(result[i] >> 8, 2).PadLeft(8, '0') + " " + Convert.ToString((UInt16)(result[i] << 8) >> 8, 2).PadLeft(8, '0');
                                                 select.Foreground = ForeGroundLight.ToString();
                                                 select.Background = colorDefaultWriteCell.ToString();
@@ -5297,6 +5324,17 @@ namespace ModBus_Client
                                     lastEditModbusItem.ValueBin = Convert.ToString(dummy_ >> 8, 2).PadLeft(8, '0') + " " + Convert.ToString((UInt16)(dummy_ << 8) >> 8, 2).PadLeft(8, '0');
                                     lastEditModbusItem.Foreground = ForeGroundLight.ToString();
                                     lastEditModbusItem.Background = colorDefaultWriteCell.ToString();
+
+                                    // Rimosso perche non e' possibile convertire valori > 1 word
+                                    // ModBus_Item found = list_template_holdingRegistersTable.FirstOrDefault(x => x.RegisterUInt == (address_start));
+                                    // if (found != null)
+                                    // {
+                                    //     lastEditModbusItem.Mappings = GetMappingValue2(new UInt16[] { dummy_ }, 0, found.Mappings, out string convertedValue);
+                                    //     lastEditModbusItem.ValueConverted = convertedValue;
+                                    // }
+
+                                    lastEditModbusItem.Mappings = "";
+                                    lastEditModbusItem.ValueConverted = "";
                                 });
                             }
                             else
@@ -5323,7 +5361,7 @@ namespace ModBus_Client
                     {
                         UInt16 dummy_ = 0;
 
-                        if (UInt16.TryParse(obj.Replace("0x", "").Replace("x", "").Replace("h", ""), (obj.ToLower().IndexOf("x") != -1 || obj.ToLower().IndexOf("h") != -1) ? System.Globalization.NumberStyles.HexNumber : System.Globalization.NumberStyles.Integer, null, out dummy_))
+                        if (UInt16.TryParse(obj.Replace("0x", "").Replace("x", "").Replace("h", ""), (obj.ToLower().IndexOf("x") != -1 || obj.ToLower().IndexOf("h") != -1 || comboBoxHoldingValori_ == "HEX") ? System.Globalization.NumberStyles.HexNumber : System.Globalization.NumberStyles.Integer, null, out dummy_))
                         {
                             uint address_start = P.uint_parser(textBoxHoldingOffset_, comboBoxHoldingOffset_) + P.uint_parser(lastEditModbusItem.Register, comboBoxHoldingRegistri_);
 
@@ -5341,11 +5379,9 @@ namespace ModBus_Client
                             {
                                 if (result == true)
                                 {
-                                    String[] value = { value_.ToString() };
-
                                     this.Dispatcher.Invoke((Action)delegate
                                     {
-                                        lastEditModbusItem.Value = obj;
+                                        lastEditModbusItem.Value = (obj.ToLower().IndexOf("x") != -1 || obj.ToLower().IndexOf("h") != -1 || comboBoxHoldingValori_ == "HEX") ? "0x" + value_.ToString("X").PadLeft(4, '0') : obj;
                                         lastEditModbusItem.ValueBin = Convert.ToString(value_ >> 8, 2).PadLeft(8, '0') + " " + Convert.ToString((UInt16)(value_ << 8) >> 8, 2).PadLeft(8, '0');
                                         lastEditModbusItem.Foreground = ForeGroundLight.ToString();
                                         lastEditModbusItem.Background = colorDefaultWriteCell.ToString();
@@ -5470,7 +5506,7 @@ namespace ModBus_Client
                         t.Start(tmp.Text);
                     }
                 }
-                catch(Exception err)
+                catch (Exception err)
                 {
                     Console.WriteLine(err);
                 }
@@ -5503,8 +5539,8 @@ namespace ModBus_Client
                                 lastEditModbusItem.Foreground = ForeGroundLight.ToString();
                                 lastEditModbusItem.Background = colorDefaultWriteCell.ToString();
 
-                            /*if(index + 1 < dataGridViewCoils.Items.Count)
-                                dataGridViewCoils.SelectedItem = list_coilsTable[index + 1];*/
+                                /*if(index + 1 < dataGridViewCoils.Items.Count)
+                                    dataGridViewCoils.SelectedItem = list_coilsTable[index + 1];*/
 
                                 dataGridViewCoils.Items.Refresh();
                             });
@@ -5602,7 +5638,7 @@ namespace ModBus_Client
                     case Key.D1:
                         tabControlMain.SelectedIndex = 0;
                         break;
-                    
+
                     case Key.D2:
                         tabControlMain.SelectedIndex = 1;
                         break;
@@ -5635,31 +5671,31 @@ namespace ModBus_Client
                     case Key.R:
 
                         // Coils
-                        if(tabControlMain.SelectedIndex == 1)
+                        if (tabControlMain.SelectedIndex == 1)
                         {
-                            if(buttonReadCoils01.IsEnabled)
+                            if (buttonReadCoils01.IsEnabled)
                                 buttonReadCoils01_Click(sender, e);
                         }
 
                         // Inputs
                         if (tabControlMain.SelectedIndex == 2)
                         {
-                            if(buttonReadInput02.IsEnabled)
+                            if (buttonReadInput02.IsEnabled)
                                 buttonReadInput02_Click(sender, e);
                         }
 
-                        // Input registers
+                        // Holding registers
                         if (tabControlMain.SelectedIndex == 3)
                         {
-                            if(buttonReadInputRegister04.IsEnabled)
-                                buttonReadInputRegister04_Click(sender, e);
+                            if (buttonReadHolding03.IsEnabled)
+                                buttonReadHolding03_Click(sender, e);
                         }
 
-                        // Holding registers
+                        // Input registers
                         if (tabControlMain.SelectedIndex == 4)
                         {
-                            if(buttonReadHolding03.IsEnabled)
-                                buttonReadHolding03_Click(sender, e);
+                            if (buttonReadInputRegister04.IsEnabled)
+                                buttonReadInputRegister04_Click(sender, e);
                         }
 
                         break;
@@ -5670,29 +5706,29 @@ namespace ModBus_Client
                         // Coils
                         if (tabControlMain.SelectedIndex == 1)
                         {
-                            if(buttonReadCoilsRange.IsEnabled)
+                            if (buttonReadCoilsRange.IsEnabled)
                                 buttonReadCoilsRange_Click(sender, e);
                         }
 
                         // Inputs
                         if (tabControlMain.SelectedIndex == 2)
                         {
-                            if(buttonReadInputRange.IsEnabled)
+                            if (buttonReadInputRange.IsEnabled)
                                 buttonReadInputRange_Click(sender, e);
                         }
 
-                        // Input registers
+                        // Holding registers
                         if (tabControlMain.SelectedIndex == 3)
                         {
-                            if(buttonReadInputRegisterRange.IsEnabled)
-                                buttonReadInputRegisterRange_Click(sender, e);
+                            if (buttonReadHoldingRange.IsEnabled)
+                                buttonReadHoldingRange_Click(sender, e);
                         }
 
-                        // Holding registers
+                        // Input registers
                         if (tabControlMain.SelectedIndex == 4)
                         {
-                            if(buttonReadHoldingRange.IsEnabled)
-                                buttonReadHoldingRange_Click(sender, e);
+                            if (buttonReadInputRegisterRange.IsEnabled)
+                                buttonReadInputRegisterRange_Click(sender, e);
                         }
 
                         break;
@@ -5709,29 +5745,29 @@ namespace ModBus_Client
                         // Coils
                         if (tabControlMain.SelectedIndex == 1)
                         {
-                            if(buttonLoopCoils01.IsEnabled)
+                            if (buttonLoopCoils01.IsEnabled)
                                 buttonLoopCoils01_Click(sender, e);
                         }
 
                         // Inputs
                         if (tabControlMain.SelectedIndex == 2)
                         {
-                            if(buttonLoopInput02.IsEnabled)
+                            if (buttonLoopInput02.IsEnabled)
                                 buttonLoopInput02_Click(sender, e);
                         }
 
-                        // Input registers
+                        // Holding registers
                         if (tabControlMain.SelectedIndex == 3)
                         {
-                            if(buttonLoopInputRegister04.IsEnabled)
-                                buttonLoopInputRegister04_Click(sender, e);
+                            if (buttonLoopHolding03.IsEnabled)
+                                buttonLoopHolding03_Click(sender, e);
                         }
 
-                        // Holding registers
+                        // Input registers
                         if (tabControlMain.SelectedIndex == 4)
                         {
-                            if(buttonLoopHolding03.IsEnabled)
-                                buttonLoopHolding03_Click(sender, e);
+                            if (buttonLoopInputRegister04.IsEnabled)
+                                buttonLoopInputRegister04_Click(sender, e);
                         }
 
                         break;
@@ -5742,29 +5778,29 @@ namespace ModBus_Client
                         // Coils
                         if (tabControlMain.SelectedIndex == 1)
                         {
-                            if(buttonLoopCoilsRange.IsEnabled)
+                            if (buttonLoopCoilsRange.IsEnabled)
                                 buttonLoopCoilsRange_Click(sender, e);
                         }
 
                         // Inputs
                         if (tabControlMain.SelectedIndex == 2)
                         {
-                            if(buttonLoopInputRange.IsEnabled)
+                            if (buttonLoopInputRange.IsEnabled)
                                 buttonLoopInputRange_Click(sender, e);
                         }
 
-                        // Input registers
+                        // Holding registers
                         if (tabControlMain.SelectedIndex == 3)
                         {
-                            if(buttonLoopInputRegisterRange.IsEnabled)
-                                buttonLoopInputRegisterRange_Click(sender, e);
+                            if (buttonLoopHoldingRange.IsEnabled)
+                                buttonLoopHoldingRange_Click(sender, e);
                         }
 
-                        // Holding registers
+                        // Input registers
                         if (tabControlMain.SelectedIndex == 4)
                         {
-                            if(buttonLoopHoldingRange.IsEnabled)
-                                buttonLoopHoldingRange_Click(sender, e);
+                            if (buttonLoopInputRegisterRange.IsEnabled)
+                                buttonLoopInputRegisterRange_Click(sender, e);
                         }
 
                         break;
@@ -5786,18 +5822,18 @@ namespace ModBus_Client
                                 buttonReadInputTemplateGroup_Click(sender, e);
                         }
 
-                        // Input registers
-                        if (tabControlMain.SelectedIndex == 3)
-                        {
-                            if (buttonReadInputRegisterTemplateGroup.IsEnabled)
-                                buttonReadInputRegisterTemplateGroup_Click(sender, e);
-                        }
-
                         // Holding registers
-                        if (tabControlMain.SelectedIndex == 4)
+                        if (tabControlMain.SelectedIndex == 3)
                         {
                             if (buttonReadHoldingTemplateGroup.IsEnabled)
                                 buttonReadHoldingTemplateGroup_Click(sender, e);
+                        }
+
+                        // Input registers
+                        if (tabControlMain.SelectedIndex == 4)
+                        {
+                            if (buttonReadInputRegisterTemplateGroup.IsEnabled)
+                                buttonReadInputRegisterTemplateGroup_Click(sender, e);
                         }
 
                         break;
@@ -5819,18 +5855,18 @@ namespace ModBus_Client
                                 buttonReadInputTemplate_Click(sender, e);
                         }
 
-                        // Input registers
-                        if (tabControlMain.SelectedIndex == 3)
-                        {
-                            if (buttonReadInputRegisterTemplate.IsEnabled)
-                                buttonReadInputRegisterTemplate_Click(sender, e);
-                        }
-
                         // Holding registers
-                        if (tabControlMain.SelectedIndex == 4)
+                        if (tabControlMain.SelectedIndex == 3)
                         {
                             if (buttonReadHoldingTemplate.IsEnabled)
                                 buttonReadHoldingTemplate_Click(sender, e);
+                        }
+
+                        // Input registers
+                        if (tabControlMain.SelectedIndex == 4)
+                        {
+                            if (buttonReadInputRegisterTemplate.IsEnabled)
+                                buttonReadInputRegisterTemplate_Click(sender, e);
                         }
 
                         break;
@@ -5847,10 +5883,10 @@ namespace ModBus_Client
 
                     // DB Manager
                     case Key.D:
-                        if(gestisciDatabaseToolStripMenuItem.IsEnabled)
+                        if (gestisciDatabaseToolStripMenuItem.IsEnabled)
                             gestisciDatabaseToolStripMenuItem_Click(sender, e);
                         break;
-                        
+
                     // Info
                     case Key.I:
                         infoToolStripMenuItem1_Click(sender, e);
@@ -5860,7 +5896,7 @@ namespace ModBus_Client
                     case Key.S:
 
                         // Salva su database
-                        if(Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift))
+                        if (Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift))
                         {
                             salvaConfigurazioneAttualeNelDatabaseToolStripMenuItem_Click(sender, e);
                         }
@@ -5950,18 +5986,18 @@ namespace ModBus_Client
                                 buttonExportInput_Click(sender, e);
                         }
 
-                        // Input registers
-                        if (tabControlMain.SelectedIndex == 3)
-                        {
-                            if (buttonExportInputReg.IsEnabled)
-                                buttonExportInputReg_Click(sender, e);
-                        }
-
                         // Holding registers
-                        if (tabControlMain.SelectedIndex == 4)
+                        if (tabControlMain.SelectedIndex == 3)
                         {
                             if (buttonExportHoldingReg.IsEnabled)
                                 buttonExportHoldingReg_Click(sender, e);
+                        }
+
+                        // Input registers
+                        if (tabControlMain.SelectedIndex == 4)
+                        {
+                            if (buttonExportInputReg.IsEnabled)
+                                buttonExportInputReg_Click(sender, e);
                         }
 
                         break;
@@ -5977,7 +6013,7 @@ namespace ModBus_Client
                         }
 
                         // Holding registers
-                        if (tabControlMain.SelectedIndex == 4)
+                        if (tabControlMain.SelectedIndex == 3)
                         {
                             if (buttonImportHoldingReg.IsEnabled)
                                 buttonImportHoldingReg_Click(sender, e);
@@ -5987,7 +6023,7 @@ namespace ModBus_Client
 
                 }
 
-                if(e.Key == Key.C && (Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift)))
+                if (e.Key == Key.C && (Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift)))
                 {
                     if (!statoConsole)
                     {
@@ -6004,7 +6040,7 @@ namespace ModBus_Client
             }
 
             // Non vincolato al ctrl
-            switch (e.Key) 
+            switch (e.Key)
             {
                 // Cancella tabella
                 case Key.Delete:
@@ -6018,29 +6054,33 @@ namespace ModBus_Client
                     // Coils
                     if (tabControlMain.SelectedIndex == 1)
                     {
-                        buttonClearCoils_Click(sender, e);
+                        if (!disableDeleteKey)
+                            buttonClearCoils_Click(sender, e);
                     }
 
                     // Inputs
                     if (tabControlMain.SelectedIndex == 2)
                     {
-                        buttonClearInput_Click(sender, e);
-                    }
-
-                    // Input registers
-                    if (tabControlMain.SelectedIndex == 3)
-                    {
-                        buttonClearInputReg_Click(sender, e);
+                        if (!disableDeleteKey)
+                            buttonClearInput_Click(sender, e);
                     }
 
                     // Holding registers
+                    if (tabControlMain.SelectedIndex == 3)
+                    {
+                        if (!disableDeleteKey)
+                            buttonClearHoldingReg_Click(sender, e);
+                    }
+
+                    // Input registers
                     if (tabControlMain.SelectedIndex == 4)
                     {
-                        buttonClearHoldingReg_Click(sender, e);
+                        if (!disableDeleteKey)
+                            buttonClearInputReg_Click(sender, e);
                     }
 
                     // Log
-                    if(tabControlMain.SelectedIndex == 6)
+                    if (tabControlMain.SelectedIndex == 6)
                     {
                         buttonClearAll_Click(sender, e);
                     }
@@ -6152,7 +6192,7 @@ namespace ModBus_Client
 
         private void TextBoxReadTimeout_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if(!int.TryParse(textBoxReadTimeout.Text, out readTimeout))
+            if (!int.TryParse(textBoxReadTimeout.Text, out readTimeout))
             {
                 textBoxReadTimeout.Text = "1000";
             }
@@ -6166,7 +6206,7 @@ namespace ModBus_Client
 
                 saveFileDialogBox.DefaultExt = "csv";
                 saveFileDialogBox.AddExtension = false;
-                saveFileDialogBox.FileName = "" + defaultPathToConfiguration + "_HoldingRegisters";
+                saveFileDialogBox.FileName = "" + pathToConfiguration + "_HoldingRegisters";
                 saveFileDialogBox.Filter = "CSV|*.csv|JSON|*.json";
                 saveFileDialogBox.Title = title;
 
@@ -6211,7 +6251,7 @@ namespace ModBus_Client
                             {
                                 ModBusItem_Save item = new ModBusItem_Save();
 
-                                if(comboBoxHoldingOffset.SelectedIndex == 0)
+                                if (comboBoxHoldingOffset.SelectedIndex == 0)
                                 {
                                     item.Offset = textBoxHoldingOffset.Text;    // DEC
                                 }
@@ -6219,7 +6259,7 @@ namespace ModBus_Client
                                 {
                                     item.Offset = "0x" + textBoxHoldingOffset.Text;    // HEX
                                 }
-                                
+
                                 item.Register = list_holdingRegistersTable[i].Register;
                                 item.Value = list_holdingRegistersTable[i].Value;
                                 item.Notes = list_holdingRegistersTable[i].Notes;
@@ -6256,7 +6296,7 @@ namespace ModBus_Client
 
                 saveFileDialogBox.DefaultExt = "csv";
                 saveFileDialogBox.AddExtension = false;
-                saveFileDialogBox.FileName = "" + defaultPathToConfiguration + "_InputRegisters";
+                saveFileDialogBox.FileName = "" + pathToConfiguration + "_InputRegisters";
                 saveFileDialogBox.Filter = "CSV|*.csv|JSON|*.json";
                 saveFileDialogBox.Title = title;
 
@@ -6346,7 +6386,7 @@ namespace ModBus_Client
 
                 saveFileDialogBox.DefaultExt = "csv";
                 saveFileDialogBox.AddExtension = false;
-                saveFileDialogBox.FileName = "" + defaultPathToConfiguration + "_Inputs";
+                saveFileDialogBox.FileName = "" + pathToConfiguration + "_Inputs";
                 saveFileDialogBox.Filter = "CSV|*.csv|JSON|*.json";
                 saveFileDialogBox.Title = title;
 
@@ -6436,7 +6476,7 @@ namespace ModBus_Client
 
                 saveFileDialogBox.DefaultExt = "csv";
                 saveFileDialogBox.AddExtension = false;
-                saveFileDialogBox.FileName = "" + defaultPathToConfiguration + "_Coils";
+                saveFileDialogBox.FileName = "" + pathToConfiguration + "_Coils";
                 saveFileDialogBox.Filter = "CSV|*.csv|JSON|*.json";
                 saveFileDialogBox.Title = title;
 
@@ -6522,12 +6562,12 @@ namespace ModBus_Client
         public void SaveConfiguration_v2(bool alert)
         {
             JavaScriptSerializer jss = new JavaScriptSerializer();
-            
+
             dynamic toSave = jss.DeserializeObject(File.ReadAllText(localPath + "\\Config\\SettingsToSave.json"));
 
             Dictionary<string, Dictionary<string, object>> file_ = new Dictionary<string, Dictionary<string, object>>();
 
-            foreach(KeyValuePair<string, object> row in toSave["toSave"])
+            foreach (KeyValuePair<string, object> row in toSave["toSave"])
             {
                 // row.key = "textBoxes"
                 // row.value = {  }
@@ -6537,7 +6577,7 @@ namespace ModBus_Client
                     case "textBoxes":
 
                         Dictionary<string, object> textBoxes = new Dictionary<string, object>();
-                        
+
                         foreach (KeyValuePair<string, object> sub in toSave["toSave"][row.Key])
                         {
                             // sub.key = "textBoxModbusAddess_1"
@@ -6558,7 +6598,7 @@ namespace ModBus_Client
                                 //Console.WriteLine("prop.key: " + prop.Key);
                                 //Console.WriteLine("prop.value: " + prop.Value as String);
 
-                                if(prop.Key == "key")
+                                if (prop.Key == "key")
                                 {
                                     found = true;
 
@@ -6575,8 +6615,8 @@ namespace ModBus_Client
 
                             if (!found)
                             {
-                                if (this.FindName(sub.Key) != null) 
-                                { 
+                                if (this.FindName(sub.Key) != null)
+                                {
                                     textBoxes.Add(sub.Key, (this.FindName(sub.Key) as TextBox).Text);
                                 }
                                 else
@@ -7237,7 +7277,7 @@ namespace ModBus_Client
                                     comboBoxHoldingGroup.Items.Add(kp);
                             }
                         }
-                        catch(Exception err)
+                        catch (Exception err)
                         {
                             Console.WriteLine("Error loading group items\n");
                             Console.WriteLine(err);
@@ -7263,9 +7303,9 @@ namespace ModBus_Client
         {
             DataGridTextColumn toEdit = (DataGridTextColumn)this.FindName((sender as MenuItem).Name.Replace("view", "dataGrid"));
 
-            if(toEdit != null)
+            if (toEdit != null)
             {
-                if((sender as MenuItem).IsChecked)
+                if ((sender as MenuItem).IsChecked)
                 {
                     toEdit.Visibility = Visibility.Visible;
                 }
@@ -7273,7 +7313,7 @@ namespace ModBus_Client
                 {
                     toEdit.Visibility = Visibility.Collapsed;
                 }
-            }    
+            }
         }
 
         private void textBoxCoilsAddress15_B_TextChanged(object sender, TextChangedEventArgs e)
@@ -7283,7 +7323,7 @@ namespace ModBus_Client
 
             System.Globalization.NumberStyles style = comboBoxCoilsAddress15_B_ == "HEX" ? System.Globalization.NumberStyles.HexNumber : System.Globalization.NumberStyles.Integer;
 
-            if (int.TryParse(textBoxCoilsAddress15_B.Text, style, null,  out stop))
+            if (int.TryParse(textBoxCoilsAddress15_B.Text, style, null, out stop))
             {
                 for (int i = 0; i < stop; i++)
                 {
@@ -7303,7 +7343,7 @@ namespace ModBus_Client
             lang.loadLanguageTemplate(language);
         }
 
-        public void changeEnableButtonsConnect(bool enabled) 
+        public void changeEnableButtonsConnect(bool enabled)
         {
             buttonReadCoils01.IsEnabled = enabled;
             buttonLoopCoils01.IsEnabled = enabled;
@@ -7349,6 +7389,8 @@ namespace ModBus_Client
 
             menuItemImportCoils.IsEnabled = enabled;
             menuItemImportHoldingRegisters.IsEnabled = enabled;
+
+            comboBoxProfileHome.IsEnabled = !enabled;
         }
 
         private void comboBoxHoldingAddress03_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -7482,7 +7524,7 @@ namespace ModBus_Client
 
         private void comboBoxCoilsRegistri_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            comboBoxCoilsRegistri_ = comboBoxCoilsRegistri.SelectedIndex == 0 ? "DEC":"HEX";
+            comboBoxCoilsRegistri_ = comboBoxCoilsRegistri.SelectedIndex == 0 ? "DEC" : "HEX";
         }
 
         private void comboBoxCoilsOffset_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -7741,14 +7783,14 @@ namespace ModBus_Client
             GridConnection.Background = darkMode ? BackGroundDark : BackGroundLight;
 
             labelSerialRtu.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
-            labelPort.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
+            labelPortRtu.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
             labelBaudRate.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
             labelParity.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
             labelStopBits.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
 
             labelTcp.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
             labelIp.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
-            labelPort1.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
+            labelPortTcp.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
 
             ToolBarMain.Background = darkMode ? BackGroundDark : new SolidColorBrush(Color.FromArgb(255, (byte)238, (byte)245, (byte)253));
 
@@ -8082,7 +8124,7 @@ namespace ModBus_Client
 
             if (openFileDialog.FileName != "")
             {
-                if(File.Exists(openFileDialog.FileName))
+                if (File.Exists(openFileDialog.FileName))
                 {
                     PreviewImport previewImport = new PreviewImport(this, openFileDialog.FileName, 5);
                     previewImport.Show();
@@ -8151,10 +8193,12 @@ namespace ModBus_Client
 
                             if (item.Mappings.ToLower().IndexOf("string") != -1)
                             {
-                                uint offset = uint.Parse(item.Mappings.Split('.')[1].ToLower().Split(')')[0]);
+                                uint offset = 0;
+                                if (item.Mappings.IndexOf('.') != -1)
+                                    offset = uint.Parse(item.Mappings.Split('.')[1].ToLower().Split(')')[0]);
                                 address_start = address_start - (offset / 2 + offset % 2);
 
-                                num_regs = uint.Parse(item.Mappings.Split('.')[0].ToLower().Replace("string(", ""));
+                                num_regs = uint.Parse(item.Mappings.Split('.')[0].ToLower().Replace("string(", "").Replace(")", ""));
                                 num_regs = num_regs / 2 + num_regs % 2;
                             }
                             else
@@ -8329,10 +8373,12 @@ namespace ModBus_Client
 
                             if (item.Mappings.ToLower().IndexOf("string") != -1)
                             {
-                                uint offset = uint.Parse(item.Mappings.Split('.')[1].ToLower().Split(')')[0]);
+                                uint offset = 0;
+                                if (item.Mappings.IndexOf('.') != -1)
+                                    offset = uint.Parse(item.Mappings.Split('.')[1].ToLower().Split(')')[0]);
                                 address_start = address_start - (offset / 2 + offset % 2);
 
-                                num_regs = uint.Parse(item.Mappings.Split('.')[0].ToLower().Replace("string(", ""));
+                                num_regs = uint.Parse(item.Mappings.Split('.')[0].ToLower().Replace("string(", "").Replace(")", ""));
                                 num_regs = num_regs / 2 + num_regs % 2;
                             }
                             else
@@ -8485,10 +8531,12 @@ namespace ModBus_Client
 
                             if (item.Mappings.ToLower().IndexOf("string") != -1)
                             {
-                                uint offset = uint.Parse(item.Mappings.Split('.')[1].ToLower().Split(')')[0]);
+                                uint offset = 0;
+                                if (item.Mappings.IndexOf('.') != -1)
+                                    offset = uint.Parse(item.Mappings.Split('.')[1].ToLower().Split(')')[0]);
                                 address_start = address_start - (offset / 2 + offset % 2);
 
-                                num_regs = uint.Parse(item.Mappings.Split('.')[0].ToLower().Replace("string(", ""));
+                                num_regs = uint.Parse(item.Mappings.Split('.')[0].ToLower().Replace("string(", "").Replace(")", ""));
                                 num_regs = num_regs / 2 + num_regs % 2;
                             }
                             else
@@ -8660,10 +8708,12 @@ namespace ModBus_Client
 
                             if (item.Mappings.ToLower().IndexOf("string") != -1)
                             {
-                                uint offset = uint.Parse(item.Mappings.Split('.')[1].ToLower().Split(')')[0]);
+                                uint offset = 0;
+                                if (item.Mappings.IndexOf('.') != -1)
+                                    offset = uint.Parse(item.Mappings.Split('.')[1].ToLower().Split(')')[0]);
                                 address_start = address_start - (offset / 2 + offset % 2);
 
-                                num_regs = uint.Parse(item.Mappings.Split('.')[0].ToLower().Replace("string(", ""));
+                                num_regs = uint.Parse(item.Mappings.Split('.')[0].ToLower().Replace("string(", "").Replace(")", ""));
                                 num_regs = num_regs / 2 + num_regs % 2;
                             }
                             else
@@ -8672,9 +8722,9 @@ namespace ModBus_Client
                                     address_start = address_start - num_regs + 1;
                             }
 
-                            if(num_regs > 1)
+                            if (num_regs > 1)
                             {
-                                for(int i = 1; i < num_regs; i++)
+                                for (int i = 1; i < num_regs; i++)
                                 {
                                     toRemove.Add((uint)(item.RegisterUInt + i));
                                 }
@@ -9301,7 +9351,7 @@ namespace ModBus_Client
 
         private void ViewFullSizeTables_Checked(object sender, RoutedEventArgs e)
         {
-            if(ViewFullSizeTables.IsChecked)
+            if (ViewFullSizeTables.IsChecked)
             {
                 Thickness marg = new Thickness(10, 50, 10, 10);
                 dataGridViewCoils.Margin = marg;
@@ -9316,6 +9366,25 @@ namespace ModBus_Client
                 dataGridViewInput.Margin = marg;
                 dataGridViewInputRegister.Margin = marg;
                 dataGridViewHolding.Margin = marg;
+            }
+        }
+
+        private void ButtonFullSize_Click(object sender, RoutedEventArgs e)
+        {
+            ViewFullSizeTables.IsChecked = !ViewFullSizeTables.IsChecked;
+            ViewFullSizeTables_Checked(null, null);
+        }
+
+        private void dataGridViewHolding_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
+        {
+            disableDeleteKey = true;
+        }
+
+        private void comboBoxProfileHome_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (comboBoxProfileHome.SelectedItem != null)
+            {
+                LoadProfile(comboBoxProfileHome.SelectedItem.ToString());
             }
         }
     }
