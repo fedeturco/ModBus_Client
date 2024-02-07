@@ -35,42 +35,30 @@
 
 
 using System;
-using System.Windows;
-using System.Windows.Media;
-using System.Windows.Controls;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 //using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Collections.Concurrent;
+using System.IO;
+//Porta seriale
+using System.IO.Ports;
+//Comandi apri/chiudi console
 
+//Libreria JSON
+
+//Classecon funzioni di conversione DEC-HEX
+using System.Net.Security;
 //Process.
-using System.Diagnostics;
 
 //Sockets
 using System.Net.Sockets;
-
+using System.Runtime.InteropServices.ComTypes;
+using System.Security.Authentication;
+using System.Security.Cryptography;
+using System.Security.Cryptography.X509Certificates;
 //Threading per server ModBus TCP
 using System.Threading;
-
-using System.Collections;
-
-//Porta seriale
-using System.IO.Ports;
-
-//Comandi apri/chiudi console
-using System.Runtime.InteropServices;
-
-//Libreria JSON
-using System.IO;
-
-using ModBusMaster_Chicco;
-
-//Classecon funzioni di conversione DEC-HEX
-using Raccolta_funzioni_parser;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace ModBusMaster_Chicco
 {
@@ -80,12 +68,13 @@ namespace ModBusMaster_Chicco
         public int TYPE_ASCII = 20;      // Mode ASCII (not supported now)
         public int TYPE_TCP_REOPEN = 30; // Open the connection on every request modbus
         public int TYPE_TCP_SOCK = 31;   // Open the conection only al first time
+        public int TYPE_TCP_SECURE = 32;   // Open the conection with TLS ecnryption
     }
 
     public class ModBus_Chicco
     {
         //-----VARIABILI-OGGETTO------
-        bool ClientActive = false;
+        public bool ClientActive = false;
 
         bool ordineTextBoxLog = true;   // true -> in cima, false -> in fondo
 
@@ -94,10 +83,15 @@ namespace ModBusMaster_Chicco
 
         // TCP
         TcpClient client;
+        SslStream sslStream;
         String ip_address;
         String port;
+        String clientCertificateFile;
+        String clientCertificatePassword;
+        String clientKeyFile;
 
-        public int type;    //"RTU", "ASCII", "TCP"
+        public int type;        //"RTU", "ASCII", "TCP"
+        public int tlsVersion;  // 0 -> 1.2, 1 -> 1.3, ...
         ModBus_Def def = new ModBus_Def();
 
         Border pictureBoxSending = new Border();
@@ -132,7 +126,17 @@ namespace ModBusMaster_Chicco
          */
         public string[] ModbusErrorCodes = { "", "Illegal Function", "Illegal Data Address", "Illegal Data Value", "Slave Device Failure", "Acknowledge", "Slave Device Busy", "Negative Acknowledge", "Memory Parity Error", "", "Gateway Path Unavailable", "Gateway Target Device Failed to Respond" };
 
-        public ModBus_Chicco(SerialPort serialPort_, String ip_address_, String port_, int type_, Border pictureBoxSending_, Border pictureBoxReceiving_)
+        public ModBus_Chicco(
+            SerialPort serialPort_, 
+            String ip_address_, 
+            String port_, 
+            int type_, 
+            Border pictureBoxSending_, 
+            Border pictureBoxReceiving_,
+            String clientCertificateFile_,
+            String clientCertificatePassword_,
+            String clientKeyFile_,
+            int tlsVersion_)
         {
             //ClientActive = true;
             //Type: TCP, RTU, ASCII
@@ -144,6 +148,10 @@ namespace ModBusMaster_Chicco
             //TCP
             ip_address = ip_address_;
             port = port_;
+            clientCertificateFile = clientCertificateFile_;
+            clientCertificatePassword = clientCertificatePassword_;
+            clientKeyFile = clientKeyFile_;
+            tlsVersion = tlsVersion_;
 
             //GRAFICA
             pictureBoxSending = pictureBoxSending_;
@@ -152,9 +160,6 @@ namespace ModBusMaster_Chicco
             //Dimensione log locale
             log.Limit = 10000;
             log2.Limit = 10000;
-
-            //DEBUG
-            Console.WriteLine("Oggeto ModBus:" + type);
 
             if (!threadTxRxIsRunning)
             {
@@ -253,10 +258,32 @@ namespace ModBusMaster_Chicco
 
         public void open()
         {
-            ClientActive = true;
-
             if(type == def.TYPE_TCP_SOCK)
                 client = new TcpClient(ip_address, int.Parse(port));
+            if (type == def.TYPE_TCP_SECURE)
+            {
+                System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
+
+                SslProtocols tlsProtocol = SslProtocols.Tls12;
+                if (tlsVersion == 0)
+                    tlsProtocol = SslProtocols.Tls12;
+                if (tlsVersion == 1)
+                    tlsProtocol = SslProtocols.Tls13;
+
+                // PFX
+                var clientCertificate = new X509Certificate2(clientCertificateFile, clientCertificatePassword);
+                var clientCertificateCollection = new X509CertificateCollection(new X509Certificate[] { clientCertificate });
+                
+                client = new TcpClient(ip_address, int.Parse(port));
+                sslStream = new SslStream(client.GetStream(), false, App_CertificateValidation);
+                sslStream.AuthenticateAsClient(
+                    ip_address, 
+                    clientCertificateCollection,
+                    tlsProtocol, 
+                    false);
+            }
+
+            ClientActive = true;
         }
 
         public void close()
@@ -281,6 +308,70 @@ namespace ModBusMaster_Chicco
                 }
                 catch { }
             }
+            
+            else if (type == def.TYPE_TCP_SECURE)
+            {
+                try
+                {
+                    sslStream.Close();
+                }
+                catch { }
+                
+                try
+                {
+                    client.Close();
+                }
+                catch { }
+            }
+        }
+
+        bool App_CertificateValidation(Object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
+        {
+            Console.WriteLine("sslPolicyErrors: {0}", sslPolicyErrors);
+
+            if (sslPolicyErrors == SslPolicyErrors.None)
+            {
+                return true;
+            }
+            
+            if (sslPolicyErrors == SslPolicyErrors.RemoteCertificateChainErrors)
+            {
+                return true;
+            }
+
+            if (sslPolicyErrors == (SslPolicyErrors.RemoteCertificateChainErrors | SslPolicyErrors.RemoteCertificateNameMismatch)) 
+            {
+                // Bypass error check RemoteName if certificate mismatch the ip server address
+                Console.WriteLine("Check RemoteCertificateNameMismatch");
+                return true; 
+            }
+
+            return false;
+        }
+
+        public bool checkModbusTcpResponse(byte[] buffer, int length)
+        {
+            if (length < 9)
+            {
+                Console.WriteLine("Invalid Length {0}", length);
+                return false;
+            }
+
+            UInt16 protocolIdentifier = (UInt16)(buffer[2] << 8 + buffer[3]);
+            if (protocolIdentifier != 0)
+            {
+                Console.WriteLine("Invalid Protocol Identifier: {0}, expected 0x0000", protocolIdentifier);
+                return false;
+            }
+
+            UInt16 packetLen = (UInt16)((buffer[4] << 8) + buffer[5]);
+            if (packetLen + 6 != length)
+            {
+                Console.WriteLine("Invalid Packet Length: {0}+6 != received: {1}", packetLen, length);
+                return false;
+            }
+
+            return true;
         }
 
         public byte[] readSerialCustom(int expected_len, int timeout)
@@ -352,7 +443,7 @@ namespace ModBusMaster_Chicco
             byte[] response;
             UInt16[] result = new UInt16[no_of_coils];
 
-            if ((type == def.TYPE_TCP_SOCK || type == def.TYPE_TCP_REOPEN) && ClientActive)
+            if ((type == def.TYPE_TCP_SOCK || type == def.TYPE_TCP_REOPEN || type == def.TYPE_TCP_SECURE) && ClientActive)
             {
                 /*
                TCP:
@@ -396,28 +487,43 @@ namespace ModBusMaster_Chicco
                     client = new TcpClient(ip_address, int.Parse(port));
 
                 TX_set = true;
-
-                NetworkStream stream = client.GetStream();
-                stream.WriteTimeout = readTimeout;
-                stream.ReadTimeout = readTimeout;
-
-                response = new Byte[buffer_dimension];
                 int Length = 0;
 
-                // Flush di eventuali dati presenti
-                if (type == def.TYPE_TCP_SOCK && stream.DataAvailable)
-                    stream.Read(response, 0, response.Length);
-
-                stream.Write(query, 0, query.Length);
-
-                Console_printByte("Tx: ", query, query.Length);
-                Console_print(" Tx -> ", query, query.Length);
-
-                try
+                if (type == def.TYPE_TCP_SECURE)
                 {
+                    sslStream.WriteTimeout = readTimeout;
+                    sslStream.ReadTimeout = readTimeout;
+
+                    response = new Byte[buffer_dimension];
+
+                    // Flush di eventuali dati presenti
+                    sslStream.Write(query, 0, query.Length);
+
+                    Console_printByte("Tx: ", query, query.Length);
+                    Console_print(" Tx -> ", query, query.Length);
+
+                    Length = sslStream.Read(response, 0, response.Length);
+                }
+                else
+                {
+                    NetworkStream stream = client.GetStream();
+                    stream.WriteTimeout = readTimeout;
+                    stream.ReadTimeout = readTimeout;
+
+                    response = new Byte[buffer_dimension];
+
+                    // Flush di eventuali dati presenti
+                    if (type == def.TYPE_TCP_SOCK && stream.DataAvailable)
+                        stream.Read(response, 0, response.Length);
+
+                    stream.Write(query, 0, query.Length);
+
+                    Console_printByte("Tx: ", query, query.Length);
+                    Console_print(" Tx -> ", query, query.Length);
+
                     Length = stream.Read(response, 0, response.Length);
                 }
-                catch { }
+
 
                 if(type == def.TYPE_TCP_REOPEN)
                     client.Close();
@@ -427,6 +533,13 @@ namespace ModBusMaster_Chicco
                 {
                     Console_print(" Timed out", null, 0);
                     throw new ModbusException("Timed out");
+                }
+
+                // CheckModbusTcp Answer
+                if (!checkModbusTcpResponse(response, Length))
+                {
+                    Console_print(" CheckModbusResponse failed", null, 0);
+                    throw new InvalidOperationException();
                 }
 
                 RX_set = true;
@@ -593,7 +706,7 @@ namespace ModBusMaster_Chicco
             byte[] response;
             UInt16[] result = new UInt16[no_of_input];
 
-            if ((type == def.TYPE_TCP_SOCK || type == def.TYPE_TCP_REOPEN) && ClientActive)
+            if ((type == def.TYPE_TCP_SOCK || type == def.TYPE_TCP_REOPEN || type == def.TYPE_TCP_SECURE) && ClientActive)
             {
                 /*
                 TCP:
@@ -641,32 +754,51 @@ namespace ModBusMaster_Chicco
                 response = new Byte[buffer_dimension];
                 int Length = 0;
 
-                NetworkStream stream = client.GetStream();
-                stream.WriteTimeout = readTimeout;
-                stream.ReadTimeout = readTimeout;
-
-                // Flush di eventuali dati presenti
-                if (type == def.TYPE_TCP_SOCK && stream.DataAvailable)
-                    stream.Read(response, 0, response.Length);
-
-                stream.Write(query, 0, query.Length);
-
-                Console_printByte("Tx: ", query, query.Length);
-                Console_print(" Tx -> ", query, query.Length);
-
-                try
+                if (type == def.TYPE_TCP_SECURE)
                 {
+                    sslStream.WriteTimeout = readTimeout;
+                    sslStream.ReadTimeout = readTimeout;
+
+                    sslStream.Write(query, 0, query.Length);
+
+                    Console_printByte("Tx: ", query, query.Length);
+                    Console_print(" Tx -> ", query, query.Length);
+
+                    Length = sslStream.Read(response, 0, response.Length);
+                }
+                else
+                {
+                    NetworkStream stream = client.GetStream();
+                    stream.WriteTimeout = readTimeout;
+                    stream.ReadTimeout = readTimeout;
+
+                    // Flush di eventuali dati presenti
+                    if (type == def.TYPE_TCP_SOCK && stream.DataAvailable)
+                        stream.Read(response, 0, response.Length);
+
+                    stream.Write(query, 0, query.Length);
+
+                    Console_printByte("Tx: ", query, query.Length);
+                    Console_print(" Tx -> ", query, query.Length);
+
                     Length = stream.Read(response, 0, response.Length);
                 }
-                catch { }
-                
-                // client.Close();
+
+                if (type == def.TYPE_TCP_REOPEN)
+                    client.Close();
 
                 // Timeout
                 if (Length == 0)
                 {
                     Console_print(" Timed out", null, 0);
                     throw new ModbusException("Timed out");
+                }
+
+                // CheckModbusTcp Answer
+                if (!checkModbusTcpResponse(response, Length))
+                {
+                    Console_print(" CheckModbusResponse failed", null, 0);
+                    throw new InvalidOperationException();
                 }
 
                 RX_set = true;
@@ -830,7 +962,7 @@ namespace ModBusMaster_Chicco
             byte[] response;
             UInt16[] result = new UInt16[no_of_registers];
 
-            if ((type == def.TYPE_TCP_SOCK || type == def.TYPE_TCP_REOPEN) && ClientActive)
+            if ((type == def.TYPE_TCP_SOCK || type == def.TYPE_TCP_REOPEN || type == def.TYPE_TCP_SECURE) && ClientActive)
             {
                 /*
                 TCP:
@@ -878,24 +1010,35 @@ namespace ModBusMaster_Chicco
                 response = new Byte[buffer_dimension];
                 int Length = 0;
 
-                NetworkStream stream = client.GetStream();
-                stream.WriteTimeout = readTimeout;
-                stream.ReadTimeout = readTimeout;
-
-                // Flush di eventuali dati presenti
-                if (type == def.TYPE_TCP_SOCK && stream.DataAvailable)
-                    stream.Read(response, 0, response.Length);
-
-                stream.Write(query, 0, query.Length);
-
-                Console_printByte("Tx: ", query, query.Length);
-                Console_print(" Tx -> ", query, query.Length);
-
-                try
+                if (type == def.TYPE_TCP_SECURE)
                 {
+                    sslStream.WriteTimeout = readTimeout;
+                    sslStream.ReadTimeout = readTimeout;
+
+                    sslStream.Write(query, 0, query.Length);
+
+                    Console_printByte("Tx: ", query, query.Length);
+                    Console_print(" Tx -> ", query, query.Length);
+
+                    Length = sslStream.Read(response, 0, response.Length);
+                }
+                else
+                {
+                    NetworkStream stream = client.GetStream();
+                    stream.WriteTimeout = readTimeout;
+                    stream.ReadTimeout = readTimeout;
+
+                    // Flush di eventuali dati presenti
+                    if (type == def.TYPE_TCP_SOCK && stream.DataAvailable)
+                        stream.Read(response, 0, response.Length);
+
+                    stream.Write(query, 0, query.Length);
+
+                    Console_printByte("Tx: ", query, query.Length);
+                    Console_print(" Tx -> ", query, query.Length);
+
                     Length = stream.Read(response, 0, response.Length);
                 }
-                catch { }
 
                 if (type == def.TYPE_TCP_REOPEN)
                     client.Close();
@@ -905,6 +1048,13 @@ namespace ModBusMaster_Chicco
                 {
                     Console_print(" Timed out", null, 0);
                     throw new ModbusException("Timed out");
+                }
+
+                // CheckModbusTcp Answer
+                if (!checkModbusTcpResponse(response, Length))
+                {
+                    Console_print(" CheckModbusResponse failed", null, 0);
+                    throw new InvalidOperationException();
                 }
 
                 RX_set = true;       // pictureBox gialla
@@ -1030,7 +1180,7 @@ namespace ModBusMaster_Chicco
             byte[] response;
             UInt16[] result = new UInt16[no_of_registers];
 
-            if ((type == def.TYPE_TCP_SOCK || type == def.TYPE_TCP_REOPEN) && ClientActive)
+            if ((type == def.TYPE_TCP_SOCK || type == def.TYPE_TCP_REOPEN || type == def.TYPE_TCP_SECURE) && ClientActive)
             {
                 /*
                 TCP:
@@ -1078,24 +1228,35 @@ namespace ModBusMaster_Chicco
                 response = new Byte[buffer_dimension];
                 int Length = 0;
 
-                NetworkStream stream = client.GetStream();
-                stream.WriteTimeout = readTimeout;
-                stream.ReadTimeout = readTimeout;
-
-                // Flush di eventuali dati presenti
-                if (type == def.TYPE_TCP_SOCK && stream.DataAvailable)
-                    stream.Read(response, 0, response.Length);
-
-                stream.Write(query, 0, query.Length);
-
-                Console_printByte("Tx: ", query, query.Length);
-                Console_print(" Tx -> ", query, query.Length);
-
-                try
+                if (type == def.TYPE_TCP_SECURE)
                 {
+                    sslStream.WriteTimeout = readTimeout;
+                    sslStream.ReadTimeout = readTimeout;
+
+                    sslStream.Write(query, 0, query.Length);
+
+                    Console_printByte("Tx: ", query, query.Length);
+                    Console_print(" Tx -> ", query, query.Length);
+
+                    Length = sslStream.Read(response, 0, response.Length);
+                }
+                else
+                {
+                    NetworkStream stream = client.GetStream();
+                    stream.WriteTimeout = readTimeout;
+                    stream.ReadTimeout = readTimeout;
+
+                    // Flush di eventuali dati presenti
+                    if (type == def.TYPE_TCP_SOCK && stream.DataAvailable)
+                        stream.Read(response, 0, response.Length);
+
+                    stream.Write(query, 0, query.Length);
+
+                    Console_printByte("Tx: ", query, query.Length);
+                    Console_print(" Tx -> ", query, query.Length);
+
                     Length = stream.Read(response, 0, response.Length);
                 }
-                catch { }
 
                 if (type == def.TYPE_TCP_REOPEN)
                     client.Close();
@@ -1105,6 +1266,13 @@ namespace ModBusMaster_Chicco
                 {
                     Console_print(" Timed out", null, 0);
                     throw new ModbusException("Timed out");
+                }
+
+                // CheckModbusTcp Answer
+                if (!checkModbusTcpResponse(response, Length))
+                {
+                    Console_print(" CheckModbusResponse failed", null, 0);
+                    throw new InvalidOperationException();
                 }
 
                 RX_set = true;       // pictureBox gialla
@@ -1232,7 +1400,7 @@ namespace ModBusMaster_Chicco
             byte[] response;
             //uint[] result = new uint[no_of_registers];
 
-            if ((type == def.TYPE_TCP_SOCK || type == def.TYPE_TCP_REOPEN) && ClientActive)
+            if ((type == def.TYPE_TCP_SOCK || type == def.TYPE_TCP_REOPEN || type == def.TYPE_TCP_SECURE) && ClientActive)
             {
                 /*
                 TCP:
@@ -1285,24 +1453,35 @@ namespace ModBusMaster_Chicco
                 response = new Byte[buffer_dimension];
                 int Length = 0;
 
-                NetworkStream stream = client.GetStream();
-                stream.WriteTimeout = readTimeout;
-                stream.ReadTimeout = readTimeout;
-
-                // Flush di eventuali dati presenti
-                if (type == def.TYPE_TCP_SOCK && stream.DataAvailable)
-                    stream.Read(response, 0, response.Length);
-
-                stream.Write(query, 0, query.Length);
-
-                Console_printByte("Tx: ", query, query.Length);
-                Console_print(" Tx -> ", query, query.Length);
-
-                try
+                if (type == def.TYPE_TCP_SECURE)
                 {
+                    sslStream.WriteTimeout = readTimeout;
+                    sslStream.ReadTimeout = readTimeout;
+
+                    sslStream.Write(query, 0, query.Length);
+
+                    Console_printByte("Tx: ", query, query.Length);
+                    Console_print(" Tx -> ", query, query.Length);
+
+                    Length = sslStream.Read(response, 0, response.Length);
+                }
+                else
+                {
+                    NetworkStream stream = client.GetStream();
+                    stream.WriteTimeout = readTimeout;
+                    stream.ReadTimeout = readTimeout;
+
+                    // Flush di eventuali dati presenti
+                    if (type == def.TYPE_TCP_SOCK && stream.DataAvailable)
+                        stream.Read(response, 0, response.Length);
+
+                    stream.Write(query, 0, query.Length);
+
+                    Console_printByte("Tx: ", query, query.Length);
+                    Console_print(" Tx -> ", query, query.Length);
+
                     Length = stream.Read(response, 0, response.Length);
                 }
-                catch { }
 
                 if (type == def.TYPE_TCP_REOPEN)
                     client.Close();
@@ -1312,6 +1491,13 @@ namespace ModBusMaster_Chicco
                 {
                     Console_print(" Timed out", null, 0);
                     throw new ModbusException("Timed out");
+                }
+
+                // CheckModbusTcp Answer
+                if (!checkModbusTcpResponse(response, Length))
+                {
+                    Console_print(" CheckModbusResponse failed", null, 0);
+                    throw new InvalidOperationException();
                 }
 
                 RX_set = true;        // pictureBox gialla
@@ -1433,7 +1619,7 @@ namespace ModBusMaster_Chicco
             byte[] query;
             byte[] response;
 
-            if ((type == def.TYPE_TCP_SOCK || type == def.TYPE_TCP_REOPEN) && ClientActive)
+            if ((type == def.TYPE_TCP_SOCK || type == def.TYPE_TCP_REOPEN || type == def.TYPE_TCP_SECURE) && ClientActive)
             {
                 /*
                 TCP:
@@ -1482,24 +1668,35 @@ namespace ModBusMaster_Chicco
                 response = new Byte[buffer_dimension];
                 int Length = 0;
 
-                NetworkStream stream = client.GetStream();
-                stream.WriteTimeout = readTimeout;
-                stream.ReadTimeout = readTimeout;
-
-                // Flush di eventuali dati presenti
-                if (type == def.TYPE_TCP_SOCK && stream.DataAvailable)
-                    stream.Read(response, 0, response.Length);
-
-                stream.Write(query, 0, query.Length);
-
-                Console_printByte("Tx: ", query, query.Length);
-                Console_print(" Tx -> ", query, query.Length);
-
-                try
+                if (type == def.TYPE_TCP_SECURE)
                 {
+                    sslStream.WriteTimeout = readTimeout;
+                    sslStream.ReadTimeout = readTimeout;
+
+                    sslStream.Write(query, 0, query.Length);
+
+                    Console_printByte("Tx: ", query, query.Length);
+                    Console_print(" Tx -> ", query, query.Length);
+
+                    Length = sslStream.Read(response, 0, response.Length);
+                }
+                else
+                {
+                    NetworkStream stream = client.GetStream();
+                    stream.WriteTimeout = readTimeout;
+                    stream.ReadTimeout = readTimeout;
+
+                    // Flush di eventuali dati presenti
+                    if (type == def.TYPE_TCP_SOCK && stream.DataAvailable)
+                        stream.Read(response, 0, response.Length);
+
+                    stream.Write(query, 0, query.Length);
+
+                    Console_printByte("Tx: ", query, query.Length);
+                    Console_print(" Tx -> ", query, query.Length);
+
                     Length = stream.Read(response, 0, response.Length);
                 }
-                catch { }
 
                 if (type == def.TYPE_TCP_REOPEN)
                     client.Close();
@@ -1509,6 +1706,13 @@ namespace ModBusMaster_Chicco
                 {
                     Console_print(" Timed out", null, 0);
                     throw new ModbusException("Timed out");
+                }
+
+                // CheckModbusTcp Answer
+                if (!checkModbusTcpResponse(response, Length))
+                {
+                    Console_print(" CheckModbusResponse failed", null, 0);
+                    throw new InvalidOperationException();
                 }
 
                 RX_set = true;        // pictureBox gialla
@@ -1624,7 +1828,7 @@ namespace ModBusMaster_Chicco
             byte[] response;
             String[] result = new String[buffer_dimension];
 
-            if ((type == def.TYPE_TCP_SOCK || type == def.TYPE_TCP_REOPEN) && ClientActive)
+            if ((type == def.TYPE_TCP_SOCK || type == def.TYPE_TCP_REOPEN || type == def.TYPE_TCP_SECURE) && ClientActive)
             {
                 /*
                 TCP:
@@ -1672,24 +1876,35 @@ namespace ModBusMaster_Chicco
                 response = new Byte[buffer_dimension];
                 int Length = 0;
 
-                NetworkStream stream = client.GetStream();
-                stream.WriteTimeout = readTimeout;
-                stream.ReadTimeout = readTimeout;
-
-                // Flush di eventuali dati presenti
-                if (type == def.TYPE_TCP_SOCK && stream.DataAvailable)
-                    stream.Read(response, 0, response.Length);
-
-                stream.Write(query, 0, query.Length);
-
-                Console_printByte("Tx: ", query, query.Length);
-                Console_print(" Tx -> ", query, query.Length);
-
-                try
+                if (type == def.TYPE_TCP_SECURE)
                 {
+                    sslStream.WriteTimeout = readTimeout;
+                    sslStream.ReadTimeout = readTimeout;
+
+                    sslStream.Write(query, 0, query.Length);
+
+                    Console_printByte("Tx: ", query, query.Length);
+                    Console_print(" Tx -> ", query, query.Length);
+
+                    Length = sslStream.Read(response, 0, response.Length);
+                }
+                else
+                {
+                    NetworkStream stream = client.GetStream();
+                    stream.WriteTimeout = readTimeout;
+                    stream.ReadTimeout = readTimeout;
+
+                    // Flush di eventuali dati presenti
+                    if (type == def.TYPE_TCP_SOCK && stream.DataAvailable)
+                        stream.Read(response, 0, response.Length);
+
+                    stream.Write(query, 0, query.Length);
+
+                    Console_printByte("Tx: ", query, query.Length);
+                    Console_print(" Tx -> ", query, query.Length);
+
                     Length = stream.Read(response, 0, response.Length);
                 }
-                catch { }
 
                 if (type == def.TYPE_TCP_REOPEN)
                     client.Close();
@@ -1699,6 +1914,13 @@ namespace ModBusMaster_Chicco
                 {
                     Console_print(" Timed out", null, 0);
                     throw new ModbusException("Timed out");
+                }
+
+                // CheckModbusTcp Answer
+                if (!checkModbusTcpResponse(response, Length))
+                {
+                    Console_print(" CheckModbusResponse failed", null, 0);
+                    throw new InvalidOperationException();
                 }
 
                 RX_set = true;       // pictureBox gialla
@@ -1851,7 +2073,7 @@ namespace ModBusMaster_Chicco
             byte[] query;
             byte[] response;
 
-            if ((type == def.TYPE_TCP_SOCK || type == def.TYPE_TCP_REOPEN) && ClientActive)
+            if ((type == def.TYPE_TCP_SOCK || type == def.TYPE_TCP_REOPEN || type == def.TYPE_TCP_SECURE) && ClientActive)
             {
                 /*
                TCP:
@@ -1941,24 +2163,35 @@ namespace ModBusMaster_Chicco
                 response = new Byte[buffer_dimension];
                 int Length = 0;
 
-                NetworkStream stream = client.GetStream();
-                stream.WriteTimeout = readTimeout;
-                stream.ReadTimeout = readTimeout;
-
-                // Flush di eventuali dati presenti
-                if (type == def.TYPE_TCP_SOCK && stream.DataAvailable)
-                    stream.Read(response, 0, response.Length);
-
-                stream.Write(query, 0, query.Length);
-
-                Console_printByte("Tx: ", query, query.Length);
-                Console_print(" Tx -> ", query, query.Length);
-
-                try
+                if (type == def.TYPE_TCP_SECURE)
                 {
+                    sslStream.WriteTimeout = readTimeout;
+                    sslStream.ReadTimeout = readTimeout;
+
+                    sslStream.Write(query, 0, query.Length);
+
+                    Console_printByte("Tx: ", query, query.Length);
+                    Console_print(" Tx -> ", query, query.Length);
+
+                    Length = sslStream.Read(response, 0, response.Length);
+                }
+                else
+                {
+                    NetworkStream stream = client.GetStream();
+                    stream.WriteTimeout = readTimeout;
+                    stream.ReadTimeout = readTimeout;
+
+                    // Flush di eventuali dati presenti
+                    if (type == def.TYPE_TCP_SOCK && stream.DataAvailable)
+                        stream.Read(response, 0, response.Length);
+
+                    stream.Write(query, 0, query.Length);
+
+                    Console_printByte("Tx: ", query, query.Length);
+                    Console_print(" Tx -> ", query, query.Length);
+
                     Length = stream.Read(response, 0, response.Length);
                 }
-                catch { }
 
                 if (type == def.TYPE_TCP_REOPEN)
                     client.Close();
@@ -1968,6 +2201,13 @@ namespace ModBusMaster_Chicco
                 {
                     Console_print(" Timed out", null, 0);
                     throw new ModbusException("Timed out");
+                }
+
+                // CheckModbusTcp Answer
+                if (!checkModbusTcpResponse(response, Length))
+                {
+                    Console_print(" CheckModbusResponse failed", null, 0);
+                    throw new InvalidOperationException();
                 }
 
                 RX_set = true;        // pictureBox gialla
@@ -2127,7 +2367,7 @@ namespace ModBusMaster_Chicco
             byte[] query;
             byte[] response;
 
-            if ((type == def.TYPE_TCP_SOCK || type == def.TYPE_TCP_REOPEN) && ClientActive)
+            if ((type == def.TYPE_TCP_SOCK || type == def.TYPE_TCP_REOPEN || type == def.TYPE_TCP_SECURE) && ClientActive)
             {
                 /*
                 TCP:
@@ -2194,24 +2434,35 @@ namespace ModBusMaster_Chicco
                 response = new Byte[buffer_dimension];
                 int Length = 0;
 
-                NetworkStream stream = client.GetStream();
-                stream.WriteTimeout = readTimeout;
-                stream.ReadTimeout = readTimeout;
-
-                // Flush di eventuali dati presenti
-                if (type == def.TYPE_TCP_SOCK && stream.DataAvailable)
-                    stream.Read(response, 0, response.Length);
-
-                stream.Write(query, 0, query.Length);
-
-                Console_printByte("Tx: ", query, query.Length);
-                Console_print(" Tx -> ", query, query.Length);
-
-                try
+                if (type == def.TYPE_TCP_SECURE)
                 {
+                    sslStream.WriteTimeout = readTimeout;
+                    sslStream.ReadTimeout = readTimeout;
+
+                    sslStream.Write(query, 0, query.Length);
+
+                    Console_printByte("Tx: ", query, query.Length);
+                    Console_print(" Tx -> ", query, query.Length);
+
+                    Length = sslStream.Read(response, 0, response.Length);
+                }
+                else
+                {
+                    NetworkStream stream = client.GetStream();
+                    stream.WriteTimeout = readTimeout;
+                    stream.ReadTimeout = readTimeout;
+
+                    // Flush di eventuali dati presenti
+                    if (type == def.TYPE_TCP_SOCK && stream.DataAvailable)
+                        stream.Read(response, 0, response.Length);
+
+                    stream.Write(query, 0, query.Length);
+
+                    Console_printByte("Tx: ", query, query.Length);
+                    Console_print(" Tx -> ", query, query.Length);
+
                     Length = stream.Read(response, 0, response.Length);
                 }
-                catch { }
 
                 if (type == def.TYPE_TCP_REOPEN)
                     client.Close();
@@ -2221,6 +2472,13 @@ namespace ModBusMaster_Chicco
                 {
                     Console_print(" Timed out", null, 0);
                     throw new ModbusException("Timed out");
+                }
+
+                // CheckModbusTcp Answer
+                if (!checkModbusTcpResponse(response, Length))
+                {
+                    Console_print(" CheckModbusResponse failed", null, 0);
+                    throw new InvalidOperationException();
                 }
 
                 RX_set = true;       // pictureBox gialla
@@ -2501,7 +2759,7 @@ namespace ModBusMaster_Chicco
             }
         }
 
-        // Funzione equivalnete alla vecchia Application.DoEvents()
+        // Funzione equivalente alla precedente Application.DoEvents()
         public static void DoEvents()
         {
             Application.Current.Dispatcher.Invoke(System.Windows.Threading.DispatcherPriority.Render, new Action(delegate { }));

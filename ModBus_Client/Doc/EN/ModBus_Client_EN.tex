@@ -1,0 +1,166 @@
+\documentclass{report}
+\usepackage
+[
+        a4paper,% other options: a3paper, a5paper, etc
+        left=2.5cm,
+        right=2.5cm,
+        % top=3cm,
+        bottom=3cm,
+        % use vmargin=2cm to make vertical margins equal to 2cm.
+        % us  hmargin=3cm to make horizontal margins equal to 3cm.
+        % use margin=3cm to make all margins  equal to 3cm.
+]
+{geometry}
+
+% OPTIONS
+% Versione estesa
+% \def\extendedPdf
+
+% \documentclass[a4paper,11pt]{report}
+% Standard margins for SLU is 3.5 cm on each side. Add this code if desired:
+% \usepackage[a4paper, left=3cm, right=3cm]{geometry}
+\usepackage{fancyhdr}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}	% Not found
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{comment}
+\usepackage{float}  %force image posistion
+%\usepackage{siunitx}	% Not found
+%\usepackage{pdfpages}   %inseting pages from an externl pdf
+%\usepackage{natbib}
+\usepackage{titlesec, color}
+\usepackage[pdftex,pdfpagelabels,bookmarks,hyperindex,hyperfigures,hidelinks]{hyperref}
+%hidelinks per nascondere i riquadri rossi che si verrebbero a creare attorno ai link generati da hyperref
+\usepackage[open,openlevel=1]{bookmark}
+%\usepackage{multirow}
+%\usepackage[Bjornstrup]{fncychap}
+%Options: Sonny, Lenny, Glenn, Conny, Rejne, Bjarne, Bjornstrup
+%\usepackage{changepage}                 % adjust margins for selected portions
+%\usepackage{lipsum}
+\usepackage{csvsimple}
+%\usepackage{pdflscape}
+%\usepackage[usenames,dvipsnames]{xcolor}
+\usepackage{listings}
+
+\usepackage{amsmath}
+\usepackage{tikz}
+\usepackage{epigraph}
+\usepackage{lipsum}
+
+\renewcommand\epigraphflush{flushleft}
+\renewcommand\epigraphsize{\normalsize}
+\setlength\epigraphwidth{0.7\textwidth}
+
+
+
+% -----------------------------------------------
+% ---- Comandi simone header pagina - titolo ----
+% -----------------------------------------------
+\newcommand{\docrevision}{\ddmmyyyydate\today}
+\newcommand{\projectname}{Modbus Client}
+\newcommand{\projectdescription}{Modbus Client Manual }
+
+\newcommand{\revision}{\docrevision}
+\newcommand{\version}{v2.38}
+\renewcommand{\chaptermark}[1]{\markboth{#1}{#1}}   % Chapter name in alto a sx senza "Capitolo x " davanti
+
+\pagestyle{fancy}
+\fancyhf{}
+% \lhead{\revision}
+\lhead{\leftmark}       % Titolo del capitolo
+\chead{\projectname}    % Nome del Progetto
+\rhead{Federico Turco}
+\cfoot{\thepage}
+% -----------------------------------------------
+
+%\usepackage[a-1b]{pdfx}
+%\usepackage[pdfa,pdfpagelabels,bookmarks,hyperindex,hyperfigures]{hyperref}
+%\usepackage[pdfa, colorlinks=true,linkcolor=black,anchorcolor=black,citecolor=black,filecolor=black,menucolor=black,runcolor=black,urlcolor=black]{hyperref}
+%\usepackage[pdfa]{hyperref}
+%\usepackage[pdfpagelabels]{hyperref}
+
+%\usepackage[pdfa,pdfpagelabels,bookmarks,hyperindex,hyperfigures,hidelinks]{hyperref}
+
+% wide page for side by side figures, tables, etc
+\newlength{\offsetpage}
+\setlength{\offsetpage}{1.5cm}
+\newenvironment{widepage}{\begin{adjustwidth}{-\offsetpage}{-\offsetpage}%
+    \addtolength{\textwidth}{2\offsetpage}}%
+{\end{adjustwidth}}
+
+%micro
+
+%----Gestione capitoli
+%-\part
+%-\chapter
+%-\section
+%-\subsection
+%-\subsubsection
+%-\paragraph
+%-\subparagraph
+
+%-tableofcontents
+%-listoffigures
+%-listoftables
+%-printindex
+
+%-printbibliography
+
+\def \citeOpen {(fonte: }
+\def \citeClose {)}
+
+% Dimesioni default immagini
+\def \imageSizeFull{1}
+\def \imageSizeRegisterSmall{0.7}
+\def \imageSizeRegister{0.8}
+
+\setlength\parindent{0pt}
+
+% DEFINIZIONE-CHAPTER-STYLE
+\definecolor{gray75}{gray}{0.75}
+\newcommand{\hsp}{\hspace{20pt}}
+\titleformat{\chapter}[hang]{\Huge\bfseries}{\thechapter\hsp\textcolor{gray75}{|}\hsp}{0pt}{\Huge\bfseries}
+
+% INIZIO-DOCUMENTO
+\begin{document}
+
+% INSERIMENTO-FRONTESPIZIO
+\begin{titlepage}
+\input{frontpage}
+\end{titlepage}
+
+% Pagina vuota dopo titlepage
+\shipout\null
+
+% INDICE
+\pagenumbering{roman}
+\tableofcontents
+\cleardoublepage
+\pagenumbering{arabic}
+
+% INDICE DELLE FIGURE
+% \listoffigures
+
+% INDICE DELLE TABELLE
+% \listoftables
+
+% DOCUMENTO
+\input{01_slave_connection.tex}
+\input{02_main_window.tex}
+\input{03_packet_log.tex}
+\input{04_settings.tex}
+\input{05_templates.tex}
+\input{06_tools_holding_registers.tex}
+\input{07_gestione_database.tex}
+\input{08_dropdown.tex}
+\input{09_shortcuts.tex}
+\input{11_modbus_secure.tex}
+\input{10_altre_note.tex}
+
+% RIFERIMENTI
+%
+
+\end{document}

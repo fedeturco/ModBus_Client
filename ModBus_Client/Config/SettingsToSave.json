@@ -45,7 +45,10 @@
       "textBoxDiagnosticFunctionManual": {},
       "TextBoxPollingInterval": {},
       "textBoxReadTimeout": {},
-      "textBoxCurrentLanguage": {}
+      "textBoxCurrentLanguage": {},
+      "textBoxClientCertificatePath": {},
+      "textBoxClientKeyPath": {},
+      "textBoxCertificatePassword": {}
     },
     "checkBoxes": {
       "checkBoxCloseConsolAfterBoot": {},
@@ -55,7 +58,9 @@
       "checkBoxFollowModbusProtocol": {},
       "checkBoxCellColorMode": {},
       "checkBoxViewTableWithoutOffset": {},
-      "CheckBoxDarkMode": {}
+      "CheckBoxDarkMode": {},
+      "checkBoxModbusSecure": {},
+      "CheckBoxUseOnlyReadSingleRegistersForGroups": {}
     },
     "menuItems": {
       "viewTabCoilsRegisters": {},
@@ -121,7 +126,8 @@
       "comboBoxInputRegOffset": {},
       "comboBoxHoldingOffset": {},
       "comboBoxDiagnosticFunction": {},
-      "comboBoxTcpConnectionMode": {}
+      "comboBoxTcpConnectionMode": {},
+      "comboBoxTlsVersion": {}
     }
   }
 }

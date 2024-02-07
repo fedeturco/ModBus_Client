@@ -89,14 +89,14 @@
     "labelSaveProfile": "Create new profile:",
     "labelSaveProfile_0": "Label:",
     "labelLoadProfile": "Load profile:",
-    "labelOffsetHiddenCoils": "Offset hidden in table",
-    "labelOffsetHiddenInput": "Offset hidden in table",
-    "labelOffsetHiddenInputRegister": "Offset hidden in table",
-    "labelOffsetHiddenHolding": "Offset hidden in table",
     "labelProfileSelected": "Selected profile:",
     "labelColorCellRead": "Read cells color:",
     "labelColorCellWrote": "Wrote cells color:",
-    "labelColorCellError": "Cells which raised an error:"
+    "labelColorCellError": "Cells which raised an error:",
+    "labelClientCertificateName": "Client Certificate:",
+    "labelClientKeyName": "Client Key:",
+    "labelClientPasswordName": "Certificate Pass:",
+    "labelClientTLSVersion": "TLS Version:"
   },
   "radioButtons": {
     "radioButtonModeSerial": {
@@ -119,7 +119,8 @@
     "checkBoxViewTableWithoutOffset": "Hide user offset in tables",
     "checkBoxCloseConsolAfterBoot": "Close console on startup",
     "checkBoxOffBit": "Disable bit automatically",
-    "checkBoxDisablePictureBoxCommands": "Disable pictureBox commands"
+    "checkBoxDisablePictureBoxCommands": "Disable pictureBox commands",
+    "CheckBoxUseOnlyReadSingleRegistersForGroups": "Use only \"ReadSingleRegister\" for group resources"
   },
   "buttons": {
     "buttonUpdateSerialList": "Update",
@@ -326,7 +327,7 @@
     "connectedTo": "Connected to",
     "failedToConnect": "Failed to connect to",
     "connectingTo": "Connecting to",
-    "maxRegNumber": "Number of registers too bit",
+    "maxRegNumber": "Number of registers too high",
     "errSetReg": "Error writing register",
     "infoSaveConfig": "Configuration saved successfully. Current configuration will be loaded on next startup.",
     "logIsAlreadyOpen": "Log window is already open",
@@ -343,6 +344,10 @@
     "overwriteProfile": "Current profile already exists, overwrite?",
     "deleteProfile": "Delete selected profile?",
     "importProfileWarning": "Importing the profile will erase the actual template (including custom mappings). Do you want to proceed?",
-    "selectedProfile": "Selected profile:"
+    "selectedProfile": "Selected profile:",
+    "valueNotValid": "Invalid value",
+    "certificateFileNotFound": "Certificate file not found: ",
+    "keyFileNotFound": "Key file not found: ",
+    "certificatePasswordNotValid": "Certificate password is not correct"
   }
 }

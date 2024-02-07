@@ -98,6 +98,33 @@
     <Compile Include="ComandiWord.xaml.cs">
       <DependentUpon>ComandiWord.xaml</DependentUpon>
     </Compile>
+    <None Include="Doc\EN\01_slave_connection.tex" />
+    <None Include="Doc\EN\02_main_window.tex" />
+    <None Include="Doc\EN\03_packet_log.tex" />
+    <None Include="Doc\EN\04_settings.tex" />
+    <None Include="Doc\EN\05_templates.tex" />
+    <None Include="Doc\EN\06_tools_holding_registers.tex" />
+    <None Include="Doc\EN\07_gestione_database.tex" />
+    <None Include="Doc\EN\08_dropdown.tex" />
+    <None Include="Doc\EN\09_shortcuts.tex" />
+    <None Include="Doc\EN\10_altre_note.tex" />
+    <None Include="Doc\EN\11_modbus_secure.tex" />
+    <None Include="Doc\EN\frontpage.tex" />
+    <None Include="Doc\EN\ModBus_Client_EN.tex" />
+    <None Include="Doc\IT\01_slave_connection.tex" />
+    <None Include="Doc\IT\02_main_window.tex" />
+    <None Include="Doc\IT\03_packet_log.tex" />
+    <None Include="Doc\IT\04_settings.tex" />
+    <None Include="Doc\IT\05_templates.tex" />
+    <None Include="Doc\IT\06_tools_holding_registers.tex" />
+    <None Include="Doc\IT\07_gestione_database.tex" />
+    <None Include="Doc\IT\08_dropdown.tex" />
+    <None Include="Doc\IT\09_shortcuts.tex" />
+    <None Include="Doc\IT\10_altre_note.tex" />
+    <None Include="Doc\IT\frontpage.tex" />
+    <None Include="Doc\IT\11_modbus_secure.tex" />
+    <None Include="Doc\IT\ModBus_Client_IT.tex" />
+    <None Include="Doc\SchemaModbus.epgz" />
     <None Include="Lang\Mappings_EN.info">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -278,10 +305,10 @@
     <None Include="Lang\IT.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Manuali\Guida_ModBus_Client_EN.pdf">
+    <None Include="Manuals\ModBus_Client_EN.pdf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Manuali\Guida_ModBus_Client_IT.pdf">
+    <None Include="Manuals\ModBus_Client_IT.pdf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Properties\Settings.settings">
@@ -296,10 +323,10 @@
     <Resource Include="Logo\Bozzetto_logo_4.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Img\ModBus_Client_InputReg_00.PNG" />
+    <Resource Include="Doc\Img\ModBus_Client_InputReg_00.PNG" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Img\ModBus_Client_HoldingReg_00.PNG" />
+    <Resource Include="Doc\Img\ModBus_Client_HoldingReg_00.PNG" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Config\SettingsToSave.json">
@@ -307,14 +334,14 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Img\ModBus_Client_Diagnostic_00.PNG" />
-    <Resource Include="Img\ModBus_Client_Home_00.PNG" />
-    <Resource Include="Img\ModBus_Client_Settings_00.PNG" />
-    <Resource Include="Img\ModBus_Client_Template_00.PNG" />
+    <Resource Include="Doc\Img\ModBus_Client_Diagnostic_00.PNG" />
+    <Resource Include="Doc\Img\ModBus_Client_Home_00.PNG" />
+    <Resource Include="Doc\Img\ModBus_Client_Settings_00.PNG" />
+    <Resource Include="Doc\Img\ModBus_Client_Template_00.PNG" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Img\ModBus_Client_Coils_00.PNG" />
-    <Resource Include="Img\ModBus_Client_Inputs_00.PNG" />
+    <Resource Include="Doc\Img\ModBus_Client_Coils_00.PNG" />
+    <Resource Include="Doc\Img\ModBus_Client_Inputs_00.PNG" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.8">
@@ -347,8 +374,39 @@
     <None Include="Lang\Mappings_IT.info">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <Resource Include="Doc\Img\Menu_Database.PNG" />
+    <Resource Include="Doc\Img\Menu_Export.PNG" />
+    <Resource Include="Doc\Img\Menu_File.PNG" />
+    <Resource Include="Doc\Img\Menu_Import.PNG" />
+    <Resource Include="Doc\Img\Menu_Info.PNG" />
+    <Resource Include="Doc\Img\Menu_Tools.PNG" />
+    <Resource Include="Doc\Img\Menu_View.PNG" />
+    <Resource Include="Doc\Img\ModBus_Client_Coils_Write_00.PNG" />
+    <Resource Include="Doc\Img\ModBus_Client_Home_Connected_00.PNG" />
+    <Resource Include="Doc\Img\ModBus_Client_Log_00.PNG" />
+    <Resource Include="Doc\Img\DatabaseDirectory.PNG" />
+    <Resource Include="Doc\Img\DatabaseManager.PNG" />
+    <Resource Include="Doc\Img\Finestra_Info.PNG" />
+    <Resource Include="Doc\Img\LoadProfile.PNG" />
+    <Resource Include="Doc\Img\Menu_View_Holding.PNG" />
+    <Resource Include="Doc\Img\Menu_View_InputReg.PNG" />
+    <Resource Include="Doc\Img\ModBus_Client_HoldingReg_Import.PNG" />
+    <Resource Include="Doc\Img\ModBus_Client_HoldingReg_Live.PNG" />
+    <Resource Include="Doc\Img\ModBus_Client_Log_01.PNG" />
+    <Resource Include="Doc\Img\ModBus_Client_Template_Group00.PNG" />
+    <Resource Include="Doc\Img\ModBus_Client_Template_ReadDemo00.PNG" />
+    <Resource Include="Doc\Img\ModBus_Home_Secure.PNG" />
+    <Resource Include="Doc\Img\ProfileHome.PNG" />
+    <Resource Include="Doc\Img\SaveProfile.PNG" />
+    <Resource Include="Doc\Img\schemamodbussecure.png" />
+    <Resource Include="Doc\Img\Tool_Command_Bit.PNG" />
+    <Resource Include="Doc\Img\Tool_Command_Bit_Label.PNG" />
+    <Resource Include="Doc\Img\Tool_Command_Byte.PNG" />
+    <Resource Include="Doc\Img\Tool_Command_Word.PNG" />
+    <Resource Include="Doc\Img\ModBus_Client_Template_Group_Definition.PNG" />
     <Content Include="Logo\Modbus_logo.svg" />
     <Content Include="Logo\Modbus_logo_2.svg" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

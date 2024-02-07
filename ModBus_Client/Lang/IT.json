@@ -89,14 +89,14 @@
     "labelSaveProfile": "Crea nuovo profilo:",
     "labelSaveProfile_0": "Etichetta:",
     "labelLoadProfile": "Carica profilo:",
-    "labelOffsetHiddenCoils": "Offset nascosto nella tabella",
-    "labelOffsetHiddenInput": "Offset nascosto nella tabella",
-    "labelOffsetHiddenInputRegister": "Offset nascosto nella tabella",
-    "labelOffsetHiddenHolding": "Offset nascosto nella tabella",
     "labelProfileSelected": "Profilo selezionato:",
     "labelColorCellRead": "Colore celle lette:",
     "labelColorCellWrote": "Colore celle scritte:",
-    "labelColorCellError": "Colore celle che hanno generato un errore:"
+    "labelColorCellError": "Colore celle che hanno generato un errore:",
+    "labelClientCertificateName": "Certificato Client:",
+    "labelClientKeyName": "Chiave Client:",
+    "labelClientPasswordName": "Pass. Certificato:",
+    "labelClientTLSVersion": "Versione TLS:"
   },
   "radioButtons": {
     "radioButtonModeSerial": {
@@ -119,7 +119,8 @@
     "checkBoxViewTableWithoutOffset": "Nascondi offset utente nelle tabelle",
     "checkBoxCloseConsolAfterBoot": "Chiudi console al termine dell'avvio",
     "checkBoxOffBit": "Disattiva automaticamente bit",
-    "checkBoxDisablePictureBoxCommands": "Disattiva comandi pictureBox"
+    "checkBoxDisablePictureBoxCommands": "Disattiva comandi pictureBox",
+    "CheckBoxUseOnlyReadSingleRegistersForGroups": "Usa solo \"ReadSingleRegister\" per risorse di gruppo"
   },
   "buttons": {
     "buttonUpdateSerialList": "Aggiorna",
@@ -438,6 +439,10 @@
     "overwriteProfile": "Il profilo corrente esiste già, sovrascriverlo?",
     "deleteProfile": "Cancellare il profilo selezionato?",
     "importProfileWarning": "Importando il profilo selezionato verrà sovrascritto completamente quello corrente. Procedere?",
-    "selectedProfile": "Profilo selezionato:"
+    "selectedProfile": "Profilo selezionato:",
+    "valueNotValid": "Valore non valido",
+    "certificateFileNotFound": "File certificato non trovato: ",
+    "keyFileNotFound": "File chiave privata non trovato: ",
+    "certificatePasswordNotValid": "Password certificato non corretta"
   }
 }

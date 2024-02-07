@@ -1,0 +1,69 @@
+
+\chapter{Settings}
+
+The settings tab contains operating parameters,
+beware that the settings are tied to the profile,
+changing the profile loads the respective settings.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{../Img/Modbus_Client_Settings_00.PNG}
+    \caption{Settings tab}
+\end{figure}
+
+\begin{itemize}
+    \item \textbf{Automatically correct offset modbus addresses:}
+    If checked when entering an address in the original protocol format e.g.
+    holding register 40002 is automatically sent in the modbus request as address
+    00001 thus eliminating the offset provided for holding registers. Otherwise it is 
+    requested
+    address 40002. Same for input registers (30001), discrete inputs (10001)
+    or coils (00001).
+    \item \textbf{Limit modbus addresses to 9998:}
+    If checked, only address requests between 0 and 9998 (or corresponding address
+    modbus e.g.: 10001-19999/30001-39999/40001-49999) are allowed. Otherwise, the request is sent
+    whatever modbus address is entered. For example, some Beckhoff CPUs provide
+    the words MW0,MW1,... starting at holding register 0x3000 (dec 12288). 
+    By not checking the box
+    you can then also send requests to addresses beyond the value of 9998, up to 65535.
+    \item \textbf{Color cells with value > 0 / Alternating color:}
+    If checked, only table rows with a value > 0 are colored, otherwise rows
+    are colored alternately.
+    \item \textbf{Hide user offset in tables:}
+    If checked, the general offset is not displayed in the tables but is counted in the commands
+    sent via ModBus. (User offset means the offset entered in the box "Offset" present
+    in each tab).
+    \item \textbf{Close console on startup:}
+    Automatically closes the console when you start the application.
+    \item \textbf{Dark mode:}
+    Enable dark mode (black backgrounds, white text).
+\end{itemize}
+
+In addition to the ticks there are some parameters such as:
+
+\begin{itemize}
+    \item \textbf{Read timeout:}
+    Timeout in ms for response to a command.
+    \item \textbf{Loop polling interval:}
+    Interval in ms between two reads for loop read commands.
+\end{itemize}
+
+For non-secure TCP connections only, it is possible to choose between two modes
+of socket management:
+
+\begin{itemize}
+    \item \textbf{TCP connection mode:}
+    This parameter allows you to change the TCP socket handling only for 
+    non-secure mode. At the TCP socket level normally the connection is opened,
+    kept open and closed at the end of its use.
+    On unstable connections, however, it is more convenient to open and 
+    close the socket on each request.
+    The correct mode of the protocol would be the first one,
+    but it often happens 
+    on unstable connections (e.g., slaves connected via modem) that a connection is initiated,
+    after a few reads it falls out, the socket fails and you have to reconnect again.
+    With the socket going into timeout as it is no longer open on the slave 
+    when the connection returns. With the second
+    mode this does not happen because the socket is opened for each read 
+    and closed immediately after so on a practical level this mode can come in very handy.
+\end{itemize}

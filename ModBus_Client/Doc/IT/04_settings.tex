@@ -1,0 +1,68 @@
+
+\chapter{Impostazioni}
+
+La tab impostazioni contiene i parametri di funzionamento,
+attenzione che le impostazioni sono legate al profilo,
+cambiando profilo vengono caricate le rispettive impostazioni.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{../Img/Modbus_Client_Settings_00.PNG}
+    \caption{Tab impostazioni}
+\end{figure}
+
+\begin{itemize}
+    \item \textbf{CORREGGI AUTOMATICAMENTE OFFSET INDIRIZZI MODBUS TEXTBOX:}
+    Se spuntata quando si inserisce un indirizzo nel formato originale del protocollo ad esempio
+    holding register 40002 viene automaticamente inviato nellla richiesta modbus come indirizzo
+    00001 eliminando quindi l'offset previsto per gli holding registers. In caso contrario viene 
+    richiesto
+    l'indirizzo 40002. Stessa cosa per gli input registers (30001), discrete inputs (10001)
+    o coils (1).
+    \item \textbf{LIMITA GLI INDIRIZZI MODBUS A 9998:}
+    Se spuntata vengono inviate solo le richieste di indirizzi tra 0 e 9998 (o corrispondente indirizzo
+    Modbus es: 10001-19999/30001-39999/40001-49999). In caso contrario viene inviata la richiesta
+    modbus qualsiasi sia l'indirizzo inserito. Ad esempio alcune CPU Beckhoff mettono a disposizione
+    le word MW0,MW1,… partendo dall'holding register 0x3000 (dec 12288). Non spuntando la casella
+    si possono quindi inviare richieste anche a indirizzi oltre il valore di 9998, fino a 65535.
+    \item \textbf{COLORE CELLE > 0 / COLORE CELLE ALTERNATE:}
+    Se spuntata vengono colorate solo le righe delle tabelle con un valore > 0, altrimenti le righe
+    vengono colorate in maniera alternata.
+    \item \textbf{NASCONDI OFFSET UTENTE NELLE TABELLE:}
+    Se spuntata l'offset generale non viene visualizzato nelle tabelle ma viene contato nei comandi
+    inviati via ModBus. (Per offset utente si intende l'offset inserito nel box presente
+    in ogni tab).
+    \item \textbf{CHIUDI CONSOLE ALL'AVVIO:}
+    Chiude automaticamente la console quando si avvia l'applicazione.
+    \item \textbf{DARK MODE:}
+    Abilita la modalità scura (sfondi neri, testo bianco).
+\end{itemize}
+
+Oltre alle spunte sono presenti alcuni parametri quali:
+
+\begin{itemize}
+    \item \textbf{READ TIMEOUT:}
+    Timeout in ms di risposta a un comando.
+    \item \textbf{LOOP POLLING INTERVAL:}
+    Intervallo in ms tra una lettura e la successiva per i comandi di loop read.
+\end{itemize}
+
+Solo per connessioni TCP non secure è possibile scegliere tra due modalità
+di gestione delle socket:
+
+\begin{itemize}
+    \item \textbf{TCP CONNECTION MODE:}
+    Questo parametro permette di cambiare la gestione della socket TCP solo per la 
+    modalità non secure. A livello di socket TCP normalmente la connessione viene aperta,
+    mantenuta aperta e chiusa al termine del suo utilizzo.
+    Su connessioni instabili però risulta più comodo aprire e 
+    chiudere la socket ad ogni richiesta.
+    La modalità corretta del protocollo sarebbe la prima,
+    ma succede spesso 
+    su connessioni instabili (ad esempio slave connessi via modem) che si inizi la connessione,
+    dopo qualche lettura cade la connessione, va in errore la socket e bisogna connettersi nuovamente
+    con la socket che va in timeout non essendo più aperta sullo slave 
+    quando ritorna la connessione. Con la seconda
+    modalità questo non accade perche la socket viene riaperta per ogni lettura 
+    e chiusa subito dopo per cui a livello pratico questa modalità può tornare molto utile.
+\end{itemize}

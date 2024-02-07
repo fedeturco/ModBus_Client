@@ -61,23 +61,24 @@ namespace ModBus_Client
     public partial class PreviewImport : Window
     {
         MainWindow main;
-        String filePath = "";
+        String[] filePaths;
         byte FC = 0;
 
         ObservableCollection<ModBus_Import> list_import = new ObservableCollection<ModBus_Import>();
 
         bool useMultiple = false; 
         bool closeAfterWrite = true;
+        bool abortOnError = true;
         bool edited = false;
 
         Parser P = new Parser();
 
-        public PreviewImport(MainWindow main_, String filePath_, byte FC_)
+        public PreviewImport(MainWindow main_, String[] filePaths_, byte FC_)
         {
             InitializeComponent();
 
             main = main_;
-            filePath = filePath_;
+            filePaths = filePaths_;
             FC = FC_;
 
             if (FC == 5)
@@ -137,91 +138,97 @@ namespace ModBus_Client
 
             try
             {
-                // CSV File
-                if (filePath.IndexOf(".csv") != -1)
+                foreach (String filePath in filePaths)
                 {
-                    string[] registers = File.ReadAllText(filePath).Split('\n');
-                    for (int i = 0; i < registers.Length; i++)
+                    // CSV File
+                    if (filePath.IndexOf(".csv") != -1)
                     {
-                        string[] row = registers[i].Split(',');
-
-                        if (row.Length < 3)
-                            continue;
-
-                        if (row[0].ToLower().IndexOf("offset") != -1)
-                            continue;
-
-                        ModBus_Import item = new ModBus_Import();
-
-                        item.Offset = row[0];
-                        item.OffsetUInt = UInt16.Parse(row[0].Replace("0x", ""), row[0].ToLower().IndexOf("0x") != -1 ? System.Globalization.NumberStyles.HexNumber : System.Globalization.NumberStyles.Integer);
-
-                        item.Register = row[1];
-                        item.RegisterUInt = UInt16.Parse(row[1].Replace("0x", ""), row[1].ToLower().IndexOf("0x") != -1 ? System.Globalization.NumberStyles.HexNumber : System.Globalization.NumberStyles.Integer);
-
-                        item.Value = row[2];
-                        item.ValueUInt = UInt16.Parse(row[2].Replace("0x", ""), row[2].ToLower().IndexOf("0x") != -1 ? System.Globalization.NumberStyles.HexNumber : System.Globalization.NumberStyles.Integer);
-
-                        item.Notes = row[3];
-
-                        if ((bool)main.CheckBoxDarkMode.IsChecked)
+                        string[] registers = File.ReadAllText(filePath).Split('\n');
+                        for (int i = 0; i < registers.Length; i++)
                         {
-                            item.Foreground = main.ForeGroundDarkStr;
-                            item.Background = main.BackGroundDarkStr;
-                        }
-                        else
-                        {
-                            item.Foreground = main.ForeGroundLightStr;
-                            item.Background = main.BackGroundLight2Str;
-                        }
+                            string[] row = registers[i].Split(',');
 
-                        list_import.Add(item);
+                            if (row.Length < 3)
+                                continue;
+
+                            if (row[0].ToLower().IndexOf("offset") != -1)
+                                continue;
+
+                            ModBus_Import item = new ModBus_Import();
+
+                            item.Offset = row[0];
+                            item.OffsetUInt = UInt16.Parse(row[0].Replace("0x", ""), row[0].ToLower().IndexOf("0x") != -1 ? System.Globalization.NumberStyles.HexNumber : System.Globalization.NumberStyles.Integer);
+
+                            item.Register = row[1];
+                            item.RegisterUInt = UInt16.Parse(row[1].Replace("0x", ""), row[1].ToLower().IndexOf("0x") != -1 ? System.Globalization.NumberStyles.HexNumber : System.Globalization.NumberStyles.Integer);
+
+                            item.Value = row[2];
+                            item.ValueUInt = UInt16.Parse(row[2].Replace("0x", ""), row[2].ToLower().IndexOf("0x") != -1 ? System.Globalization.NumberStyles.HexNumber : System.Globalization.NumberStyles.Integer);
+
+                            item.Notes = row[3];
+
+                            if ((bool)main.CheckBoxDarkMode.IsChecked)
+                            {
+                                item.Foreground = main.ForeGroundDarkStr;
+                                item.Background = main.BackGroundDarkStr;
+                            }
+                            else
+                            {
+                                item.Foreground = main.ForeGroundLightStr;
+                                item.Background = main.BackGroundLight2Str;
+                            }
+
+                            list_import.Add(item);
+                        }
                     }
-                }
 
-                // JSON File
-                if (filePath.IndexOf(".json") != -1)
-                {
-                    JavaScriptSerializer jss = new JavaScriptSerializer();
-                    jss.MaxJsonLength = main.MaxJsonLength;
-                    dynamic obj = jss.DeserializeObject(File.ReadAllText(filePath));
-
-                    foreach (dynamic reg in obj["items"])
+                    // JSON File
+                    if (filePath.IndexOf(".json") != -1)
                     {
-                        ModBus_Import item = new ModBus_Import();
+                        JavaScriptSerializer jss = new JavaScriptSerializer();
+                        jss.MaxJsonLength = main.MaxJsonLength;
+                        dynamic obj = jss.DeserializeObject(File.ReadAllText(filePath));
 
-                        item.Offset = reg["Offset"];
-                        item.OffsetUInt = UInt16.Parse(reg["Offset"], reg["Offset"].ToLower().IndexOf("0x") != -1 ? System.Globalization.NumberStyles.HexNumber : System.Globalization.NumberStyles.Integer);
-
-                        item.Register = reg["Register"];
-                        item.RegisterUInt = UInt16.Parse(reg["Register"], reg["Register"].ToLower().IndexOf("0x") != -1 ? System.Globalization.NumberStyles.HexNumber : System.Globalization.NumberStyles.Integer);
-
-                        item.Value = reg["Value"];
-                        item.ValueUInt = UInt16.Parse(reg["Value"], reg["Value"].ToLower().IndexOf("0x") != -1 ? System.Globalization.NumberStyles.HexNumber : System.Globalization.NumberStyles.Integer);
-
-                        item.Notes = reg["Notes"] is null ? "" : reg["Notes"];
-
-                        if ((bool)main.CheckBoxDarkMode.IsChecked)
+                        foreach (dynamic reg in obj["items"])
                         {
-                            item.Foreground = main.ForeGroundDarkStr;
-                            item.Background = main.BackGroundDarkStr;
-                        }
-                        else
-                        {
-                            item.Foreground = main.ForeGroundLightStr;
-                            item.Background = main.BackGroundLight2Str;
-                        }
+                            ModBus_Import item = new ModBus_Import();
 
-                        list_import.Add(item);
+                            item.Offset = reg["Offset"];
+                            item.OffsetUInt = UInt16.Parse(reg["Offset"], reg["Offset"].ToLower().IndexOf("0x") != -1 ? System.Globalization.NumberStyles.HexNumber : System.Globalization.NumberStyles.Integer);
+
+                            item.Register = reg["Register"];
+                            item.RegisterUInt = UInt16.Parse(reg["Register"], reg["Register"].ToLower().IndexOf("0x") != -1 ? System.Globalization.NumberStyles.HexNumber : System.Globalization.NumberStyles.Integer);
+
+                            item.Value = reg["Value"];
+                            item.ValueUInt = UInt16.Parse(reg["Value"], reg["Value"].ToLower().IndexOf("0x") != -1 ? System.Globalization.NumberStyles.HexNumber : System.Globalization.NumberStyles.Integer);
+
+                            item.Notes = reg["Notes"] is null ? "" : reg["Notes"];
+
+                            if ((bool)main.CheckBoxDarkMode.IsChecked)
+                            {
+                                item.Foreground = main.ForeGroundDarkStr;
+                                item.Background = main.BackGroundDarkStr;
+                            }
+                            else
+                            {
+                                item.Foreground = main.ForeGroundLightStr;
+                                item.Background = main.BackGroundLight2Str;
+                            }
+
+                            list_import.Add(item);
+                        }
                     }
                 }
             }
             catch(Exception err)
             {
+                MessageBox.Show("Error importing files", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
                 Console.WriteLine(err);
             }
 
             dataGridPreview.ItemsSource = list_import;
+
+            buttonImportPreview.Focus();
         }
 
         private void buttonImportPreview_Click(object sender, RoutedEventArgs e)
@@ -297,15 +304,15 @@ namespace ModBus_Client
                             {
                                 if (err.Message.IndexOf("Timed out") != -1)
                                 {
-                                    main.SetTableTimeoutError(main.list_coilsTable, true);
+                                    main.SetTableTimeoutError(main.list_coilsTable, false);
                                 }
                                 if (err.Message.IndexOf("ModBus ErrCode") != -1)
                                 {
-                                    main.SetTableModBusError(main.list_coilsTable, err, true);
+                                    main.SetTableModBusError(main.list_coilsTable, err, false);
                                 }
                                 if (err.Message.IndexOf("CRC Error") != -1)
                                 {
-                                    main.SetTableCrcError(main.list_coilsTable, true);
+                                    main.SetTableCrcError(main.list_coilsTable, false);
                                 }
 
                                 Console.WriteLine(err);
@@ -316,7 +323,8 @@ namespace ModBus_Client
                                     main.dataGridViewCoils.ItemsSource = main.list_coilsTable;
                                 });
 
-                                break;
+                                if (abortOnError)
+                                    break;
                             }
                             catch (Exception err)
                             {
@@ -422,15 +430,15 @@ namespace ModBus_Client
                                 {
                                     if (err.Message.IndexOf("Timed out") != -1)
                                     {
-                                        main.SetTableTimeoutError(main.list_coilsTable, true);
+                                        main.SetTableTimeoutError(main.list_coilsTable, false);
                                     }
                                     if (err.Message.IndexOf("ModBus ErrCode") != -1)
                                     {
-                                        main.SetTableModBusError(main.list_coilsTable, err, true);
+                                        main.SetTableModBusError(main.list_coilsTable, err, false);
                                     }
                                     if (err.Message.IndexOf("CRC Error") != -1)
                                     {
-                                        main.SetTableCrcError(main.list_coilsTable, true);
+                                        main.SetTableCrcError(main.list_coilsTable, false);
                                     }
 
                                     Console.WriteLine(err);
@@ -441,7 +449,8 @@ namespace ModBus_Client
                                         main.dataGridViewCoils.ItemsSource = main.list_coilsTable;
                                     });
 
-                                    break;
+                                    if (abortOnError)
+                                        break;
                                 }
                                 catch (Exception err)
                                 {
@@ -528,15 +537,15 @@ namespace ModBus_Client
                             {
                                 if (err.Message.IndexOf("Timed out") != -1)
                                 {
-                                    main.SetTableTimeoutError(main.list_holdingRegistersTable, true);
+                                    main.SetTableTimeoutError(main.list_holdingRegistersTable, false);
                                 }
                                 if (err.Message.IndexOf("ModBus ErrCode") != -1)
                                 {
-                                    main.SetTableModBusError(main.list_holdingRegistersTable, err, true);
+                                    main.SetTableModBusError(main.list_holdingRegistersTable, err, false);
                                 }
                                 if (err.Message.IndexOf("CRC Error") != -1)
                                 {
-                                    main.SetTableCrcError(main.list_holdingRegistersTable, true);
+                                    main.SetTableCrcError(main.list_holdingRegistersTable, false);
                                 }
 
                                 Console.WriteLine(err);
@@ -546,6 +555,9 @@ namespace ModBus_Client
                                     main.dataGridViewHolding.ItemsSource = null;
                                     main.dataGridViewHolding.ItemsSource = main.list_holdingRegistersTable;
                                 });
+
+                                if (abortOnError)
+                                    break;
                             }
                             catch (Exception err)
                             {
@@ -647,15 +659,15 @@ namespace ModBus_Client
                                 {
                                     if (err.Message.IndexOf("Timed out") != -1)
                                     {
-                                        main.SetTableTimeoutError(main.list_holdingRegistersTable, true);
+                                        main.SetTableTimeoutError(main.list_holdingRegistersTable, false);
                                     }
                                     if (err.Message.IndexOf("ModBus ErrCode") != -1)
                                     {
-                                        main.SetTableModBusError(main.list_holdingRegistersTable, err, true);
+                                        main.SetTableModBusError(main.list_holdingRegistersTable, err, false);
                                     }
                                     if (err.Message.IndexOf("CRC Error") != -1)
                                     {
-                                        main.SetTableCrcError(main.list_holdingRegistersTable, true);
+                                        main.SetTableCrcError(main.list_holdingRegistersTable, false);
                                     }
 
                                     Console.WriteLine(err);
@@ -666,7 +678,8 @@ namespace ModBus_Client
                                         main.dataGridViewHolding.ItemsSource = main.list_holdingRegistersTable;
                                     });
 
-                                    break;
+                                    if(abortOnError)
+                                        break;
                                 }
                                 catch (Exception err)
                                 {
@@ -711,69 +724,9 @@ namespace ModBus_Client
             closeAfterWrite = (bool)CheckBoxCloseWindowAfterWrite.IsChecked;
         }
 
-        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        private void CheckBoxAbortOnError_Checked(object sender, RoutedEventArgs e)
         {
-            if (edited)
-            {
-                if (MessageBox.Show("Save modifies?", "Info", MessageBoxButton.YesNo, MessageBoxImage.Information) == MessageBoxResult.Yes)
-                {
-                    // CSV
-                    if (filePath.IndexOf("csv") != -1)
-                    {
-                        String file_content = "";
-
-                        for (int i = 0; i < list_import.Count; i++)
-                        {
-                            file_content += list_import[i].Offset + ",";   // DEC
-                            file_content += list_import[i].Register + ",";
-                            file_content += list_import[i].Value + ",";
-                            file_content += list_import[i].Notes + "\n";
-                        }
-
-                        StreamWriter writer = new StreamWriter(filePath);
-
-                        writer.Write(file_content);
-                        writer.Dispose();
-                        writer.Close();
-                    }
-
-                    // JSON
-                    if (filePath.IndexOf(".json") != -1)
-                    {
-                        // File JSON
-                        dataGridJson save = new dataGridJson();
-
-                        save.items = new ModBusItem_Save[list_import.Count];
-
-                        for (int i = 0; i < list_import.Count; i++)
-                        {
-                            try
-                            {
-                                ModBusItem_Save item = new ModBusItem_Save();
-
-                                item.Offset = list_import[i].Offset;
-                                item.Register = list_import[i].Register;
-                                item.Value = list_import[i].Value;
-                                item.Notes = list_import[i].Notes;
-
-                                save.items[i] = item;
-                            }
-                            catch { }
-                        }
-
-
-                        JavaScriptSerializer jss = new JavaScriptSerializer();
-                        jss.MaxJsonLength = main.MaxJsonLength;
-                        string file_content = jss.Serialize(save);
-
-                        StreamWriter writer = new StreamWriter(filePath);
-
-                        writer.Write(file_content);
-                        writer.Dispose();
-                        writer.Close();
-                    }
-                }
-            }
+            abortOnError = (bool)CheckBoxAbortOnError.IsChecked;
         }
     }
 

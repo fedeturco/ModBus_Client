@@ -117,9 +117,10 @@
                         <ColumnDefinition Width="*"></ColumnDefinition>
                         <ColumnDefinition Width="*"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
-                    <Border BorderBrush="Gray" BorderThickness="2,1,2,2" Grid.ColumnSpan="2" Height="211" VerticalAlignment="Bottom" Opacity="0.5"/>
-                    <Border BorderBrush="Gray" BorderThickness="1,2,2,1" Grid.Column="1" Margin="0,0,0,211" Opacity="0.5"/>
-                    <Border BorderBrush="Gray" BorderThickness="2,2,1,1" Margin="0,0,0,211" Opacity="0.5"/>
+                    <Border BorderBrush="Gray" BorderThickness="2,1,2,2" Grid.ColumnSpan="2" Height="180" VerticalAlignment="Bottom" Opacity="0.5"/>
+                    <Border BorderBrush="Gray" BorderThickness="1,2,2,1" Grid.Column="1" Margin="0,0,0,180" Opacity="0.5">
+                    </Border>
+                    <Border BorderBrush="Gray" BorderThickness="2,2,1,1" Margin="0,0,0,180" Opacity="0.5"/>
                     <Border x:Name="pictureBoxSerial" Margin="17,20,0,0" Height="25" VerticalAlignment="Top" HorizontalAlignment="Left" Width="25" Grid.Column="0"/>
                     <Label x:Name="labelSerialRtu" Content="RTU" HorizontalAlignment="Left" Margin="47,16,0,0" VerticalAlignment="Top" FontSize="18" Grid.Column="0" Height="34"/>
                     <Label x:Name="labelTcp" Content="TCP" HorizontalAlignment="Left" Margin="49,16,0,0" VerticalAlignment="Top" FontSize="18" Grid.Column="1" Height="34" Width="40"/>
@@ -150,7 +151,7 @@
                     <Label x:Name="labelPortTcp" Content="Port:" HorizontalAlignment="Left" Margin="10,97,0,0" VerticalAlignment="Top" FontSize="14" Grid.Column="1" Height="29" Width="70"/>
                     <TextBox x:Name="textBoxTcpClientIpAddress" HorizontalAlignment="Left" Height="30" Margin="85,64,0,0" TextWrapping="Wrap" Text="192.168.1.100" VerticalAlignment="Top" Width="271" FontSize="16" Grid.Column="1"/>
                     <TextBox x:Name="textBoxTcpClientPort" HorizontalAlignment="Left" Height="30" Margin="85,96,0,0" TextWrapping="Wrap" Text="502" VerticalAlignment="Top" Width="93" FontSize="16" Grid.Column="1"/>
-                    <Button x:Name="buttonSerialActive" HorizontalAlignment="Left" Margin="275,223,0,0" Width="110" Grid.Column="0" Click="buttonSerialActive_Click" FontSize="16" ToolTip="Ctrl+B" Height="29" VerticalAlignment="Top">
+                    <Button x:Name="buttonSerialActive" HorizontalAlignment="Left" Margin="275,249,0,0" Width="110" Grid.Column="0" Click="buttonSerialActive_Click" FontSize="16" ToolTip="Ctrl+B" Height="29" VerticalAlignment="Top">
                         <StackPanel Orientation="Horizontal">
                             <Viewbox xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" Width="16" Height="16">
                                 <Rectangle Width="16" Height="16">
@@ -171,7 +172,7 @@
                             <TextBlock x:Name="textBlockSerialActive" Text="Connect" Margin="3,0,0,0"/>
                         </StackPanel>
                     </Button>
-                    <Button x:Name="buttonTcpActive" HorizontalAlignment="Left" Margin="278,223,0,0" VerticalAlignment="Top" Width="110" Grid.Column="1" Click="buttonTcpActive_Click" FontSize="16" Height="29" ToolTip="Ctrl+B">
+                    <Button x:Name="buttonTcpActive" HorizontalAlignment="Left" Margin="278,249,0,0" VerticalAlignment="Top" Width="110" Grid.Column="1" Click="buttonTcpActive_Click" FontSize="16" Height="29" ToolTip="Ctrl+B">
                         <StackPanel Orientation="Horizontal">
                             <Viewbox xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" Width="16" Height="16">
                                 <Rectangle Width="16" Height="16">
@@ -192,12 +193,12 @@
                             <TextBlock x:Name="textBlockTcpActive" Text="Connect" Margin="3,0,0,0"/>
                         </StackPanel>
                     </Button>
-                    <RichTextBox x:Name="richTextBoxStatus" Margin="8,0,10,10" Block.LineHeight="2" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" FontFamily="Consolas" Background="#FF353535" Foreground="#FFFAFAFA" IsReadOnly="True" FontSize="14" Grid.ColumnSpan="2" Height="141" VerticalAlignment="Bottom">
+                    <RichTextBox x:Name="richTextBoxStatus" Margin="8,0,10,10" Block.LineHeight="2" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" FontFamily="Consolas" Background="#FF353535" Foreground="#FFFAFAFA" IsReadOnly="True" FontSize="14" Grid.ColumnSpan="2" Height="105" VerticalAlignment="Bottom">
                         <FlowDocument/>
                     </RichTextBox>
                     <Button x:Name="buttonUpdateSerialList" Content="Update" HorizontalAlignment="Left" Margin="261,64,0,0" VerticalAlignment="Top" Width="75" Grid.Column="0" Height="29" Click="buttonUpdateSerialList_Click" FontSize="14"/>
                     <Border x:Name="pictureBoxTcp" Height="25" Margin="19,20,0,0" Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Left" Width="25"/>
-                    <Button x:Name="buttonClearSerialStatus" HorizontalAlignment="Right" Margin="0,0,30,166" VerticalAlignment="Bottom" Width="98" Click="buttonClearSerialStatus_Click" FontSize="16" Height="29" Grid.Column="1">
+                    <Button x:Name="buttonClearSerialStatus" HorizontalAlignment="Right" Margin="0,0,30,133" VerticalAlignment="Bottom" Width="98" Click="buttonClearSerialStatus_Click" FontSize="16" Height="29" Grid.Column="1">
                         <StackPanel Orientation="Horizontal">
                             <Viewbox xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" Width="16" Height="16">
                                 <Rectangle Width="16" Height="16">
@@ -221,13 +222,26 @@
                     <Button x:Name="buttonPingIp" Content="Ping" Margin="301,96,0,0" FontSize="14" Grid.Column="1" HorizontalAlignment="Left" Width="55" Height="30" VerticalAlignment="Top" Click="buttonPingIp_Click"/>
                     <Image x:Name="ImageLogoTCP" Grid.Column="1" HorizontalAlignment="Right" Height="40" Margin="0,10,10,0" VerticalAlignment="Top" Width="40" Source="/Logo/Modbus_logo_Lens_256_B.ico"/>
                     <Image x:Name="ImageLogoRTU" HorizontalAlignment="Right" Height="40" Margin="0,10,10,0" VerticalAlignment="Top" Width="40" Source="/Logo/Modbus_logo_Lens_256_B.ico"/>
-                    <Label x:Name="labelStopBits_Copy" Content="Load profile:" HorizontalAlignment="Left" Margin="8,0,0,166" VerticalAlignment="Bottom" FontSize="14" Grid.Column="0" Height="29"/>
-                    <ComboBox x:Name="comboBoxProfileHome" HorizontalAlignment="Left" Margin="136,0,0,166" VerticalAlignment="Bottom" Width="278" FontSize="14" Height="29">
+                    <Label x:Name="labelLoadProfile" Content="Load profile:" HorizontalAlignment="Left" Margin="8,0,0,132" VerticalAlignment="Bottom" FontSize="14" Grid.Column="0" Height="29"/>
+                    <ComboBox x:Name="comboBoxProfileHome" HorizontalAlignment="Left" Margin="136,0,0,132" VerticalAlignment="Bottom" Width="278" FontSize="14" Height="29" SelectionChanged="comboBoxProfileHome_SelectionChanged">
                         <ComboBoxItem Content="1"/>
                         <ComboBoxItem Content="1.5"/>
                         <ComboBoxItem Content="2"/>
                     </ComboBox>
                     <Label x:Name="labelPortRtu" Content="Port:" HorizontalAlignment="Left" Margin="10,65,0,0" VerticalAlignment="Top" FontSize="14" Grid.Column="0" Height="29" Width="121" />
+                    <Label x:Name="labelClientCertificateName" Content="Client Certificate:" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="14" Margin="10,170,0,0" Grid.Column="1" Height="29" Width="122"/>
+                    <Label x:Name="labelClientKeyName" Content="Client Key:" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="14" Margin="10,199,0,0" Grid.Column="1" Height="29" Width="122"/>
+                    <Label x:Name="labelClientCertificatePath" Content="" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="14" Margin="129,170,0,0" Grid.Column="1" Height="29" Width="160"/>
+                    <Label x:Name="labelClientKeyPath" Content="" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="14" Margin="128,199,0,0" Grid.Column="1" Height="29" Width="162"/>
+                    <Button x:Name="buttonLoadClientCertificate" Content="Open" Margin="298,169,0,0" FontSize="14" Grid.Column="1" HorizontalAlignment="Left" Width="55" Height="30" VerticalAlignment="Top" Click="buttonLoadClientCertificate_Click"/>
+                    <Button x:Name="buttonLoadClientKey" Content="Open" Margin="298,198,0,0" FontSize="14" Grid.Column="1" HorizontalAlignment="Left" Width="55" Height="30" VerticalAlignment="Top" Click="buttonLoadClientKey_Click"/>
+                    <CheckBox x:Name="checkBoxModbusSecure" Grid.Column="1" Content="Modbus Secure" HorizontalAlignment="Left" Margin="12,144,0,0" VerticalAlignment="Top" FontSize="14" Checked="CheckBoxModbusSecure_Checked" Unchecked="CheckBoxModbusSecure_Checked"/>
+                    <TextBox x:Name="textBoxClientCertificatePath" HorizontalAlignment="Left" Height="30" Margin="240,168,0,0" TextWrapping="Wrap" Text="Path" VerticalAlignment="Top" Width="93" FontSize="16" Grid.Column="1" TextChanged="textBoxClientCertificatePath_TextChanged" Visibility="Hidden"/>
+                    <TextBox x:Name="textBoxClientKeyPath" HorizontalAlignment="Left" Height="30" Margin="240,198,0,0" TextWrapping="Wrap" Text="Path" VerticalAlignment="Top" Width="93" FontSize="16" Grid.Column="1" TextChanged="textBoxClientKeyPath_TextChanged" Visibility="Hidden"/>
+                    <Label x:Name="labelClientPasswordName" Content="Certificate Pass:" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="14" Margin="10,199,0,0" Grid.Column="1" Height="29" Width="122"/>
+                    <TextBox x:Name="textBoxCertificatePassword" HorizontalAlignment="Left" Height="30" Margin="131,200,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="147" FontSize="14" Grid.Column="1"/>
+                    <Label x:Name="labelClientTLSVersion" Content="TLS v:" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="14" Margin="10,230,0,0" Grid.Column="1" Height="29" Width="122"/>
+                    <ComboBox x:Name="comboBoxTlsVersion" HorizontalAlignment="Left" Margin="131,230,0,0" VerticalAlignment="Top" Width="82" FontSize="14" Height="30" Grid.Column="1"/>
                 </Grid>
             </TabItem>
             <TabItem x:Name="tabItem1" Header="Coils FC01" FontSize="12">
@@ -246,7 +260,6 @@
                         <ComboBoxItem Content="HEX"/>
                     </ComboBox>
                     <TextBox x:Name="textBoxCoilsOffset" HorizontalAlignment="Left" Height="25" Margin="255,10,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="65" FontSize="12" VerticalContentAlignment="Center" TextChanged="textBoxCoilsOffset_TextChanged"/>
-                    <Label x:Name="labelOffsetHiddenCoils" Content="Offset hidden in table" HorizontalAlignment="Left" Margin="325,10,0,0" VerticalAlignment="Top" FontSize="12" Height="26" Width="219"/>
 
                     <Label x:Name="labelCoils_2" Content="Read Coil Status (FC01):" Height="26" Margin="0,50,210,0" VerticalAlignment="Top" FontSize="12" HorizontalAlignment="Right" Width="200"/>
                     <StackPanel x:Name="StackPanelCoils0" Margin="0,76,10,0" Background="AliceBlue" Height="40" Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Right" Width="400">
@@ -442,14 +455,13 @@
                         <ComboBoxItem Content="DEC"/>
                         <ComboBoxItem Content="HEX"/>
                     </ComboBox>
-                    <Label x:Name="labelInputs_0" Content="Registers:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontSize="12"/>
-                    <Label x:Name="labelInputs_1" Content="Offset:" HorizontalAlignment="Left" Margin="140,10,0,0" VerticalAlignment="Top" FontSize="12"/>
+                    <Label x:Name="labelInputs_0" Content="Registers:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontSize="12" Grid.ColumnSpan="2" Height="26" Width="60"/>
+                    <Label x:Name="labelInputs_1" Content="Offset:" HorizontalAlignment="Left" Margin="140,10,0,0" VerticalAlignment="Top" FontSize="12" Height="26" Width="45"/>
                     <ComboBox x:Name="comboBoxInputOffset" HorizontalAlignment="Left" Margin="195,10,0,0" VerticalAlignment="Top" Width="55" FontSize="12" Height="25" SelectionChanged="comboBoxInputOffset_SelectionChanged">
                         <ComboBoxItem Content="DEC"/>
                         <ComboBoxItem Content="HEX"/>
                     </ComboBox>
                     <TextBox x:Name="textBoxInputOffset" HorizontalAlignment="Left" Height="25" Margin="255,10,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="65" FontSize="12" TextChanged="textBoxInputOffset_TextChanged" VerticalContentAlignment="Center"/>
-                    <Label x:Name="labelOffsetHiddenInput" Content="Offset hidden in table" HorizontalAlignment="Left" Margin="325,10,0,0" VerticalAlignment="Top" FontSize="12"/>
                     <Label x:Name="labelInputs_2" Content="Read Input Status (FC02):" Height="26" Margin="0,50,210,0" VerticalAlignment="Top" FontSize="12" HorizontalAlignment="Right" Width="200"/>
                     <StackPanel x:Name="StackPanelInputs0" Margin="0,76,10,0" Background="AliceBlue" Height="40" Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Right" Width="400">
                         <Label x:Name="labelInputs_3" Content="Address:" Height="25" FontSize="12"/>
@@ -463,9 +475,9 @@
                         <Button x:Name="buttonReadInput02" Content="Read" Width="55" Height="25" Margin="10,0,0,0" Click="buttonReadInput02_Click" FontSize="12"/>
                         <Button x:Name="buttonLoopInput02" Content="Loop" Width="55" Height="25" Margin="10,0,0,0" FontSize="12" Click="buttonLoopInput02_Click"/>
                     </StackPanel>
-                    <Label x:Name="labelInputs_5" Content="Read Input Range:" Height="26" Margin="0,121,210,0" VerticalAlignment="Top" FontSize="12" HorizontalAlignment="Right" Width="200"/>
+                    <Label x:Name="labelInputs_5" Content="Read Input Range:" Height="26" Margin="0,121,210,0" VerticalAlignment="Top" FontSize="12" HorizontalAlignment="Right" Width="200" Grid.Column="1"/>
                     <StackPanel x:Name="StackPanelInputs1" Margin="0,148
-                                ,10,0" Background="AliceBlue" Height="40" Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Right" Width="400">
+                                ,10,0" Background="AliceBlue" Height="40" Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Right" Width="400" Grid.Column="1">
                         <Label x:Name="labelInputs_6" Content="Start:" Height="30" FontSize="12"/>
                         <ComboBox x:Name="comboBoxInputRange_A" Width="55" Height="25" FontSize="12" SelectionChanged="comboBoxInputRange_A_SelectionChanged">
                             <ComboBoxItem Content="DEC"/>
@@ -477,7 +489,7 @@
                         <Button x:Name="buttonReadInputRange" Content="Read" Width="55" Height="25" Margin="10,8,0,0" Click="buttonReadInputRange_Click" FontSize="12" VerticalAlignment="Top"/>
                         <Button x:Name="buttonLoopInputRange" Content="Loop" Width="55" Height="25" Margin="10,0,0,0" FontSize="12" Click="buttonLoopInputRange_Click"/>
                     </StackPanel>
-                    <StackPanel x:Name="stackGoToInput" Margin="0,430,10,0" Background="AliceBlue" Height="40" Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Right" Width="272" Visibility="Hidden">
+                    <StackPanel x:Name="stackGoToInput" Margin="0,430,10,0" Background="AliceBlue" Height="40" Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Right" Width="272" Visibility="Hidden" Grid.Column="1">
                         <Label x:Name="labelGoToInput" Content="Go to Input address:" Height="30"/>
                         <TextBox x:Name="textBoxGoToInputAddress" TextWrapping="Wrap" Width="55"  Height="25" Margin="10,0,0,0"/>
                         <Button x:Name="buttonGoToInputAddress" Content="Vai" Width="55" Height="25" Margin="10,0,0,0" Click="buttonGoToInputAddress_Click"/>
@@ -505,7 +517,7 @@
                             <TextBlock x:Name="textBlockClearInput" Text="Clear" Margin="3,0,0,0"/>
                         </StackPanel>
                     </Button>
-                    <Button x:Name="buttonExportInput" Height="25" Margin="0,0,261,10" FontSize="12" HorizontalAlignment="Right" Width="72" VerticalAlignment="Bottom" Click="buttonExportInput_Click">
+                    <Button x:Name="buttonExportInput" Height="25" Margin="0,0,261,10" FontSize="12" HorizontalAlignment="Right" Width="72" VerticalAlignment="Bottom" Click="buttonExportInput_Click" Grid.Column="1">
                         <StackPanel Orientation="Horizontal">
                             <Viewbox Width="16" Height="16" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
                                 <Rectangle Width="16" Height="16">
@@ -529,10 +541,10 @@
                             <TextBlock x:Name="textBlockExportInput" Text="Export" Margin="3,0,0,0"/>
                         </StackPanel>
                     </Button>
-                    <Button x:Name="buttonReadInputTemplate" Content="Read all" Height="25" Margin="0,10,10,0" FontSize="12" RenderTransformOrigin="0.5,0.5" Click="buttonReadInputTemplate_Click" HorizontalAlignment="Right" Width="80" VerticalAlignment="Top"/>
-                    <Button x:Name="buttonReadInputTemplateGroup" Content="Read group" Height="25" Margin="0,10,95,0" FontSize="12" RenderTransformOrigin="0.5,0.5" VerticalAlignment="Top" Click="buttonReadInputTemplateGroup_Click" Width="80" HorizontalAlignment="Right"/>
-                    <ComboBox x:Name="comboBoxInputGroup" Margin="0,10,180,0" VerticalAlignment="Top" SelectionChanged="comboBoxInputGroup_SelectionChanged" DisplayMemberPath="Value" Height="25" HorizontalAlignment="Right" Width="205"/>
-                    <DataGrid x:Name="dataGridViewInput" Margin="10,50,415,10" AutoGenerateColumns="False" HorizontalGridLinesBrush="LightGray" VerticalGridLinesBrush="LightGray" BorderThickness="1" FontSize="14"  RowBackground="#FFF1F1F1">
+                    <Button x:Name="buttonReadInputTemplate" Content="Read all" Height="25" Margin="0,10,10,0" FontSize="12" RenderTransformOrigin="0.5,0.5" Click="buttonReadInputTemplate_Click" HorizontalAlignment="Right" Width="80" VerticalAlignment="Top" Grid.Column="1"/>
+                    <Button x:Name="buttonReadInputTemplateGroup" Content="Read group" Height="25" Margin="0,10,95,0" FontSize="12" RenderTransformOrigin="0.5,0.5" VerticalAlignment="Top" Click="buttonReadInputTemplateGroup_Click" Width="80" HorizontalAlignment="Right" Grid.Column="1"/>
+                    <ComboBox x:Name="comboBoxInputGroup" Margin="0,10,180,0" VerticalAlignment="Top" SelectionChanged="comboBoxInputGroup_SelectionChanged" DisplayMemberPath="Value" Height="25" HorizontalAlignment="Right" Width="205" Grid.Column="1"/>
+                    <DataGrid x:Name="dataGridViewInput" Margin="10,50,415,10" AutoGenerateColumns="False" HorizontalGridLinesBrush="LightGray" VerticalGridLinesBrush="LightGray" BorderThickness="1" FontSize="14"  RowBackground="#FFF1F1F1" Grid.ColumnSpan="2">
                         <DataGrid.Columns>
                             <DataGridTextColumn x:Name="dataGridTabInputsRegisters" Header="Register" Binding="{Binding Register}" Width="100" Visibility="Collapsed">
                                 <DataGridTextColumn.ElementStyle>
@@ -568,7 +580,6 @@
                         <ComboBoxItem Content="HEX"/>
                     </ComboBox>
                     <TextBox x:Name="textBoxHoldingOffset" HorizontalAlignment="Left" Height="25" Margin="380,10,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="65" FontSize="12" TextChanged="textBoxHoldingOffset_TextChanged" VerticalContentAlignment="Center"/>
-                    <Label x:Name="labelOffsetHiddenHolding" Content="Offset hidden in table" HorizontalAlignment="Left" Margin="450,10,0,0" VerticalAlignment="Top" FontSize="12"/>
                     <ComboBox x:Name="comboBoxHoldingValori" HorizontalAlignment="Left" Margin="195,10,0,0" VerticalAlignment="Top" Width="55" FontSize="12" Height="25" SelectionChanged="comboBoxHoldingValori_SelectionChanged">
                         <ComboBoxItem Content="DEC"/>
                         <ComboBoxItem Content="HEX"/>
@@ -806,7 +817,6 @@
                         <ComboBoxItem Content="HEX"/>
                     </ComboBox>
                     <TextBox x:Name="textBoxInputRegOffset" HorizontalAlignment="Left" Height="25" Margin="380,10,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="65" FontSize="12" TextChanged="textBoxInputRegOffset_TextChanged" VerticalContentAlignment="Center"/>
-                    <Label x:Name="labelOffsetHiddenInputRegister" Content="Offset hidden in table" HorizontalAlignment="Left" Margin="450,10,0,0" VerticalAlignment="Top" FontSize="12"/>
                     <ComboBox x:Name="comboBoxInputRegValori" HorizontalAlignment="Left" Margin="195,10,0,0" VerticalAlignment="Top" Width="55" FontSize="12" Height="25" SelectionChanged="comboBoxInputRegValori_SelectionChanged">
                         <ComboBoxItem Content="DEC"/>
                         <ComboBoxItem Content="HEX"/>
@@ -955,7 +965,7 @@
                     <Label x:Name="labelDiagnostic_9" Content="Esempio RTU: 01 03 00 02 00 04 [E5 C9]" HorizontalAlignment="Left" Margin="27,434,0,0" VerticalAlignment="Top" FontSize="13"/>
                     <Label x:Name="labelDiagnostic_8" Content="Id:01 FC:03 Starting Address: 02 Number of registers: 04" HorizontalAlignment="Left" Margin="402,400,0,0" VerticalAlignment="Top" FontSize="13"/>
                     <Label x:Name="labelDiagnostic_10" Content="CRC: E5 C9, usare il bottone Calc CRC" HorizontalAlignment="Left" Margin="402,434,0,0" VerticalAlignment="Top" FontSize="13"/>
-                    <Button x:Name="buttonSendManualDiagnosticQuery_Copy" Content="Calc CRC" HorizontalAlignment="Left" Margin="623,214,0,0" VerticalAlignment="Top" Width="75" FontSize="13" Height="24" Click="buttonSendManualDiagnosticQuery_Copy_Click"/>
+                    <Button x:Name="buttonCalcCrcRtu" Content="Calc CRC" HorizontalAlignment="Left" Margin="623,214,0,0" VerticalAlignment="Top" Width="75" FontSize="13" Height="24" Click="buttonCalcCrcRtu_Click"/>
                     <Button x:Name="ButtonExampleTCP" HorizontalAlignment="Left" Margin="329,400,0,0" VerticalAlignment="Top" Width="30" Height="30" Click="ButtonExampleTCP_Click">
                         <StackPanel>
                             <DockPanel>
@@ -1010,60 +1020,55 @@
                 <Grid x:Name="GridLog" Background="#FFE5E5E5">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
-                        <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
-                    <RichTextBox x:Name="richTextBoxPackets" Margin="10,41,10,9.571" Block.LineHeight="2" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" FontSize="14" Grid.ColumnSpan="2" IsReadOnly="true" FontFamily="Consolas" Background="#FF353535" Foreground="#FFFAFAFA">
+                    <RichTextBox x:Name="richTextBoxPackets" Margin="10,41,10,10" Block.LineHeight="2" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" FontSize="14" IsReadOnly="true" FontFamily="Consolas" Background="#FF353535" Foreground="#FFFAFAFA">
                         <FlowDocument PageWidth="8000">
                             <Paragraph>
                                 <Run Text=""/>
                             </Paragraph>
                         </FlowDocument>
                     </RichTextBox>
-                    <Button x:Name="buttonExportSentPackets" Content="Export" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="75" Click="buttonExportSentPackets_Click"/>
-                    <Button x:Name="buttonClearSent" Content="Clear" HorizontalAlignment="Left" Margin="90,10,0,0" VerticalAlignment="Top" Width="75" Click="buttonClearAll_Click"/>
-                    <Button x:Name="buttonExportReceivedPackets" Content="Export" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="75" Grid.Column="1" Click="buttonExportReceivedPackets_Click" Visibility="Hidden"/>
-                    <Button x:Name="buttonClearReceived" Content="Clear" HorizontalAlignment="Left" Margin="90,10,0,0" VerticalAlignment="Top" Width="75" Grid.Column="1" Click="buttonClearAll_Click" Visibility="Hidden"/>
-                    <Button x:Name="buttonClearAll" Content="Clear" Margin="0,10,10,0" VerticalAlignment="Top" Grid.Column="1" Click="buttonClearAll_Click" HorizontalAlignment="Right" Width="75"/>
-                    <CheckBox x:Name="checkBoxAddLinesToEnd" Content="Add log to end" HorizontalAlignment="Left" Margin="273,13,0,0" VerticalAlignment="Top"/>
+                    <Button x:Name="buttonExportSentPackets" Content="Export" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="75" Click="buttonExportSentPackets_Click" Height="20"/>
+                    <Button x:Name="buttonClearSent" Content="Clear" HorizontalAlignment="Left" Margin="90,10,0,0" VerticalAlignment="Top" Width="75" Click="buttonClearAll_Click" Height="20"/>
+                    <Button x:Name="buttonClearAll" Content="Clear" Margin="0,10,10,0" VerticalAlignment="Top" Click="buttonClearAll_Click" HorizontalAlignment="Right" Width="75" Height="20"/>
+                    <CheckBox x:Name="checkBoxAddLinesToEnd" Content="Add log to end" HorizontalAlignment="Left" Margin="273,13,0,0" VerticalAlignment="Top" Height="15" Width="100"/>
                 </Grid>
             </TabItem>
             <TabItem x:Name="TabItem7" Header="Settings" FontSize="12">
                 <Grid x:Name="GridSettings" Background="#FFE5E5E5">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="24*"></ColumnDefinition>
-                        <ColumnDefinition Width="179*"/>
-                        <ColumnDefinition Width="203*"></ColumnDefinition>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="45"></RowDefinition>
                         <RowDefinition></RowDefinition>
-                        <RowDefinition Height="30"></RowDefinition>
                     </Grid.RowDefinitions>
-                    <Label x:Name="labelSettings_2" Content="General Settings:" HorizontalAlignment="Left" Margin="10,10,0,0" Grid.Row="1" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
-                    <Label x:Name="labelSettings_0" Content="SETTINGS:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
-                    <Label x:Name="labelSettings_1" Content="Restart the application to apply changes in this page" HorizontalAlignment="Left" Margin="89,10,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2" Width="469" Grid.Column="1"/>
-                    <CheckBox x:Name="checkBoxCloseConsolAfterBoot" Content="Chiudi console al termine dell'avvio" HorizontalAlignment="Left" Margin="28,159,0,0" Grid.Row="1" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
-                    <Label x:Name="labelColorCellRead" Content="Colore celle lette:" Grid.Column="2" HorizontalAlignment="Left" Margin="28,34.857,0,0" Grid.Row="1" VerticalAlignment="Top"/>
-                    <Label x:Name="labelColorCellWrote" Content="Colore celle scritte:" Grid.Column="2" HorizontalAlignment="Left" Margin="28,64,0,0" Grid.Row="1" VerticalAlignment="Top"/>
-                    <Label x:Name="labelColorCellError" Content="Colore celle che hanno generato un errore:" Grid.Column="2" HorizontalAlignment="Left" Margin="28,96.857,0,0" Grid.Row="1" VerticalAlignment="Top"/>
-                    <Button x:Name="buttonColorCellRead" Content="Color" HorizontalAlignment="Left" Margin="320,34.857,0,0" Grid.Row="1" VerticalAlignment="Top" Width="75" Grid.Column="2" Click="buttonColorCellRead_Click"/>
-                    <Button x:Name="buttonCellWrote" Content="Color" HorizontalAlignment="Left" Margin="320,67,0,0" Grid.Row="1" VerticalAlignment="Top" Width="75" Grid.Column="2" Click="buttonCellWrote_Click"/>
-                    <Button x:Name="buttonColorCellError" Content="Color" HorizontalAlignment="Left" Margin="320,99.857,0,0" Grid.Row="1" VerticalAlignment="Top" Width="75" Grid.Column="2" Click="buttonColorCellError_Click"/>
-                    <CheckBox x:Name="checkBoxUseOffsetInTextBox" Content="Correggi automaticamente offset indirizzi modbus textBox&#xD;&#xA;(se off invia qualsiasi indirizzo immesso nella textBox)" HorizontalAlignment="Left" Margin="28,47,0,0" Grid.Row="1" VerticalAlignment="Top" Grid.ColumnSpan="3" Width="426" Checked="checkBoxUseOffsetInTextBox_Checked"/>
-                    <CheckBox x:Name="checkBoxFollowModbusProtocol" Content="Limita gli indirizzi modbus a 9998 (come da protocollo)" HorizontalAlignment="Left" Margin="28,89,0,0" Grid.Row="1" VerticalAlignment="Top" Grid.ColumnSpan="3" Width="426"/>
-                    <CheckBox x:Name="checkBoxCellColorMode" Content="Colora celle &gt; 0 / Colorazione alternata" HorizontalAlignment="Left" Margin="28,112,0,0" Grid.Row="1" VerticalAlignment="Top" Grid.ColumnSpan="3" Width="426" Checked="checkBoxCellColorMode_Checked" Unchecked="checkBoxCellColorMode_Checked"/>
-                    <CheckBox x:Name="checkBoxViewTableWithoutOffset" Content="Nascondi offset utente nelle tabelle" HorizontalAlignment="Left" Margin="28,135,0,0" Grid.Row="1" VerticalAlignment="Top" Grid.ColumnSpan="3" Width="426" Checked="checkBoxViewTableWithoutOffset_CheckedChanged" Unchecked="checkBoxViewTableWithoutOffset_CheckedChanged"/>
-                    <Label x:Name="labelSettings_3" Content="Loop polling interval [ms]:" HorizontalAlignment="Left" Margin="28,333,0,0" Grid.Row="1" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
-                    <TextBox x:Name="TextBoxPollingInterval" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="235,335,0,0" Grid.Row="1" TextWrapping="Wrap" Text="10000" VerticalAlignment="Top" Width="69" TextChanged="TextBoxPollingINterval_TextChanged"/>
-                    <Label x:Name="labelSettings_5" Content="Read timeout (serial/TCP) [ms]" HorizontalAlignment="Left" Margin="28,302,0,0" Grid.Row="1" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
-                    <TextBox x:Name="textBoxReadTimeout" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="234.714,301.857,0,0" Grid.Row="1" TextWrapping="Wrap" Text="1000" VerticalAlignment="Top" Width="69" TextChanged="TextBoxReadTimeout_TextChanged"/>
-                    <TextBox x:Name="textBoxCurrentLanguage" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="235,368,0,0" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Width="69" TextChanged="TextBoxCurrentLanguage_TextChanged" IsEnabled="False"/>
-                    <Label x:Name="labelSettings_4" Content="Current Language:" HorizontalAlignment="Left" Margin="28,365,0,0" Grid.Row="1" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
-                    <CheckBox x:Name="CheckBoxDarkMode" Content="Dark Mode" HorizontalAlignment="Left" Margin="28,183,0,0" Grid.Row="1" VerticalAlignment="Top" Grid.ColumnSpan="2" Checked="CheckBoxDarkMode_Checked" Unchecked="CheckBoxDarkMode_Checked"/>
-                    <Button x:Name="ButtonResetLightMode" Content="Reset Light Mode" Grid.Column="2" HorizontalAlignment="Left" Margin="140,135,0,0" Grid.Row="1" VerticalAlignment="Top" Width="125" Click="ButtonResetLightMode_Click"/>
-                    <Button x:Name="ButtonResetDarkMode" Content="Reset Dark Mode" Grid.Column="2" HorizontalAlignment="Left" Margin="270,135,0,0" Grid.Row="1" VerticalAlignment="Top" Width="125" Click="ButtonResetDarkMode_Click"/>
-                    <ComboBox x:Name="comboBoxTcpConnectionMode" Grid.Column="2" HorizontalAlignment="Left" Margin="173,368,0,0" Grid.Row="1" VerticalAlignment="Top" Width="222"/>
-                    <Label x:Name="labelSettings_6" Content="TCP Connection mode:" HorizontalAlignment="Left" Margin="28,366,0,0" Grid.Row="1" VerticalAlignment="Top" Grid.Column="2"/>
+                    <Label x:Name="labelSettings_2" Content="General Settings:" HorizontalAlignment="Left" Margin="43,73,0,0" VerticalAlignment="Top"/>
+                    <Label x:Name="labelSettings_0" Content="SETTINGS:" HorizontalAlignment="Left" Margin="35,22,0,0" VerticalAlignment="Top"/>
+                    <Label x:Name="labelSettings_1" Content="Restart the application to apply changes in this page" HorizontalAlignment="Left" Margin="276,22,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2" Width="468"/>
+                    <CheckBox x:Name="checkBoxCloseConsolAfterBoot" Content="Chiudi console al termine dell'avvio" HorizontalAlignment="Left" Margin="43,223,0,0" VerticalAlignment="Top"/>
+                    <Label x:Name="labelColorCellRead" Content="Colore celle lette:" Grid.Column="1" HorizontalAlignment="Left" Margin="32,108,0,0" VerticalAlignment="Top"/>
+                    <Label x:Name="labelColorCellWrote" Content="Colore celle scritte:" Grid.Column="1" HorizontalAlignment="Left" Margin="32,140,0,0" VerticalAlignment="Top"/>
+                    <Label x:Name="labelColorCellError" Content="Colore celle che hanno generato un errore:" Grid.Column="1" HorizontalAlignment="Left" Margin="32,173,0,0" VerticalAlignment="Top"/>
+                    <Button x:Name="buttonColorCellRead" Content="Color" HorizontalAlignment="Left" Margin="314,111,0,0" VerticalAlignment="Top" Width="75" Grid.Column="1" Click="buttonColorCellRead_Click"/>
+                    <Button x:Name="buttonCellWrote" Content="Color" HorizontalAlignment="Left" Margin="314,143,0,0" VerticalAlignment="Top" Width="75" Grid.Column="1" Click="buttonCellWrote_Click"/>
+                    <Button x:Name="buttonColorCellError" Content="Color" HorizontalAlignment="Left" Margin="314,176,0,0" VerticalAlignment="Top" Width="75" Grid.Column="1" Click="buttonColorCellError_Click"/>
+                    <CheckBox x:Name="checkBoxUseOffsetInTextBox" Content="Correggi automaticamente offset indirizzi modbus textBox&#xD;&#xA;(se off invia qualsiasi indirizzo immesso nella textBox)" HorizontalAlignment="Left" Margin="43,112,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2" Width="426" Checked="checkBoxUseOffsetInTextBox_Checked"/>
+                    <CheckBox x:Name="checkBoxFollowModbusProtocol" Content="Limita gli indirizzi modbus a 9998 (come da protocollo)" HorizontalAlignment="Left" Margin="43,154,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2" Width="426"/>
+                    <CheckBox x:Name="checkBoxCellColorMode" Content="Colora celle &gt; 0 / Colorazione alternata" HorizontalAlignment="Left" Margin="43,177,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2" Width="426" Checked="checkBoxCellColorMode_Checked" Unchecked="checkBoxCellColorMode_Checked"/>
+                    <CheckBox x:Name="checkBoxViewTableWithoutOffset" Content="Nascondi offset utente nelle tabelle" HorizontalAlignment="Left" Margin="43,200,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2" Width="426" Checked="checkBoxViewTableWithoutOffset_CheckedChanged" Unchecked="checkBoxViewTableWithoutOffset_CheckedChanged"/>
+                    <Label x:Name="labelSettings_3" Content="Loop polling interval [ms]:" HorizontalAlignment="Left" Margin="43,389,0,0" VerticalAlignment="Top"/>
+                    <TextBox x:Name="TextBoxPollingInterval" HorizontalAlignment="Left" Height="23" Margin="300,391,0,0" TextWrapping="Wrap" Text="10000" VerticalAlignment="Top" Width="69" TextChanged="TextBoxPollingINterval_TextChanged"/>
+                    <Label x:Name="labelSettings_5" Content="Read timeout (serial/TCP) [ms]" HorizontalAlignment="Left" Margin="43,358,0,0" VerticalAlignment="Top"/>
+                    <TextBox x:Name="textBoxReadTimeout" HorizontalAlignment="Left" Height="23" Margin="300,358,0,0" TextWrapping="Wrap" Text="1000" VerticalAlignment="Top" Width="69" TextChanged="TextBoxReadTimeout_TextChanged"/>
+                    <TextBox x:Name="textBoxCurrentLanguage" HorizontalAlignment="Left" Height="23" Margin="300,424,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="69" TextChanged="TextBoxCurrentLanguage_TextChanged" IsEnabled="False"/>
+                    <Label x:Name="labelSettings_4" Content="Current Language:" HorizontalAlignment="Left" Margin="43,421,0,0" VerticalAlignment="Top"/>
+                    <CheckBox x:Name="CheckBoxDarkMode" Content="Dark Mode" HorizontalAlignment="Left" Margin="43,247,0,0" VerticalAlignment="Top" Checked="CheckBoxDarkMode_Checked" Unchecked="CheckBoxDarkMode_Checked"/>
+                    <Button x:Name="ButtonResetLightMode" Content="Reset Light Mode" Grid.Column="1" HorizontalAlignment="Left" Margin="134,211,0,0" VerticalAlignment="Top" Width="125" Click="ButtonResetLightMode_Click"/>
+                    <Button x:Name="ButtonResetDarkMode" Content="Reset Dark Mode" Grid.Column="1" HorizontalAlignment="Left" Margin="264,211,0,0" VerticalAlignment="Top" Width="125" Click="ButtonResetDarkMode_Click"/>
+                    <ComboBox x:Name="comboBoxTcpConnectionMode" Grid.Column="1" HorizontalAlignment="Left" Margin="181,426,0,0" VerticalAlignment="Top" Width="222"/>
+                    <Label x:Name="labelSettings_6" Content="TCP Connection mode:" HorizontalAlignment="Left" Margin="32,424,0,0" VerticalAlignment="Top" Grid.Column="1"/>
+                    <CheckBox x:Name="CheckBoxUseOnlyReadSingleRegistersForGroups" Content="Usa solo &quot;ReadSingleRegister&quot; per risorse di gruppo" HorizontalAlignment="Left" Margin="43,270,0,0" VerticalAlignment="Top" Checked="CheckBoxUseOnlyReadSingleRegistersForGroups_Checked" Unchecked="CheckBoxUseOnlyReadSingleRegistersForGroups_Checked"/>
                 </Grid>
             </TabItem>
         </TabControl>

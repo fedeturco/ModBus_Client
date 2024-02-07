@@ -1,0 +1,46 @@
+
+\DeclareFixedFont{\titlefont}{T1}{phv}{b}{}{38pt}
+
+\makeatletter                       
+\def\printauthor{
+    {\large \@author}}              
+\makeatother
+\author{
+    \href{https://fedeturco.github.io/}{Federico Turco} \\
+    \href{mailto:\federico.turco97@gmail.com}{federico.turco97@gmail.com}
+    }
+
+\begin{titlepage}
+
+\vspace*{3cm}
+\noindent
+\titlefont\projectname\par
+\epigraph{\projectdescription}{\docrevision}
+\null\vfill
+
+\noindent
+\hfill
+
+\begin{minipage}{0.45\linewidth}    % Autore a sinistra
+\begin{flushright}
+\printauthor
+\end{flushright}
+\end{minipage}
+\begin{minipage}{0.02\linewidth}    % Barra al centro
+\rule{1pt}{50pt}
+\end{minipage}
+\begin{minipage}[c]{0.4\linewidth}  % Logo a destra
+\begin{flushleft}
+\vspace*{3mm}
+\begin{figure}[H]
+\includegraphics[height=17mm]{../../Logo/Modbus_logo_2.png}
+\end{figure}
+\end{flushleft}
+\end{minipage}
+\begin{tikzpicture}[remember picture,overlay]
+\node[] at ([yshift=-190px,xshift=-130px]current page.north east)
+{
+\includegraphics[height=55mm]{../../Logo/Modbus_logo_2.png}
+};
+\end{tikzpicture}
+\end{titlepage}
