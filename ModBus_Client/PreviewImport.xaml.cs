@@ -69,7 +69,6 @@ namespace ModBus_Client
         bool useMultiple = false; 
         bool closeAfterWrite = true;
         bool abortOnError = true;
-        bool edited = false;
 
         Parser P = new Parser();
 

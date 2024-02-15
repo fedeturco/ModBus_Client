@@ -7,8 +7,8 @@
         mc:Ignorable="d"
         Title="DatabaseManager" Height="462" Width="417.127" Loaded="Window_Loaded" KeyUp="Window_KeyUp" Closing="Window_Closing">
     <Grid>
-        <Button x:Name="ButtonExportZip" Content="Export .zip" Margin="0,0,11,8" Click="ButtonExportZip_Click" Height="25" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="75" IsEnabled="False"/>
-        <Button x:Name="ButtonImportZip" Content="Import .zip" Margin="0,0,91,8" Click="ButtonImportZip_Click" Height="25" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="75" IsEnabled="True"/>
+        <Button x:Name="ButtonExportZip" Content="Export .mbp/.zip" Margin="0,0,11,10" Click="ButtonExportZip_Click" Height="25" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="100" IsEnabled="False"/>
+        <Button x:Name="ButtonImportZip" Content="Import .mbp/.zip" Margin="0,0,116,10" Click="ButtonImportZip_Click" Height="25" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="100" IsEnabled="True"/>
         <Button x:Name="buttonOpenFileLocation" Content="Open directory" HorizontalAlignment="Left" Margin="10,0,0,10" Width="104" Click="ButtonOpenFileLocation_Click" Height="25" VerticalAlignment="Bottom"/>
         <Button x:Name="ButtonRefresh" Content="Refresh" HorizontalAlignment="Left" Margin="119,0,0,10" Width="75" Click="ButtonRefresh_Click" Height="21" VerticalAlignment="Bottom" Visibility="Hidden"/>
         <Label x:Name="labelProfileSelected" Content="Profile" HorizontalAlignment="Left" Margin="10,0,0,35" Height="32" VerticalAlignment="Bottom" Visibility="Visible" FontSize="14"/>

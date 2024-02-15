@@ -121,9 +121,9 @@ namespace ModBus_Client
             
             SaveFileDialog window = new SaveFileDialog();
 
-            window.Filter = "Zip Files | *.zip";
-            window.DefaultExt = ".zip";
-            window.FileName = currItem + ".zip";
+            window.Filter = "ModBus Profile | *.mbp|Zip File | *.zip";
+            window.DefaultExt = ".mbp";
+            window.FileName = currItem + ".mbp";
 
             if ((bool)window.ShowDialog())
             {
@@ -139,8 +139,9 @@ namespace ModBus_Client
         {
             OpenFileDialog window = new OpenFileDialog();
 
-            window.Filter = "Zip Files | *.zip";
-            window.DefaultExt = ".zip";
+            window.Filter = "ModBus Profile | *.mbp|Zip File | *.zip";
+            window.DefaultExt = ".mbp";
+            window.Multiselect = false;
 
             if ((bool)window.ShowDialog())
             {
@@ -205,6 +206,12 @@ namespace ModBus_Client
                             ButtonDeleteProfile.IsEnabled = false;
 
                             LoadDb();
+
+                            try
+                            {
+                                ListBoxProfiles.SelectedItem = "Default";
+                            }
+                            catch { }
                         }
                         else
                         {
