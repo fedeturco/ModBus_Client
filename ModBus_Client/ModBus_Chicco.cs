@@ -258,8 +258,13 @@ namespace ModBusMaster_Chicco
 
         public void open()
         {
-            if(type == def.TYPE_TCP_SOCK)
+            if (type == def.TYPE_TCP_SOCK)
                 client = new TcpClient(ip_address, int.Parse(port));
+            if (type == def.TYPE_TCP_REOPEN)
+            {
+                client = new TcpClient(ip_address, int.Parse(port));
+                client.Close();
+            }
             if (type == def.TYPE_TCP_SECURE)
             {
                 System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;

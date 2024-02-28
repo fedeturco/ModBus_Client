@@ -19,6 +19,7 @@ Nella colonna mappings è possibile inserite alcune informazioni sul tipo di ris
 -----------------------------------------------------------------------
 - Enum:	    "E1:Idle;E2:Run;E3:Stop"
  -> Mostra l'etichetta corrispondente al valore presente nel registro.
+ -> Il tipo enum può essere usato anche coils e discrete inputs
 -----------------------------------------------------------------------
 
 Le variabili seguenti a 32 bit (due word) utilizzano la word del registro precedente (High Word) e corrente (Low Word) a cui fa riferimento 

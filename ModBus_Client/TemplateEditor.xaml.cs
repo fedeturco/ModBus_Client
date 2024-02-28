@@ -485,7 +485,7 @@ namespace ModBus_Client
             {
                 if (window.FileName.IndexOf("csv") != -1)
                 {
-                    String content = "Offset,Register,Value,Notes,Mappings\n";
+                    String content = "Offset,Register,Value,Notes,Mappings,Groups\n";
 
                     foreach (ModBus_Item item in collection)
                     {

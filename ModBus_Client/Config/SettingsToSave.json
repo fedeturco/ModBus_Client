@@ -65,10 +65,12 @@
     "menuItems": {
       "viewTabCoilsRegisters": {},
       "viewTabCoilsValues": {},
+      "viewTabCoilsConvertedValues": {},
       "viewTabCoilsNotes": {},
 
       "viewTabInputsRegisters": {},
       "viewTabInputsValues": {},
+      "viewTabInputsConvertedValues": {},
       "viewTabInputsNotes": {},
 
       "viewTabInputRegistersRegisters": {},

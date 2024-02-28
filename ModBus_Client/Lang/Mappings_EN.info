@@ -17,6 +17,7 @@
 -----------------------------------------------------------------------
 - Enum:	    "E1:Idle;E2:Run;E3:Stop"
  -> Show different labels according to register value (enum datatype)
+ -> Enum is also available for coils and discrete inputs
 -----------------------------------------------------------------------
 
 32 bit values uses two word in big endian format, the current one and the previous register: 
@@ -45,7 +46,7 @@
  -> Show the value converted as unsigned integer 64
 -----------------------------------------------------------------------
 
-Altri formati:
+Other datatypes:
 
 -----------------------------------------------------------------------
 - String(len): 			"String(8):Model"

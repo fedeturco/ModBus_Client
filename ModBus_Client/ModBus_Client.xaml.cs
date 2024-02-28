@@ -566,6 +566,9 @@ namespace ModBus_Client
             string[] argv = Environment.GetCommandLineArgs();
             for (int i = 0; i < argv.Length; i++)
             {
+                // debug
+                // Console.WriteLine("{0}", argv[i]);
+
                 // -h
                 // --help
                 if (argv[i].IndexOf("-h") != -1 || argv[i].IndexOf("--help") != -1)
@@ -659,6 +662,7 @@ namespace ModBus_Client
                         Console.WriteLine("Not enough parameter for --rtu");
                     }
                 }
+
 
                 if (argv[i].IndexOf("--tab") != -1)
                 {
@@ -1651,7 +1655,6 @@ namespace ModBus_Client
                         textBoxTcpClientPort.IsEnabled = false;
                         languageToolStripMenu.IsEnabled = false;
 
-                        buttonPingIp.IsEnabled = false;
                         buttonLoadClientCertificate.IsEnabled = false;
                         buttonLoadClientKey.IsEnabled = false;
                         textBoxCertificatePassword.IsEnabled = false;
@@ -5076,7 +5079,7 @@ namespace ModBus_Client
                 // check when the ping is not success
                 if (!PR.Status.ToString().Equals("Success"))
                 {
-                    buttonPingIp.Background = Brushes.Red;
+                    buttonPingIp.Background = Brushes.PaleVioletRed;
 
                     // Rimosso box per comodita
                     // DoEvents();
@@ -8044,6 +8047,13 @@ namespace ModBus_Client
             buttonClearSerialStatus.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
             buttonClearSerialStatus.Background = darkMode ? BackGroundDarkButton : BackGroundLightButton;
 
+            buttonNewProfile.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
+            buttonNewProfile.Background = darkMode ? BackGroundDarkButton : BackGroundLightButton;
+            buttonImportZip.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
+            buttonImportZip.Background = darkMode ? BackGroundDarkButton : BackGroundLightButton;
+            buttonExportZip.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
+            buttonExportZip.Background = darkMode ? BackGroundDarkButton : BackGroundLightButton;
+
             ButtonFullSize.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
             ButtonFullSize.Background = darkMode ? BackGroundDarkButton : BackGroundLightButton;
 
@@ -8051,10 +8061,12 @@ namespace ModBus_Client
             dataGridTabCoilsRegisters.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
             dataGridTabCoilsValues.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
             dataGridTabCoilsNotes.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
+            dataGridTabCoilsConvertedValues.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
 
             dataGridTabCoilsRegisters.CellStyle = NewStyle;
             dataGridTabCoilsValues.CellStyle = NewStyle;
             dataGridTabCoilsNotes.CellStyle = NewStyle;
+            dataGridTabCoilsConvertedValues.CellStyle = NewStyle;
 
             GridCoils.Background = darkMode ? BackGroundDark : BackGroundLight;
 
@@ -8116,10 +8128,12 @@ namespace ModBus_Client
             dataGridTabInputsRegisters.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
             dataGridTabInputsValues.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
             dataGridTabInputsNotes.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
+            dataGridTabInputsConvertedValues.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
 
             dataGridTabInputsRegisters.CellStyle = NewStyle;
             dataGridTabInputsValues.CellStyle = NewStyle;
             dataGridTabInputsNotes.CellStyle = NewStyle;
+            dataGridTabInputsConvertedValues.CellStyle = NewStyle;
 
             GridInputs.Background = darkMode ? BackGroundDark : BackGroundLight;
 
@@ -8332,6 +8346,7 @@ namespace ModBus_Client
             checkBoxViewTableWithoutOffset.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
             checkBoxCloseConsolAfterBoot.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
             CheckBoxDarkMode.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
+            CheckBoxUseOnlyReadSingleRegistersForGroups.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
             labelColorCellRead.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
             labelColorCellWrote.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
             labelColorCellError.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
