@@ -320,7 +320,7 @@
   "tabItems": {
     "tabItem0": "Connessione",
     "tabItem1": "Coils FC01",
-    "tabItem2": "Inputs FC02",
+    "tabItem2": "Discrete inputs FC02",
     "tabItem3": "Input registers FC04",
     "tabItem4": "Holding registers FC03",
     "tabItem5": "Diagnostic FC08",
@@ -443,6 +443,7 @@
     "valueNotValid": "Valore non valido",
     "certificateFileNotFound": "File certificato non trovato: ",
     "keyFileNotFound": "File chiave privata non trovato: ",
-    "certificatePasswordNotValid": "Password certificato non corretta"
+    "certificatePasswordNotValid": "Password certificato non corretta",
+    "abortPreviweImport": "Importazione in corso, annullare?"
   }
 }

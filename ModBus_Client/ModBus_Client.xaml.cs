@@ -2,7 +2,7 @@
 
 // -------------------------------------------------------------------------------------------
 
-// Copyright (c) 2023 Federico Turco
+// Copyright (c) 2024 Federico Turco
 
 // Permission is hereby granted, free of charge, to any person
 // obtaining a copy of this software and associated documentation
@@ -65,6 +65,7 @@ using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Shell;
 
 namespace ModBus_Client
 {
@@ -437,6 +438,8 @@ namespace ModBus_Client
             // buttonLoadClientKey.Visibility = Visibility.Hidden;
 
             CheckBoxModbusSecure_Checked(null, null);
+
+            TaskbarItemInfo = new TaskbarItemInfo();
         }
 
         private void Form1_FormClosing(object sender, EventArgs e)
@@ -803,13 +806,13 @@ namespace ModBus_Client
                     serialPort.WriteTimeout = 50;
 
                     ModBus = new ModBus_Chicco(
-                        serialPort, 
-                        textBoxTcpClientIpAddress.Text, 
-                        textBoxTcpClientPort.Text, 
-                        ModBus_Def.TYPE_RTU, 
-                        pictureBoxTx, 
+                        serialPort,
+                        textBoxTcpClientIpAddress.Text,
+                        textBoxTcpClientPort.Text,
+                        ModBus_Def.TYPE_RTU,
+                        pictureBoxTx,
                         pictureBoxRx,
-                        "","","",-1);
+                        "", "", "", -1);
                     ModBus.open();
 
                     serialPort.Open();
@@ -824,6 +827,11 @@ namespace ModBus_Client
                     comboBoxSerialParity.IsEnabled = false;
                     comboBoxSerialStop.IsEnabled = false;
                     languageToolStripMenu.IsEnabled = false;
+
+                    if (pathToConfiguration != defaultPathToConfiguration)
+                        this.Title = title + " " + version + " - File: " + pathToConfiguration + " - Port: " + comboBoxSerialPort.SelectedItem.ToString();
+                    else
+                        this.Title = title + " " + version + " - Port: " + comboBoxSerialPort.SelectedItem.ToString();
                 }
                 catch (Exception err)
                 {
@@ -851,6 +859,11 @@ namespace ModBus_Client
                     Console.WriteLine(err);
 
                     richTextBoxAppend(richTextBoxStatus, lang.languageTemplate["strings"]["failedToConnect"]);
+
+                    if (pathToConfiguration != defaultPathToConfiguration)
+                        this.Title = title + " " + version + " - File: " + pathToConfiguration;
+                    else
+                        this.Title = title + " " + version;
                 }
             }
             else
@@ -1666,6 +1679,11 @@ namespace ModBus_Client
                         buttonLoadClientKey.IsEnabled = false;
                         textBoxCertificatePassword.IsEnabled = false;
                         comboBoxTlsVersion.IsEnabled = false;
+
+                        if (pathToConfiguration != defaultPathToConfiguration)
+                            this.Title = title + " " + version + " - File: " + pathToConfiguration + " - Ip: " + textBoxTcpClientIpAddress.Text + ":" + textBoxTcpClientPort.Text;
+                        else
+                            this.Title = title + " " + version + " - Ip: " + textBoxTcpClientIpAddress.Text + ":" + textBoxTcpClientPort.Text;
                     });
                 }
                 catch(Exception err)
@@ -1681,6 +1699,11 @@ namespace ModBus_Client
                         richTextBoxAppend(richTextBoxStatus, lang.languageTemplate["strings"]["failedToConnect"] + " " + ip_address + ":" + port);
                         changeEnableButtonsConnect(false);
                         buttonTcpActive.IsEnabled = true;
+
+                        if (pathToConfiguration != defaultPathToConfiguration)
+                            this.Title = title + " " + version + " - File: " + pathToConfiguration;
+                        else
+                            this.Title = title + " " + version;
                     });
 
                     return;
@@ -1767,7 +1790,7 @@ namespace ModBus_Client
                         if (response.Length > 0)
                         {
                             // Cancello la tabella e inserisco le nuove righe
-                            insertRowsTable(list_coilsTable, list_template_coilsTable, P.uint_parser(textBoxCoilsOffset_, comboBoxCoilsOffset_), address_start, response, colorDefaultReadCellStr, comboBoxCoilsRegistri_, "DEC", true);
+                            insertRowsTable(list_coilsTable, list_template_coilsTable, P.uint_parser(textBoxCoilsOffset_, comboBoxCoilsOffset_), address_start, response, colorDefaultReadCellStr, comboBoxCoilsRegistri_, "DEC", true, false);
                         }
                     }
                 }
@@ -1868,8 +1891,13 @@ namespace ModBus_Client
         {
             try
             {
+                this.Dispatcher.Invoke((Action)delegate
+                {
+                    TaskbarItemInfo.ProgressValue = 0;
+                    TaskbarItemInfo.ProgressState = TaskbarItemProgressState.Normal;
+                });
+
                 uint address_start = P.uint_parser(textBoxCoilsOffset_, comboBoxCoilsOffset_) + P.uint_parser(textBoxCoilsRange_A_, comboBoxCoilsRange_A_);
-                //uint coil_len = P.uint_parser(textBoxCoilsOffset_, comboBoxCoilsOffset_) + P.uint_parser(textBoxCoilsRange_B_, comboBoxCoilsRange_B_) - address_start + 1;
                 uint coil_len = P.uint_parser(textBoxCoilsOffset_, comboBoxCoilsOffset_) + P.uint_parser(textBoxCoilsRange_B_, comboBoxCoilsRange_A_) - address_start + 1;
                 uint read_len = uint.Parse(textBoxCoilNumber_);
                 uint repeatQuery = coil_len / read_len;
@@ -1900,17 +1928,27 @@ namespace ModBus_Client
                         }
 
                         Array.Copy(read, 0, response, read_len * i, coil_len % read_len);
+
+                        this.Dispatcher.Invoke((Action)delegate
+                        {
+                            TaskbarItemInfo.ProgressValue = (double)(i) / (double)(repeatQuery);
+                        });
                     }
                     else
                     {
                         UInt16[] read = ModBus.readCoilStatus_01(byte.Parse(textBoxModbusAddress_), address_start + (uint)(read_len * i), read_len, readTimeout);
 
                         Array.Copy(read, 0, response, read_len * i, read_len);
+
+                        this.Dispatcher.Invoke((Action)delegate
+                        {
+                            TaskbarItemInfo.ProgressValue = (double)(i) / (double)(repeatQuery);
+                        });
                     }
                 }
 
                 // Cancello la tabella e inserisco le nuove righe
-                insertRowsTable(list_coilsTable, list_template_coilsTable, P.uint_parser(textBoxCoilsOffset_, comboBoxCoilsOffset_), address_start, response, colorDefaultReadCellStr, comboBoxCoilsRegistri_, "DEC", true);
+                insertRowsTable(list_coilsTable, list_template_coilsTable, P.uint_parser(textBoxCoilsOffset_, comboBoxCoilsOffset_), address_start, response, colorDefaultReadCellStr, comboBoxCoilsRegistri_, "DEC", true, false);
 
                 this.Dispatcher.Invoke((Action)delegate
                 {
@@ -1918,6 +1956,8 @@ namespace ModBus_Client
 
                     dataGridViewCoils.ItemsSource = null;
                     dataGridViewCoils.ItemsSource = list_coilsTable;
+
+                    TaskbarItemInfo.ProgressState = TaskbarItemProgressState.None;
                 });
             }
             catch (Exception ex)
@@ -1984,6 +2024,8 @@ namespace ModBus_Client
                 {
                     dataGridViewCoils.ItemsSource = null;
                     dataGridViewCoils.ItemsSource = list_coilsTable;
+
+                    TaskbarItemInfo.ProgressState = TaskbarItemProgressState.None;
                 });
 
                 Console.WriteLine(ex);
@@ -2113,7 +2155,7 @@ namespace ModBus_Client
                         UInt16[] value = { UInt16.Parse(textBoxCoilsValue05_) };
 
                         // Cancello la tabella e inserisco le nuove righe
-                        insertRowsTable(list_coilsTable, list_template_coilsTable, P.uint_parser(textBoxCoilsOffset_, comboBoxCoilsOffset_), address_start, value, colorDefaultWriteCellStr, comboBoxCoilsRegistri_, "DEC", true);
+                        insertRowsTable(list_coilsTable, list_template_coilsTable, P.uint_parser(textBoxCoilsOffset_, comboBoxCoilsOffset_), address_start, value, colorDefaultWriteCellStr, comboBoxCoilsRegistri_, "DEC", true, true);
                     }
                 }
 
@@ -2219,7 +2261,7 @@ namespace ModBus_Client
                         UInt16[] value = { UInt16.Parse(textBoxCoilsValue05_b_) };
 
                         // Cancello la tabella e inserisco le nuove righe
-                        insertRowsTable(list_coilsTable, list_template_coilsTable, P.uint_parser(textBoxCoilsOffset_, comboBoxCoilsOffset_), address_start, value, colorDefaultWriteCellStr, comboBoxCoilsRegistri_, "DEC", true);
+                        insertRowsTable(list_coilsTable, list_template_coilsTable, P.uint_parser(textBoxCoilsOffset_, comboBoxCoilsOffset_), address_start, value, colorDefaultWriteCellStr, comboBoxCoilsRegistri_, "DEC", true, true);
                     }
                 }
 
@@ -2339,7 +2381,7 @@ namespace ModBus_Client
                         }
 
                         // Cancello la tabella e inserisco le nuove righe
-                        insertRowsTable(list_coilsTable, list_template_coilsTable, P.uint_parser(textBoxCoilsOffset_, comboBoxCoilsOffset_), address_start, value, colorDefaultWriteCellStr, comboBoxCoilsRegistri_, null, true);
+                        insertRowsTable(list_coilsTable, list_template_coilsTable, P.uint_parser(textBoxCoilsOffset_, comboBoxCoilsOffset_), address_start, value, colorDefaultWriteCellStr, comboBoxCoilsRegistri_, null, true, true);
                     }
                 }
 
@@ -2463,7 +2505,7 @@ namespace ModBus_Client
                         if (response.Length > 0)
                         {
                             // Cancello la tabella e inserisco le nuove righe
-                            insertRowsTable(list_inputsTable, list_template_inputsTable, P.uint_parser(textBoxInputOffset_, comboBoxInputOffset_), address_start, response, colorDefaultReadCellStr, comboBoxInputRegistri_, "DEC", true);
+                            insertRowsTable(list_inputsTable, list_template_inputsTable, P.uint_parser(textBoxInputOffset_, comboBoxInputOffset_), address_start, response, colorDefaultReadCellStr, comboBoxInputRegistri_, "DEC", true, false);
                         }
                     }
                 }
@@ -2563,8 +2605,13 @@ namespace ModBus_Client
         {
             try
             {
+                this.Dispatcher.Invoke((Action)delegate
+                {
+                    TaskbarItemInfo.ProgressValue = 0;
+                    TaskbarItemInfo.ProgressState = TaskbarItemProgressState.Normal;
+                });
+
                 uint address_start = P.uint_parser(textBoxInputOffset_, comboBoxInputOffset_) + P.uint_parser(textBoxInputRange_A_, comboBoxInputRange_A_);
-                //uint input_len = P.uint_parser(textBoxInputOffset_, comboBoxInputOffset_) + P.uint_parser(textBoxInputRange_B_, comboBoxInputRange_B_) - address_start + 1;
                 uint input_len = P.uint_parser(textBoxInputOffset_, comboBoxInputOffset_) + P.uint_parser(textBoxInputRange_B_, comboBoxInputRange_A_) - address_start + 1;
 
                 if (address_start > 9999 && correctModbusAddressAuto)    // Se indirizzo espresso in 10001+ imposto offset a 0
@@ -2603,17 +2650,27 @@ namespace ModBus_Client
                         }
 
                         Array.Copy(read, 0, response, read_len * i, input_len % read_len);
+
+                        this.Dispatcher.Invoke((Action)delegate
+                        {
+                            TaskbarItemInfo.ProgressValue = (double)(i) / (double)(repeatQuery);
+                        });
                     }
                     else
                     {
                         UInt16[] read = ModBus.readInputStatus_02(byte.Parse(textBoxModbusAddress_), address_start + (uint)(read_len * i), read_len, readTimeout);
 
                         Array.Copy(read, 0, response, read_len * i, read_len);
+
+                        this.Dispatcher.Invoke((Action)delegate
+                        {
+                            TaskbarItemInfo.ProgressValue = (double)(i) / (double)(repeatQuery);
+                        });
                     }
                 }
 
                 // Cancello la tabella e inserisco le nuove righe
-                insertRowsTable(list_inputsTable, list_template_inputsTable, P.uint_parser(textBoxInputOffset_, comboBoxInputOffset_), address_start, response, colorDefaultReadCellStr, comboBoxInputRegistri_, "DEC", true);
+                insertRowsTable(list_inputsTable, list_template_inputsTable, P.uint_parser(textBoxInputOffset_, comboBoxInputOffset_), address_start, response, colorDefaultReadCellStr, comboBoxInputRegistri_, "DEC", true, false);
 
                 this.Dispatcher.Invoke((Action)delegate
                 {
@@ -2621,6 +2678,8 @@ namespace ModBus_Client
 
                     dataGridViewInput.ItemsSource = null;
                     dataGridViewInput.ItemsSource = list_inputsTable;
+
+                    TaskbarItemInfo.ProgressState = TaskbarItemProgressState.None;
                 });
             }
             catch (Exception ex)
@@ -2653,7 +2712,7 @@ namespace ModBus_Client
                         });
                     }
                 }
-                else if(ex is ModbusException)
+                else if (ex is ModbusException)
                 {
                     if (ex.Message.IndexOf("Timed out") != -1)
                     {
@@ -2687,6 +2746,8 @@ namespace ModBus_Client
                 {
                     dataGridViewInput.ItemsSource = null;
                     dataGridViewInput.ItemsSource = list_inputsTable;
+
+                    TaskbarItemInfo.ProgressState = TaskbarItemProgressState.None;
                 });
 
                 Console.WriteLine(ex);
@@ -2745,7 +2806,7 @@ namespace ModBus_Client
                         if (response.Length > 0)
                         {
                             // Cancello la tabella e inserisco le nuove righe
-                            insertRowsTable(list_inputRegistersTable, list_template_inputRegistersTable, P.uint_parser(textBoxInputRegOffset_, comboBoxInputRegOffset_), address_start, response, colorDefaultReadCellStr, comboBoxInputRegRegistri_, comboBoxInputRegValori_, true);
+                            insertRowsTable(list_inputRegistersTable, list_template_inputRegistersTable, P.uint_parser(textBoxInputRegOffset_, comboBoxInputRegOffset_), address_start, response, colorDefaultReadCellStr, comboBoxInputRegRegistri_, comboBoxInputRegValori_, true, false);
                         }
                     }
                 }
@@ -2847,8 +2908,13 @@ namespace ModBus_Client
         {
             try
             {
+                this.Dispatcher.Invoke((Action)delegate
+                {
+                    TaskbarItemInfo.ProgressValue = 0;
+                    TaskbarItemInfo.ProgressState = TaskbarItemProgressState.Normal;
+                });
+
                 uint address_start = P.uint_parser(textBoxInputRegOffset_, comboBoxInputRegOffset_) + P.uint_parser(textBoxInputRegisterRange_A_, comboBoxInputRegisterRange_A_);
-                //uint register_len = P.uint_parser(textBoxInputRegOffset_, comboBoxInputRegOffset_) + P.uint_parser(textBoxInputRegisterRange_B_, comboBoxInputRegisterRange_B_) - address_start + 1;
                 uint register_len = P.uint_parser(textBoxInputRegOffset_, comboBoxInputRegOffset_) + P.uint_parser(textBoxInputRegisterRange_B_, comboBoxInputRegisterRange_A_) - address_start + 1;
 
                 if (address_start > 9999 && correctModbusAddressAuto)    //Se indirizzo espresso in 30001+ imposto offset a 0
@@ -2887,12 +2953,22 @@ namespace ModBus_Client
                         }
 
                         Array.Copy(read, 0, response, read_len * i, register_len % read_len);
+
+                        this.Dispatcher.Invoke((Action)delegate
+                        {
+                            TaskbarItemInfo.ProgressValue = (double)(i) / (double)(repeatQuery);
+                        });
                     }
                     else
                     {
                         UInt16[] read = ModBus.readInputRegister_04(byte.Parse(textBoxModbusAddress_), address_start + (uint)(read_len * i), read_len, readTimeout);
 
                         Array.Copy(read, 0, response, read_len * i, read_len);
+
+                        this.Dispatcher.Invoke((Action)delegate
+                        {
+                            TaskbarItemInfo.ProgressValue = (double)(i) / (double)(repeatQuery);
+                        });
                     }
                 }
 
@@ -2902,7 +2978,7 @@ namespace ModBus_Client
                 }
 
                 // Cancello la tabella e inserisco le nuove righe
-                insertRowsTable(list_inputRegistersTable, list_template_inputRegistersTable, P.uint_parser(textBoxInputRegOffset_, comboBoxInputRegOffset_), address_start, response, colorDefaultReadCellStr, comboBoxInputRegRegistri_, comboBoxInputRegValori_, true);
+                insertRowsTable(list_inputRegistersTable, list_template_inputRegistersTable, P.uint_parser(textBoxInputRegOffset_, comboBoxInputRegOffset_), address_start, response, colorDefaultReadCellStr, comboBoxInputRegRegistri_, comboBoxInputRegValori_, true, false);
 
                 this.Dispatcher.Invoke((Action)delegate
                 {
@@ -2910,6 +2986,8 @@ namespace ModBus_Client
 
                     dataGridViewInputRegister.ItemsSource = null;
                     dataGridViewInputRegister.ItemsSource = list_inputRegistersTable;
+
+                    TaskbarItemInfo.ProgressState = TaskbarItemProgressState.None;
                 });
             }
             catch (Exception ex)
@@ -2976,6 +3054,8 @@ namespace ModBus_Client
                 {
                     dataGridViewInputRegister.ItemsSource = null;
                     dataGridViewInputRegister.ItemsSource = list_inputRegistersTable;
+
+                    TaskbarItemInfo.ProgressState = TaskbarItemProgressState.None;
                 });
 
                 Console.WriteLine(ex);
@@ -3043,7 +3123,8 @@ namespace ModBus_Client
                                 colorDefaultReadCellStr,
                                 comboBoxHoldingRegistri_,
                                 comboBoxHoldingValori_,
-                                true);
+                                true,
+                                false);
                         }
                     }
                 }
@@ -3155,7 +3236,7 @@ namespace ModBus_Client
                         UInt16[] value = { (UInt16)P.uint_parser(textBoxHoldingValue06_, comboBoxHoldingValue06_) };
 
                         // Cancello la tabella e inserisco le nuove righe
-                        insertRowsTable(list_holdingRegistersTable, list_template_holdingRegistersTable, P.uint_parser(textBoxHoldingOffset_, comboBoxHoldingOffset_), address_start, value, colorDefaultWriteCellStr, comboBoxHoldingRegistri_, comboBoxHoldingValori_, true);
+                        insertRowsTable(list_holdingRegistersTable, list_template_holdingRegistersTable, P.uint_parser(textBoxHoldingOffset_, comboBoxHoldingOffset_), address_start, value, colorDefaultWriteCellStr, comboBoxHoldingRegistri_, comboBoxHoldingValori_, true, true);
                     }
                 }
 
@@ -3283,7 +3364,7 @@ namespace ModBus_Client
                         if (writtenRegs.Length == word_count)
                         {
                             // Cancello la tabella e inserisco le nuove righe
-                            insertRowsTable(list_holdingRegistersTable, list_template_holdingRegistersTable, P.uint_parser(textBoxHoldingOffset_, comboBoxHoldingOffset_), address_start, writtenRegs, colorDefaultWriteCellStr, comboBoxHoldingRegistri_, comboBoxHoldingValori_, true);
+                            insertRowsTable(list_holdingRegistersTable, list_template_holdingRegistersTable, P.uint_parser(textBoxHoldingOffset_, comboBoxHoldingOffset_), address_start, writtenRegs, colorDefaultWriteCellStr, comboBoxHoldingRegistri_, comboBoxHoldingValori_, true, true);
                         }
                         else
                         {
@@ -3313,7 +3394,7 @@ namespace ModBus_Client
                         if (writtenRegs.Length == word_count)
                         {
                             // Cancello la tabella e inserisco le nuove righe
-                            insertRowsTable(list_holdingRegistersTable, list_template_holdingRegistersTable, P.uint_parser(textBoxHoldingOffset_, comboBoxHoldingOffset_), address_start, writtenRegs, colorDefaultWriteCellStr, comboBoxHoldingRegistri_, comboBoxHoldingValori_, true);
+                            insertRowsTable(list_holdingRegistersTable, list_template_holdingRegistersTable, P.uint_parser(textBoxHoldingOffset_, comboBoxHoldingOffset_), address_start, writtenRegs, colorDefaultWriteCellStr, comboBoxHoldingRegistri_, comboBoxHoldingValori_, true, true);
                         }
                         else
                         {
@@ -3421,8 +3502,13 @@ namespace ModBus_Client
         {
             try
             {
+                this.Dispatcher.Invoke((Action)delegate
+                {
+                    TaskbarItemInfo.ProgressValue = 0;
+                    TaskbarItemInfo.ProgressState = TaskbarItemProgressState.Normal;
+                });
+
                 uint address_start = P.uint_parser(textBoxHoldingOffset_, comboBoxHoldingOffset_) + P.uint_parser(textBoxHoldingRange_A_, comboBoxHoldingRange_A_);
-                //uint register_len = P.uint_parser(textBoxHoldingOffset_, comboBoxHoldingOffset_) + P.uint_parser(textBoxHoldingRange_B_, comboBoxHoldingRange_B_) - address_start + 1;
                 uint register_len = P.uint_parser(textBoxHoldingOffset_, comboBoxHoldingOffset_) + P.uint_parser(textBoxHoldingRange_B_, comboBoxHoldingRange_A_) - address_start + 1;
 
                 if (address_start > 9999 && correctModbusAddressAuto)    // Se indirizzo espresso in 40001+ imposto offset a 0
@@ -3461,6 +3547,11 @@ namespace ModBus_Client
                         }
 
                         Array.Copy(read, 0, response, read_len * i, register_len % read_len);
+
+                        this.Dispatcher.Invoke((Action)delegate
+                        {
+                            TaskbarItemInfo.ProgressValue = (double)(i) / (double)(repeatQuery);
+                        });
                     }
                     else
                     {
@@ -3481,6 +3572,11 @@ namespace ModBus_Client
                         }
 
                         Array.Copy(read, 0, response, read_len * i, read_len);
+
+                        this.Dispatcher.Invoke((Action)delegate
+                        {
+                            TaskbarItemInfo.ProgressValue = (double)(i) / (double)(repeatQuery);
+                        });
                     }
                 }
 
@@ -3490,7 +3586,7 @@ namespace ModBus_Client
                 }
 
                 // Cancello la tabella e inserisco le nuove righe
-                insertRowsTable(list_holdingRegistersTable, list_template_holdingRegistersTable, P.uint_parser(textBoxHoldingOffset_, comboBoxHoldingOffset_), address_start, response, colorDefaultReadCellStr, comboBoxHoldingRegistri_, comboBoxHoldingValori_, true);
+                insertRowsTable(list_holdingRegistersTable, list_template_holdingRegistersTable, P.uint_parser(textBoxHoldingOffset_, comboBoxHoldingOffset_), address_start, response, colorDefaultReadCellStr, comboBoxHoldingRegistri_, comboBoxHoldingValori_, true, false);
 
                 this.Dispatcher.Invoke((Action)delegate
                 {
@@ -3498,6 +3594,8 @@ namespace ModBus_Client
 
                     dataGridViewHolding.ItemsSource = null;
                     dataGridViewHolding.ItemsSource = list_holdingRegistersTable;
+
+                    TaskbarItemInfo.ProgressState = TaskbarItemProgressState.None;
                 });
             }
             catch (Exception ex)
@@ -3564,6 +3662,8 @@ namespace ModBus_Client
                 {
                     dataGridViewHolding.ItemsSource = null;
                     dataGridViewHolding.ItemsSource = list_holdingRegistersTable;
+
+                    TaskbarItemInfo.ProgressState = TaskbarItemProgressState.None;
                 });
 
                 Console.WriteLine(ex);
@@ -4274,7 +4374,7 @@ namespace ModBus_Client
         }
 
         // Funzione inserimento righe nelle collections
-        public void insertRowsTable(ObservableCollection<ModBus_Item> tab_1, IEnumerable<ModBus_Item> template, uint user_offset, uint address_start, UInt16[] response, String cellBackGround, String formatRegister, String formatVal, bool clearTable)
+        public void insertRowsTable(ObservableCollection<ModBus_Item> tab_1, IEnumerable<ModBus_Item> template, uint user_offset, uint address_start, UInt16[] response, String cellBackGround, String formatRegister, String formatVal, bool clearTable, bool colorAlways)
         {
             if (clearTable)
             {
@@ -4316,7 +4416,7 @@ namespace ModBus_Client
                     // Colorazione celle
                     if (colorMode)
                     {
-                        if (response[i] > 0)
+                        if (response[i] > 0 || colorAlways)
                         {
                             row.Foreground = darkMode ? ForeGroundDarkStr : ForeGroundLightStr;
                             row.Background = cellBackGround;
@@ -4329,7 +4429,7 @@ namespace ModBus_Client
                     }
                     else
                     {
-                        if (i % 2 == 0)
+                        if (i % 2 == 0 || colorAlways)
                         {
                             this.Dispatcher.Invoke((Action)delegate
                             {
@@ -4553,7 +4653,7 @@ namespace ModBus_Client
                         UInt16[] value = { (UInt16)P.uint_parser(textBoxHoldingValue06_b_, comboBoxHoldingValue06_b_) };
 
                         // Cancello la tabella e inserisco le nuove righe
-                        insertRowsTable(list_holdingRegistersTable, list_template_holdingRegistersTable, P.uint_parser(textBoxHoldingOffset_, comboBoxHoldingOffset_), address_start, value, colorDefaultWriteCellStr, comboBoxHoldingRegistri_, comboBoxHoldingValori_, true);
+                        insertRowsTable(list_holdingRegistersTable, list_template_holdingRegistersTable, P.uint_parser(textBoxHoldingOffset_, comboBoxHoldingOffset_), address_start, value, colorDefaultWriteCellStr, comboBoxHoldingRegistri_, comboBoxHoldingValori_, true, true);
                     }
                 }
 
@@ -7441,7 +7541,8 @@ namespace ModBus_Client
                             {
                                 KeyValuePair<Group_Item, String> kp = new KeyValuePair<Group_Item, String>(gr, gr.Group + " - " + gr.Label);
 
-                                if (template.dataGridViewCoils.FirstOrDefault<ModBus_Item>(x => (x.Group != null ? x.Group : "").Split(';').FirstOrDefault<string>(y => String.Compare(y, kp.Key.Group) == 0) != null) != null)
+                                // Apparently fast but actually really slow when loading big templates
+                                /*if (template.dataGridViewCoils.FirstOrDefault<ModBus_Item>(x => (x.Group != null ? x.Group : "").Split(';').FirstOrDefault<string>(y => String.Compare(y, kp.Key.Group) == 0) != null) != null)
                                     comboBoxCoilsGroup.Items.Add(kp);
 
                                 if (template.dataGridViewInput.FirstOrDefault<ModBus_Item>(x => (x.Group != null ? x.Group : "").Split(';').FirstOrDefault<string>(y => String.Compare(y, kp.Key.Group) == 0) != null) != null)
@@ -7451,53 +7552,106 @@ namespace ModBus_Client
                                     comboBoxInputRegisterGroup.Items.Add(kp);
 
                                 if (template.dataGridViewHolding.FirstOrDefault<ModBus_Item>(x => (x.Group != null ? x.Group : "").Split(';').FirstOrDefault<string>(y => String.Compare(y, kp.Key.Group) == 0) != null) != null)
-                                    comboBoxHoldingGroup.Items.Add(kp);
+                                    comboBoxHoldingGroup.Items.Add(kp);*/
 
-                                /* Faster but not working properly
-                                 * foreach(ModBus_Item item in template.dataGridViewCoils)
+                                // Faster than the previous
+                                bool breakNested = false;
+
+                                foreach (ModBus_Item item in template.dataGridViewCoils)
                                 {
                                     if (item.Group != null)
                                     {
-                                        if (UInt32.Parse(item.Group) == UInt32.Parse(gr.Group))
+                                        foreach (string testGroup in item.Group.Split(';'))
                                         {
-                                            comboBoxCoilsGroup.Items.Add(kp);
-                                            break;
+                                            if (UInt32.TryParse(testGroup, out UInt32 testGroupInt) && UInt32.TryParse(kp.Key.Group, out UInt32 grouproupInt))
+                                            {
+                                                if (testGroupInt == grouproupInt)
+                                                {
+                                                    comboBoxCoilsGroup.Items.Add(kp);
+                                                    breakNested = true;
+                                                }
+                                            }
+
+                                            if (breakNested)
+                                                break;
                                         }
+
+                                        if (breakNested)
+                                            break;
                                     }
                                 }
                                 foreach (ModBus_Item item in template.dataGridViewInput)
                                 {
                                     if (item.Group != null)
                                     {
-                                        if (UInt32.Parse(item.Group) == UInt32.Parse(gr.Group))
+                                        foreach (string testGroup in item.Group.Split(';'))
                                         {
-                                            comboBoxInputGroup.Items.Add(kp);
-                                            break;
+                                            if (UInt32.TryParse(testGroup, out UInt32 testGroupInt) && UInt32.TryParse(kp.Key.Group, out UInt32 grouproupInt))
+                                            {
+                                                if (testGroupInt == grouproupInt)
+                                                {
+                                                    comboBoxInputGroup.Items.Add(kp);
+                                                    breakNested = true;
+                                                }
+                                            }
+
+                                            if (breakNested)
+                                                break;
                                         }
+
+                                        if (breakNested)
+                                            break;
                                     }
                                 }
-                                foreach(ModBus_Item item in template.dataGridViewInputRegister)
+                                foreach (ModBus_Item item in template.dataGridViewInputRegister)
                                 {
                                     if (item.Group != null)
                                     {
-                                        if (UInt32.Parse(item.Group) == UInt32.Parse(gr.Group))
+                                        foreach (string testGroup in item.Group.Split(';'))
                                         {
-                                            comboBoxInputRegisterGroup.Items.Add(kp);
-                                            break;
+                                            if (UInt32.TryParse(testGroup, out UInt32 testGroupInt) && UInt32.TryParse(kp.Key.Group, out UInt32 grouproupInt))
+                                            {
+                                                if (testGroupInt == grouproupInt)
+                                                {
+                                                    comboBoxInputRegisterGroup.Items.Add(kp);
+                                                    breakNested = true;
+                                                }
+                                            }
+
+                                            if (breakNested)
+                                                break;
                                         }
+
+                                        if (breakNested)
+                                            break;
                                     }
                                 }
-                                foreach(ModBus_Item item in template.dataGridViewHolding)
+                                foreach (ModBus_Item item in template.dataGridViewHolding)
                                 {
                                     if (item.Group != null)
                                     {
-                                        if (UInt32.Parse(item.Group) == UInt32.Parse(gr.Group))
+                                        foreach (string testGroup in item.Group.Split(';'))
                                         {
-                                            comboBoxHoldingGroup.Items.Add(kp);
-                                            break;
+                                            if (UInt32.TryParse(testGroup, out UInt32 testGroupInt) && UInt32.TryParse(kp.Key.Group, out UInt32 grouproupInt))
+                                            {
+                                                if (testGroupInt == grouproupInt)
+                                                {
+                                                    comboBoxHoldingGroup.Items.Add(kp);
+                                                    breakNested = true;
+                                                }
+                                            }
+
+                                            if (breakNested)
+                                                break;
                                         }
+
+                                        if (breakNested)
+                                            break;
                                     }
-                                }*/
+                                }
+
+                                if (breakNested)
+                                    continue;
                             }
                         }
                         catch (Exception err)
@@ -8533,15 +8687,22 @@ namespace ModBus_Client
             this.Dispatcher.Invoke((Action)delegate
             {
                 list_holdingRegistersTable.Clear();
+                TaskbarItemInfo.ProgressValue = 0;
+                TaskbarItemInfo.ProgressState = TaskbarItemProgressState.Normal;
             });
+
+            List<ModBus_Item> toRead = new List<ModBus_Item>();
+            List<uint> toRemove = new List<uint>();
+            UInt32 counter = 0;
 
             if (useOnlyReadSingleRegisterForGroups)
             {
-                List<uint> toRemove = new List<uint>();
                 foreach (ModBus_Item item in list_template_holdingRegistersTable.OrderBy(x => x.RegisterUInt))
                 {
                     try
                     {
+                        counter++;
+
                         if (item == null)
                             continue;
 
@@ -8553,10 +8714,10 @@ namespace ModBus_Client
 
                         if (item.Mappings != null)
                         {
-                            if (item.Mappings.ToLower().IndexOf("32") != -1 || item.Mappings.ToLower().IndexOf("float") != -1)
+                            if (item.Mappings.ToLower().IndexOf("int32") != -1 || item.Mappings.ToLower().IndexOf("float") != -1)
                                 num_regs = 2;
 
-                            if (item.Mappings.ToLower().IndexOf("64") != -1 || item.Mappings.ToLower().IndexOf("double") != -1)
+                            if (item.Mappings.ToLower().IndexOf("int64") != -1 || item.Mappings.ToLower().IndexOf("double") != -1)
                                 num_regs = 4;
 
                             if (item.Mappings.ToLower().IndexOf("string") != -1)
@@ -8604,9 +8765,15 @@ namespace ModBus_Client
                                     colorDefaultReadCellStr,
                                     comboBoxHoldingRegistri_,
                                     comboBoxHoldingValori_,
+                                    false,
                                     false);
                             }
                         }
+
+                        this.Dispatcher.Invoke((Action)delegate
+                        {
+                            TaskbarItemInfo.ProgressValue = (double)(counter) / (double)(list_template_holdingRegistersTable.Count);
+                        });
                     }
                     catch (Exception ex)
                     {
@@ -8665,9 +8832,10 @@ namespace ModBus_Client
 
                 try
                 {
-                    List<uint> toRemove = new List<uint>();
                     foreach (ModBus_Item item in list_template_holdingRegistersTable.OrderBy(x => x.RegisterUInt))
                     {
+                        counter++;
+
                         if (item == null)
                             continue;
 
@@ -8679,10 +8847,10 @@ namespace ModBus_Client
 
                         if (item.Mappings != null)
                         {
-                            if (item.Mappings.ToLower().IndexOf("32") != -1 || item.Mappings.ToLower().IndexOf("float") != -1)
+                            if (item.Mappings.ToLower().IndexOf("int32") != -1 || item.Mappings.ToLower().IndexOf("float") != -1)
                                 curr_len = 2;
 
-                            if (item.Mappings.ToLower().IndexOf("64") != -1 || item.Mappings.ToLower().IndexOf("double") != -1)
+                            if (item.Mappings.ToLower().IndexOf("int64") != -1 || item.Mappings.ToLower().IndexOf("double") != -1)
                                 curr_len = 4;
 
                             if (item.Mappings.ToLower().IndexOf("string") != -1)
@@ -8732,9 +8900,15 @@ namespace ModBus_Client
                                         colorDefaultReadCellStr,
                                         comboBoxHoldingRegistri_,
                                         comboBoxHoldingValori_,
+                                        false,
                                         false);
                                 }
                             }
+
+                            this.Dispatcher.Invoke((Action)delegate
+                            {
+                                TaskbarItemInfo.ProgressValue = (double)(counter) / (double)(list_template_holdingRegistersTable.Count);
+                            });
 
                             address_start = 0xFFFF;
                             num_regs = 0;
@@ -8771,9 +8945,15 @@ namespace ModBus_Client
                                     colorDefaultReadCellStr,
                                     comboBoxHoldingRegistri_,
                                     comboBoxHoldingValori_,
+                                    false,
                                     false);
                             }
                         }
+
+                        this.Dispatcher.Invoke((Action)delegate
+                        {
+                            TaskbarItemInfo.ProgressValue = (double)(counter) / (double)(list_template_holdingRegistersTable.Count);
+                        });
                     }
                 }
                 catch (Exception ex)
@@ -8829,6 +9009,8 @@ namespace ModBus_Client
 
                 dataGridViewHolding.ItemsSource = null;
                 dataGridViewHolding.ItemsSource = list_holdingRegistersTable;
+
+                TaskbarItemInfo.ProgressState = TaskbarItemProgressState.None;
             });
         }
 
@@ -8849,60 +9031,78 @@ namespace ModBus_Client
             this.Dispatcher.Invoke((Action)delegate
             {
                 list_holdingRegistersTable.Clear();
+                TaskbarItemInfo.ProgressValue = 0;
+                TaskbarItemInfo.ProgressState = TaskbarItemProgressState.Normal;
             });
+
+            List<ModBus_Item> toRead = new List<ModBus_Item>();
+            List<uint> toRemove = new List<uint>();
+            UInt32 counter = 0;
+
+            foreach (ModBus_Item item in list_template_holdingRegistersTable.OrderBy(x => x.RegisterUInt))
+            {
+                try
+                {
+                    if (item == null)
+                        continue;
+
+                    if (item.Group == null && (comboBoxHoldingGroup_.Length > 1))
+                        continue;
+
+                    if (item.Group == null && (comboBoxHoldingGroup_.Length > 0))
+                    {
+                        if (int.Parse(comboBoxHoldingGroup_) != 0)
+                            continue;
+                    }
+
+                    if (toRemove.Contains(item.RegisterUInt))
+                        continue;
+
+                    if (item.Group != null)
+                    {
+                        bool found = false;
+
+                        foreach (string str in item.Group.Split(';'))
+                        {
+                            int dummy = -1;
+                            if (int.TryParse(str, out dummy))
+                            {
+                                if (dummy == int.Parse(comboBoxHoldingGroup_))
+                                {
+                                    found = true;
+                                    break;
+                                }
+                            }
+                        }
+
+                        if (!found)
+                            continue;
+                    }
+
+                    toRead.Add(item);
+                }
+                catch (Exception err)
+                {
+                    Console.WriteLine(err);
+                }
+            }
 
             if (useOnlyReadSingleRegisterForGroups)
             {
-                List<uint> toRemove = new List<uint>();
-                foreach (ModBus_Item item in list_template_holdingRegistersTable.OrderBy(x => x.RegisterUInt))
+                foreach (ModBus_Item item in toRead)
                 {
                     try
                     {
-                        if (item == null)
-                            continue;
-
-                        if (item.Group == null && (comboBoxHoldingGroup_.Length > 1))
-                            continue;
-
-                        if (item.Group == null && (comboBoxHoldingGroup_.Length > 0))
-                        {
-                            if (int.Parse(comboBoxHoldingGroup_) != 0)
-                                continue;
-                        }
-
-                        if (toRemove.Contains(item.RegisterUInt))
-                            continue;
-
-                        if (item.Group != null)
-                        {
-                            bool found = false;
-
-                            foreach (string str in item.Group.Split(';'))
-                            {
-                                int dummy = -1;
-                                if (int.TryParse(str, out dummy))
-                                {
-                                    if (dummy == int.Parse(comboBoxHoldingGroup_))
-                                    {
-                                        found = true;
-                                        break;
-                                    }
-                                }
-                            }
-
-                            if (!found)
-                                continue;
-                        }
-
                         uint address_start = item.RegisterUInt;
                         uint num_regs = 1;
+                        counter++;
 
                         if (item.Mappings != null)
                         {
-                            if (item.Mappings.ToLower().IndexOf("32") != -1 || item.Mappings.ToLower().IndexOf("float") != -1)
+                            if (item.Mappings.ToLower().IndexOf("int32") != -1 || item.Mappings.ToLower().IndexOf("float") != -1)
                                 num_regs = 2;
 
-                            if (item.Mappings.ToLower().IndexOf("64") != -1 || item.Mappings.ToLower().IndexOf("double") != -1)
+                            if (item.Mappings.ToLower().IndexOf("int64") != -1 || item.Mappings.ToLower().IndexOf("double") != -1)
                                 num_regs = 4;
 
                             if (item.Mappings.ToLower().IndexOf("string") != -1)
@@ -8950,9 +9150,15 @@ namespace ModBus_Client
                                     colorDefaultReadCellStr,
                                     comboBoxHoldingRegistri_,
                                     comboBoxHoldingValori_,
+                                    false,
                                     false);
                             }
                         }
+
+                        this.Dispatcher.Invoke((Action)delegate
+                        {
+                            TaskbarItemInfo.ProgressValue = (double)(counter) / (double)(toRead.Count);
+                        });
                     }
                     catch (Exception ex)
                     {
@@ -9011,55 +9217,19 @@ namespace ModBus_Client
 
                 try
                 {
-                    List<uint> toRemove = new List<uint>();
-                    foreach (ModBus_Item item in list_template_holdingRegistersTable.OrderBy(x => x.RegisterUInt))
+                    foreach (ModBus_Item item in toRead)
                     {
-
-                        if (item == null)
-                            continue;
-
-                        if (item.Group == null && (comboBoxHoldingGroup_.Length > 1))
-                            continue;
-
-                        if (item.Group == null && (comboBoxHoldingGroup_.Length > 0))
-                        {
-                            if (int.Parse(comboBoxHoldingGroup_) != 0)
-                                continue;
-                        }
-
-                        if (toRemove.Contains(item.RegisterUInt))
-                            continue;
-
-                        if (item.Group != null)
-                        {
-                            bool found = false;
-
-                            foreach (string str in item.Group.Split(';'))
-                            {
-                                int dummy = -1;
-                                if (int.TryParse(str, out dummy))
-                                {
-                                    if (dummy == int.Parse(comboBoxHoldingGroup_))
-                                    {
-                                        found = true;
-                                        break;
-                                    }
-                                }
-                            }
-
-                            if (!found)
-                                continue;
-                        }
-
                         curr_start = item.RegisterUInt;
                         curr_len = 1;
 
+                        counter++;
+
                         if (item.Mappings != null)
                         {
-                            if (item.Mappings.ToLower().IndexOf("32") != -1 || item.Mappings.ToLower().IndexOf("float") != -1)
+                            if (item.Mappings.ToLower().IndexOf("int32") != -1 || item.Mappings.ToLower().IndexOf("float") != -1)
                                 curr_len = 2;
 
-                            if (item.Mappings.ToLower().IndexOf("64") != -1 || item.Mappings.ToLower().IndexOf("double") != -1)
+                            if (item.Mappings.ToLower().IndexOf("int64") != -1 || item.Mappings.ToLower().IndexOf("double") != -1)
                                 curr_len = 4;
 
                             if (item.Mappings.ToLower().IndexOf("string") != -1)
@@ -9110,12 +9280,18 @@ namespace ModBus_Client
                                         colorDefaultReadCellStr,
                                         comboBoxHoldingRegistri_,
                                         comboBoxHoldingValori_,
+                                        false,
                                         false);
                                 }
                             }
 
                             address_start = 0xFFFF;
                             num_regs = 0;
+
+                            this.Dispatcher.Invoke((Action)delegate
+                            {
+                                TaskbarItemInfo.ProgressValue = (double)(counter) / (double)(toRead.Count);
+                            });
                         }
 
                         num_regs += curr_len;
@@ -9149,9 +9325,15 @@ namespace ModBus_Client
                                     colorDefaultReadCellStr,
                                     comboBoxHoldingRegistri_,
                                     comboBoxHoldingValori_,
+                                    false,
                                     false);
                             }
                         }
+
+                        this.Dispatcher.Invoke((Action)delegate
+                        {
+                            TaskbarItemInfo.ProgressValue = (double)(counter) / (double)(toRead.Count);
+                        });
                     }
                 }
                 catch (Exception ex)
@@ -9207,6 +9389,8 @@ namespace ModBus_Client
 
                 dataGridViewHolding.ItemsSource = null;
                 dataGridViewHolding.ItemsSource = list_holdingRegistersTable;
+
+                TaskbarItemInfo.ProgressState = TaskbarItemProgressState.None;
             });
         }
 
@@ -9235,7 +9419,12 @@ namespace ModBus_Client
             this.Dispatcher.Invoke((Action)delegate
             {
                 list_inputRegistersTable.Clear();
+
+                TaskbarItemInfo.ProgressValue = 0;
+                TaskbarItemInfo.ProgressState = TaskbarItemProgressState.Normal;
             });
+
+            UInt32 counter = 0;
 
             if (useOnlyReadSingleRegisterForGroups)
             {
@@ -9244,6 +9433,8 @@ namespace ModBus_Client
                 {
                     try
                     {
+                        counter++;
+
                         if (item == null)
                             continue;
 
@@ -9255,10 +9446,10 @@ namespace ModBus_Client
 
                         if (item.Mappings != null)
                         {
-                            if (item.Mappings.ToLower().IndexOf("32") != -1 || item.Mappings.ToLower().IndexOf("float") != -1)
+                            if (item.Mappings.ToLower().IndexOf("int32") != -1 || item.Mappings.ToLower().IndexOf("float") != -1)
                                 num_regs = 2;
 
-                            if (item.Mappings.ToLower().IndexOf("64") != -1 || item.Mappings.ToLower().IndexOf("double") != -1)
+                            if (item.Mappings.ToLower().IndexOf("int64") != -1 || item.Mappings.ToLower().IndexOf("double") != -1)
                                 num_regs = 4;
 
                             if (item.Mappings.ToLower().IndexOf("string") != -1)
@@ -9306,9 +9497,15 @@ namespace ModBus_Client
                                     colorDefaultReadCellStr,
                                     comboBoxInputRegRegistri_,
                                     comboBoxInputRegValori_,
+                                    false,
                                     false);
                             }
                         }
+
+                        this.Dispatcher.Invoke((Action)delegate
+                        {
+                            TaskbarItemInfo.ProgressValue = (double)(counter) / (double)(list_template_inputRegistersTable.Count);
+                        });
                     }
                     catch (Exception ex)
                     {
@@ -9372,6 +9569,7 @@ namespace ModBus_Client
                     List<uint> toRemove = new List<uint>();
                     foreach (ModBus_Item item in list_template_inputRegistersTable.OrderBy(x => x.RegisterUInt))
                     {
+                        counter++;
 
                         if (item == null)
                             continue;
@@ -9384,10 +9582,10 @@ namespace ModBus_Client
 
                         if (item.Mappings != null)
                         {
-                            if (item.Mappings.ToLower().IndexOf("32") != -1 || item.Mappings.ToLower().IndexOf("float") != -1)
+                            if (item.Mappings.ToLower().IndexOf("int32") != -1 || item.Mappings.ToLower().IndexOf("float") != -1)
                                 curr_len = 2;
 
-                            if (item.Mappings.ToLower().IndexOf("64") != -1 || item.Mappings.ToLower().IndexOf("double") != -1)
+                            if (item.Mappings.ToLower().IndexOf("int64") != -1 || item.Mappings.ToLower().IndexOf("double") != -1)
                                 curr_len = 4;
 
                             if (item.Mappings.ToLower().IndexOf("string") != -1)
@@ -9437,9 +9635,15 @@ namespace ModBus_Client
                                         colorDefaultReadCellStr,
                                         comboBoxInputRegRegistri_,
                                         comboBoxInputRegValori_,
+                                        false,
                                         false);
                                 }
                             }
+
+                            this.Dispatcher.Invoke((Action)delegate
+                            {
+                                TaskbarItemInfo.ProgressValue = (double)(counter) / (double)(list_template_inputRegistersTable.Count);
+                            });
 
                             address_start = 0xFFFF;
                             num_regs = 0;
@@ -9476,9 +9680,15 @@ namespace ModBus_Client
                                     colorDefaultReadCellStr,
                                     comboBoxInputRegRegistri_,
                                     comboBoxInputRegValori_,
+                                    false,
                                     false);
                             }
                         }
+
+                        this.Dispatcher.Invoke((Action)delegate
+                        {
+                            TaskbarItemInfo.ProgressValue = (double)(counter) / (double)(list_template_inputRegistersTable.Count);
+                        });
                     }
                 }
                 catch (Exception ex)
@@ -9536,6 +9746,8 @@ namespace ModBus_Client
 
                 dataGridViewInputRegister.ItemsSource = null;
                 dataGridViewInputRegister.ItemsSource = list_inputRegistersTable;
+
+                TaskbarItemInfo.ProgressState = TaskbarItemProgressState.None;
             });
         }
 
@@ -9553,60 +9765,79 @@ namespace ModBus_Client
             this.Dispatcher.Invoke((Action)delegate
             {
                 list_inputRegistersTable.Clear();
+
+                TaskbarItemInfo.ProgressValue = 0;
+                TaskbarItemInfo.ProgressState = TaskbarItemProgressState.Normal;
             });
+
+            List<ModBus_Item> toRead = new List<ModBus_Item>();
+            List<uint> toRemove = new List<uint>();
+            UInt32 counter = 0;
+
+            foreach (ModBus_Item item in list_template_inputRegistersTable.OrderBy(x => x.RegisterUInt).ToList<ModBus_Item>())
+            {
+                try
+                {
+                    if (item == null)
+                        continue;
+
+                    if (item.Group == null && (comboBoxInputRegisterGroup_.Length > 1))
+                        continue;
+
+                    if (item.Group == null && (comboBoxInputRegisterGroup_.Length > 0))
+                    {
+                        if (int.Parse(comboBoxInputRegisterGroup_) != 0)
+                            continue;
+                    }
+
+                    if (toRemove.Contains(item.RegisterUInt))
+                        continue;
+
+                    if (item.Group != null)
+                    {
+                        bool found = false;
+
+                        foreach (string str in item.Group.Split(';'))
+                        {
+                            int dummy = -1;
+                            if (int.TryParse(str, out dummy))
+                            {
+                                if (dummy == int.Parse(comboBoxInputRegisterGroup_))
+                                {
+                                    found = true;
+                                    break;
+                                }
+                            }
+                        }
+
+                        if (!found)
+                            continue;
+                    }
+
+                    toRead.Add(item);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex);
+                }
+            }
 
             if (useOnlyReadSingleRegisterForGroups)
             {
-                List<uint> toRemove = new List<uint>();
-                foreach (ModBus_Item item in list_template_inputRegistersTable.OrderBy(x => x.RegisterUInt).ToList<ModBus_Item>())
+                foreach (ModBus_Item item in toRead)
                 {
                     try
                     {
-                        if (item == null)
-                            continue;
-
-                        if (item.Group == null && (comboBoxInputRegisterGroup_.Length > 1))
-                            continue;
-
-                        if (item.Group == null && (comboBoxInputRegisterGroup_.Length > 0))
-                        {
-                            if (int.Parse(comboBoxInputRegisterGroup_) != 0)
-                                continue;
-                        }
-
-                        if (toRemove.Contains(item.RegisterUInt))
-                            continue;
-
-                        if (item.Group != null)
-                        {
-                            bool found = false;
-
-                            foreach (string str in item.Group.Split(';'))
-                            {
-                                int dummy = -1;
-                                if (int.TryParse(str, out dummy))
-                                {
-                                    if (dummy == int.Parse(comboBoxInputRegisterGroup_))
-                                    {
-                                        found = true;
-                                        break;
-                                    }
-                                }
-                            }
-
-                            if (!found)
-                                continue;
-                        }
-
                         uint address_start = item.RegisterUInt;
                         uint num_regs = 1;
+                        counter++;
 
                         if (item.Mappings != null)
                         {
-                            if (item.Mappings.ToLower().IndexOf("32") != -1 || item.Mappings.ToLower().IndexOf("float") != -1)
+                            if (item.Mappings.ToLower().IndexOf("int32") != -1 || item.Mappings.ToLower().IndexOf("float") != -1)
                                 num_regs = 2;
 
-                            if (item.Mappings.ToLower().IndexOf("64") != -1 || item.Mappings.ToLower().IndexOf("double") != -1)
+                            if (item.Mappings.ToLower().IndexOf("int64") != -1 || item.Mappings.ToLower().IndexOf("double") != -1)
                                 num_regs = 4;
 
                             if (item.Mappings.ToLower().IndexOf("string") != -1)
@@ -9654,9 +9885,15 @@ namespace ModBus_Client
                                     colorDefaultReadCellStr,
                                     comboBoxInputRegRegistri_,
                                     comboBoxInputRegValori_,
+                                    false,
                                     false);
                             }
                         }
+
+                        this.Dispatcher.Invoke((Action)delegate
+                        {
+                            TaskbarItemInfo.ProgressValue = (double)(counter) / (double)(toRead.Count);
+                        });
                     }
                     catch (Exception ex)
                     {
@@ -9717,64 +9954,33 @@ namespace ModBus_Client
 
                 try
                 {
-                    List<uint> toRemove = new List<uint>();
-                    foreach (ModBus_Item item in list_template_inputRegistersTable.OrderBy(x => x.RegisterUInt).ToList<ModBus_Item>())
+                    foreach (ModBus_Item item in toRead)
                     {
-                        if (item == null)
-                            continue;
-
-                        if (item.Group == null && (comboBoxInputRegisterGroup_.Length > 1))
-                            continue;
-
-                        if (item.Group == null && (comboBoxInputRegisterGroup_.Length > 0))
-                        {
-                            if (int.Parse(comboBoxInputRegisterGroup_) != 0)
-                                continue;
-                        }
-
-                        if (toRemove.Contains(item.RegisterUInt))
-                            continue;
-
-                        if (item.Group != null)
-                        {
-                            bool found = false;
-
-                            foreach (string str in item.Group.Split(';'))
-                            {
-                                int dummy = -1;
-                                if (int.TryParse(str, out dummy))
-                                {
-                                    if (dummy == int.Parse(comboBoxInputRegisterGroup_))
-                                    {
-                                        found = true;
-                                        break;
-                                    }
-                                }
-                            }
-
-                            if (!found)
-                                continue;
-                        }
-
                         curr_start = item.RegisterUInt;
                         curr_len = 1;
+                        counter++;
 
                         if (item.Mappings != null)
                         {
-                            if (item.Mappings.ToLower().IndexOf("32") != -1 || item.Mappings.ToLower().IndexOf("float") != -1)
+                            if (item.Mappings.ToLower().IndexOf("int32") != -1 || item.Mappings.ToLower().IndexOf("float") != -1)
                                 curr_len = 2;
 
-                            if (item.Mappings.ToLower().IndexOf("64") != -1 || item.Mappings.ToLower().IndexOf("double") != -1)
+                            if (item.Mappings.ToLower().IndexOf("int64") != -1 || item.Mappings.ToLower().IndexOf("double") != -1)
                                 curr_len = 4;
 
                             if (item.Mappings.ToLower().IndexOf("string") != -1)
                             {
                                 uint offset = 0;
                                 if (item.Mappings.IndexOf('.') != -1)
-                                    offset = uint.Parse(item.Mappings.Split('.')[1].ToLower().Split(')')[0]);
+                                {
+                                    if (!uint.TryParse(item.Mappings.Split('.')[1].ToLower().Split(')')[0], out offset))
+                                        Console.WriteLine("Error parsing \"" + item.Mappings.Split('.')[1].ToLower().Split(')')[0] + "\"");
+                                }
                                 address_start = address_start - (offset / 2 + offset % 2);
 
-                                curr_len = uint.Parse(item.Mappings.Split('.')[0].ToLower().Replace("string(", "").Replace(")", ""));
+                                if (!uint.TryParse(item.Mappings.Split('.')[0].ToLower().Replace("string(", "").Replace(")", ""), out curr_len))
+                                    Console.WriteLine("Error parsing \"" + item.Mappings.Split('.')[0].ToLower().Replace("string(", "").Replace(")", "") + "\"");
+
                                 curr_len = curr_len / 2 + curr_len % 2;
                             }
                             else
@@ -9814,9 +10020,15 @@ namespace ModBus_Client
                                         colorDefaultReadCellStr,
                                         comboBoxInputRegRegistri_,
                                         comboBoxInputRegValori_,
+                                        false,
                                         false);
                                 }
                             }
+
+                            this.Dispatcher.Invoke((Action)delegate
+                            {
+                                TaskbarItemInfo.ProgressValue = (double)(counter) / (double)(toRead.Count);
+                            });
 
                             address_start = 0xFFFF;
                             num_regs = 0;
@@ -9853,9 +10065,15 @@ namespace ModBus_Client
                                     colorDefaultReadCellStr,
                                     comboBoxInputRegRegistri_,
                                     comboBoxInputRegValori_,
+                                    false,
                                     false);
                             }
                         }
+
+                        this.Dispatcher.Invoke((Action)delegate
+                        {
+                            TaskbarItemInfo.ProgressValue = (double)(counter) / (double)(toRead.Count);
+                        });
                     }
                 }
                 catch (Exception ex)
@@ -9913,6 +10131,8 @@ namespace ModBus_Client
 
                 dataGridViewInputRegister.ItemsSource = null;
                 dataGridViewInputRegister.ItemsSource = list_inputRegistersTable;
+
+                TaskbarItemInfo.ProgressState = TaskbarItemProgressState.None;
             });
         }
 
@@ -9941,7 +10161,12 @@ namespace ModBus_Client
             this.Dispatcher.Invoke((Action)delegate
             {
                 list_inputsTable.Clear();
+
+                TaskbarItemInfo.ProgressValue = 0;
+                TaskbarItemInfo.ProgressState = TaskbarItemProgressState.Normal;
             });
+
+            UInt32 counter = 0;
 
             if (useOnlyReadSingleRegisterForGroups)
             {
@@ -9949,6 +10174,8 @@ namespace ModBus_Client
                 {
                     try
                     {
+                        counter++;
+
                         if (item == null)
                             continue;
 
@@ -9975,9 +10202,15 @@ namespace ModBus_Client
                                     colorDefaultReadCellStr,
                                     comboBoxInputRegistri_,
                                     "DEC",
+                                    false,
                                     false);
                             }
                         }
+
+                        this.Dispatcher.Invoke((Action)delegate
+                        {
+                            TaskbarItemInfo.ProgressValue = (double)(counter) / (double)(list_template_inputsTable.Count);
+                        });
                     }
                     catch (Exception ex)
                     {
@@ -10037,6 +10270,8 @@ namespace ModBus_Client
                 {
                     foreach (ModBus_Item item in list_template_inputsTable.OrderBy(x => x.RegisterUInt))
                     {
+                        counter++;
+
                         if (item == null)
                             continue;
 
@@ -10064,9 +10299,15 @@ namespace ModBus_Client
                                         colorDefaultReadCellStr,
                                         comboBoxInputRegistri_,
                                         "DEC",
+                                        false,
                                         false);
                                 }
                             }
+
+                            this.Dispatcher.Invoke((Action)delegate
+                            {
+                                TaskbarItemInfo.ProgressValue = (double)(counter) / (double)(list_template_inputsTable.Count);
+                            });
 
                             address_start = 0xFFFF;
                             num_regs = 0;
@@ -10100,9 +10341,15 @@ namespace ModBus_Client
                                     colorDefaultReadCellStr,
                                     comboBoxInputRegistri_,
                                     "DEC",
+                                    false,
                                     false);
                             }
                         }
+
+                        this.Dispatcher.Invoke((Action)delegate
+                        {
+                            TaskbarItemInfo.ProgressValue = (double)(counter) / (double)(list_template_inputsTable.Count);
+                        });
                     }
                 }
                 catch (Exception ex)
@@ -10158,6 +10405,8 @@ namespace ModBus_Client
 
                 dataGridViewInput.ItemsSource = null;
                 dataGridViewInput.ItemsSource = list_inputsTable;
+
+                TaskbarItemInfo.ProgressState = TaskbarItemProgressState.None;
             });
         }
 
@@ -10175,49 +10424,69 @@ namespace ModBus_Client
             this.Dispatcher.Invoke((Action)delegate
             {
                 list_inputsTable.Clear();
+
+                TaskbarItemInfo.ProgressValue = 0;
+                TaskbarItemInfo.ProgressState = TaskbarItemProgressState.Normal;
             });
+
+            List<ModBus_Item> toRead = new List<ModBus_Item>();
+            List<uint> toRemove = new List<uint>();
+            UInt32 counter = 0;
+
+            foreach (ModBus_Item item in list_template_inputsTable.OrderBy(x => x.RegisterUInt))
+            {
+                try
+                {
+                    if (item == null)
+                        continue;
+
+                    if (item.Group == null && (comboBoxInputGroup_.Length > 1))
+                        continue;
+
+                    if (item.Group == null && (comboBoxInputGroup_.Length > 0))
+                    {
+                        if (int.Parse(comboBoxInputGroup_) != 0)
+                            continue;
+                    }
+
+                    if (item.Group != null)
+                    {
+                        bool found = false;
+
+                        foreach (string str in item.Group.Split(';'))
+                        {
+                            int dummy = -1;
+                            if (int.TryParse(str, out dummy))
+                            {
+                                if (dummy == int.Parse(comboBoxInputGroup_))
+                                {
+                                    found = true;
+                                    break;
+                                }
+                            }
+                        }
+
+                        if (!found)
+                            continue;
+                    }
+
+                    toRead.Add(item);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex);
+                }
+            }
 
             if (useOnlyReadSingleRegisterForGroups)
             {
-                foreach (ModBus_Item item in list_template_inputsTable.OrderBy(x => x.RegisterUInt))
+                foreach (ModBus_Item item in toRead)
                 {
                     try
                     {
-                        if (item == null)
-                            continue;
-
-                        if (item.Group == null && (comboBoxInputGroup_.Length > 1))
-                            continue;
-
-                        if (item.Group == null && (comboBoxInputGroup_.Length > 0))
-                        {
-                            if (int.Parse(comboBoxInputGroup_) != 0)
-                                continue;
-                        }
-
-                        if (item.Group != null)
-                        {
-                            bool found = false;
-
-                            foreach (string str in item.Group.Split(';'))
-                            {
-                                int dummy = -1;
-                                if (int.TryParse(str, out dummy))
-                                {
-                                    if (dummy == int.Parse(comboBoxInputGroup_))
-                                    {
-                                        found = true;
-                                        break;
-                                    }
-                                }
-                            }
-
-                            if (!found)
-                                continue;
-                        }
-
                         uint address_start = item.RegisterUInt;
                         uint num_regs = 1;
+                        counter++;
 
                         UInt16[] response = ModBus.readInputStatus_02(
                             byte.Parse(textBoxModbusAddress_),
@@ -10239,9 +10508,15 @@ namespace ModBus_Client
                                     colorDefaultReadCellStr,
                                     comboBoxInputRegistri_,
                                     "DEC",
+                                    false,
                                     false);
                             }
                         }
+
+                        this.Dispatcher.Invoke((Action)delegate
+                        {
+                            TaskbarItemInfo.ProgressValue = (double)(counter) / (double)(toRead.Count);
+                        });
                     }
                     catch (Exception ex)
                     {
@@ -10299,42 +10574,10 @@ namespace ModBus_Client
 
                 try
                 {
-                    foreach (ModBus_Item item in list_template_inputsTable.OrderBy(x => x.RegisterUInt))
+                    foreach (ModBus_Item item in toRead)
                     {
-                        if (item == null)
-                            continue;
-
-                        if (item.Group == null && (comboBoxInputGroup_.Length > 1))
-                            continue;
-
-                        if (item.Group == null && (comboBoxInputGroup_.Length > 0))
-                        {
-                            if (int.Parse(comboBoxInputGroup_) != 0)
-                                continue;
-                        }
-
-                        if (item.Group != null)
-                        {
-                            bool found = false;
-
-                            foreach (string str in item.Group.Split(';'))
-                            {
-                                int dummy = -1;
-                                if (int.TryParse(str, out dummy))
-                                {
-                                    if (dummy == int.Parse(comboBoxInputGroup_))
-                                    {
-                                        found = true;
-                                        break;
-                                    }
-                                }
-                            }
-
-                            if (!found)
-                                continue;
-                        }
-
                         curr_start = item.RegisterUInt;
+                        counter++;
 
                         if (address_start != 0xFFFF && ((curr_start > address_start + num_regs) || (num_regs >= UInt16.Parse(textBoxInputNumber_))))
                         {
@@ -10358,9 +10601,15 @@ namespace ModBus_Client
                                         colorDefaultReadCellStr,
                                         comboBoxInputRegistri_,
                                         "DEC",
+                                        false,
                                         false);
                                 }
                             }
+
+                            this.Dispatcher.Invoke((Action)delegate
+                            {
+                                TaskbarItemInfo.ProgressValue = (double)(counter) / (double)(toRead.Count);
+                            });
 
                             address_start = 0xFFFF;
                             num_regs = 0;
@@ -10394,9 +10643,15 @@ namespace ModBus_Client
                                     colorDefaultReadCellStr,
                                     comboBoxInputRegistri_,
                                     "DEC",
+                                    false,
                                     false);
                             }
                         }
+
+                        this.Dispatcher.Invoke((Action)delegate
+                        {
+                            TaskbarItemInfo.ProgressValue = (double)(counter) / (double)(toRead.Count);
+                        });
                     }
                 }
                 catch (Exception ex)
@@ -10452,6 +10707,8 @@ namespace ModBus_Client
 
                 dataGridViewInput.ItemsSource = null;
                 dataGridViewInput.ItemsSource = list_inputsTable;
+
+                TaskbarItemInfo.ProgressState = TaskbarItemProgressState.None;
             });
         }
 
@@ -10480,7 +10737,12 @@ namespace ModBus_Client
             this.Dispatcher.Invoke((Action)delegate
             {
                 list_coilsTable.Clear();
+
+                TaskbarItemInfo.ProgressValue = 0;
+                TaskbarItemInfo.ProgressState = TaskbarItemProgressState.Normal;
             });
+
+            UInt32 counter = 0;
 
             try
             {
@@ -10490,6 +10752,8 @@ namespace ModBus_Client
                     {
                         try
                         {
+                            counter++;
+
                             if (item == null)
                                 continue;
 
@@ -10516,9 +10780,15 @@ namespace ModBus_Client
                                         colorDefaultReadCellStr,
                                         comboBoxCoilsRegistri_,
                                         "DEC",
+                                        false,
                                         false);
                                 }
                             }
+
+                            this.Dispatcher.Invoke((Action)delegate
+                            {
+                                TaskbarItemInfo.ProgressValue = (double)(counter) / (double)(list_template_coilsTable.Count);
+                            });
                         }
                         catch (Exception ex)
                         {
@@ -10585,6 +10855,8 @@ namespace ModBus_Client
                     {
                         foreach (ModBus_Item item in list_template_coilsTable.OrderBy(x => x.RegisterUInt))
                         {
+                            counter++;
+
                             if (item == null)
                                 continue;
 
@@ -10612,9 +10884,15 @@ namespace ModBus_Client
                                             colorDefaultReadCellStr,
                                             comboBoxCoilsRegistri_,
                                             "DEC",
+                                            false,
                                             false);
                                     }
                                 }
+
+                                this.Dispatcher.Invoke((Action)delegate
+                                {
+                                    TaskbarItemInfo.ProgressValue = (double)(counter) / (double)(list_template_coilsTable.Count);
+                                });
 
                                 address_start = 0xFFFF;
                                 num_regs = 0;
@@ -10648,9 +10926,15 @@ namespace ModBus_Client
                                         colorDefaultReadCellStr,
                                         comboBoxCoilsRegistri_,
                                         "DEC",
+                                        false,
                                         false);
                                 }
                             }
+
+                            this.Dispatcher.Invoke((Action)delegate
+                            {
+                                TaskbarItemInfo.ProgressValue = (double)(counter) / (double)(list_template_coilsTable.Count);
+                            });
                         }
                     }
                     catch (Exception ex)
@@ -10719,6 +11003,8 @@ namespace ModBus_Client
 
                 dataGridViewCoils.ItemsSource = null;
                 dataGridViewCoils.ItemsSource = list_coilsTable;
+
+                TaskbarItemInfo.ProgressState = TaskbarItemProgressState.None;
             });
         }
 
@@ -10739,124 +11025,150 @@ namespace ModBus_Client
             this.Dispatcher.Invoke((Action)delegate
             {
                 list_coilsTable.Clear();
+
+                TaskbarItemInfo.ProgressValue = 0;
+                TaskbarItemInfo.ProgressState = TaskbarItemProgressState.Normal;
             });
+
+            List<ModBus_Item> toRead = new List<ModBus_Item>();
+            List<uint> toRemove = new List<uint>();
+            UInt32 counter = 0;
+
+            foreach (ModBus_Item item in list_template_coilsTable.OrderBy(x => x.RegisterUInt))
+            {
+                try
+                {
+                    if (item == null)
+                        continue;
+
+                    if (item.Group == null && (comboBoxCoilsGroup_.Length > 1))
+                        continue;
+
+                    if (item.Group == null && (comboBoxCoilsGroup_.Length > 0))
+                    {
+                        if (int.Parse(comboBoxCoilsGroup_) != 0)
+                            continue;
+                    }
+
+                    if (item.Group != null)
+                    {
+                        bool found = false;
+
+                        foreach (string str in item.Group.Split(';'))
+                        {
+                            int dummy = -1;
+                            if (int.TryParse(str, out dummy))
+                            {
+                                if (dummy == int.Parse(comboBoxCoilsGroup_))
+                                {
+                                    found = true;
+                                    break;
+                                }
+                            }
+                        }
+
+                        if (!found)
+                            continue;
+                    }
+
+                    toRead.Add(item);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex);
+                }
+            }
 
             if (useOnlyReadSingleRegisterForGroups)
             {
-                foreach (ModBus_Item item in list_template_coilsTable.OrderBy(x => x.RegisterUInt))
+                foreach (ModBus_Item item in toRead)
+                {
+                    try
                     {
-                        try
+                        uint address_start = item.RegisterUInt;
+                        uint num_regs = 1;
+                        counter++;
+
+                        UInt16[] response = ModBus.readCoilStatus_01(
+                            byte.Parse(textBoxModbusAddress_),
+                            address_start,
+                            num_regs,
+                            readTimeout);
+
+                        if (response != null)
                         {
-                            if (item == null)
-                                continue;
-
-                            if (item.Group == null && (comboBoxCoilsGroup_.Length > 1))
-                                continue;
-
-                            if (item.Group == null && (comboBoxCoilsGroup_.Length > 0))
+                            if (response.Length > 0)
                             {
-                                if (int.Parse(comboBoxCoilsGroup_) != 0)
-                                    continue;
-                            }
-
-                            if (item.Group != null)
-                            {
-                                bool found = false;
-
-                                foreach (string str in item.Group.Split(';'))
-                                {
-                                    int dummy = -1;
-                                    if (int.TryParse(str, out dummy))
-                                    {
-                                        if (dummy == int.Parse(comboBoxCoilsGroup_))
-                                        {
-                                            found = true;
-                                            break;
-                                        }
-                                    }
-                                }
-
-                                if (!found)
-                                    continue;
-                            }
-
-                            uint address_start = item.RegisterUInt;
-                            uint num_regs = 1;
-
-                            UInt16[] response = ModBus.readCoilStatus_01(
-                                byte.Parse(textBoxModbusAddress_),
-                                address_start,
-                                num_regs,
-                                readTimeout);
-
-                            if (response != null)
-                            {
-                                if (response.Length > 0)
-                                {
-                                    // Cancello la tabella e inserisco le nuove righe
-                                    insertRowsTable(
-                                        list_coilsTable,
-                                        list_template_coilsTable,
-                                        P.uint_parser(textBoxCoilsOffset_, comboBoxCoilsOffset_),
-                                        address_start,
-                                        response,
-                                        colorDefaultReadCellStr,
-                                        comboBoxCoilsRegistri_,
-                                        "DEC",
-                                        false);
-                                }
+                                // Cancello la tabella e inserisco le nuove righe
+                                insertRowsTable(
+                                    list_coilsTable,
+                                    list_template_coilsTable,
+                                    P.uint_parser(textBoxCoilsOffset_, comboBoxCoilsOffset_),
+                                    address_start,
+                                    response,
+                                    colorDefaultReadCellStr,
+                                    comboBoxCoilsRegistri_,
+                                    "DEC",
+                                    false,
+                                    false);
                             }
                         }
-                        catch (Exception ex)
+
+                        this.Dispatcher.Invoke((Action)delegate
                         {
-                            if (ex is InvalidOperationException || ex is IOException || ex is SocketException)
+                            TaskbarItemInfo.ProgressValue = (double)(counter) / (double)(toRead.Count);
+                        });
+                    }
+                    catch (Exception ex)
+                    {
+                        if (ex is InvalidOperationException || ex is IOException || ex is SocketException)
+                        {
+                            SetTableDisconnectError(list_coilsTable, true);
+
+                            if (ModBus.type == ModBus_Def.TYPE_RTU || ModBus.type == ModBus_Def.TYPE_ASCII)
                             {
-                                SetTableDisconnectError(list_coilsTable, true);
-
-                                if (ModBus.type == ModBus_Def.TYPE_RTU || ModBus.type == ModBus_Def.TYPE_ASCII)
+                                this.Dispatcher.Invoke((Action)delegate
                                 {
-                                    this.Dispatcher.Invoke((Action)delegate
-                                    {
-                                        if (ModBus.ClientActive)
-                                            buttonSerialActive_Click(null, null);
-                                    });
-                                }
-                                else if (ModBus.type == ModBus_Def.TYPE_TCP_SOCK || ModBus.type == ModBus_Def.TYPE_TCP_SECURE)
-                                {
-                                    this.Dispatcher.Invoke((Action)delegate
-                                    {
-                                        if (ModBus.ClientActive)
-                                            buttonTcpActive_Click(null, null);
-                                    });
-                                }
-                                else
-                                {
-
-                                }
+                                    if (ModBus.ClientActive)
+                                        buttonSerialActive_Click(null, null);
+                                });
                             }
-                            else if (ex is ModbusException)
+                            else if (ModBus.type == ModBus_Def.TYPE_TCP_SOCK || ModBus.type == ModBus_Def.TYPE_TCP_SECURE)
                             {
-                                if (ex.Message.IndexOf("Timed out") != -1)
+                                this.Dispatcher.Invoke((Action)delegate
                                 {
-                                    SetTableTimeoutError(list_coilsTable, false);
-                                }
-                                if (ex.Message.IndexOf("ModBus ErrCode") != -1)
-                                {
-                                    SetTableModBusError(list_coilsTable, (ModbusException)ex, false);
-                                }
-                                if (ex.Message.IndexOf("CRC Error") != -1)
-                                {
-                                    SetTableCrcError(list_coilsTable, false);
-                                }
+                                    if (ModBus.ClientActive)
+                                        buttonTcpActive_Click(null, null);
+                                });
                             }
                             else
                             {
-                                SetTableInternalError(list_coilsTable, false);
-                            }
 
-                            Console.WriteLine(ex);
+                            }
                         }
+                        else if (ex is ModbusException)
+                        {
+                            if (ex.Message.IndexOf("Timed out") != -1)
+                            {
+                                SetTableTimeoutError(list_coilsTable, false);
+                            }
+                            if (ex.Message.IndexOf("ModBus ErrCode") != -1)
+                            {
+                                SetTableModBusError(list_coilsTable, (ModbusException)ex, false);
+                            }
+                            if (ex.Message.IndexOf("CRC Error") != -1)
+                            {
+                                SetTableCrcError(list_coilsTable, false);
+                            }
+                        }
+                        else
+                        {
+                            SetTableInternalError(list_coilsTable, false);
+                        }
+
+                        Console.WriteLine(ex);
                     }
+                }
             }
             else
             {
@@ -10867,42 +11179,10 @@ namespace ModBus_Client
 
                 try
                 {
-                    foreach (ModBus_Item item in list_template_coilsTable.OrderBy(x => x.RegisterUInt))
+                    foreach (ModBus_Item item in toRead)
                     {
-                        if (item == null)
-                            continue;
-
-                        if (item.Group == null && (comboBoxCoilsGroup_.Length > 1))
-                            continue;
-
-                        if (item.Group == null && (comboBoxCoilsGroup_.Length > 0))
-                        {
-                            if (int.Parse(comboBoxCoilsGroup_) != 0)
-                                continue;
-                        }
-
-                        if (item.Group != null)
-                        {
-                            bool found = false;
-
-                            foreach (string str in item.Group.Split(';'))
-                            {
-                                int dummy = -1;
-                                if (int.TryParse(str, out dummy))
-                                {
-                                    if (dummy == int.Parse(comboBoxCoilsGroup_))
-                                    {
-                                        found = true;
-                                        break;
-                                    }
-                                }
-                            }
-
-                            if (!found)
-                                continue;
-                        }
-
                         curr_start = item.RegisterUInt;
+                        counter++;
 
                         if (address_start != 0xFFFF && ((curr_start > address_start + num_regs) || (num_regs >= UInt16.Parse(textBoxCoilNumber_))))
                         {
@@ -10926,9 +11206,15 @@ namespace ModBus_Client
                                         colorDefaultReadCellStr,
                                         comboBoxCoilsRegistri_,
                                         "DEC",
+                                        false,
                                         false);
                                 }
                             }
+
+                            this.Dispatcher.Invoke((Action)delegate
+                            {
+                                TaskbarItemInfo.ProgressValue = (double)(counter) / (double)(toRead.Count);
+                            });
 
                             address_start = 0xFFFF;
                             num_regs = 0;
@@ -10962,9 +11248,15 @@ namespace ModBus_Client
                                     colorDefaultReadCellStr,
                                     comboBoxCoilsRegistri_,
                                     "DEC",
+                                    false,
                                     false);
                             }
                         }
+
+                        this.Dispatcher.Invoke((Action)delegate
+                        {
+                            TaskbarItemInfo.ProgressValue = (double)(counter) / (double)(toRead.Count);
+                        });
                     }
                 }
                 catch (Exception ex)
@@ -11024,6 +11316,8 @@ namespace ModBus_Client
 
                 dataGridViewCoils.ItemsSource = null;
                 dataGridViewCoils.ItemsSource = list_coilsTable;
+
+                TaskbarItemInfo.ProgressState = TaskbarItemProgressState.None;
             });
         }
 

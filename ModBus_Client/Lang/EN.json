@@ -231,7 +231,7 @@
   "tabItems": {
     "tabItem0": "Connection",
     "tabItem1": "Coils FC01",
-    "tabItem2": "Inputs FC02",
+    "tabItem2": "Discrete inputs FC02",
     "tabItem3": "Input registers FC04",
     "tabItem4": "Holding registers FC03",
     "tabItem5": "Diagnostic FC08",
@@ -348,6 +348,7 @@
     "valueNotValid": "Invalid value",
     "certificateFileNotFound": "Certificate file not found: ",
     "keyFileNotFound": "Key file not found: ",
-    "certificatePasswordNotValid": "Certificate password is not correct"
+    "certificatePasswordNotValid": "Certificate password is not correct",
+    "abortPreviweImport": "Import stil running, abort process?"
   }
 }

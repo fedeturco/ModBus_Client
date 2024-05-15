@@ -553,7 +553,7 @@
                     </DataGrid>
                 </Grid>
             </TabItem>
-            <TabItem x:Name="tabItem2" Header="Inputs FC02" FontSize="12">
+            <TabItem x:Name="tabItem2" Header="Discrete inputs FC02" FontSize="12">
                 <Grid x:Name="GridInputs" Background="#FFE5E5E5">
                     <ComboBox x:Name="comboBoxInputRegistri" HorizontalAlignment="Left" Margin="74,10,0,0" VerticalAlignment="Top" Width="55" FontSize="12" Height="25" SelectionChanged="comboBoxInputRegistri_SelectionChanged">
                         <ComboBoxItem Content="DEC"/>

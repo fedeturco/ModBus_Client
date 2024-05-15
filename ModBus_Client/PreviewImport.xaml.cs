@@ -2,7 +2,7 @@
 
 // -------------------------------------------------------------------------------------------
 
-// Copyright (c) 2023 Federico Turco
+// Copyright (c) 2024 Federico Turco
 
 // Permission is hereby granted, free of charge, to any person
 // obtaining a copy of this software and associated documentation
@@ -43,6 +43,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.IO;
 using System.Collections.ObjectModel;
+using System.Threading;
+using System.Windows.Shell;
 
 // Custom Modbus Library
 using ModBusMaster_Chicco;
@@ -70,8 +72,12 @@ namespace ModBus_Client
         bool closeAfterWrite = true;
         bool abortOnError = true;
 
+        bool importRunning = false;     // True while sending modbus write commands passing through registers list
+        bool abortExit = false;         // True for stopping window from sending commands qhile exiting
+
         Parser P = new Parser();
 
+        int stepScrollIntoView = 1;
         public PreviewImport(MainWindow main_, String[] filePaths_, byte FC_)
         {
             InitializeComponent();
@@ -79,6 +85,13 @@ namespace ModBus_Client
             main = main_;
             filePaths = filePaths_;
             FC = FC_;
+
+            String newTitle = "PreviewImport - Files:";
+            foreach (String filePath in filePaths)
+            {
+                newTitle += " " + System.IO.Path.GetFileName(filePath);
+            }
+            this.Title = newTitle;
 
             if (FC == 5)
             {
@@ -100,6 +113,8 @@ namespace ModBus_Client
 
                 CheckBoxCloseWindowAfterWrite.Foreground = main.darkMode ? main.ForeGroundDark : main.ForeGroundLight;
                 // CheckBoxCloseWindowAfterWrite.Background = main.darkMode ? main.BackGroundDark : main.BackGroundLight;
+
+                CheckBoxAbortOnError.Foreground = main.darkMode ? main.ForeGroundDark : main.ForeGroundLight;
 
                 dataGridPreview.Background = main.darkMode ? main.BackGroundDark : main.BackGroundLight;
 
@@ -129,6 +144,8 @@ namespace ModBus_Client
                 dataGridPreviewValue.CellStyle = NewStyle;
                 dataGridPreviewNotes.CellStyle = NewStyle;
             }
+
+            TaskbarItemInfo = new TaskbarItemInfo();
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -170,11 +187,15 @@ namespace ModBus_Client
                             {
                                 item.Foreground = main.ForeGroundDarkStr;
                                 item.Background = main.BackGroundDarkStr;
+                                item.ForegroundDef = main.ForeGroundDarkStr;
+                                item.BackgroundDef = main.BackGroundDarkStr;
                             }
                             else
                             {
                                 item.Foreground = main.ForeGroundLightStr;
                                 item.Background = main.BackGroundLight2Str;
+                                item.ForegroundDef = main.ForeGroundLightStr;
+                                item.BackgroundDef = main.BackGroundLight2Str;
                             }
 
                             list_import.Add(item);
@@ -207,11 +228,15 @@ namespace ModBus_Client
                             {
                                 item.Foreground = main.ForeGroundDarkStr;
                                 item.Background = main.BackGroundDarkStr;
+                                item.ForegroundDef = main.ForeGroundDarkStr;
+                                item.BackgroundDef = main.BackGroundDarkStr;
                             }
                             else
                             {
                                 item.Foreground = main.ForeGroundLightStr;
                                 item.Background = main.BackGroundLight2Str;
+                                item.ForegroundDef = main.ForeGroundLightStr;
+                                item.BackgroundDef = main.BackGroundLight2Str;
                             }
 
                             list_import.Add(item);
@@ -232,6 +257,18 @@ namespace ModBus_Client
 
         private void buttonImportPreview_Click(object sender, RoutedEventArgs e)
         {
+            buttonImportPreview.IsEnabled = false;
+            TextBoxNrOfRegs.IsEnabled = false;
+            CheckBoxWriteMultiple.IsEnabled = false;
+
+            Thread t = new Thread(new ThreadStart(ImportPreview));
+            t.Start();
+        }
+
+        public void ImportPreview()
+        {
+            importRunning = true;
+
             try
             {
                 // Aggiorno stato registri prima di inviarli
@@ -240,24 +277,56 @@ namespace ModBus_Client
                     list_import[i].OffsetUInt = UInt16.Parse(list_import[i].Offset.Replace("0x", ""), list_import[i].Offset.ToLower().IndexOf("0x") != -1 ? System.Globalization.NumberStyles.HexNumber : System.Globalization.NumberStyles.Integer);
                     list_import[i].RegisterUInt = UInt16.Parse(list_import[i].Register.Replace("0x", ""), list_import[i].Register.ToLower().IndexOf("0x") != -1 ? System.Globalization.NumberStyles.HexNumber : System.Globalization.NumberStyles.Integer);
                     list_import[i].ValueUInt = UInt16.Parse(list_import[i].Value.Replace("0x", ""), list_import[i].Value.ToLower().IndexOf("0x") != -1 ? System.Globalization.NumberStyles.HexNumber : System.Globalization.NumberStyles.Integer);
+
+                    if (main.darkMode)
+                    {
+                        list_import[i].Foreground = main.ForeGroundDarkStr;
+                        list_import[i].Background = main.BackGroundDarkStr;
+                        list_import[i].ForegroundDef = main.ForeGroundDarkStr;
+                        list_import[i].BackgroundDef = main.BackGroundDarkStr;
+                    }
+                    else
+                    {
+                        list_import[i].Foreground = main.ForeGroundLightStr;
+                        list_import[i].Background = main.BackGroundLight2Str;
+                        list_import[i].ForegroundDef = main.ForeGroundLightStr;
+                        list_import[i].BackgroundDef = main.BackGroundLight2Str;
+                    }
                 }
+
+                this.Dispatcher.Invoke((Action)delegate
+                {
+                    dataGridPreview.ItemsSource = null;
+                    dataGridPreview.ItemsSource = list_import;
+
+                    dataGridPreview.ScrollIntoView(list_import[0]);
+                });
 
                 // Coils
                 if (FC == 5)
                 {
                     // Svuoto tabella coils
-                    main.list_coilsTable.Clear();
+                    this.Dispatcher.Invoke((Action)delegate
+                    {
+                        main.list_coilsTable.Clear();
+
+                        TaskbarItemInfo.ProgressValue = 0;
+                        TaskbarItemInfo.ProgressState = TaskbarItemProgressState.Normal;
+                    });
 
                     if (!useMultiple)
                     {
-                        foreach (ModBus_Import item in list_import)
+                        for (int i = 0; i < list_import.Count; i++)
                         {
+                            if (abortExit)
+                                break;
+
                             try
                             {
                                 bool? result = main.ModBus.forceSingleCoil_05(
                                     byte.Parse(main.textBoxModbusAddress_),
-                                    (UInt16)(item.OffsetUInt + item.RegisterUInt),
-                                    item.ValueUInt,
+                                    (UInt16)(list_import[i].OffsetUInt + list_import[i].RegisterUInt),
+                                    list_import[i].ValueUInt,
                                     main.readTimeout
                                     );
 
@@ -267,13 +336,33 @@ namespace ModBus_Client
                                         main.list_coilsTable,
                                         main.list_template_coilsTable,
                                         P.uint_parser(main.textBoxCoilsOffset_, main.comboBoxCoilsOffset_),
-                                        (UInt16)(item.OffsetUInt + item.RegisterUInt),
-                                        new UInt16[] { item.ValueUInt },
+                                        (UInt16)(list_import[i].OffsetUInt + list_import[i].RegisterUInt),
+                                        new UInt16[] { list_import[i].ValueUInt },
                                         result == true ? main.colorDefaultWriteCellStr : main.colorErrorCellStr,
                                         main.comboBoxCoilsRegistri_,
                                         "DEC",
-                                        false);
+                                        false,
+                                        true);
+
+                                    list_import[i].Background = main.colorDefaultWriteCellStr;
                                 }
+                                else
+                                {
+                                    list_import[i].Background = main.colorErrorCellStr;
+                                }
+
+                                this.Dispatcher.Invoke((Action)delegate
+                                {
+                                    TaskbarItemInfo.ProgressValue = (double)(i) / (double)(list_import.Count);
+
+                                    dataGridPreview.ItemsSource = null;
+                                    dataGridPreview.ItemsSource = list_import;
+
+                                    if (i + stepScrollIntoView < list_import.Count)
+                                        dataGridPreview.ScrollIntoView(list_import[i + stepScrollIntoView]);
+                                    else
+                                        dataGridPreview.ScrollIntoView(list_import[i]);
+                                });
                             }
                             catch (InvalidOperationException err)
                             {
@@ -316,12 +405,6 @@ namespace ModBus_Client
 
                                 Console.WriteLine(err);
 
-                                this.Dispatcher.Invoke((Action)delegate
-                                {
-                                    main.dataGridViewCoils.ItemsSource = null;
-                                    main.dataGridViewCoils.ItemsSource = main.list_coilsTable;
-                                });
-
                                 if (abortOnError)
                                     break;
                             }
@@ -330,34 +413,46 @@ namespace ModBus_Client
                                 main.SetTableInternalError(main.list_coilsTable, true);
                                 Console.WriteLine(err);
 
-                                this.Dispatcher.Invoke((Action)delegate
-                                {
-                                    main.dataGridViewCoils.ItemsSource = null;
-                                    main.dataGridViewCoils.ItemsSource = main.list_coilsTable;
-                                });
-
                                 break;
                             }
                         }
+
+                        this.Dispatcher.Invoke((Action)delegate
+                        {
+                            main.dataGridViewCoils.ItemsSource = null;
+                            main.dataGridViewCoils.ItemsSource = main.list_coilsTable;
+                        });
                     }
                     else
                     {
                         UInt16 maxNumRegister = 0;
 
-                        if (!UInt16.TryParse(TextBoxNrOfRegs.Text, out maxNumRegister))
+                        this.Dispatcher.Invoke((Action)delegate
                         {
-                            MessageBox.Show("Error parsing value", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                            return;
-                        }
+                            if (!UInt16.TryParse(TextBoxNrOfRegs.Text, out maxNumRegister))
+                            {
+                                MessageBox.Show("Error parsing value", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                                return;
+                            }
+                        });
 
-                        UInt16 startAddr = 0;   // Start address FC16
-                        int countRegs = 0;      // Numero di registri accorpati
-                        int currAddr = -1;      // Address corrente
-                        int oldCurrAddr = -1;   // Address precedente
+                        UInt16 startAddr = 0;   // Start address FC15
+                        int startIndex = 0;     // Index start address
+                        int countRegs = 0;      // Number of registers aggregated
+                        int currAddr = -1;      // Current address
+                        int oldCurrAddr = -1;   // Previous address
                         bool[] toSendBuffer = new bool[maxNumRegister];
 
                         for (int i = 0; i <= list_import.Count; i++)
                         {
+                            if (abortExit)
+                                break;
+
+                            this.Dispatcher.Invoke((Action)delegate
+                            {
+                                TaskbarItemInfo.ProgressValue = (double)(i) / (double)(list_import.Count);
+                            });
+
                             if (i < list_import.Count)
                                 currAddr = list_import[i].RegisterUInt + list_import[i].OffsetUInt;
 
@@ -378,11 +473,11 @@ namespace ModBus_Client
                                 try
                                 {
                                     bool? result = main.ModBus.forceMultipleCoils_15(
-                                    byte.Parse(main.textBoxModbusAddress_),
-                                    startAddr,
-                                    toSend,
-                                    main.readTimeout
-                                    );
+                                        byte.Parse(main.textBoxModbusAddress_),
+                                        startAddr,
+                                        toSend,
+                                        main.readTimeout
+                                        );
 
                                     if (result != null)
                                     {
@@ -395,11 +490,43 @@ namespace ModBus_Client
                                                 result == true ? main.colorDefaultWriteCellStr : main.colorErrorCellStr,
                                                 main.comboBoxHoldingRegistri_,
                                                 "DEC",
-                                                false);
+                                                false,
+                                                true);
+
+                                        for(int a = startIndex; a < (startIndex + countRegs); a++)
+                                        {
+                                            list_import[a].Background = main.colorDefaultWriteCellStr;
+                                        }
                                     }
+                                    else
+                                    {
+                                        for (int a = startIndex; a < (startIndex + countRegs); a++)
+                                        {
+                                            list_import[a].Background = main.colorErrorCellStr;
+                                        }
+                                    }
+
+                                    this.Dispatcher.Invoke((Action)delegate
+                                    {
+                                        TaskbarItemInfo.ProgressValue = (double)(i) / (double)(list_import.Count);
+
+                                        dataGridPreview.ItemsSource = null;
+                                        dataGridPreview.ItemsSource = list_import;
+
+                                        if (i + stepScrollIntoView < list_import.Count)
+                                        {
+                                            dataGridPreview.ScrollIntoView(list_import[i + stepScrollIntoView]);
+                                        }
+                                        else
+                                        {
+                                            if (i < list_import.Count)
+                                                dataGridPreview.ScrollIntoView(list_import[i]);
+                                        }
+                                    });
 
                                     countRegs = 0;
                                     startAddr = (UInt16)currAddr;
+                                    startIndex = i;
                                 }
                                 catch (InvalidOperationException err)
                                 {
@@ -442,12 +569,6 @@ namespace ModBus_Client
 
                                     Console.WriteLine(err);
 
-                                    this.Dispatcher.Invoke((Action)delegate
-                                    {
-                                        main.dataGridViewCoils.ItemsSource = null;
-                                        main.dataGridViewCoils.ItemsSource = main.list_coilsTable;
-                                    });
-
                                     if (abortOnError)
                                         break;
                                 }
@@ -455,12 +576,6 @@ namespace ModBus_Client
                                 {
                                     main.SetTableInternalError(main.list_coilsTable, true);
                                     Console.WriteLine(err);
-
-                                    this.Dispatcher.Invoke((Action)delegate
-                                    {
-                                        main.dataGridViewCoils.ItemsSource = null;
-                                        main.dataGridViewCoils.ItemsSource = main.list_coilsTable;
-                                    });
 
                                     break;
                                 }
@@ -472,6 +587,12 @@ namespace ModBus_Client
                             countRegs++;
                             oldCurrAddr = currAddr;
                         }
+
+                        this.Dispatcher.Invoke((Action)delegate
+                        {
+                            main.dataGridViewCoils.ItemsSource = null;
+                            main.dataGridViewCoils.ItemsSource = main.list_coilsTable;
+                        });
                     }
                 }
 
@@ -479,41 +600,70 @@ namespace ModBus_Client
                 if (FC == 6)
                 {
                     // Svuoto tabella coils
-                    main.list_holdingRegistersTable.Clear();
+                    this.Dispatcher.Invoke((Action)delegate
+                    {
+                        main.list_holdingRegistersTable.Clear();
+
+                        TaskbarItemInfo.ProgressValue = 0;
+                        TaskbarItemInfo.ProgressState = TaskbarItemProgressState.Normal;
+                    });
 
                     if (!useMultiple)
                     {
-                        foreach (ModBus_Import item in list_import)
+                        for (int i = 0; i < list_import.Count; i++)
                         {
+                            if (abortExit)
+                                break;
+
                             try
                             {
                                 bool? result = main.ModBus.presetSingleRegister_06(
                                     byte.Parse(main.textBoxModbusAddress_),
-                                    (UInt16)(item.OffsetUInt + item.RegisterUInt),
-                                    item.ValueUInt,
+                                    (UInt16)(list_import[i].OffsetUInt + list_import[i].RegisterUInt),
+                                    list_import[i].ValueUInt,
                                     main.readTimeout
                                     );
 
                                 if (result != null)
                                 {
-                                    main.insertRowsTable(
+                                        main.insertRowsTable(
                                         main.list_holdingRegistersTable,
                                         main.list_template_holdingRegistersTable,
                                         P.uint_parser(main.textBoxHoldingOffset_, main.comboBoxHoldingOffset_),
-                                        (UInt16)(item.OffsetUInt + item.RegisterUInt),
-                                        new UInt16[] { item.ValueUInt },
+                                        (UInt16)(list_import[i].OffsetUInt + list_import[i].RegisterUInt),
+                                        new UInt16[] { list_import[i].ValueUInt },
                                         result == true ? main.colorDefaultWriteCellStr : main.colorErrorCellStr,
                                         main.comboBoxHoldingRegistri_,
                                         main.comboBoxHoldingValori_,
-                                        false);
+                                        false,
+                                        true);
+
+                                    list_import[i].Background = main.colorDefaultWriteCellStr;
                                 }
+                                else
+                                {
+                                    list_import[i].Background = main.colorErrorCellStr;
+                                }
+
+                                this.Dispatcher.Invoke((Action)delegate
+                                {
+                                    TaskbarItemInfo.ProgressValue = (double)(i) / (double)(list_import.Count);
+
+                                    dataGridPreview.ItemsSource = null;
+                                    dataGridPreview.ItemsSource = list_import;
+
+                                    if (i + stepScrollIntoView < list_import.Count)
+                                        dataGridPreview.ScrollIntoView(list_import[i + stepScrollIntoView]);
+                                    else
+                                        dataGridPreview.ScrollIntoView(list_import[i]);
+                                });
                             }
                             catch (InvalidOperationException err)
                             {
                                 if (err.Message.IndexOf("non-connected socket") != -1)
                                 {
                                     main.SetTableDisconnectError(main.list_coilsTable, true);
-
+                                    
                                     if (main.ModBus.type == main.ModBus_Def.TYPE_RTU || main.ModBus.type == main.ModBus_Def.TYPE_ASCII)
                                     {
                                         this.Dispatcher.Invoke((Action)delegate
@@ -549,12 +699,6 @@ namespace ModBus_Client
 
                                 Console.WriteLine(err);
 
-                                this.Dispatcher.Invoke((Action)delegate
-                                {
-                                    main.dataGridViewHolding.ItemsSource = null;
-                                    main.dataGridViewHolding.ItemsSource = main.list_holdingRegistersTable;
-                                });
-
                                 if (abortOnError)
                                     break;
                             }
@@ -562,33 +706,40 @@ namespace ModBus_Client
                             {
                                 main.SetTableInternalError(main.list_holdingRegistersTable, true);
                                 Console.WriteLine(err);
-
-                                this.Dispatcher.Invoke((Action)delegate
-                                {
-                                    main.dataGridViewHolding.ItemsSource = null;
-                                    main.dataGridViewHolding.ItemsSource = main.list_holdingRegistersTable;
-                                });
                             }
                         }
+
+                        this.Dispatcher.Invoke((Action)delegate
+                        {
+                            main.dataGridViewHolding.ItemsSource = null;
+                            main.dataGridViewHolding.ItemsSource = main.list_holdingRegistersTable;
+                        });
                     }
                     else
                     {
                         UInt16 maxNumRegister = 0;
 
-                        if (!UInt16.TryParse(TextBoxNrOfRegs.Text, out maxNumRegister))
+                        this.Dispatcher.Invoke((Action)delegate
                         {
-                            MessageBox.Show("Error parsing value", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                            return;
-                        }
+                            if (!UInt16.TryParse(TextBoxNrOfRegs.Text, out maxNumRegister))
+                            {
+                                MessageBox.Show("Error parsing value", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                                return;
+                            }
+                        });
 
                         UInt16 startAddr = 0;   // Start address FC16
-                        int countRegs = 0;      // Numero di registri accorpati
-                        int currAddr = -1;      // Address corrente
-                        int oldCurrAddr = -1;   // Address precedente
+                        int startIndex = 0;     // Index start address
+                        int countRegs = 0;      // Number of aggregated registers
+                        int currAddr = -1;      // Current address
+                        int oldCurrAddr = -1;   // Previous address
                         UInt16[] toSendBuffer = new UInt16[maxNumRegister];
 
                         for (int i = 0; i <= list_import.Count; i++)
                         {
+                            if (abortExit)
+                                break;
+
                             if (i < list_import.Count)
                                 currAddr = list_import[i].RegisterUInt + list_import[i].OffsetUInt;
 
@@ -606,29 +757,63 @@ namespace ModBus_Client
 
                                 try
                                 {
+                                    // UInt16[] writtenRegs = null;
+
                                     UInt16[] writtenRegs = main.ModBus.presetMultipleRegisters_16(
-                                    byte.Parse(main.textBoxModbusAddress_),
-                                    startAddr,
-                                    toSend,
-                                    main.readTimeout
-                                    );
+                                        byte.Parse(main.textBoxModbusAddress_),
+                                        startAddr,
+                                        toSend,
+                                        main.readTimeout
+                                        );
 
                                     if (writtenRegs != null)
                                     {
                                         main.insertRowsTable(
-                                                main.list_holdingRegistersTable,
-                                                main.list_template_holdingRegistersTable,
-                                                P.uint_parser(main.textBoxHoldingOffset_, main.comboBoxHoldingOffset_),
-                                                startAddr,
-                                                writtenRegs,
-                                                writtenRegs.Length == toSend.Length ? main.colorDefaultWriteCellStr : main.colorErrorCellStr,
-                                                main.comboBoxHoldingRegistri_,
-                                                main.comboBoxHoldingValori_,
-                                                false);
+                                            main.list_holdingRegistersTable,
+                                            main.list_template_holdingRegistersTable,
+                                            P.uint_parser(main.textBoxHoldingOffset_, main.comboBoxHoldingOffset_),
+                                            startAddr,
+                                            writtenRegs,
+                                            writtenRegs.Length == toSend.Length ? main.colorDefaultWriteCellStr : main.colorErrorCellStr,
+                                            main.comboBoxHoldingRegistri_,
+                                            main.comboBoxHoldingValori_,
+                                            false,
+                                            true);
+
+                                        for (int a = startIndex; a < (startIndex + countRegs); a++)
+                                        {
+                                            list_import[a].Background = main.colorDefaultWriteCellStr;
+                                        }
                                     }
+                                    else
+                                    {
+                                        for (int a = startIndex; a < (startIndex + countRegs); a++)
+                                        {
+                                            list_import[a].Background = main.colorErrorCellStr;
+                                        }
+                                    }
+
+                                    this.Dispatcher.Invoke((Action)delegate
+                                    {
+                                        TaskbarItemInfo.ProgressValue = (double)(i) / (double)(list_import.Count);
+
+                                        dataGridPreview.ItemsSource = null;
+                                        dataGridPreview.ItemsSource = list_import;
+
+                                        if (i + stepScrollIntoView < list_import.Count)
+                                        {
+                                            dataGridPreview.ScrollIntoView(list_import[i + stepScrollIntoView]);
+                                        }
+                                        else
+                                        {
+                                            if (i < list_import.Count)
+                                                dataGridPreview.ScrollIntoView(list_import[i]);
+                                        }
+                                    });
 
                                     countRegs = 0;
                                     startAddr = (UInt16)currAddr;
+                                    startIndex = i;
                                 }
                                 catch (InvalidOperationException err)
                                 {
@@ -671,25 +856,13 @@ namespace ModBus_Client
 
                                     Console.WriteLine(err);
 
-                                    this.Dispatcher.Invoke((Action)delegate
-                                    {
-                                        main.dataGridViewHolding.ItemsSource = null;
-                                        main.dataGridViewHolding.ItemsSource = main.list_holdingRegistersTable;
-                                    });
-
-                                    if(abortOnError)
+                                    if (abortOnError)
                                         break;
                                 }
                                 catch (Exception err)
                                 {
                                     main.SetTableInternalError(main.list_holdingRegistersTable, true);
                                     Console.WriteLine(err);
-
-                                    this.Dispatcher.Invoke((Action)delegate
-                                    {
-                                        main.dataGridViewHolding.ItemsSource = null;
-                                        main.dataGridViewHolding.ItemsSource = main.list_holdingRegistersTable;
-                                    });
 
                                     break;
                                 }
@@ -701,16 +874,39 @@ namespace ModBus_Client
                             countRegs++;
                             oldCurrAddr = currAddr;
                         }
+
+                        this.Dispatcher.Invoke((Action)delegate
+                        {
+                            main.dataGridViewHolding.ItemsSource = null;
+                            main.dataGridViewHolding.ItemsSource = main.list_holdingRegistersTable;
+                        });
                     }
                 }
+
+
             }
             catch (Exception err)
             {
                 Console.WriteLine(err);
             }
 
+            this.Dispatcher.Invoke((Action)delegate
+            {
+                TaskbarItemInfo.ProgressState = TaskbarItemProgressState.None;
+                buttonImportPreview.IsEnabled = true;
+                TextBoxNrOfRegs.IsEnabled = true;
+                CheckBoxWriteMultiple.IsEnabled = true;
+            });
+
+            importRunning = false;
+
             if (closeAfterWrite)
-                this.Close();
+            {
+                this.Dispatcher.Invoke((Action)delegate
+                {
+                    this.Close();
+                });
+            }
         }
 
         private void CheckBoxWriteMultiple_Checked(object sender, RoutedEventArgs e)
@@ -727,6 +923,21 @@ namespace ModBus_Client
         {
             abortOnError = (bool)CheckBoxAbortOnError.IsChecked;
         }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if(importRunning)
+            {
+                if (MessageBox.Show(main.lang.languageTemplate["strings"]["abortPreviweImport"], "Alert", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+                {
+                    abortExit = true;
+                }
+                else
+                {
+                    e.Cancel = true;
+                }
+            }
+        }
     }
 
     class ModBus_Import
@@ -741,5 +952,8 @@ namespace ModBus_Client
         public string Notes { get; set; }
         public string Foreground { get; set; }
         public string Background { get; set; }
+        
+        public string ForegroundDef { get; set; }
+        public string BackgroundDef { get; set; }
     }
 }

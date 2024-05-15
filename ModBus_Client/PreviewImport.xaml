@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ModBus_Client"
         mc:Ignorable="d"
-        Title="PreviewImport" Height="450" Width="800" Loaded="Window_Loaded">
+        Title="PreviewImport" Height="450" Width="800" Loaded="Window_Loaded" Closing="Window_Closing">
     <Grid x:Name="GridMain">
         <DataGrid x:Name="dataGridPreview" Margin="10,10,10,41" AutoGenerateColumns="False" HorizontalGridLinesBrush="LightGray" VerticalGridLinesBrush="LightGray" BorderThickness="1" FontSize="14" RowBackground="#FFF1F1F1" IsReadOnly="True" >
             <DataGrid.Columns>
@@ -35,12 +35,11 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-
                 <DataGridTextColumn x:Name="dataGridPreviewNotes" Header="Notes" Binding="{Binding Notes}" Width="490">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="TextBlock">
-                            <Setter Property="Foreground" Value="{Binding Foreground}"/>
-                            <Setter Property="Background" Value="{Binding Background}"/>
+                            <Setter Property="Foreground" Value="{Binding ForegroundDef}"/>
+                            <Setter Property="Background" Value="{Binding BackgroundDef}"/>
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
@@ -85,7 +84,7 @@
             </StackPanel>
         </Button>
         <CheckBox x:Name="CheckBoxWriteMultiple" Content="Write multiple registers (FC16)" HorizontalAlignment="Left" Margin="10,0,0,15" VerticalAlignment="Bottom" Checked="CheckBoxWriteMultiple_Checked" Unchecked="CheckBoxWriteMultiple_Checked"/>
-        <TextBox x:Name="TextBoxNrOfRegs" HorizontalAlignment="Right" Height="25" Margin="0,0,108,10" FontSize="12" TextWrapping="Wrap" Text="120" VerticalAlignment="Bottom" Width="49" VerticalContentAlignment="Center"/>
+        <TextBox x:Name="TextBoxNrOfRegs" HorizontalAlignment="Right" Height="25" Margin="0,0,108,10" FontSize="12" TextWrapping="Wrap" Text="123" VerticalAlignment="Bottom" Width="49" VerticalContentAlignment="Center"/>
         <Label x:Name="LabelNrOf" Content="Nr. of registers:" HorizontalAlignment="Right" Margin="0,0,165,10" VerticalAlignment="Bottom"/>
         <CheckBox x:Name="CheckBoxCloseWindowAfterWrite" Content="Close window after write" HorizontalAlignment="Left" Margin="209,0,0,15" VerticalAlignment="Bottom" Unchecked="CheckBoxCloseWindowAfterWrite_Checked" IsChecked="True" Checked="CheckBoxCloseWindowAfterWrite_Checked"/>
         <CheckBox x:Name="CheckBoxAbortOnError" Content="Abort write on error" HorizontalAlignment="Left" Margin="377,0,0,15" VerticalAlignment="Bottom" IsChecked="True" Checked="CheckBoxAbortOnError_Checked" Unchecked="CheckBoxAbortOnError_Checked"/>

@@ -2,7 +2,7 @@
 
 // -------------------------------------------------------------------------------------------
 
-// Copyright (c) 2023 Federico Turco
+// Copyright (c) 2024 Federico Turco
 
 // Permission is hereby granted, free of charge, to any person
 // obtaining a copy of this software and associated documentation
@@ -340,6 +340,8 @@ namespace ModBus_Client
                 }
 
                 Console.WriteLine("Caricata configurazione precedente\n");
+
+                ButtonReloadStatistic_Click(null, null);
             }
             catch(Exception err)
             {
@@ -893,6 +895,15 @@ namespace ModBus_Client
                     File.WriteAllText(window.FileName, content);
                 }
             }
+        }
+
+        private void ButtonReloadStatistic_Click(object sender, RoutedEventArgs e)
+        {
+            LabelStatisticsValueCoils.Content = list_coilsTable.Count.ToString();
+            LabelStatisticsValueDiscreteInputs.Content = list_inputsTable.Count.ToString();
+            LabelStatisticsValueHoldingRegisters.Content = list_holdingRegistersTable.Count.ToString();
+            LabelStatisticsValueInputRegisters.Content = list_inputRegistersTable.Count.ToString();
+            LabelStatisticsValueGroups.Content = list_groups.Count.ToString();
         }
     }
 
