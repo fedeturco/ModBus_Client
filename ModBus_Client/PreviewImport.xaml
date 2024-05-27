@@ -5,9 +5,28 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ModBus_Client"
         mc:Ignorable="d"
-        Title="PreviewImport" Height="450" Width="800" Loaded="Window_Loaded" Closing="Window_Closing">
+        Title="PreviewImport" Height="450" Width="820" Loaded="Window_Loaded" Closing="Window_Closing" KeyUp="Window_KeyUp">
     <Grid x:Name="GridMain">
-        <DataGrid x:Name="dataGridPreview" Margin="10,10,10,41" AutoGenerateColumns="False" HorizontalGridLinesBrush="LightGray" VerticalGridLinesBrush="LightGray" BorderThickness="1" FontSize="14" RowBackground="#FFF1F1F1" IsReadOnly="True" >
+        <Grid.RowDefinitions>
+            <RowDefinition Height="25" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <DockPanel>
+            <Menu x:Name="menuStrip" DockPanel.Dock="Top" Grid.Row="0" FontSize="14">
+                <MenuItem x:Name="fileToolStripMenuItem" Header="File" Grid.Row="0">
+                    <MenuItem x:Name="importToolStripMenuItem" Header="Import" Click="importToolStripMenuItem_Click" Foreground="#2d2d30" Grid.Row="0"/>
+                    <MenuItem x:Name="exportToolStripMenuItem" Header="Export" Click="exportToolStripMenuItem_Click" Foreground="#2d2d30" Grid.Row="0"/>
+                </MenuItem>
+                <MenuItem x:Name="editToolStripMenuItem" Header="Edit" Grid.Row="0">
+                    <MenuItem x:Name="deleteToolStripMenuItem" Header="Delete" Click="deleteToolStripMenuItem_Click" Foreground="#2d2d30" Grid.Row="0" ToolTip="Del" AutomationProperties.HelpText="ciao"/>
+                    <Separator/>
+                    <MenuItem x:Name="cutToolStripMenuItem" Header="Cut" Click="cutToolStripMenuItem_Click" Foreground="#2d2d30" Grid.Row="0" ToolTip="Ctrl+x"/>
+                    <MenuItem x:Name="copyToolStripMenuItem" Header="Copy" Click="copyToolStripMenuItem_Click" Foreground="#2d2d30" Grid.Row="0" ToolTip="Ctrl+c"/>
+                    <MenuItem x:Name="pasteToolStripMenuItem" Header="Paste" Click="pasteToolStripMenuItem_Click" Foreground="#2d2d30" Grid.Row="0" ToolTip="Ctrl+v"/>
+                </MenuItem>
+            </Menu>
+        </DockPanel>
+        <DataGrid x:Name="dataGridPreview" Margin="10,10,10,41" AutoGenerateColumns="False" HorizontalGridLinesBrush="LightGray" VerticalGridLinesBrush="LightGray" BorderThickness="1" FontSize="14" RowBackground="#FFF1F1F1" IsReadOnly="True" Grid.Row="1">
             <DataGrid.Columns>
                 <DataGridTextColumn x:Name="dataGridPreviewOffset" Header="Offset" Binding="{Binding Offset}" Width="80">
                     <DataGridTextColumn.ElementStyle>
@@ -44,8 +63,20 @@
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
             </DataGrid.Columns>
+            <DataGrid.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Delete" Click="deleteToolStripMenuItem_Click" />
+                    <Separator/>
+                    <MenuItem Header="Cut" Click="cutToolStripMenuItem_Click" />
+                    <MenuItem Header="Copy" Click="copyToolStripMenuItem_Click" />
+                    <MenuItem Header="Paste" Click="pasteToolStripMenuItem_Click" />
+                    <Separator/>
+                    <MenuItem Header="Write single" Click="writeSingleMenuItem_Click" />
+                    <MenuItem Header="Write multiple" Click="writeMultipleMenuItem_Click" />
+                </ContextMenu>
+            </DataGrid.ContextMenu>
         </DataGrid>
-        <Button x:Name="buttonImportPreview" Height="25" Margin="0,0,10,10" FontSize="12" HorizontalAlignment="Right" Width="93" VerticalAlignment="Bottom" Click="buttonImportPreview_Click">
+        <Button x:Name="buttonImportPreview" Height="25" Margin="0,0,10,10" FontSize="12" HorizontalAlignment="Right" Width="93" VerticalAlignment="Bottom" Click="buttonImportPreview_Click" Grid.Row="1">
             <StackPanel Orientation="Horizontal">
                 <Viewbox xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" Width="16" Height="16">
                     <Rectangle Width="16" Height="16">
@@ -83,10 +114,10 @@
                 <TextBlock x:Name="textBlockExportHoldingReg1" Margin="3,0,0,0">Write</TextBlock>
             </StackPanel>
         </Button>
-        <CheckBox x:Name="CheckBoxWriteMultiple" Content="Write multiple registers (FC16)" HorizontalAlignment="Left" Margin="10,0,0,15" VerticalAlignment="Bottom" Checked="CheckBoxWriteMultiple_Checked" Unchecked="CheckBoxWriteMultiple_Checked"/>
-        <TextBox x:Name="TextBoxNrOfRegs" HorizontalAlignment="Right" Height="25" Margin="0,0,108,10" FontSize="12" TextWrapping="Wrap" Text="123" VerticalAlignment="Bottom" Width="49" VerticalContentAlignment="Center"/>
-        <Label x:Name="LabelNrOf" Content="Nr. of registers:" HorizontalAlignment="Right" Margin="0,0,165,10" VerticalAlignment="Bottom"/>
-        <CheckBox x:Name="CheckBoxCloseWindowAfterWrite" Content="Close window after write" HorizontalAlignment="Left" Margin="209,0,0,15" VerticalAlignment="Bottom" Unchecked="CheckBoxCloseWindowAfterWrite_Checked" IsChecked="True" Checked="CheckBoxCloseWindowAfterWrite_Checked"/>
-        <CheckBox x:Name="CheckBoxAbortOnError" Content="Abort write on error" HorizontalAlignment="Left" Margin="377,0,0,15" VerticalAlignment="Bottom" IsChecked="True" Checked="CheckBoxAbortOnError_Checked" Unchecked="CheckBoxAbortOnError_Checked"/>
+        <CheckBox x:Name="CheckBoxWriteMultiple" Content="Write multiple registers (FC16)" HorizontalAlignment="Left" Margin="10,0,0,15" VerticalAlignment="Bottom" Checked="CheckBoxWriteMultiple_Checked" Unchecked="CheckBoxWriteMultiple_Checked" Grid.Row="1"/>
+        <TextBox x:Name="TextBoxNrOfRegs" HorizontalAlignment="Right" Height="25" Margin="0,0,108,10" FontSize="12" TextWrapping="Wrap" Text="123" VerticalAlignment="Bottom" Width="49" VerticalContentAlignment="Center" Grid.Row="1"/>
+        <Label x:Name="LabelNrOf" Content="Nr. of registers:" HorizontalAlignment="Right" Margin="0,0,165,10" VerticalAlignment="Bottom" Grid.Row="1"/>
+        <CheckBox x:Name="CheckBoxCloseWindowAfterWrite" Content="Close window after write" HorizontalAlignment="Left" Margin="209,0,0,15" VerticalAlignment="Bottom" Unchecked="CheckBoxCloseWindowAfterWrite_Checked" IsChecked="True" Checked="CheckBoxCloseWindowAfterWrite_Checked" Grid.Row="1"/>
+        <CheckBox x:Name="CheckBoxAbortOnError" Content="Abort write on error" HorizontalAlignment="Left" Margin="377,0,0,15" VerticalAlignment="Bottom" IsChecked="True" Checked="CheckBoxAbortOnError_Checked" Unchecked="CheckBoxAbortOnError_Checked" Grid.Row="1"/>
     </Grid>
 </Window>

@@ -19,13 +19,6 @@ changing the profile loads the respective settings.
     requested
     address 40002. Same for input registers (30001), discrete inputs (10001)
     or coils (00001).
-    \item \textbf{Limit modbus addresses to 9998:}
-    If checked, only address requests between 0 and 9998 (or corresponding address
-    modbus e.g.: 10001-19999/30001-39999/40001-49999) are allowed. Otherwise, the request is sent
-    whatever modbus address is entered. For example, some Beckhoff CPUs provide
-    the words MW0,MW1,... starting at holding register 0x3000 (dec 12288). 
-    By not checking the box
-    you can then also send requests to addresses beyond the value of 9998, up to 65535.
     \item \textbf{Color cells with value > 0 / Alternating color:}
     If checked, only table rows with a value > 0 are colored, otherwise rows
     are colored alternately.
@@ -66,4 +59,16 @@ of socket management:
     when the connection returns. With the second
     mode this does not happen because the socket is opened for each read 
     and closed immediately after so on a practical level this mode can come in very handy.
+\end{itemize}
+
+Preview import settings:
+\\\\
+The following settings allow you to set the default values
+of the preview import window.
+
+\begin{itemize}
+    \item \textbf{WRITE MULTIPLE REGISTERS (FC15 / FC16):} merge consecutive records into a single command where possible.
+    \item \textbf{CLOSE WINDOW AFTER WRITE:} closes the window automatically when the writing is finished.
+    \item \textbf{ABORT WRITE ON ERROR:} stops the entries in case of an error (otherwise ignores the error and continues with the next entries).
+    \item \textbf{NR. OF REGISTERS MULTIPLE WRITE:} maximum number of registers sent in a single command FC15 / FC16.
 \end{itemize}

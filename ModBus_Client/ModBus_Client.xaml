@@ -31,18 +31,21 @@
                     <MenuItem x:Name="logToolStripMenu" Header="Log pacchetti" Click="logToolStripMenu_Click" Foreground="#2d2d30"/>
                     <Separator />
                     <MenuItem x:Name="viewTabCoils" Header="Coils" Foreground="#2d2d30">
+                        <MenuItem x:Name="viewTabCoilsOffset" Header="Offset" IsCheckable="True" Checked="changeColumnVisibility" Unchecked="changeColumnVisibility" Foreground="#2d2d30"></MenuItem>
                         <MenuItem x:Name="viewTabCoilsRegisters" Header="Register" IsCheckable="True" Checked="changeColumnVisibility" Unchecked="changeColumnVisibility" Foreground="#2d2d30"></MenuItem>
                         <MenuItem x:Name="viewTabCoilsValues" Header="Values" IsCheckable="True" Checked="changeColumnVisibility" Unchecked="changeColumnVisibility" Foreground="#2d2d30"></MenuItem>
                         <MenuItem x:Name="viewTabCoilsConvertedValues" Header="Converted Values" IsCheckable="True" Checked="changeColumnVisibility" Unchecked="changeColumnVisibility" Foreground="#2d2d30"></MenuItem>
                         <MenuItem x:Name="viewTabCoilsNotes" Header="Notes" IsCheckable="True" Checked="changeColumnVisibility" Unchecked="changeColumnVisibility" Foreground="#2d2d30"></MenuItem>
                     </MenuItem>
                     <MenuItem x:Name="viewTabInputs" Header="Inputs" Foreground="#2d2d30">
+                        <MenuItem x:Name="viewTabInputsOffset" Header="Offset" IsCheckable="True" Checked="changeColumnVisibility" Unchecked="changeColumnVisibility" Foreground="#2d2d30"></MenuItem>
                         <MenuItem x:Name="viewTabInputsRegisters" Header="Register" IsCheckable="True" Checked="changeColumnVisibility" Unchecked="changeColumnVisibility" Foreground="#2d2d30"></MenuItem>
                         <MenuItem x:Name="viewTabInputsValues" Header="Values" IsCheckable="True" Checked="changeColumnVisibility" Unchecked="changeColumnVisibility" Foreground="#2d2d30"></MenuItem>
                         <MenuItem x:Name="viewTabInputsConvertedValues" Header="Converted Values" IsCheckable="True" Checked="changeColumnVisibility" Unchecked="changeColumnVisibility" Foreground="#2d2d30"></MenuItem>
                         <MenuItem x:Name="viewTabInputsNotes" Header="Notes" IsCheckable="True" Checked="changeColumnVisibility" Unchecked="changeColumnVisibility" Foreground="#2d2d30"></MenuItem>
                     </MenuItem>
                     <MenuItem x:Name="viewTabInputRgisters" Header="Input Registers" Foreground="#2d2d30">
+                        <MenuItem x:Name="viewTabInputRegistersOffset" Header="Offset" IsCheckable="True" Checked="changeColumnVisibility" Unchecked="changeColumnVisibility" Foreground="#2d2d30"></MenuItem>
                         <MenuItem x:Name="viewTabInputRegistersRegisters" Header="Register" IsCheckable="True" Checked="changeColumnVisibility" Unchecked="changeColumnVisibility" Foreground="#2d2d30"></MenuItem>
                         <MenuItem x:Name="viewTabInputRegistersValues" Header="Values" IsCheckable="True" Checked="changeColumnVisibility" Unchecked="changeColumnVisibility" Foreground="#2d2d30"></MenuItem>
                         <MenuItem x:Name="viewTabInputRegistersBinaryValues" Header="Binary Values" IsCheckable="True" Checked="changeColumnVisibility" Unchecked="changeColumnVisibility" Foreground="#2d2d30"></MenuItem>
@@ -51,6 +54,7 @@
                         <MenuItem x:Name="viewTabInputRegistersMappings" Header="Mappings" IsCheckable="True" Checked="changeColumnVisibility" Unchecked="changeColumnVisibility" Foreground="#2d2d30"></MenuItem>
                     </MenuItem>
                     <MenuItem x:Name="viewTabHoldingRgisters" Header="Holding Registers" Foreground="#2d2d30">
+                        <MenuItem x:Name="viewTabHoldingRegistersOffset" Header="Offset" IsCheckable="True" Checked="changeColumnVisibility" Unchecked="changeColumnVisibility" Foreground="#2d2d30"></MenuItem>
                         <MenuItem x:Name="viewTabHoldingRegistersRegisters" Header="Register" IsCheckable="True" Checked="changeColumnVisibility" Unchecked="changeColumnVisibility" Foreground="#2d2d30"></MenuItem>
                         <MenuItem x:Name="viewTabHoldingRegistersValues" Header="Values" IsCheckable="True" Checked="changeColumnVisibility" Unchecked="changeColumnVisibility" Foreground="#2d2d30"></MenuItem>
                         <MenuItem x:Name="viewTabHoldingRegistersBinaryValues" Header="Binary Values" IsCheckable="True" Checked="changeColumnVisibility" Unchecked="changeColumnVisibility" Foreground="#2d2d30"></MenuItem>
@@ -76,14 +80,17 @@
                     <MenuItem x:Name="menuItemToolWord" Header="Tool command word" Click="menuItemToolWord_Click" Foreground="#2d2d30"/>
                 </MenuItem>
                 <MenuItem x:Name="menuItemImportReg" Header="Import">
-                    <MenuItem x:Name="menuItemImportCoils" Header="Import coils table" Click="buttonImportCoils_Click" Foreground="#2d2d30"/>
-                    <MenuItem x:Name="menuItemImportHoldingRegisters" Header="Import holding registers table" Click="buttonImportHoldingReg_Click" Foreground="#2d2d30"/>
+                    <MenuItem x:Name="menuItemImportCoilsClipboard" Header="Import coils table (clipboard)" Click="buttonImportCoilsClipboard_Click" Foreground="#2d2d30"/>
+                    <MenuItem x:Name="menuItemImportHoldingRegistersClipboard" Header="Import holding registers table (clipboard)" Click="buttonImportHoldingRegClipboard_Click" Foreground="#2d2d30"/>
+                    <Separator />
+                    <MenuItem x:Name="menuItemImportCoils" Header="Import coils table (.csv / .json)" Click="buttonImportCoils_Click" Foreground="#2d2d30"/>
+                    <MenuItem x:Name="menuItemImportHoldingRegisters" Header="Import holding registers table (.csv / .json)" Click="buttonImportHoldingReg_Click" Foreground="#2d2d30"/>
                 </MenuItem>
                 <MenuItem x:Name="menuItemExportReg" Header="Export">
                     <MenuItem x:Name="menuItemExportCoils" Header="Export coils table" Click="buttonExportCoils_Click" Foreground="#2d2d30"/>
                     <MenuItem x:Name="menuItemExportInputs" Header="Export inputs table" Click="buttonExportInput_Click" Foreground="#2d2d30"/>
-                    <MenuItem x:Name="menuItemExportInputRegisters" Header="Export input registers table" Click="buttonExportInputReg_Click" Foreground="#2d2d30"/>
                     <MenuItem x:Name="menuItemExportHoldingRegisters" Header="Export holding registers table" Click="buttonExportHoldingReg_Click" Foreground="#2d2d30"/>
+                    <MenuItem x:Name="menuItemExportInputRegisters" Header="Export input registers table" Click="buttonExportInputReg_Click" Foreground="#2d2d30"/>
                 </MenuItem>
                 <MenuItem x:Name="infoToolStripMenuItem" Header="Info">
                     <MenuItem x:Name="licenseToolStripMenuItem" Header="License" Click="licenseToolStripMenuItem_Click" Foreground="#2d2d30"/>
@@ -531,6 +538,14 @@
                     <ComboBox x:Name="comboBoxCoilsGroup" Margin="0,10,180,0" VerticalAlignment="Top" SelectionChanged="comboBoxCoilsGroup_SelectionChanged" DisplayMemberPath="Value" Height="25" Width="205" HorizontalAlignment="Right"/>
                     <DataGrid x:Name="dataGridViewCoils" Margin="10,50,415,10" AutoGenerateColumns="False" HorizontalGridLinesBrush="LightGray" VerticalGridLinesBrush="LightGray" BorderThickness="1" FontSize="14" CellEditEnding="dataGridViewCoils_KeyUp" RowBackground="White">
                         <DataGrid.Columns>
+                            <DataGridTextColumn x:Name="dataGridTabCoilsOffset" Header="Offset" Binding="{Binding Offset}" Width="100" Visibility="Collapsed">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="Foreground" Value="{Binding Foreground}"/>
+                                        <Setter Property="Background" Value="{Binding Background}"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
                             <DataGridTextColumn x:Name="dataGridTabCoilsRegisters" Header="Register" Binding="{Binding Register}" Width="100" Visibility="Collapsed">
                                 <DataGridTextColumn.ElementStyle>
                                     <Style TargetType="TextBlock">
@@ -550,6 +565,18 @@
                             <DataGridTextColumn x:Name="dataGridTabCoilsConvertedValues" Header="Converted value" Binding="{Binding ValueConverted}" Width="130" Visibility="Collapsed"/>
                             <DataGridTextColumn x:Name="dataGridTabCoilsNotes" Header="Notes" Binding="{Binding Notes}" Width="600" Visibility="Collapsed"/>
                         </DataGrid.Columns>
+                        <DataGrid.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="Delete" Click="coilsMenuItemDelete_Click"/>
+                                <Separator/>
+                                <MenuItem Header="Cut" Click="coilsMenuItemCut_Click"/>
+                                <MenuItem Header="Copy" Click="coilsMenuItemCopy_Click"/>
+                                <MenuItem Header="Paste" Click="coilsMenuItemPaste_Click"/>
+                                <Separator/>
+                                <MenuItem Header="Import" Click="coilsMenuItemImport_Click"/>
+                                <MenuItem Header="Export" Click="coilsMenuItemExport_Click"/>
+                            </ContextMenu>
+                        </DataGrid.ContextMenu>
                     </DataGrid>
                 </Grid>
             </TabItem>
@@ -650,6 +677,14 @@
                     <ComboBox x:Name="comboBoxInputGroup" Margin="0,10,180,0" VerticalAlignment="Top" SelectionChanged="comboBoxInputGroup_SelectionChanged" DisplayMemberPath="Value" Height="25" HorizontalAlignment="Right" Width="205" Grid.Column="1"/>
                     <DataGrid x:Name="dataGridViewInput" Margin="10,50,415,10" AutoGenerateColumns="False" HorizontalGridLinesBrush="LightGray" VerticalGridLinesBrush="LightGray" BorderThickness="1" FontSize="14"  RowBackground="White" Grid.ColumnSpan="2">
                         <DataGrid.Columns>
+                            <DataGridTextColumn x:Name="dataGridTabInputsOffset" Header="Offset" Binding="{Binding Offset}" Width="100" Visibility="Collapsed">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="Foreground" Value="{Binding Foreground}"/>
+                                        <Setter Property="Background" Value="{Binding Background}"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
                             <DataGridTextColumn x:Name="dataGridTabInputsRegisters" Header="Register" Binding="{Binding Register}" Width="100" Visibility="Collapsed">
                                 <DataGridTextColumn.ElementStyle>
                                     <Style TargetType="TextBlock">
@@ -669,6 +704,16 @@
                             <DataGridTextColumn x:Name="dataGridTabInputsConvertedValues" Header="Converted value" Binding="{Binding ValueConverted}" Width="130" Visibility="Collapsed"/>
                             <DataGridTextColumn x:Name="dataGridTabInputsNotes" Header="Notes" Binding="{Binding Notes}" Width="600" Visibility="Collapsed"/>
                         </DataGrid.Columns>
+                        <DataGrid.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="Delete" Click="inputsMenuItemDelete_Click"/>
+                                <Separator/>
+                                <MenuItem Header="Cut" Click="inputsMenuItemCut_Click"/>
+                                <MenuItem Header="Copy" Click="inputsMenuItemCopy_Click"/>
+                                <Separator/>
+                                <MenuItem Header="Export" Click="inputsMenuItemExport_Click"/>
+                            </ContextMenu>
+                        </DataGrid.ContextMenu>
                     </DataGrid>
                 </Grid>
             </TabItem>
@@ -878,6 +923,14 @@
                             </Style>
                         </DataGrid.RowStyle>
                         <DataGrid.Columns>
+                            <DataGridTextColumn x:Name="dataGridTabHoldingRegistersOffset" Header="Offset" Binding="{Binding Offset}" Width="80" Visibility="Collapsed">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="Foreground" Value="{Binding Foreground}"/>
+                                        <Setter Property="Background" Value="{Binding Background}"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
                             <DataGridTextColumn x:Name="dataGridTabHoldingRegistersRegisters" Header="Register" Binding="{Binding Register}" Width="80" Visibility="Collapsed">
                                 <DataGridTextColumn.ElementStyle>
                                     <Style TargetType="TextBlock">
@@ -906,6 +959,18 @@
                             <DataGridTextColumn x:Name="dataGridTabHoldingRegistersNotes" Header="Notes" Binding="{Binding Notes}" Width="600" Visibility="Collapsed"/>
                             <DataGridTextColumn x:Name="dataGridTabHoldingRegistersMappings" Header="Mappings" Binding="{Binding Mappings}" Width="600" Visibility="Collapsed"/>
                         </DataGrid.Columns>
+                        <DataGrid.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="Delete" Click="holdingRegistersMenuItemDelete_Click"/>
+                                <Separator/>
+                                <MenuItem Header="Cut" Click="holdingRegistersMenuItemCut_Click"/>
+                                <MenuItem Header="Copy" Click="holdingRegistersMenuItemCopy_Click"/>
+                                <MenuItem Header="Paste" Click="holdingRegistersMenuItemPaste_Click"/>
+                                <Separator/>
+                                <MenuItem Header="Import" Click="holdingRegistersMenuItemImport_Click"/>
+                                <MenuItem Header="Export" Click="holdingRegistersMenuItemExport_Click"/>
+                            </ContextMenu>
+                        </DataGrid.ContextMenu>
                     </DataGrid>
                 </Grid>
             </TabItem>
@@ -1019,6 +1084,14 @@
                             </Style>
                         </DataGrid.RowStyle>
                         <DataGrid.Columns>
+                            <DataGridTextColumn x:Name="dataGridTabInputRegistersOffset" Header="Offset" Binding="{Binding Offset}" Width="80" Visibility="Collapsed">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="Foreground" Value="{Binding Foreground}"/>
+                                        <Setter Property="Background" Value="{Binding Background}"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
                             <DataGridTextColumn x:Name="dataGridTabInputRegistersRegisters" Header="Register" Binding="{Binding Register}" Width="80" Visibility="Collapsed">
                                 <DataGridTextColumn.ElementStyle>
                                     <Style TargetType="TextBlock">
@@ -1047,6 +1120,16 @@
                             <DataGridTextColumn x:Name="dataGridTabInputRegistersNotes" Header="Notes" Binding="{Binding Notes}" Width="600" Visibility="Collapsed"/>
                             <DataGridTextColumn x:Name="dataGridTabInputRegistersMappings" Header="Mappings" Binding="{Binding Mappings}" Width="600" Visibility="Collapsed"/>
                         </DataGrid.Columns>
+                        <DataGrid.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="Delete" Click="inputRegistersMenuItemDelete_Click"/>
+                                <Separator/>
+                                <MenuItem Header="Cut" Click="inputRegistersMenuItemCut_Click"/>
+                                <MenuItem Header="Copy" Click="inputRegistersMenuItemCopy_Click"/>
+                                <Separator/>
+                                <MenuItem Header="Export" Click="inputRegistersMenuItemExport_Click"/>
+                            </ContextMenu>
+                        </DataGrid.ContextMenu>
                     </DataGrid>
                 </Grid>
             </TabItem>
@@ -1151,7 +1234,7 @@
                     <Label x:Name="labelSettings_2" Content="General Settings:" HorizontalAlignment="Left" Margin="43,73,0,0" VerticalAlignment="Top"/>
                     <Label x:Name="labelSettings_0" Content="SETTINGS:" HorizontalAlignment="Left" Margin="35,22,0,0" VerticalAlignment="Top"/>
                     <Label x:Name="labelSettings_1" Content="Restart the application to apply changes in this page" HorizontalAlignment="Left" Margin="276,22,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2" Width="468"/>
-                    <CheckBox x:Name="checkBoxCloseConsolAfterBoot" Content="Chiudi console al termine dell'avvio" HorizontalAlignment="Left" Margin="43,223,0,0" VerticalAlignment="Top"/>
+                    <CheckBox x:Name="checkBoxCloseConsolAfterBoot" Content="Chiudi console al termine dell'avvio" HorizontalAlignment="Left" Margin="43,200,0,0" VerticalAlignment="Top"/>
                     <Label x:Name="labelColorCellRead" Content="Colore celle lette:" Grid.Column="1" HorizontalAlignment="Left" Margin="32,108,0,0" VerticalAlignment="Top"/>
                     <Label x:Name="labelColorCellWrote" Content="Colore celle scritte:" Grid.Column="1" HorizontalAlignment="Left" Margin="32,140,0,0" VerticalAlignment="Top"/>
                     <Label x:Name="labelColorCellError" Content="Colore celle che hanno generato un errore:" Grid.Column="1" HorizontalAlignment="Left" Margin="32,173,0,0" VerticalAlignment="Top"/>
@@ -1159,21 +1242,26 @@
                     <Button x:Name="buttonCellWrote" Content="Color" HorizontalAlignment="Left" Margin="314,143,0,0" VerticalAlignment="Top" Width="75" Grid.Column="1" Click="buttonCellWrote_Click"/>
                     <Button x:Name="buttonColorCellError" Content="Color" HorizontalAlignment="Left" Margin="314,176,0,0" VerticalAlignment="Top" Width="75" Grid.Column="1" Click="buttonColorCellError_Click"/>
                     <CheckBox x:Name="checkBoxUseOffsetInTextBox" Content="Correggi automaticamente offset indirizzi modbus textBox&#xD;&#xA;(se off invia qualsiasi indirizzo immesso nella textBox)" HorizontalAlignment="Left" Margin="43,112,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2" Width="426" Checked="checkBoxUseOffsetInTextBox_Checked"/>
-                    <CheckBox x:Name="checkBoxFollowModbusProtocol" Content="Limita gli indirizzi modbus a 9998 (come da protocollo)" HorizontalAlignment="Left" Margin="43,154,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2" Width="426"/>
-                    <CheckBox x:Name="checkBoxCellColorMode" Content="Colora celle &gt; 0 / Colorazione alternata" HorizontalAlignment="Left" Margin="43,177,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2" Width="426" Checked="checkBoxCellColorMode_Checked" Unchecked="checkBoxCellColorMode_Checked"/>
-                    <CheckBox x:Name="checkBoxViewTableWithoutOffset" Content="Nascondi offset utente nelle tabelle" HorizontalAlignment="Left" Margin="43,200,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2" Width="426" Checked="checkBoxViewTableWithoutOffset_CheckedChanged" Unchecked="checkBoxViewTableWithoutOffset_CheckedChanged"/>
-                    <Label x:Name="labelSettings_3" Content="Loop polling interval [ms]:" HorizontalAlignment="Left" Margin="43,389,0,0" VerticalAlignment="Top"/>
-                    <TextBox x:Name="TextBoxPollingInterval" HorizontalAlignment="Left" Height="23" Margin="300,391,0,0" TextWrapping="Wrap" Text="10000" VerticalAlignment="Top" Width="69" TextChanged="TextBoxPollingINterval_TextChanged"/>
-                    <Label x:Name="labelSettings_5" Content="Read timeout (serial/TCP) [ms]" HorizontalAlignment="Left" Margin="43,358,0,0" VerticalAlignment="Top"/>
-                    <TextBox x:Name="textBoxReadTimeout" HorizontalAlignment="Left" Height="23" Margin="300,358,0,0" TextWrapping="Wrap" Text="1000" VerticalAlignment="Top" Width="69" TextChanged="TextBoxReadTimeout_TextChanged"/>
-                    <TextBox x:Name="textBoxCurrentLanguage" HorizontalAlignment="Left" Height="23" Margin="300,424,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="69" TextChanged="TextBoxCurrentLanguage_TextChanged" IsEnabled="False"/>
-                    <Label x:Name="labelSettings_4" Content="Current Language:" HorizontalAlignment="Left" Margin="43,421,0,0" VerticalAlignment="Top"/>
-                    <CheckBox x:Name="CheckBoxDarkMode" Content="Dark Mode" HorizontalAlignment="Left" Margin="43,247,0,0" VerticalAlignment="Top" Checked="CheckBoxDarkMode_Checked" Unchecked="CheckBoxDarkMode_Checked"/>
+                    <CheckBox x:Name="checkBoxCellColorMode" Content="Colora celle &gt; 0 / Colorazione alternata" HorizontalAlignment="Left" Margin="43,154,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2" Width="426" Checked="checkBoxCellColorMode_Checked" Unchecked="checkBoxCellColorMode_Checked"/>
+                    <CheckBox x:Name="checkBoxViewTableWithoutOffset" Content="Nascondi offset utente nelle tabelle" HorizontalAlignment="Left" Margin="43,177,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2" Width="426" Checked="checkBoxViewTableWithoutOffset_CheckedChanged" Unchecked="checkBoxViewTableWithoutOffset_CheckedChanged"/>
+                    <Label x:Name="labelSettings_3" Content="Loop polling interval [ms]:" HorizontalAlignment="Left" Margin="32,309,0,0" VerticalAlignment="Top" Grid.Column="1"/>
+                    <TextBox x:Name="TextBoxPollingInterval" HorizontalAlignment="Left" Height="23" Margin="313,311,0,0" TextWrapping="Wrap" Text="10000" VerticalAlignment="Top" Width="69" TextChanged="TextBoxPollingINterval_TextChanged" Grid.Column="1"/>
+                    <Label x:Name="labelSettings_5" Content="Read timeout (serial/TCP) [ms]" HorizontalAlignment="Left" Margin="32,278,0,0" VerticalAlignment="Top" Grid.Column="1"/>
+                    <TextBox x:Name="textBoxReadTimeout" HorizontalAlignment="Left" Height="23" Margin="313,278,0,0" TextWrapping="Wrap" Text="1000" VerticalAlignment="Top" Width="69" TextChanged="TextBoxReadTimeout_TextChanged" Grid.Column="1"/>
+                    <TextBox x:Name="textBoxCurrentLanguage" HorizontalAlignment="Left" Height="23" Margin="313,344,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="69" TextChanged="TextBoxCurrentLanguage_TextChanged" IsEnabled="False" Grid.Column="1"/>
+                    <Label x:Name="labelSettings_4" Content="Current Language:" HorizontalAlignment="Left" Margin="32,341,0,0" VerticalAlignment="Top" Grid.Column="1"/>
+                    <CheckBox x:Name="CheckBoxDarkMode" Content="Dark Mode" HorizontalAlignment="Left" Margin="43,224,0,0" VerticalAlignment="Top" Checked="CheckBoxDarkMode_Checked" Unchecked="CheckBoxDarkMode_Checked"/>
                     <Button x:Name="ButtonResetLightMode" Content="Reset Light Mode" Grid.Column="1" HorizontalAlignment="Left" Margin="134,211,0,0" VerticalAlignment="Top" Width="125" Click="ButtonResetLightMode_Click"/>
                     <Button x:Name="ButtonResetDarkMode" Content="Reset Dark Mode" Grid.Column="1" HorizontalAlignment="Left" Margin="264,211,0,0" VerticalAlignment="Top" Width="125" Click="ButtonResetDarkMode_Click"/>
                     <ComboBox x:Name="comboBoxTcpConnectionMode" Grid.Column="1" HorizontalAlignment="Left" Margin="181,426,0,0" VerticalAlignment="Top" Width="222"/>
                     <Label x:Name="labelSettings_6" Content="TCP Connection mode:" HorizontalAlignment="Left" Margin="32,424,0,0" VerticalAlignment="Top" Grid.Column="1"/>
-                    <CheckBox x:Name="CheckBoxUseOnlyReadSingleRegistersForGroups" Content="Usa solo &quot;ReadSingleRegister&quot; per risorse di gruppo" HorizontalAlignment="Left" Margin="43,270,0,0" VerticalAlignment="Top" Checked="CheckBoxUseOnlyReadSingleRegistersForGroups_Checked" Unchecked="CheckBoxUseOnlyReadSingleRegistersForGroups_Checked"/>
+                    <CheckBox x:Name="CheckBoxUseOnlyReadSingleRegistersForGroups" Content="Usa solo &quot;ReadSingleRegister&quot; per risorse di gruppo" HorizontalAlignment="Left" Margin="43,247,0,0" VerticalAlignment="Top" Checked="CheckBoxUseOnlyReadSingleRegistersForGroups_Checked" Unchecked="CheckBoxUseOnlyReadSingleRegistersForGroups_Checked"/>
+                    <Label x:Name="labelSettings_2_Copy" Content="Preview import settings:" HorizontalAlignment="Left" Margin="43,308,0,0" VerticalAlignment="Top"/>
+                    <CheckBox x:Name="CheckBoxPreviewimportWriteMultipleRegisters" Content="Write multiple registers (FC15 / FC16)" HorizontalAlignment="Left" Margin="43,353,0,0" VerticalAlignment="Top"/>
+                    <CheckBox x:Name="CheckBoxPreviewImportCloseWindowAfterWrite" Content="Close window after write" HorizontalAlignment="Left" Margin="43,377,0,0" VerticalAlignment="Top"/>
+                    <CheckBox x:Name="CheckBoxPreviewImportAbortOnError" Content="Abort write on error" HorizontalAlignment="Left" Margin="43,402,0,0" VerticalAlignment="Top"/>
+                    <Label x:Name="labelSettings_7" Content="Nr. of registers multiple write:" HorizontalAlignment="Left" Margin="44,424,0,0" VerticalAlignment="Top"/>
+                    <TextBox x:Name="textBoxReadTimeout_Copy" HorizontalAlignment="Left" Height="23" Margin="325,424,0,0" TextWrapping="Wrap" Text="123" VerticalAlignment="Top" Width="69" TextChanged="TextBoxReadTimeout_TextChanged"/>
                 </Grid>
             </TabItem>
         </TabControl>

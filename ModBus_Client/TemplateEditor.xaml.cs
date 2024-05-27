@@ -42,6 +42,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Threading;
 using Microsoft.Win32;
 
 using System.IO;
@@ -54,6 +55,7 @@ using LanguageLib;
 
 // Classe con funzioni di conversione DEC-HEX
 using Raccolta_funzioni_parser;
+using System.Windows.Shell;
 
 namespace ModBus_Client
 {
@@ -193,6 +195,8 @@ namespace ModBus_Client
 
             if(File.Exists(Directory.GetCurrentDirectory() + "\\Lang\\Mappings_" + main.language + ".info"))
                 RichTextBoxInfo.AppendText(File.ReadAllText(Directory.GetCurrentDirectory() + "\\Lang\\Mappings_" + main.language + ".info"));
+
+            TaskbarItemInfo = new TaskbarItemInfo();
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -453,31 +457,161 @@ namespace ModBus_Client
 
         private void ButtonExportCsvCoils_Click(object sender, RoutedEventArgs e)
         {
-            string offset = comboBoxCoilsOffset.SelectedIndex == 1 ? "0x" : "" + textBoxCoilsOffset.Text;
-            exportCsv(list_coilsTable, "_Coils", offset, comboBoxCoilsRegistri.SelectedIndex == 1);
+            dataGridViewCoils.IsEnabled = false;
+            comboBoxCoilsRegistri.IsEnabled = false;
+            comboBoxCoilsOffset.IsEnabled = false;
+            textBoxCoilsOffset.IsEnabled = false;
+            ButtonImportCsvCoils.IsEnabled = false;
+            ButtonExportCsvCoils.IsEnabled = false;
+
+            Thread t = new Thread(new ThreadStart(ExportCsvCoils));
+            t.Start();
+        }
+
+        public void ExportCsvCoils()
+        {
+            string offset = "";
+            bool registerHex = false;
+
+            this.Dispatcher.Invoke((Action)delegate
+            {
+                offset = comboBoxCoilsOffset.SelectedIndex == 1 ? "0x" : "" + textBoxCoilsOffset.Text;
+                registerHex = comboBoxCoilsRegistri.SelectedIndex == 1;
+            });
+
+            exportCsv(list_coilsTable, "_Coils", offset, registerHex);
+
+            this.Dispatcher.Invoke((Action)delegate
+            {
+                dataGridViewCoils.IsEnabled = true;
+                comboBoxCoilsRegistri.IsEnabled = true;
+                comboBoxCoilsOffset.IsEnabled = true;
+                textBoxCoilsOffset.IsEnabled = true;
+                ButtonImportCsvCoils.IsEnabled = true;
+                ButtonExportCsvCoils.IsEnabled = true;
+            });
         }
 
         private void ButtonExportCsvInputs_Click(object sender, RoutedEventArgs e)
         {
-            string offset = comboBoxInputOffset.SelectedIndex == 1 ? "0x" : "" + textBoxInputOffset.Text;
-            exportCsv(list_inputsTable, "_Inputs", offset, comboBoxInputRegistri.SelectedIndex == 1);
+            dataGridViewInput.IsEnabled = false;
+            comboBoxInputRegistri.IsEnabled = false;
+            comboBoxInputOffset.IsEnabled = false;
+            textBoxInputOffset.IsEnabled = false;
+            ButtonImportCsvInputs.IsEnabled = false;
+            ButtonExportCsvInputs.IsEnabled = false;
+
+            Thread t = new Thread(new ThreadStart(ExportCsvInputs));
+            t.Start();
+        }
+
+        public void ExportCsvInputs()
+        {
+            string offset = "";
+            bool registerHex = false;
+
+            this.Dispatcher.Invoke((Action)delegate
+            {
+                offset = comboBoxInputOffset.SelectedIndex == 1 ? "0x" : "" + textBoxInputOffset.Text;
+                registerHex = comboBoxInputRegistri.SelectedIndex == 1;
+            });
+            
+            exportCsv(list_inputsTable, "_Inputs", offset, registerHex);
+
+            this.Dispatcher.Invoke((Action)delegate
+            {
+                dataGridViewInput.IsEnabled = true;
+                comboBoxInputRegistri.IsEnabled = true;
+                comboBoxInputOffset.IsEnabled = true;
+                textBoxInputOffset.IsEnabled = true;
+                ButtonImportCsvInputs.IsEnabled = true;
+                ButtonExportCsvInputs.IsEnabled = true;
+            });
         }
 
         private void ButtonExportCsvInputRegisters_Click(object sender, RoutedEventArgs e)
         {
-            string offset = comboBoxInputRegOffset.SelectedIndex == 1 ? "0x" : "" + textBoxInputRegOffset.Text;
-            exportCsv(list_inputRegistersTable, "_InputRegisters", offset, comboBoxInputRegRegistri.SelectedIndex == 1);
+            dataGridViewInputRegister.IsEnabled = false;
+            comboBoxInputRegRegistri.IsEnabled = false;
+            comboBoxInputRegOffset.IsEnabled = false;
+            textBoxInputRegOffset.IsEnabled = false;
+            ButtonImportCsvInputRegisters.IsEnabled = false;
+            ButtonExportCsvInputRegisters.IsEnabled = false;
+
+            Thread t = new Thread(new ThreadStart(ExportCsvInputRegisters));
+            t.Start();
+        }
+
+        public void ExportCsvInputRegisters()
+        {
+            string offset = "";
+            bool registerHex = false;
+
+            this.Dispatcher.Invoke((Action)delegate
+            {
+                offset = comboBoxInputRegOffset.SelectedIndex == 1 ? "0x" : "" + textBoxInputRegOffset.Text;
+                registerHex = comboBoxInputRegRegistri.SelectedIndex == 1;
+            });
+
+            exportCsv(list_inputRegistersTable, "_InputRegisters", offset, registerHex);
+
+            this.Dispatcher.Invoke((Action)delegate
+            {
+                dataGridViewInputRegister.IsEnabled = true;
+                comboBoxInputRegRegistri.IsEnabled = true;
+                comboBoxInputRegOffset.IsEnabled = true;
+                textBoxInputRegOffset.IsEnabled = true;
+                ButtonImportCsvInputRegisters.IsEnabled = true;
+                ButtonExportCsvInputRegisters.IsEnabled = true;
+            });
         }
 
         private void ButtonExportCsvHoldingRegisters_Click(object sender, RoutedEventArgs e)
         {
-            string offset = comboBoxHoldingOffset.SelectedIndex == 1 ? "0x": "" + textBoxHoldingOffset.Text;
-            exportCsv(list_holdingRegistersTable, "_HoldingRegisters", offset, comboBoxHoldingRegistri.SelectedIndex == 1);
+            dataGridViewHolding.IsEnabled = false;
+            comboBoxHoldingRegistri.IsEnabled = false;
+            comboBoxHoldingOffset.IsEnabled = false;
+            textBoxHoldingOffset.IsEnabled = false;
+            ButtonImportCsvHoldingRegisters.IsEnabled = false;
+            ButtonExportCsvHoldingRegisters.IsEnabled = false;
+
+            Thread t = new Thread(new ThreadStart(ExportCsvHoldingRegisters));
+            t.Start();
+        }
+
+        public void ExportCsvHoldingRegisters()
+        {
+            string offset = "";
+            bool registerHex = false;
+
+            this.Dispatcher.Invoke((Action)delegate
+            {
+                offset = comboBoxHoldingOffset.SelectedIndex == 1 ? "0x" : "" + textBoxHoldingOffset.Text;
+                registerHex = comboBoxHoldingRegistri.SelectedIndex == 1;
+            });
+
+            exportCsv(list_holdingRegistersTable, "_HoldingRegisters", offset, registerHex);
+
+            this.Dispatcher.Invoke((Action)delegate
+            {
+                dataGridViewHolding.IsEnabled = true;
+                comboBoxHoldingRegistri.IsEnabled = true;
+                comboBoxHoldingOffset.IsEnabled = true;
+                textBoxHoldingOffset.IsEnabled = true;
+                ButtonImportCsvHoldingRegisters.IsEnabled = true;
+                ButtonExportCsvHoldingRegisters.IsEnabled = true;
+            });
         }
 
         public void exportCsv(ObservableCollection<ModBus_Item> collection, String append, String offset, bool registerHex)
         {
             SaveFileDialog window = new SaveFileDialog();
+
+            this.Dispatcher.Invoke((Action)delegate
+            {
+                TaskbarItemInfo.ProgressValue = 0;
+                TaskbarItemInfo.ProgressState = TaskbarItemProgressState.Normal;
+            });
 
             window.Filter = "csv Files | *.csv";
             window.DefaultExt = ".csv";
@@ -488,18 +622,42 @@ namespace ModBus_Client
                 if (window.FileName.IndexOf("csv") != -1)
                 {
                     String content = "Offset,Register,Value,Notes,Mappings,Groups\n";
+                    int counter = 0;
 
                     foreach (ModBus_Item item in collection)
                     {
                         if (item != null)
                         {
                             content += offset + (registerHex ? ",0x" : ",") + item.Register + "," + item.Value + "," + item.Notes + "," + item.Mappings + "," + item.Group + "\n";
+                            counter++;
+
+                            if (counter % (collection.Count / 100) == 0)
+                            {
+                                if (counter % (collection.Count / 100) == 0)
+                                {
+                                    this.Dispatcher.Invoke((Action)delegate
+                                    {
+                                        TaskbarItemInfo.ProgressValue = (double)(counter) / (double)(collection.Count);
+                                    });
+                                }
+                            }
                         }
                     }
 
                     File.WriteAllText(window.FileName, content);
                 }
             }
+
+            this.Dispatcher.Invoke((Action)delegate
+            {
+                TaskbarItemInfo.ProgressValue = 0;
+                TaskbarItemInfo.ProgressState = TaskbarItemProgressState.None;
+            });
+        }
+
+        public void exportCsvThread()
+        {
+
         }
 
         public void importCsv(ObservableCollection<ModBus_Item> collection, ComboBox comboBox, TextBox textBox, ComboBox comboBoxReg)
@@ -937,6 +1095,7 @@ namespace ModBus_Client
 
     public class ModBus_Item
     {
+        public string Offset { get; set; }
         public string Register { get; set; }
         public UInt16 RegisterUInt { get; set; }
         public string Value { get; set; }

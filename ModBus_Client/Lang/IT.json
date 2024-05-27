@@ -86,6 +86,7 @@
     "labelSettings_2": "Impostazioni generali:",
     "labelSettings_3": "Loop polling interval [ms]:",
     "labelSettings_4": "Lingua corrente:",
+    "labelSettings_7": "Nr. di registri multiple write:",
     "labelSaveProfile": "Crea nuovo profilo:",
     "labelSaveProfile_0": "Etichetta:",
     "labelLoadProfile": "Carica profilo:",
@@ -120,7 +121,10 @@
     "checkBoxCloseConsolAfterBoot": "Chiudi console al termine dell'avvio",
     "checkBoxOffBit": "Disattiva automaticamente bit",
     "checkBoxDisablePictureBoxCommands": "Disattiva comandi pictureBox",
-    "CheckBoxUseOnlyReadSingleRegistersForGroups": "Usa solo \"ReadSingleRegister\" per risorse di gruppo"
+    "CheckBoxUseOnlyReadSingleRegistersForGroups": "Usa solo \"ReadSingleRegister\" per risorse di gruppo",
+    "CheckBoxPreviewimportWriteMultipleRegisters": "Write multiple registers (FC15 / FC16)",
+    "CheckBoxPreviewImportCloseWindowAfterWrite": "Chiudi finestra al termine",
+    "CheckBoxPreviewImportAbortOnError": "Interrompi in caso di errore"
   },
   "buttons": {
     "buttonUpdateSerialList": "Aggiorna",
@@ -444,6 +448,12 @@
     "certificateFileNotFound": "File certificato non trovato: ",
     "keyFileNotFound": "File chiave privata non trovato: ",
     "certificatePasswordNotValid": "Password certificato non corretta",
-    "abortPreviweImport": "Importazione in corso, annullare?"
+    "abortPreviweImport": "Importazione in corso, annullare?",
+    "loadingProfile": "Caricamento in corso ...",
+    "loadedProfile": "Caricamento completato",
+    "importingProfile": "Attendere il caricamento del profilo prima di aprire il template editor",
+    "importingError": "Errore importazione riga del file .csv/.json, controllare il contenuto",
+    "importingErrorFiles": "Errore importazione files",
+    "importingErrorParse": "Errore conversione valori"
   }
 }

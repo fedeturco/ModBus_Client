@@ -19,12 +19,6 @@ cambiando profilo vengono caricate le rispettive impostazioni.
     richiesto
     l'indirizzo 40002. Stessa cosa per gli input registers (30001), discrete inputs (10001)
     o coils (1).
-    \item \textbf{LIMITA GLI INDIRIZZI MODBUS A 9998:}
-    Se spuntata vengono inviate solo le richieste di indirizzi tra 0 e 9998 (o corrispondente indirizzo
-    Modbus es: 10001-19999/30001-39999/40001-49999). In caso contrario viene inviata la richiesta
-    modbus qualsiasi sia l'indirizzo inserito. Ad esempio alcune CPU Beckhoff mettono a disposizione
-    le word MW0,MW1,… partendo dall'holding register 0x3000 (dec 12288). Non spuntando la casella
-    si possono quindi inviare richieste anche a indirizzi oltre il valore di 9998, fino a 65535.
     \item \textbf{COLORE CELLE > 0 / COLORE CELLE ALTERNATE:}
     Se spuntata vengono colorate solo le righe delle tabelle con un valore > 0, altrimenti le righe
     vengono colorate in maniera alternata.
@@ -65,4 +59,16 @@ di gestione delle socket:
     quando ritorna la connessione. Con la seconda
     modalità questo non accade perche la socket viene riaperta per ogni lettura 
     e chiusa subito dopo per cui a livello pratico questa modalità può tornare molto utile.
+\end{itemize}
+
+Preview import settings:
+\\\\
+Le impostazioni seguenti permettono di impostare i valori di default
+della finestra di import dei registri.
+
+\begin{itemize}
+    \item \textbf{WRITE MULTIPLE REGISTERS (FC15 / FC16):} accorpa registri consecutivi in un unico comando ove possibile.
+    \item \textbf{CLOSE WINDOW AFTER WRITE:} chiude la finestra automaticamente al termine delle scritture.
+    \item \textbf{ABORT WRITE ON ERROR:} interrompe le scritture in caso di errore (altrimenti ignora l'errore e prosegue con le successive).
+    \item \textbf{NR. OF REGISTERS MULTIPLE WRITE:} numero massimo di registri inviati in un singolo comando FC15 / FC16.
 \end{itemize}

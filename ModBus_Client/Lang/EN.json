@@ -86,6 +86,7 @@
     "labelSettings_2": "General Settings:",
     "labelSettings_3": "Loop polling interval [ms]:",
     "labelSettings_4": "Current language:",
+    "labelSettings_7": "Nr. of registers multiple write:",
     "labelSaveProfile": "Create new profile:",
     "labelSaveProfile_0": "Label:",
     "labelLoadProfile": "Load profile:",
@@ -120,7 +121,10 @@
     "checkBoxCloseConsolAfterBoot": "Close console on startup",
     "checkBoxOffBit": "Disable bit automatically",
     "checkBoxDisablePictureBoxCommands": "Disable pictureBox commands",
-    "CheckBoxUseOnlyReadSingleRegistersForGroups": "Use only \"ReadSingleRegister\" for group resources"
+    "CheckBoxUseOnlyReadSingleRegistersForGroups": "Use only \"ReadSingleRegister\" for group resources",
+    "CheckBoxPreviewimportWriteMultipleRegisters": "Write multiple registers (FC15 / FC16)",
+    "CheckBoxPreviewImportCloseWindowAfterWrite": "Close window after write",
+    "CheckBoxPreviewImportAbortOnError": "Abort write on error"
   },
   "buttons": {
     "buttonUpdateSerialList": "Update",
@@ -349,6 +353,12 @@
     "certificateFileNotFound": "Certificate file not found: ",
     "keyFileNotFound": "Key file not found: ",
     "certificatePasswordNotValid": "Certificate password is not correct",
-    "abortPreviweImport": "Import stil running, abort process?"
+    "abortPreviweImport": "Import stil running, abort process?",
+    "loadingProfile": "Loading profile ...",
+    "loadedProfile": "Loading complete",
+    "importingProfile": "Profile loading in progress, wait the process to finish before opening template editor",
+    "importingError": "Error import row from file .csv/.json, check content",
+    "importingErrorFiles": "Error importing files",
+    "importingErrorParse": "Error parsing value"
   }
 }

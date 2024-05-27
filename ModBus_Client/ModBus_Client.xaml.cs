@@ -180,6 +180,13 @@ namespace ModBus_Client
         bool scrolled_log = false;
         int count_log = 0;
 
+        public bool lastCoilsCommandGroup = false;
+        public bool lastInputsCommandGroup = false;
+        public bool lastHoldingRegistersCommandGroup = false;
+        public bool lastInputRegistersCommandGroup = false;
+
+        public bool importingProfile = false;
+
         // Variabili di appoggio per gestire le chiamate a thread
 
         public bool useOffsetInTable = false;
@@ -1278,7 +1285,6 @@ namespace ModBus_Client
                 textBoxHoldingOffset.Text = config.textBoxHoldingOffset_;
 
                 checkBoxUseOffsetInTextBox.IsChecked = config.checkBoxUseOffsetInTextBox_;
-                checkBoxFollowModbusProtocol.IsChecked = config.checkBoxFollowModbusProtocol_;
                 checkBoxCloseConsolAfterBoot.IsChecked = config.checkBoxCloseConsolAfterBoot_;
                 checkBoxCellColorMode.IsChecked = config.checkBoxCellColorMode_;
                 checkBoxViewTableWithoutOffset.IsChecked = config.checkBoxViewTableWithoutOffset_;
@@ -1766,6 +1772,8 @@ namespace ModBus_Client
                 buttonReadCoils01.IsEnabled = false;
             }
 
+            lastCoilsCommandGroup = false;
+
             Thread t = new Thread(new ThreadStart(readCoils));
             t.Priority = threadPriority;
             t.Start();
@@ -1790,7 +1798,17 @@ namespace ModBus_Client
                         if (response.Length > 0)
                         {
                             // Cancello la tabella e inserisco le nuove righe
-                            insertRowsTable(list_coilsTable, list_template_coilsTable, P.uint_parser(textBoxCoilsOffset_, comboBoxCoilsOffset_), address_start, response, colorDefaultReadCellStr, comboBoxCoilsRegistri_, "DEC", true, false);
+                            insertRowsTable(list_coilsTable, 
+                                list_template_coilsTable, 
+                                P.uint_parser(textBoxCoilsOffset_, comboBoxCoilsOffset_), 
+                                address_start, 
+                                response, 
+                                colorDefaultReadCellStr, 
+                                comboBoxCoilsOffset_,
+                                comboBoxCoilsRegistri_,
+                                "DEC", 
+                                true, 
+                                false);
                         }
                     }
                 }
@@ -1880,6 +1898,7 @@ namespace ModBus_Client
                 buttonReadCoilsRange.IsEnabled = false;
             }
 
+            lastCoilsCommandGroup = false;
             list_coilsTable.Clear();
 
             Thread t = new Thread(new ThreadStart(readColisRange));
@@ -1948,7 +1967,18 @@ namespace ModBus_Client
                 }
 
                 // Cancello la tabella e inserisco le nuove righe
-                insertRowsTable(list_coilsTable, list_template_coilsTable, P.uint_parser(textBoxCoilsOffset_, comboBoxCoilsOffset_), address_start, response, colorDefaultReadCellStr, comboBoxCoilsRegistri_, "DEC", true, false);
+                insertRowsTable(
+                    list_coilsTable, 
+                    list_template_coilsTable, 
+                    P.uint_parser(textBoxCoilsOffset_, comboBoxCoilsOffset_), 
+                    address_start, 
+                    response, 
+                    colorDefaultReadCellStr, 
+                    comboBoxCoilsOffset_, 
+                    comboBoxCoilsRegistri_, 
+                    "DEC", 
+                    true, 
+                    false);
 
                 this.Dispatcher.Invoke((Action)delegate
                 {
@@ -2134,6 +2164,7 @@ namespace ModBus_Client
         private void buttonWriteCoils05_Click(object sender, RoutedEventArgs e)
         {
             buttonWriteCoils05.IsEnabled = false;
+            lastCoilsCommandGroup = false;
 
             Thread t = new Thread(new ThreadStart(writeCoil_01));
             t.Priority = threadPriority;
@@ -2155,7 +2186,18 @@ namespace ModBus_Client
                         UInt16[] value = { UInt16.Parse(textBoxCoilsValue05_) };
 
                         // Cancello la tabella e inserisco le nuove righe
-                        insertRowsTable(list_coilsTable, list_template_coilsTable, P.uint_parser(textBoxCoilsOffset_, comboBoxCoilsOffset_), address_start, value, colorDefaultWriteCellStr, comboBoxCoilsRegistri_, "DEC", true, true);
+                        insertRowsTable(
+                            list_coilsTable, 
+                            list_template_coilsTable, 
+                            P.uint_parser(textBoxCoilsOffset_, comboBoxCoilsOffset_), 
+                            address_start, 
+                            value, 
+                            colorDefaultWriteCellStr, 
+                            comboBoxCoilsOffset_, 
+                            comboBoxCoilsRegistri_, 
+                            "DEC", 
+                            true, 
+                            true);
                     }
                 }
 
@@ -2240,6 +2282,7 @@ namespace ModBus_Client
         private void buttonWriteCoils05_B_Click(object sender, RoutedEventArgs e)
         {
             buttonWriteCoils05_B.IsEnabled = false;
+            lastCoilsCommandGroup = false;
 
             Thread t = new Thread(new ThreadStart(writeCoil_02));
             t.Priority = threadPriority;
@@ -2261,7 +2304,18 @@ namespace ModBus_Client
                         UInt16[] value = { UInt16.Parse(textBoxCoilsValue05_b_) };
 
                         // Cancello la tabella e inserisco le nuove righe
-                        insertRowsTable(list_coilsTable, list_template_coilsTable, P.uint_parser(textBoxCoilsOffset_, comboBoxCoilsOffset_), address_start, value, colorDefaultWriteCellStr, comboBoxCoilsRegistri_, "DEC", true, true);
+                        insertRowsTable(
+                            list_coilsTable, 
+                            list_template_coilsTable, 
+                            P.uint_parser(textBoxCoilsOffset_, comboBoxCoilsOffset_), 
+                            address_start, 
+                            value, 
+                            colorDefaultWriteCellStr, 
+                            comboBoxCoilsOffset_, 
+                            comboBoxCoilsRegistri_, 
+                            "DEC", 
+                            true, 
+                            true);
                     }
                 }
 
@@ -2346,6 +2400,7 @@ namespace ModBus_Client
         private void buttonWriteCoils15_Click(object sender, RoutedEventArgs e)
         {
             buttonWriteCoils15.IsEnabled = false;
+            lastCoilsCommandGroup = false;
 
             Thread t = new Thread(new ThreadStart(writeMultipleCoils));
             t.Priority = threadPriority;
@@ -2381,7 +2436,18 @@ namespace ModBus_Client
                         }
 
                         // Cancello la tabella e inserisco le nuove righe
-                        insertRowsTable(list_coilsTable, list_template_coilsTable, P.uint_parser(textBoxCoilsOffset_, comboBoxCoilsOffset_), address_start, value, colorDefaultWriteCellStr, comboBoxCoilsRegistri_, null, true, true);
+                        insertRowsTable(
+                            list_coilsTable, 
+                            list_template_coilsTable, 
+                            P.uint_parser(textBoxCoilsOffset_, comboBoxCoilsOffset_), 
+                            address_start, 
+                            value, 
+                            colorDefaultWriteCellStr, 
+                            comboBoxCoilsOffset_, 
+                            comboBoxCoilsRegistri_, 
+                            null, 
+                            true, 
+                            true);
                     }
                 }
 
@@ -2472,6 +2538,8 @@ namespace ModBus_Client
                 buttonReadInput02.IsEnabled = false;
             }
 
+            lastInputsCommandGroup = false;
+
             Thread t = new Thread(new ThreadStart(readInputs));
             t.Priority = threadPriority;
             t.Start();
@@ -2505,7 +2573,18 @@ namespace ModBus_Client
                         if (response.Length > 0)
                         {
                             // Cancello la tabella e inserisco le nuove righe
-                            insertRowsTable(list_inputsTable, list_template_inputsTable, P.uint_parser(textBoxInputOffset_, comboBoxInputOffset_), address_start, response, colorDefaultReadCellStr, comboBoxInputRegistri_, "DEC", true, false);
+                            insertRowsTable(
+                                list_inputsTable, 
+                                list_template_inputsTable, 
+                                P.uint_parser(textBoxInputOffset_, comboBoxInputOffset_), 
+                                address_start, 
+                                response, 
+                                colorDefaultReadCellStr, 
+                                comboBoxInputOffset_, 
+                                comboBoxInputRegistri_, 
+                                "DEC", 
+                                true, 
+                                false);
                         }
                     }
                 }
@@ -2594,6 +2673,7 @@ namespace ModBus_Client
                 buttonReadInputRange.IsEnabled = false;
             }
 
+            lastInputsCommandGroup = false;
             list_inputsTable.Clear();
 
             Thread t = new Thread(new ThreadStart(readInputsRange));
@@ -2670,7 +2750,18 @@ namespace ModBus_Client
                 }
 
                 // Cancello la tabella e inserisco le nuove righe
-                insertRowsTable(list_inputsTable, list_template_inputsTable, P.uint_parser(textBoxInputOffset_, comboBoxInputOffset_), address_start, response, colorDefaultReadCellStr, comboBoxInputRegistri_, "DEC", true, false);
+                insertRowsTable(
+                    list_inputsTable, 
+                    list_template_inputsTable, 
+                    P.uint_parser(textBoxInputOffset_, comboBoxInputOffset_), 
+                    address_start, 
+                    response, 
+                    colorDefaultReadCellStr, 
+                    comboBoxInputOffset_, 
+                    comboBoxInputRegistri_, 
+                    "DEC", 
+                    true, 
+                    false);
 
                 this.Dispatcher.Invoke((Action)delegate
                 {
@@ -2777,6 +2868,8 @@ namespace ModBus_Client
                 buttonReadInputRegister04.IsEnabled = false;
             }
 
+            lastInputRegistersCommandGroup = false;
+
             Thread t = new Thread(new ThreadStart(readInputRegisters));
             t.Priority = threadPriority;
             t.Start();
@@ -2806,7 +2899,18 @@ namespace ModBus_Client
                         if (response.Length > 0)
                         {
                             // Cancello la tabella e inserisco le nuove righe
-                            insertRowsTable(list_inputRegistersTable, list_template_inputRegistersTable, P.uint_parser(textBoxInputRegOffset_, comboBoxInputRegOffset_), address_start, response, colorDefaultReadCellStr, comboBoxInputRegRegistri_, comboBoxInputRegValori_, true, false);
+                            insertRowsTable(
+                                list_inputRegistersTable, 
+                                list_template_inputRegistersTable, 
+                                P.uint_parser(textBoxInputRegOffset_, comboBoxInputRegOffset_), 
+                                address_start, 
+                                response, 
+                                colorDefaultReadCellStr, 
+                                comboBoxInputRegOffset_, 
+                                comboBoxInputRegRegistri_, 
+                                comboBoxInputRegValori_, 
+                                true, 
+                                false);
                         }
                     }
                 }
@@ -2897,6 +3001,7 @@ namespace ModBus_Client
                 buttonReadInputRegisterRange.IsEnabled = false;
             }
 
+            lastInputRegistersCommandGroup = false;
             list_inputRegistersTable.Clear();
 
             Thread t = new Thread(new ThreadStart(readInputRegistersRange));
@@ -2978,7 +3083,18 @@ namespace ModBus_Client
                 }
 
                 // Cancello la tabella e inserisco le nuove righe
-                insertRowsTable(list_inputRegistersTable, list_template_inputRegistersTable, P.uint_parser(textBoxInputRegOffset_, comboBoxInputRegOffset_), address_start, response, colorDefaultReadCellStr, comboBoxInputRegRegistri_, comboBoxInputRegValori_, true, false);
+                insertRowsTable(
+                    list_inputRegistersTable, 
+                    list_template_inputRegistersTable, 
+                    P.uint_parser(textBoxInputRegOffset_, comboBoxInputRegOffset_), 
+                    address_start, 
+                    response, 
+                    colorDefaultReadCellStr, 
+                    comboBoxInputRegOffset_, 
+                    comboBoxInputRegRegistri_, 
+                    comboBoxInputRegValori_, 
+                    true, 
+                    false);
 
                 this.Dispatcher.Invoke((Action)delegate
                 {
@@ -3085,6 +3201,8 @@ namespace ModBus_Client
                 buttonReadHolding03.IsEnabled = false;
             }
 
+            lastHoldingRegistersCommandGroup = false;
+
             Thread t = new Thread(new ThreadStart(readHoldingRegisters));
             t.Priority = threadPriority;
             t.Start();
@@ -3121,6 +3239,7 @@ namespace ModBus_Client
                                 address_start,
                                 response,
                                 colorDefaultReadCellStr,
+                                comboBoxHoldingOffset_,
                                 comboBoxHoldingRegistri_,
                                 comboBoxHoldingValori_,
                                 true,
@@ -3211,6 +3330,7 @@ namespace ModBus_Client
         private void buttonWriteHolding06_Click(object sender, RoutedEventArgs e)
         {
             buttonWriteHolding06.IsEnabled = false;
+            lastHoldingRegistersCommandGroup = false;
 
             Thread T = new Thread(new ThreadStart(witeHoldingRegister_01));
             T.Start();
@@ -3236,7 +3356,17 @@ namespace ModBus_Client
                         UInt16[] value = { (UInt16)P.uint_parser(textBoxHoldingValue06_, comboBoxHoldingValue06_) };
 
                         // Cancello la tabella e inserisco le nuove righe
-                        insertRowsTable(list_holdingRegistersTable, list_template_holdingRegistersTable, P.uint_parser(textBoxHoldingOffset_, comboBoxHoldingOffset_), address_start, value, colorDefaultWriteCellStr, comboBoxHoldingRegistri_, comboBoxHoldingValori_, true, true);
+                        insertRowsTable(list_holdingRegistersTable,
+                            list_template_holdingRegistersTable,
+                            P.uint_parser(textBoxHoldingOffset_, comboBoxHoldingOffset_),
+                            address_start,
+                            value,
+                            colorDefaultWriteCellStr,
+                            comboBoxHoldingOffset_,
+                            comboBoxHoldingRegistri_,
+                            comboBoxHoldingValori_,
+                            true,
+                            true);
                     }
                 }
 
@@ -3322,6 +3452,7 @@ namespace ModBus_Client
         private void buttonWriteHolding16_Click(object sender, RoutedEventArgs e)
         {
             buttonWriteHolding16.IsEnabled = false;
+            lastHoldingRegistersCommandGroup = false;
 
             Thread t = new Thread(new ThreadStart(writeMultipleRegisters));
             t.Priority = threadPriority;
@@ -3364,7 +3495,17 @@ namespace ModBus_Client
                         if (writtenRegs.Length == word_count)
                         {
                             // Cancello la tabella e inserisco le nuove righe
-                            insertRowsTable(list_holdingRegistersTable, list_template_holdingRegistersTable, P.uint_parser(textBoxHoldingOffset_, comboBoxHoldingOffset_), address_start, writtenRegs, colorDefaultWriteCellStr, comboBoxHoldingRegistri_, comboBoxHoldingValori_, true, true);
+                            insertRowsTable(list_holdingRegistersTable, 
+                                list_template_holdingRegistersTable, 
+                                P.uint_parser(textBoxHoldingOffset_, comboBoxHoldingOffset_), 
+                                address_start, 
+                                writtenRegs, 
+                                colorDefaultWriteCellStr, 
+                                comboBoxHoldingOffset_,
+                                comboBoxHoldingRegistri_, 
+                                comboBoxHoldingValori_, 
+                                true, 
+                                true);
                         }
                         else
                         {
@@ -3394,7 +3535,17 @@ namespace ModBus_Client
                         if (writtenRegs.Length == word_count)
                         {
                             // Cancello la tabella e inserisco le nuove righe
-                            insertRowsTable(list_holdingRegistersTable, list_template_holdingRegistersTable, P.uint_parser(textBoxHoldingOffset_, comboBoxHoldingOffset_), address_start, writtenRegs, colorDefaultWriteCellStr, comboBoxHoldingRegistri_, comboBoxHoldingValori_, true, true);
+                            insertRowsTable(list_holdingRegistersTable, 
+                                list_template_holdingRegistersTable, 
+                                P.uint_parser(textBoxHoldingOffset_, comboBoxHoldingOffset_), 
+                                address_start, 
+                                writtenRegs, 
+                                colorDefaultWriteCellStr, 
+                                comboBoxHoldingOffset_,
+                                comboBoxHoldingRegistri_, 
+                                comboBoxHoldingValori_, 
+                                true, 
+                                true);
                         }
                         else
                         {
@@ -3491,6 +3642,7 @@ namespace ModBus_Client
                 buttonReadHoldingRange.IsEnabled = false;
             }
 
+            lastHoldingRegistersCommandGroup = false;
             list_holdingRegistersTable.Clear();
 
             Thread t = new Thread(new ThreadStart(readHoldingRegistersRange));
@@ -3586,7 +3738,17 @@ namespace ModBus_Client
                 }
 
                 // Cancello la tabella e inserisco le nuove righe
-                insertRowsTable(list_holdingRegistersTable, list_template_holdingRegistersTable, P.uint_parser(textBoxHoldingOffset_, comboBoxHoldingOffset_), address_start, response, colorDefaultReadCellStr, comboBoxHoldingRegistri_, comboBoxHoldingValori_, true, false);
+                insertRowsTable(list_holdingRegistersTable, 
+                    list_template_holdingRegistersTable, 
+                    P.uint_parser(textBoxHoldingOffset_, comboBoxHoldingOffset_), 
+                    address_start, 
+                    response, 
+                    colorDefaultReadCellStr,
+                    comboBoxHoldingOffset_,
+                    comboBoxHoldingRegistri_, 
+                    comboBoxHoldingValori_, 
+                    true, 
+                    false);
 
                 this.Dispatcher.Invoke((Action)delegate
                 {
@@ -4374,7 +4536,7 @@ namespace ModBus_Client
         }
 
         // Funzione inserimento righe nelle collections
-        public void insertRowsTable(ObservableCollection<ModBus_Item> tab_1, IEnumerable<ModBus_Item> template, uint user_offset, uint address_start, UInt16[] response, String cellBackGround, String formatRegister, String formatVal, bool clearTable, bool colorAlways)
+        public void insertRowsTable(ObservableCollection<ModBus_Item> tab_1, IEnumerable<ModBus_Item> template, uint user_offset, uint address_start, UInt16[] response, String cellBackGround, String formatOffset, String formatRegister, String formatVal, bool clearTable, bool colorAlways)
         {
             if (clearTable)
             {
@@ -4389,6 +4551,16 @@ namespace ModBus_Client
                 for (int i = 0; i < response.Length; i++)
                 {
                     ModBus_Item row = new ModBus_Item();
+
+                    // Cella con numero del registro
+                    if (formatOffset == "DEC" || formatOffset == null)
+                    {
+                        row.Offset = ((useOffsetInTable ? user_offset : 0)).ToString();
+                    }
+                    else
+                    {
+                        row.Offset = "0x" + ((useOffsetInTable ? user_offset : 0)).ToString("X").PadLeft(4, '0');
+                    }
 
                     // Valore reale registro modbus
                     row.RegisterUInt = (UInt16)(address_start + i);
@@ -4627,6 +4799,7 @@ namespace ModBus_Client
         private void buttonWriteHolding06_b_Click(object sender, RoutedEventArgs e)
         {
             buttonWriteHolding06_b.IsEnabled = false;
+            lastHoldingRegistersCommandGroup = false;
 
             Thread t = new Thread(new ThreadStart(writeHoldingRegister_02));
             t.Priority = threadPriority;
@@ -4653,7 +4826,17 @@ namespace ModBus_Client
                         UInt16[] value = { (UInt16)P.uint_parser(textBoxHoldingValue06_b_, comboBoxHoldingValue06_b_) };
 
                         // Cancello la tabella e inserisco le nuove righe
-                        insertRowsTable(list_holdingRegistersTable, list_template_holdingRegistersTable, P.uint_parser(textBoxHoldingOffset_, comboBoxHoldingOffset_), address_start, value, colorDefaultWriteCellStr, comboBoxHoldingRegistri_, comboBoxHoldingValori_, true, true);
+                        insertRowsTable(list_holdingRegistersTable, 
+                            list_template_holdingRegistersTable, 
+                            P.uint_parser(textBoxHoldingOffset_, comboBoxHoldingOffset_), 
+                            address_start, 
+                            value, 
+                            colorDefaultWriteCellStr, 
+                            comboBoxHoldingOffset_,
+                            comboBoxHoldingRegistri_, 
+                            comboBoxHoldingValori_, 
+                            true, 
+                            true);
                     }
                 }
 
@@ -4903,8 +5086,15 @@ namespace ModBus_Client
 
         private void apriTemplateEditor_Click(object sender, RoutedEventArgs e)
         {
-            TemplateEditor window = new TemplateEditor(this);
-            window.Show();
+            if (importingProfile)
+            {
+                MessageBox.Show(lang.languageTemplate["strings"]["importingProfile"], "Info", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            else
+            {
+                TemplateEditor window = new TemplateEditor(this);
+                window.Show();
+            }
         }
 
         private void caricaToolStripMenuItem_Click(object sender, RoutedEventArgs e)
@@ -6483,7 +6673,13 @@ namespace ModBus_Client
 
                 saveFileDialogBox.DefaultExt = "csv";
                 saveFileDialogBox.AddExtension = false;
-                saveFileDialogBox.FileName = "" + pathToConfiguration + "_HoldingRegisters";
+                if (lastHoldingRegistersCommandGroup && comboBoxHoldingGroup.SelectedItem != null)
+                {
+                    KeyValuePair<Group_Item, String> kp = (KeyValuePair<Group_Item, String>)comboBoxHoldingGroup.SelectedItem;
+                    saveFileDialogBox.FileName = "" + pathToConfiguration + "_HoldingRegisters" + kp.Value.Split('-')[1].Replace(" ", "_");
+                }
+                else
+                    saveFileDialogBox.FileName = "" + pathToConfiguration + "_HoldingRegisters";
                 saveFileDialogBox.Filter = "CSV|*.csv|JSON|*.json";
                 saveFileDialogBox.Title = title;
 
@@ -6495,15 +6691,7 @@ namespace ModBus_Client
 
                         for (int i = 0; i < (list_holdingRegistersTable.Count); i++)
                         {
-                            if (comboBoxHoldingOffset.SelectedIndex == 0)
-                            {
-                                file_content += textBoxHoldingOffset.Text + ",";   // DEC
-                            }
-                            else
-                            {
-                                file_content += "0x" + textBoxHoldingOffset.Text + ",";    // HEX
-                            }
-
+                            file_content += list_holdingRegistersTable[i].Offset + ",";
                             file_content += list_holdingRegistersTable[i].Register + ",";
                             file_content += list_holdingRegistersTable[i].Value + ",";
                             file_content += list_holdingRegistersTable[i].Notes + "\n";
@@ -6528,15 +6716,7 @@ namespace ModBus_Client
                             {
                                 ModBusItem_Save item = new ModBusItem_Save();
 
-                                if (comboBoxHoldingOffset.SelectedIndex == 0)
-                                {
-                                    item.Offset = textBoxHoldingOffset.Text;    // DEC
-                                }
-                                else
-                                {
-                                    item.Offset = "0x" + textBoxHoldingOffset.Text;    // HEX
-                                }
-
+                                item.Offset = list_holdingRegistersTable[i].Offset;
                                 item.Register = list_holdingRegistersTable[i].Register;
                                 item.Value = list_holdingRegistersTable[i].Value;
                                 item.Notes = list_holdingRegistersTable[i].Notes;
@@ -6573,7 +6753,13 @@ namespace ModBus_Client
 
                 saveFileDialogBox.DefaultExt = "csv";
                 saveFileDialogBox.AddExtension = false;
-                saveFileDialogBox.FileName = "" + pathToConfiguration + "_InputRegisters";
+                if (lastInputRegistersCommandGroup && comboBoxInputRegisterGroup.SelectedItem != null)
+                {
+                    KeyValuePair<Group_Item, String> kp = (KeyValuePair<Group_Item, String>)comboBoxInputRegisterGroup.SelectedItem;
+                    saveFileDialogBox.FileName = "" + pathToConfiguration + "_InputRegisters" + kp.Value.Split('-')[1].Replace(" ", "_");
+                }
+                else
+                    saveFileDialogBox.FileName = "" + pathToConfiguration + "_InputRegisters";
                 saveFileDialogBox.Filter = "CSV|*.csv|JSON|*.json";
                 saveFileDialogBox.Title = title;
 
@@ -6585,15 +6771,7 @@ namespace ModBus_Client
 
                         for (int i = 0; i < (list_inputRegistersTable.Count); i++)
                         {
-                            if (comboBoxInputRegOffset.SelectedIndex == 0)
-                            {
-                                file_content += textBoxInputRegOffset.Text + ",";   // DEC
-                            }
-                            else
-                            {
-                                file_content += "0x" + textBoxInputRegOffset.Text + ",";    // HEX
-                            }
-
+                            file_content += list_inputRegistersTable[i].Offset + ",";
                             file_content += list_inputRegistersTable[i].Register + ",";
                             file_content += list_inputRegistersTable[i].Value + ",";
                             file_content += list_inputRegistersTable[i].Notes + "\n";
@@ -6618,15 +6796,7 @@ namespace ModBus_Client
                             {
                                 ModBusItem_Save item = new ModBusItem_Save();
 
-                                if (comboBoxInputRegOffset.SelectedIndex == 0)
-                                {
-                                    item.Offset = textBoxInputRegOffset.Text;    // DEC
-                                }
-                                else
-                                {
-                                    item.Offset = "0x" + textBoxInputRegOffset.Text;    // HEX
-                                }
-
+                                item.Offset = list_inputRegistersTable[i].Offset;
                                 item.Register = list_inputRegistersTable[i].Register;
                                 item.Value = list_inputRegistersTable[i].Value;
                                 item.Notes = list_inputRegistersTable[i].Notes;
@@ -6663,7 +6833,13 @@ namespace ModBus_Client
 
                 saveFileDialogBox.DefaultExt = "csv";
                 saveFileDialogBox.AddExtension = false;
-                saveFileDialogBox.FileName = "" + pathToConfiguration + "_Inputs";
+                if (lastInputsCommandGroup && comboBoxInputGroup.SelectedItem != null)
+                {
+                    KeyValuePair<Group_Item, String> kp = (KeyValuePair<Group_Item, String>)comboBoxInputGroup.SelectedItem;
+                    saveFileDialogBox.FileName = "" + pathToConfiguration + "_Inputs" + kp.Value.Split('-')[1].Replace(" ", "_");
+                }
+                else
+                    saveFileDialogBox.FileName = "" + pathToConfiguration + "_Inputs";
                 saveFileDialogBox.Filter = "CSV|*.csv|JSON|*.json";
                 saveFileDialogBox.Title = title;
 
@@ -6675,15 +6851,7 @@ namespace ModBus_Client
 
                         for (int i = 0; i < (list_inputsTable.Count); i++)
                         {
-                            if (comboBoxInputOffset.SelectedIndex == 0)
-                            {
-                                file_content += textBoxInputOffset.Text + ",";   // DEC
-                            }
-                            else
-                            {
-                                file_content += "0x" + textBoxInputOffset.Text + ",";    // HEX
-                            }
-
+                            file_content += list_inputsTable[i].Offset + ",";
                             file_content += list_inputsTable[i].Register + ",";
                             file_content += list_inputsTable[i].Value + ",";
                             file_content += list_inputsTable[i].Notes + "\n";
@@ -6708,15 +6876,7 @@ namespace ModBus_Client
                             {
                                 ModBusItem_Save item = new ModBusItem_Save();
 
-                                if (comboBoxInputOffset.SelectedIndex == 0)
-                                {
-                                    item.Offset = textBoxInputOffset.Text;    // DEC
-                                }
-                                else
-                                {
-                                    item.Offset = "0x" + textBoxInputOffset.Text;    // HEX
-                                }
-
+                                item.Offset = list_inputsTable[i].Offset;
                                 item.Register = list_inputsTable[i].Register;
                                 item.Value = list_inputsTable[i].Value;
                                 item.Notes = list_inputsTable[i].Notes;
@@ -6753,7 +6913,13 @@ namespace ModBus_Client
 
                 saveFileDialogBox.DefaultExt = "csv";
                 saveFileDialogBox.AddExtension = false;
-                saveFileDialogBox.FileName = "" + pathToConfiguration + "_Coils";
+                if (lastCoilsCommandGroup && comboBoxCoilsGroup.SelectedItem != null)
+                {
+                    KeyValuePair<Group_Item, String> kp = (KeyValuePair<Group_Item, String>)comboBoxCoilsGroup.SelectedItem;
+                    saveFileDialogBox.FileName = "" + pathToConfiguration + "_Coils" + kp.Value.Split('-')[1].Replace(" ", "_");
+                }
+                else
+                    saveFileDialogBox.FileName = "" + pathToConfiguration + "_Coils";
                 saveFileDialogBox.Filter = "CSV|*.csv|JSON|*.json";
                 saveFileDialogBox.Title = title;
 
@@ -6765,15 +6931,7 @@ namespace ModBus_Client
 
                         for (int i = 0; i < (list_coilsTable.Count); i++)
                         {
-                            if (comboBoxCoilsOffset.SelectedIndex == 0)
-                            {
-                                file_content += textBoxCoilsOffset.Text + ",";   // DEC
-                            }
-                            else
-                            {
-                                file_content += "0x" + textBoxCoilsOffset.Text + ",";    // HEX
-                            }
-
+                            file_content += list_coilsTable[i].Offset + ",";
                             file_content += list_coilsTable[i].Register + ",";
                             file_content += list_coilsTable[i].Value + ",";
                             file_content += list_coilsTable[i].Notes + "\n";
@@ -6798,15 +6956,7 @@ namespace ModBus_Client
                             {
                                 ModBusItem_Save item = new ModBusItem_Save();
 
-                                if (comboBoxCoilsOffset.SelectedIndex == 0)
-                                {
-                                    item.Offset = textBoxCoilsOffset.Text;    // DEC
-                                }
-                                else
-                                {
-                                    item.Offset = "0x" + textBoxCoilsOffset.Text;    // HEX
-                                }
-
+                                item.Offset = list_coilsTable[i].Offset;
                                 item.Register = list_coilsTable[i].Register;
                                 item.Value = list_coilsTable[i].Value;
                                 item.Notes = list_coilsTable[i].Notes;
@@ -7092,6 +7242,8 @@ namespace ModBus_Client
         public void LoadConfiguration_v2()
         {
             JavaScriptSerializer jss = new JavaScriptSerializer();
+
+            importingProfile = true;
 
             dynamic toSave = jss.DeserializeObject(File.ReadAllText(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "\\Config\\SettingsToSave.json"));
             dynamic loaded = jss.DeserializeObject(File.ReadAllText(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "\\Json\\" + pathToConfiguration + "\\Config.json"));
@@ -7451,229 +7603,206 @@ namespace ModBus_Client
             }
 
             // Al termine del caricamento della configurazione carico il template
-            try
+            Thread t = new Thread(new ThreadStart(LoadTemplaeGroups));
+            t.Start();
+        }
+
+        public void LoadTemplaeGroups()
+        {
+            this.Dispatcher.Invoke((Action)delegate
             {
-                string file_content = File.ReadAllText(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "\\Json\\" + pathToConfiguration + "\\Template.json");
-                jss.MaxJsonLength = this.MaxJsonLength;
-                TEMPLATE template = jss.Deserialize<TEMPLATE>(file_content);
+                TaskbarItemInfo.ProgressValue = 0.01;
+                TaskbarItemInfo.ProgressState = TaskbarItemProgressState.Normal;
+            });
 
-                list_template_coilsTable.Clear();
-                list_template_inputsTable.Clear();
-                list_template_inputRegistersTable.Clear();
-                list_template_holdingRegistersTable.Clear();
+            string file_content = File.ReadAllText(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "\\Json\\" + pathToConfiguration + "\\Template.json");
+            JavaScriptSerializer jss = new JavaScriptSerializer();
+            jss.MaxJsonLength = this.MaxJsonLength;
+            TEMPLATE template = jss.Deserialize<TEMPLATE>(file_content);
 
-                UInt16 tmp = 0;
+            list_template_coilsTable.Clear();
+            list_template_inputsTable.Clear();
+            list_template_inputRegistersTable.Clear();
+            list_template_holdingRegistersTable.Clear();
 
-                // Coils
-                int template_coilsOffset = int.Parse(template.textBoxCoilsOffset_, template.comboBoxCoilsOffset_ == "HEX" ? System.Globalization.NumberStyles.HexNumber : System.Globalization.NumberStyles.Integer);
+            UInt16 tmp = 0;
 
-                // Inputs
-                int template_inputsOffset = int.Parse(template.textBoxInputOffset_, template.comboBoxInputOffset_ == "HEX" ? System.Globalization.NumberStyles.HexNumber : System.Globalization.NumberStyles.Integer);
+            // Coils
+            int template_coilsOffset = int.Parse(template.textBoxCoilsOffset_, template.comboBoxCoilsOffset_ == "HEX" ? System.Globalization.NumberStyles.HexNumber : System.Globalization.NumberStyles.Integer);
 
-                // Input registers
-                int template_inputRegistersOffset = int.Parse(template.textBoxInputRegOffset_, template.comboBoxInputRegOffset_ == "HEX" ? System.Globalization.NumberStyles.HexNumber : System.Globalization.NumberStyles.Integer);
+            // Inputs
+            int template_inputsOffset = int.Parse(template.textBoxInputOffset_, template.comboBoxInputOffset_ == "HEX" ? System.Globalization.NumberStyles.HexNumber : System.Globalization.NumberStyles.Integer);
 
-                // Holding registers
-                int template_HoldingOffset = int.Parse(template.textBoxHoldingOffset_, template.comboBoxHoldingOffset_ == "HEX" ? System.Globalization.NumberStyles.HexNumber : System.Globalization.NumberStyles.Integer);
+            // Input registers
+            int template_inputRegistersOffset = int.Parse(template.textBoxInputRegOffset_, template.comboBoxInputRegOffset_ == "HEX" ? System.Globalization.NumberStyles.HexNumber : System.Globalization.NumberStyles.Integer);
 
-                // Tabella coils
-                for (int i = 0; i < template.dataGridViewCoils.Count(); i++)
+            // Holding registers
+            int template_HoldingOffset = int.Parse(template.textBoxHoldingOffset_, template.comboBoxHoldingOffset_ == "HEX" ? System.Globalization.NumberStyles.HexNumber : System.Globalization.NumberStyles.Integer);
+
+            // Tabella coils
+            for (int i = 0; i < template.dataGridViewCoils.Count(); i++)
+            {
+                if (UInt16.TryParse(template.dataGridViewCoils[i].Register, template.comboBoxCoilsRegistri_ == "HEX" ? System.Globalization.NumberStyles.HexNumber : System.Globalization.NumberStyles.Integer, null, out tmp))
                 {
-                    if (UInt16.TryParse(template.dataGridViewCoils[i].Register, template.comboBoxCoilsRegistri_ == "HEX" ? System.Globalization.NumberStyles.HexNumber : System.Globalization.NumberStyles.Integer, null, out tmp))
-                    {
-                        template.dataGridViewCoils[i].RegisterUInt = (UInt16)(tmp + template_coilsOffset);
-                        template.dataGridViewCoils[i].Register = tmp.ToString();
-                        list_template_coilsTable.Add(template.dataGridViewCoils[i]);
-                    }
+                    template.dataGridViewCoils[i].RegisterUInt = (UInt16)(tmp + template_coilsOffset);
+                    template.dataGridViewCoils[i].Register = tmp.ToString();
+                    list_template_coilsTable.Add(template.dataGridViewCoils[i]);
                 }
+            }
 
-                // Tabella inputs
-                for (int i = 0; i < template.dataGridViewInput.Count(); i++)
+            // Tabella inputs
+            for (int i = 0; i < template.dataGridViewInput.Count(); i++)
+            {
+                if (UInt16.TryParse(template.dataGridViewInput[i].Register, template.comboBoxInputRegistri_ == "HEX" ? System.Globalization.NumberStyles.HexNumber : System.Globalization.NumberStyles.Integer, null, out tmp))
                 {
-                    if (UInt16.TryParse(template.dataGridViewInput[i].Register, template.comboBoxInputRegistri_ == "HEX" ? System.Globalization.NumberStyles.HexNumber : System.Globalization.NumberStyles.Integer, null, out tmp))
-                    {
-                        template.dataGridViewInput[i].RegisterUInt = (UInt16)(tmp + template_inputsOffset);
-                        template.dataGridViewInput[i].Register = tmp.ToString();
-                        list_template_inputsTable.Add(template.dataGridViewInput[i]);
-                    }
+                    template.dataGridViewInput[i].RegisterUInt = (UInt16)(tmp + template_inputsOffset);
+                    template.dataGridViewInput[i].Register = tmp.ToString();
+                    list_template_inputsTable.Add(template.dataGridViewInput[i]);
                 }
+            }
 
-                // Tabella input registers
-                for (int i = 0; i < template.dataGridViewInputRegister.Count(); i++)
+            // Tabella input registers
+            for (int i = 0; i < template.dataGridViewInputRegister.Count(); i++)
+            {
+                if (UInt16.TryParse(template.dataGridViewInputRegister[i].Register, template.comboBoxInputRegRegistri_ == "HEX" ? System.Globalization.NumberStyles.HexNumber : System.Globalization.NumberStyles.Integer, null, out tmp))
                 {
-                    if (UInt16.TryParse(template.dataGridViewInputRegister[i].Register, template.comboBoxInputRegRegistri_ == "HEX" ? System.Globalization.NumberStyles.HexNumber : System.Globalization.NumberStyles.Integer, null, out tmp))
-                    {
-                        template.dataGridViewInputRegister[i].RegisterUInt = (UInt16)(tmp + template_inputRegistersOffset);
-                        template.dataGridViewInputRegister[i].Register = template.dataGridViewInputRegister[i].RegisterUInt.ToString();
-                        list_template_inputRegistersTable.Add(template.dataGridViewInputRegister[i]);
-                    }
+                    template.dataGridViewInputRegister[i].RegisterUInt = (UInt16)(tmp + template_inputRegistersOffset);
+                    template.dataGridViewInputRegister[i].Register = template.dataGridViewInputRegister[i].RegisterUInt.ToString();
+                    list_template_inputRegistersTable.Add(template.dataGridViewInputRegister[i]);
                 }
+            }
 
-                // Tabella holdings
-                for (int i = 0; i < template.dataGridViewHolding.Count(); i++)
+            // Tabella holdings
+            for (int i = 0; i < template.dataGridViewHolding.Count(); i++)
+            {
+                if (UInt16.TryParse(template.dataGridViewHolding[i].Register, template.comboBoxHoldingRegistri_ == "HEX" ? System.Globalization.NumberStyles.HexNumber : System.Globalization.NumberStyles.Integer, null, out tmp))
                 {
-                    if (UInt16.TryParse(template.dataGridViewHolding[i].Register, template.comboBoxHoldingRegistri_ == "HEX" ? System.Globalization.NumberStyles.HexNumber : System.Globalization.NumberStyles.Integer, null, out tmp))
-                    {
-                        template.dataGridViewHolding[i].RegisterUInt = (UInt16)(tmp + template_HoldingOffset);
-                        template.dataGridViewHolding[i].Register = template.dataGridViewHolding[i].RegisterUInt.ToString();
-                        list_template_holdingRegistersTable.Add(template.dataGridViewHolding[i]);
-                    }
+                    template.dataGridViewHolding[i].RegisterUInt = (UInt16)(tmp + template_HoldingOffset);
+                    template.dataGridViewHolding[i].Register = template.dataGridViewHolding[i].RegisterUInt.ToString();
+                    list_template_holdingRegistersTable.Add(template.dataGridViewHolding[i]);
                 }
+            }
 
-                // Tabella groups
+            // Tabella groups
+            this.Dispatcher.Invoke((Action)delegate
+            {
                 comboBoxHoldingGroup.Items.Clear();
                 comboBoxInputRegisterGroup.Items.Clear();
                 comboBoxInputGroup.Items.Clear();
                 comboBoxCoilsGroup.Items.Clear();
+            });
 
-                if (template.Groups != null)
+            if (template.Groups != null)
+            {
+                this.Dispatcher.Invoke((Action)delegate
                 {
                     comboBoxHoldingGroup.IsEnabled = template.Groups.Count() > 0;
                     comboBoxInputRegisterGroup.IsEnabled = template.Groups.Count() > 0;
                     comboBoxInputGroup.IsEnabled = template.Groups.Count() > 0;
                     comboBoxCoilsGroup.IsEnabled = template.Groups.Count() > 0;
+                });
 
-                    if (template.Groups.Count() > 0)
+                if (template.Groups.Count() > 0)
+                {
+                    int counter = 0;
+
+                    this.Dispatcher.Invoke((Action)delegate
+                    {
+                        richTextBoxAppend(richTextBoxStatus, lang.languageTemplate["strings"]["loadingProfile"]);
+                    });
+
+                    foreach (Group_Item gr in template.Groups.OrderBy(x => int.Parse(x.Group)))
                     {
                         try
                         {
-                            foreach (Group_Item gr in template.Groups.OrderBy(x => int.Parse(x.Group)))
+                            KeyValuePair<Group_Item, String> kp = new KeyValuePair<Group_Item, String>(gr, gr.Group + " - " + gr.Label);
+
+                            // Apparently fast but actually really slow when loading big templates
+                            if (template.dataGridViewCoils.FirstOrDefault<ModBus_Item>(x => (x.Group != null ? x.Group : "").Split(';').FirstOrDefault<string>(y => String.Compare(y, kp.Key.Group) == 0) != null) != null)
                             {
-                                KeyValuePair<Group_Item, String> kp = new KeyValuePair<Group_Item, String>(gr, gr.Group + " - " + gr.Label);
-
-                                // Apparently fast but actually really slow when loading big templates
-                                /*if (template.dataGridViewCoils.FirstOrDefault<ModBus_Item>(x => (x.Group != null ? x.Group : "").Split(';').FirstOrDefault<string>(y => String.Compare(y, kp.Key.Group) == 0) != null) != null)
+                                this.Dispatcher.Invoke((Action)delegate
+                                {
                                     comboBoxCoilsGroup.Items.Add(kp);
-
-                                if (template.dataGridViewInput.FirstOrDefault<ModBus_Item>(x => (x.Group != null ? x.Group : "").Split(';').FirstOrDefault<string>(y => String.Compare(y, kp.Key.Group) == 0) != null) != null)
-                                    comboBoxInputGroup.Items.Add(kp);
-
-                                if (template.dataGridViewInputRegister.FirstOrDefault<ModBus_Item>(x => (x.Group != null ? x.Group : "").Split(';').FirstOrDefault<string>(y => String.Compare(y, kp.Key.Group) == 0) != null) != null)
-                                    comboBoxInputRegisterGroup.Items.Add(kp);
-
-                                if (template.dataGridViewHolding.FirstOrDefault<ModBus_Item>(x => (x.Group != null ? x.Group : "").Split(';').FirstOrDefault<string>(y => String.Compare(y, kp.Key.Group) == 0) != null) != null)
-                                    comboBoxHoldingGroup.Items.Add(kp);*/
-
-                                // Faster than the previous
-                                bool breakNested = false;
-
-                                foreach (ModBus_Item item in template.dataGridViewCoils)
-                                {
-                                    if (item.Group != null)
-                                    {
-                                        foreach (string testGroup in item.Group.Split(';'))
-                                        {
-                                            if (UInt32.TryParse(testGroup, out UInt32 testGroupInt) && UInt32.TryParse(kp.Key.Group, out UInt32 grouproupInt))
-                                            {
-                                                if (testGroupInt == grouproupInt)
-                                                {
-                                                    comboBoxCoilsGroup.Items.Add(kp);
-                                                    breakNested = true;
-                                                }
-                                            }
-
-                                            if (breakNested)
-                                                break;
-                                        }
-
-                                        if (breakNested)
-                                            break;
-                                    }
-                                }
-                                foreach (ModBus_Item item in template.dataGridViewInput)
-                                {
-                                    if (item.Group != null)
-                                    {
-                                        foreach (string testGroup in item.Group.Split(';'))
-                                        {
-                                            if (UInt32.TryParse(testGroup, out UInt32 testGroupInt) && UInt32.TryParse(kp.Key.Group, out UInt32 grouproupInt))
-                                            {
-                                                if (testGroupInt == grouproupInt)
-                                                {
-                                                    comboBoxInputGroup.Items.Add(kp);
-                                                    breakNested = true;
-                                                }
-                                            }
-
-                                            if (breakNested)
-                                                break;
-                                        }
-
-                                        if (breakNested)
-                                            break;
-                                    }
-                                }
-                                foreach (ModBus_Item item in template.dataGridViewInputRegister)
-                                {
-                                    if (item.Group != null)
-                                    {
-                                        foreach (string testGroup in item.Group.Split(';'))
-                                        {
-                                            if (UInt32.TryParse(testGroup, out UInt32 testGroupInt) && UInt32.TryParse(kp.Key.Group, out UInt32 grouproupInt))
-                                            {
-                                                if (testGroupInt == grouproupInt)
-                                                {
-                                                    comboBoxInputRegisterGroup.Items.Add(kp);
-                                                    breakNested = true;
-                                                }
-                                            }
-
-                                            if (breakNested)
-                                                break;
-                                        }
-
-                                        if (breakNested)
-                                            break;
-                                    }
-                                }
-                                foreach (ModBus_Item item in template.dataGridViewHolding)
-                                {
-                                    if (item.Group != null)
-                                    {
-                                        foreach (string testGroup in item.Group.Split(';'))
-                                        {
-                                            if (UInt32.TryParse(testGroup, out UInt32 testGroupInt) && UInt32.TryParse(kp.Key.Group, out UInt32 grouproupInt))
-                                            {
-                                                if (testGroupInt == grouproupInt)
-                                                {
-                                                    comboBoxHoldingGroup.Items.Add(kp);
-                                                    breakNested = true;
-                                                }
-                                            }
-
-                                            if (breakNested)
-                                                break;
-                                        }
-
-                                        if (breakNested)
-                                            break;
-                                    }
-                                }
-
-                                if (breakNested)
-                                    continue;
+                                });
                             }
+
+                            if (template.dataGridViewInput.FirstOrDefault<ModBus_Item>(x => (x.Group != null ? x.Group : "").Split(';').FirstOrDefault<string>(y => String.Compare(y, kp.Key.Group) == 0) != null) != null)
+                            {
+                                this.Dispatcher.Invoke((Action)delegate
+                                {
+                                    comboBoxInputGroup.Items.Add(kp);
+                                });
+                            }
+
+                            if (template.dataGridViewInputRegister.FirstOrDefault<ModBus_Item>(x => (x.Group != null ? x.Group : "").Split(';').FirstOrDefault<string>(y => String.Compare(y, kp.Key.Group) == 0) != null) != null)
+                            {
+                                this.Dispatcher.Invoke((Action)delegate
+                                {
+                                    comboBoxInputRegisterGroup.Items.Add(kp);
+                                });
+                            }
+
+                            if (template.dataGridViewHolding.FirstOrDefault<ModBus_Item>(x => (x.Group != null ? x.Group : "").Split(';').FirstOrDefault<string>(y => String.Compare(y, kp.Key.Group) == 0) != null) != null)
+                            {
+                                this.Dispatcher.Invoke((Action)delegate
+                                {
+                                    comboBoxHoldingGroup.Items.Add(kp);
+                                });
+                            }
+
+                            this.Dispatcher.Invoke((Action)delegate
+                            {
+                                if (((double)counter / (double)template.Groups.Count) > 0.01)
+                                    TaskbarItemInfo.ProgressValue = (double)counter / (double)template.Groups.Count;
+                            });
+
+                            counter++;
                         }
-                        catch (Exception err)
+                        catch
                         {
-                            Console.WriteLine("Error loading group items");
-                            Console.WriteLine(err);
+                            break;
                         }
                     }
+
+                    this.Dispatcher.Invoke((Action)delegate
+                    {
+                        try
+                        {
+                            TaskbarItemInfo.ProgressValue = 0;
+                            TaskbarItemInfo.ProgressState = TaskbarItemProgressState.None;
+
+                            richTextBoxAppend(richTextBoxStatus, lang.languageTemplate["strings"]["loadedProfile"]);
+                        }
+                        catch
+                        {
+                        }
+                    });
                 }
-                else
+            }
+            else
+            {
+                this.Dispatcher.Invoke((Action)delegate
                 {
                     comboBoxHoldingGroup.IsEnabled = false;
                     comboBoxInputRegisterGroup.IsEnabled = false;
                     comboBoxInputGroup.IsEnabled = false;
                     comboBoxCoilsGroup.IsEnabled = false;
-                }
+                });
             }
-            catch (Exception err)
+
+            this.Dispatcher.Invoke((Action)delegate
             {
-                Console.WriteLine("Error loading configuration\n");
-                Console.WriteLine(err);
-            }
+                try
+                {
+                    TaskbarItemInfo.ProgressValue = 0;
+                    TaskbarItemInfo.ProgressState = TaskbarItemProgressState.None;
+                }
+                catch
+                {
+                }
+            });
+
+            importingProfile = false;
         }
 
         public void changeColumnVisibility(object sender, RoutedEventArgs e)
@@ -7766,6 +7895,8 @@ namespace ModBus_Client
 
             menuItemImportCoils.IsEnabled = enabled;
             menuItemImportHoldingRegisters.IsEnabled = enabled;
+            menuItemImportCoilsClipboard.IsEnabled = enabled;
+            menuItemImportHoldingRegistersClipboard.IsEnabled = enabled;
 
             comboBoxProfileHome.IsEnabled = !enabled;
         }
@@ -8495,7 +8626,6 @@ namespace ModBus_Client
             labelSettings_1.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
             labelSettings_2.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
             checkBoxUseOffsetInTextBox.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
-            checkBoxFollowModbusProtocol.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
             checkBoxCellColorMode.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
             checkBoxViewTableWithoutOffset.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
             checkBoxCloseConsolAfterBoot.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
@@ -8676,6 +8806,7 @@ namespace ModBus_Client
         private void buttonReadHoldingTemplate_Click(object sender, RoutedEventArgs e)
         {
             buttonReadHoldingTemplate.IsEnabled = false;
+            lastHoldingRegistersCommandGroup = false;
 
             Thread t = new Thread(new ThreadStart(readHoldingTemplateAll));
             t.Priority = threadPriority;
@@ -8763,6 +8894,7 @@ namespace ModBus_Client
                                     address_start,
                                     response,
                                     colorDefaultReadCellStr,
+                                    comboBoxHoldingOffset_,
                                     comboBoxHoldingRegistri_,
                                     comboBoxHoldingValori_,
                                     false,
@@ -8898,6 +9030,7 @@ namespace ModBus_Client
                                         address_start,
                                         response,
                                         colorDefaultReadCellStr,
+                                        comboBoxHoldingOffset_,
                                         comboBoxHoldingRegistri_,
                                         comboBoxHoldingValori_,
                                         false,
@@ -8943,6 +9076,7 @@ namespace ModBus_Client
                                     address_start,
                                     response,
                                     colorDefaultReadCellStr,
+                                    comboBoxHoldingOffset_,
                                     comboBoxHoldingRegistri_,
                                     comboBoxHoldingValori_,
                                     false,
@@ -9019,6 +9153,7 @@ namespace ModBus_Client
             if (comboBoxHoldingGroup.IsEnabled)
             {
                 buttonReadHoldingTemplateGroup.IsEnabled = false;
+                lastHoldingRegistersCommandGroup = true;
 
                 Thread t = new Thread(new ThreadStart(readHoldingTemplateGroup));
                 t.Priority = threadPriority;
@@ -9148,6 +9283,7 @@ namespace ModBus_Client
                                     address_start,
                                     response,
                                     colorDefaultReadCellStr,
+                                    comboBoxHoldingOffset_,
                                     comboBoxHoldingRegistri_,
                                     comboBoxHoldingValori_,
                                     false,
@@ -9278,6 +9414,7 @@ namespace ModBus_Client
                                         address_start,
                                         response,
                                         colorDefaultReadCellStr,
+                                        comboBoxHoldingOffset_,
                                         comboBoxHoldingRegistri_,
                                         comboBoxHoldingValori_,
                                         false,
@@ -9323,6 +9460,7 @@ namespace ModBus_Client
                                     address_start,
                                     response,
                                     colorDefaultReadCellStr,
+                                    comboBoxHoldingOffset_,
                                     comboBoxHoldingRegistri_,
                                     comboBoxHoldingValori_,
                                     false,
@@ -9408,6 +9546,7 @@ namespace ModBus_Client
         private void buttonReadInputRegisterTemplate_Click(object sender, RoutedEventArgs e)
         {
             buttonReadInputRegisterTemplate.IsEnabled = false;
+            lastInputRegistersCommandGroup = false;
 
             Thread t = new Thread(new ThreadStart(readInputRegisterTemplateAll));
             t.Priority = threadPriority;
@@ -9495,6 +9634,7 @@ namespace ModBus_Client
                                     address_start,
                                     response,
                                     colorDefaultReadCellStr,
+                                    comboBoxInputRegOffset_,
                                     comboBoxInputRegRegistri_,
                                     comboBoxInputRegValori_,
                                     false,
@@ -9633,6 +9773,7 @@ namespace ModBus_Client
                                         address_start,
                                         response,
                                         colorDefaultReadCellStr,
+                                        comboBoxInputRegOffset_,
                                         comboBoxInputRegRegistri_,
                                         comboBoxInputRegValori_,
                                         false,
@@ -9678,6 +9819,7 @@ namespace ModBus_Client
                                     address_start,
                                     response,
                                     colorDefaultReadCellStr,
+                                    comboBoxInputRegOffset_,
                                     comboBoxInputRegRegistri_,
                                     comboBoxInputRegValori_,
                                     false,
@@ -9754,6 +9896,7 @@ namespace ModBus_Client
         private void buttonReadInputRegisterTemplateGroup_Click(object sender, RoutedEventArgs e)
         {
             buttonReadInputRegisterTemplateGroup.IsEnabled = false;
+            lastInputRegistersCommandGroup = true;
 
             Thread t = new Thread(new ThreadStart(readInputRegisterTemplateGroup));
             t.Priority = threadPriority;
@@ -9883,6 +10026,7 @@ namespace ModBus_Client
                                     address_start,
                                     response,
                                     colorDefaultReadCellStr,
+                                    comboBoxInputRegOffset_,
                                     comboBoxInputRegRegistri_,
                                     comboBoxInputRegValori_,
                                     false,
@@ -10018,6 +10162,7 @@ namespace ModBus_Client
                                         address_start,
                                         response,
                                         colorDefaultReadCellStr,
+                                        comboBoxInputRegOffset_,
                                         comboBoxInputRegRegistri_,
                                         comboBoxInputRegValori_,
                                         false,
@@ -10063,6 +10208,7 @@ namespace ModBus_Client
                                     address_start,
                                     response,
                                     colorDefaultReadCellStr,
+                                    comboBoxInputRegOffset_,
                                     comboBoxInputRegRegistri_,
                                     comboBoxInputRegValori_,
                                     false,
@@ -10150,6 +10296,7 @@ namespace ModBus_Client
         private void buttonReadInputTemplate_Click(object sender, RoutedEventArgs e)
         {
             buttonReadInputTemplate.IsEnabled = false;
+            lastInputsCommandGroup = false;
 
             Thread t = new Thread(new ThreadStart(readInputTemplateAll));
             t.Priority = threadPriority;
@@ -10200,6 +10347,7 @@ namespace ModBus_Client
                                     address_start,
                                     response,
                                     colorDefaultReadCellStr,
+                                    comboBoxInputOffset_,
                                     comboBoxInputRegistri_,
                                     "DEC",
                                     false,
@@ -10297,6 +10445,7 @@ namespace ModBus_Client
                                         address_start,
                                         response,
                                         colorDefaultReadCellStr,
+                                        comboBoxInputOffset_,
                                         comboBoxInputRegistri_,
                                         "DEC",
                                         false,
@@ -10339,6 +10488,7 @@ namespace ModBus_Client
                                     address_start,
                                     response,
                                     colorDefaultReadCellStr,
+                                    comboBoxInputOffset_,
                                     comboBoxInputRegistri_,
                                     "DEC",
                                     false,
@@ -10413,6 +10563,7 @@ namespace ModBus_Client
         private void buttonReadInputTemplateGroup_Click(object sender, RoutedEventArgs e)
         {
             buttonReadInputTemplateGroup.IsEnabled = false;
+            lastInputsCommandGroup = true;
 
             Thread t = new Thread(new ThreadStart(readInputTemplateGroup));
             t.Priority = threadPriority;
@@ -10506,6 +10657,7 @@ namespace ModBus_Client
                                     address_start,
                                     response,
                                     colorDefaultReadCellStr,
+                                    comboBoxInputOffset_,
                                     comboBoxInputRegistri_,
                                     "DEC",
                                     false,
@@ -10599,6 +10751,7 @@ namespace ModBus_Client
                                         address_start,
                                         response,
                                         colorDefaultReadCellStr,
+                                        comboBoxInputOffset_,
                                         comboBoxInputRegistri_,
                                         "DEC",
                                         false,
@@ -10641,6 +10794,7 @@ namespace ModBus_Client
                                     address_start,
                                     response,
                                     colorDefaultReadCellStr,
+                                    comboBoxInputOffset_,
                                     comboBoxInputRegistri_,
                                     "DEC",
                                     false,
@@ -10726,6 +10880,7 @@ namespace ModBus_Client
         private void buttonReadCoilsTemplate_Click(object sender, RoutedEventArgs e)
         {
             buttonReadCoilsTemplate.IsEnabled = false;
+            lastCoilsCommandGroup = false;
 
             Thread t = new Thread(new ThreadStart(readCoilsTemplateAll));
             t.Priority = threadPriority;
@@ -10778,6 +10933,7 @@ namespace ModBus_Client
                                         address_start,
                                         response,
                                         colorDefaultReadCellStr,
+                                        comboBoxCoilsOffset_,
                                         comboBoxCoilsRegistri_,
                                         "DEC",
                                         false,
@@ -10882,6 +11038,7 @@ namespace ModBus_Client
                                             address_start,
                                             response,
                                             colorDefaultReadCellStr,
+                                            comboBoxCoilsOffset_,
                                             comboBoxCoilsRegistri_,
                                             "DEC",
                                             false,
@@ -10924,6 +11081,7 @@ namespace ModBus_Client
                                         address_start,
                                         response,
                                         colorDefaultReadCellStr,
+                                        comboBoxCoilsOffset_,
                                         comboBoxCoilsRegistri_,
                                         "DEC",
                                         false,
@@ -11013,6 +11171,7 @@ namespace ModBus_Client
             if (comboBoxCoilsGroup.IsEnabled)
             {
                 buttonReadCoilsTemplateGroup.IsEnabled = false;
+                lastCoilsCommandGroup = true;
 
                 Thread t = new Thread(new ThreadStart(readCoilsTemplateGroup));
                 t.Priority = threadPriority;
@@ -11107,6 +11266,7 @@ namespace ModBus_Client
                                     address_start,
                                     response,
                                     colorDefaultReadCellStr,
+                                    comboBoxCoilsOffset_,
                                     comboBoxCoilsRegistri_,
                                     "DEC",
                                     false,
@@ -11204,6 +11364,7 @@ namespace ModBus_Client
                                         address_start,
                                         response,
                                         colorDefaultReadCellStr,
+                                        comboBoxCoilsOffset_,
                                         comboBoxCoilsRegistri_,
                                         "DEC",
                                         false,
@@ -11246,6 +11407,7 @@ namespace ModBus_Client
                                     address_start,
                                     response,
                                     colorDefaultReadCellStr,
+                                    comboBoxCoilsOffset_,
                                     comboBoxCoilsRegistri_,
                                     "DEC",
                                     false,
@@ -11572,6 +11734,149 @@ namespace ModBus_Client
                     File.Delete(window.FileName);
 
                 ZipFile.CreateFromDirectory("Json\\" + currItem, window.FileName);
+            }
+        }
+
+        private void buttonImportCoilsClipboard_Click(object sender, RoutedEventArgs e)
+        {
+            PreviewImport previewImport = new PreviewImport(this, null, 5);
+            previewImport.Show();
+        }
+
+        private void buttonImportHoldingRegClipboard_Click(object sender, RoutedEventArgs e)
+        {
+            PreviewImport previewImport = new PreviewImport(this, null, 6);
+            previewImport.Show();
+        }
+
+        private void coilsMenuItemDelete_Click(object sender, RoutedEventArgs e)
+        {
+            list_coilsTable.Clear();
+        }
+
+        private void coilsMenuItemCut_Click(object sender, RoutedEventArgs e)
+        {
+            CopyListToClipboard(list_coilsTable);
+            list_coilsTable.Clear();
+        }
+
+        private void coilsMenuItemCopy_Click(object sender, RoutedEventArgs e)
+        {
+            CopyListToClipboard(list_coilsTable);
+        }
+
+        private void coilsMenuItemPaste_Click(object sender, RoutedEventArgs e)
+        {
+            PreviewImport previewImport = new PreviewImport(this, null, 5);
+            previewImport.Show();
+        }
+
+        private void coilsMenuItemImport_Click(object sender, RoutedEventArgs e)
+        {
+            buttonImportCoils_Click(null, null);
+        }
+
+        private void coilsMenuItemExport_Click(object sender, RoutedEventArgs e)
+        {
+            buttonExportCoils_Click(null, null);
+        }
+
+        private void inputsMenuItemDelete_Click(object sender, RoutedEventArgs e)
+        {
+            list_inputsTable.Clear();
+        }
+
+        private void inputsMenuItemCut_Click(object sender, RoutedEventArgs e)
+        {
+            CopyListToClipboard(list_inputsTable);
+            list_inputsTable.Clear();
+        }
+
+        private void inputsMenuItemCopy_Click(object sender, RoutedEventArgs e)
+        {
+            CopyListToClipboard(list_inputsTable);
+        }
+
+        private void inputsMenuItemExport_Click(object sender, RoutedEventArgs e)
+        {
+            buttonExportInput_Click(null, null);
+        }
+
+        private void holdingRegistersMenuItemDelete_Click(object sender, RoutedEventArgs e)
+        {
+            list_holdingRegistersTable.Clear();
+        }
+
+        private void holdingRegistersMenuItemCut_Click(object sender, RoutedEventArgs e)
+        {
+            CopyListToClipboard(list_holdingRegistersTable);
+            list_holdingRegistersTable.Clear();
+        }
+
+        private void holdingRegistersMenuItemCopy_Click(object sender, RoutedEventArgs e)
+        {
+            CopyListToClipboard(list_holdingRegistersTable);
+        }
+
+        private void holdingRegistersMenuItemPaste_Click(object sender, RoutedEventArgs e)
+        {
+            PreviewImport previewImport = new PreviewImport(this, null, 6);
+            previewImport.Show();
+        }
+
+        private void holdingRegistersMenuItemImport_Click(object sender, RoutedEventArgs e)
+        {
+            buttonImportHoldingReg_Click(null, null);
+        }
+
+        private void holdingRegistersMenuItemExport_Click(object sender, RoutedEventArgs e)
+        {
+            buttonExportHoldingReg_Click(null, null);
+        }
+
+        private void inputRegistersMenuItemDelete_Click(object sender, RoutedEventArgs e)
+        {
+            list_inputRegistersTable.Clear();
+        }
+
+        private void inputRegistersMenuItemCut_Click(object sender, RoutedEventArgs e)
+        {
+            CopyListToClipboard(list_inputRegistersTable);
+            list_inputRegistersTable.Clear();
+        }
+
+        private void inputRegistersMenuItemCopy_Click(object sender, RoutedEventArgs e)
+        {
+            CopyListToClipboard(list_inputRegistersTable);
+        }
+
+        private void inputRegistersMenuItemExport_Click(object sender, RoutedEventArgs e)
+        {
+            buttonExportInputReg_Click(null, null);
+        }
+
+        public void CopyListToClipboard(ObservableCollection<ModBus_Item> list)
+        {
+            try
+            {
+                string clipContent = "";
+                foreach (ModBus_Item item in list)
+                {
+                    clipContent += item.Offset;
+                    clipContent += "\t";
+                    clipContent += item.Register;
+                    clipContent += "\t";
+                    clipContent += item.Value;
+                    clipContent += "\t";
+                    clipContent += item.Notes;
+                    clipContent += "\r\n";
+                }
+
+                Clipboard.SetText(clipContent);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
             }
         }
     }

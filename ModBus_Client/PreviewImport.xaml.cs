@@ -45,6 +45,7 @@ using System.IO;
 using System.Collections.ObjectModel;
 using System.Threading;
 using System.Windows.Shell;
+using Microsoft.Win32;
 
 // Custom Modbus Library
 using ModBusMaster_Chicco;
@@ -54,6 +55,7 @@ using System.Web.Script.Serialization;
 
 // Classe con funzioni di conversione DEC-HEX
 using Raccolta_funzioni_parser;
+using System.Security.Cryptography;
 
 namespace ModBus_Client
 {
@@ -85,13 +87,6 @@ namespace ModBus_Client
             main = main_;
             filePaths = filePaths_;
             FC = FC_;
-
-            String newTitle = "PreviewImport - Files:";
-            foreach (String filePath in filePaths)
-            {
-                newTitle += " " + System.IO.Path.GetFileName(filePath);
-            }
-            this.Title = newTitle;
 
             if (FC == 5)
             {
@@ -146,6 +141,270 @@ namespace ModBus_Client
             }
 
             TaskbarItemInfo = new TaskbarItemInfo();
+
+            //CheckBoxWriteMultiple.Content = main.CheckBoxPreviewimportWriteMultipleRegisters.Content;
+            CheckBoxWriteMultiple.IsChecked = main.CheckBoxPreviewimportWriteMultipleRegisters.IsChecked;
+            CheckBoxCloseWindowAfterWrite.Content = main.CheckBoxPreviewImportCloseWindowAfterWrite.Content;
+            CheckBoxCloseWindowAfterWrite.IsChecked = main.CheckBoxPreviewImportCloseWindowAfterWrite.IsChecked;
+            CheckBoxAbortOnError.Content = main.CheckBoxPreviewImportAbortOnError.Content;
+            CheckBoxAbortOnError.IsChecked = main.CheckBoxPreviewImportAbortOnError.IsChecked;
+        }
+
+        public void ImportClipboard()
+        {
+            bool errorParsing = false;
+
+            try
+            {
+                string clipContent = Clipboard.GetText(TextDataFormat.Text);
+                string[] registers = clipContent.Replace("\r", "").Replace("\t", ",").Split('\n');
+
+                for (int i = 0; i < registers.Length; i++)
+                {
+                    string[] row = registers[i].Split(',');
+
+                    if (row.Length < 3)
+                        continue;
+
+                    if (row[0].ToLower().IndexOf("offset") != -1)
+                        continue;
+
+                    ModBus_Import item = new ModBus_Import();
+
+                    UInt16 parsed = 0;
+
+                    if (!UInt16.TryParse(row[0].Replace("0x", ""), row[0].ToLower().IndexOf("0x") != -1 ? System.Globalization.NumberStyles.HexNumber : System.Globalization.NumberStyles.Integer, null, out parsed))
+                    {
+                        errorParsing = true;
+                        continue;
+                    }
+
+                    item.Offset = row[0];
+                    item.OffsetUInt = parsed;
+
+                    if (!UInt16.TryParse(row[1].Replace("0x", ""), row[1].ToLower().IndexOf("0x") != -1 ? System.Globalization.NumberStyles.HexNumber : System.Globalization.NumberStyles.Integer, null, out parsed))
+                    {
+                        errorParsing = true;
+                        continue;
+                    }
+
+                    item.Register = row[1];
+                    item.RegisterUInt = parsed;
+
+                    if (!UInt16.TryParse(row[2].Replace("0x", ""), row[2].ToLower().IndexOf("0x") != -1 ? System.Globalization.NumberStyles.HexNumber : System.Globalization.NumberStyles.Integer, null, out parsed))
+                    {
+                        errorParsing = true;
+                        continue;
+                    }
+
+                    item.Value = row[2];
+                    item.ValueUInt = parsed;
+
+                    if(row.Length >= 4)
+                        item.Notes = row[3];
+                    else
+                        item.Notes = "";
+
+                    if ((bool)main.CheckBoxDarkMode.IsChecked)
+                    {
+                        item.Foreground = main.ForeGroundDarkStr;
+                        item.Background = main.BackGroundDarkStr;
+                        item.ForegroundDef = main.ForeGroundDarkStr;
+                        item.BackgroundDef = main.BackGroundDarkStr;
+                    }
+                    else
+                    {
+                        item.Foreground = main.ForeGroundLightStr;
+                        item.Background = main.BackGroundLight2Str;
+                        item.ForegroundDef = main.ForeGroundLightStr;
+                        item.BackgroundDef = main.BackGroundLight2Str;
+                    }
+
+                    list_import.Add(item);
+                }
+
+                this.Dispatcher.Invoke((Action)delegate
+                {
+                    dataGridPreview.ScrollIntoView(list_import.LastOrDefault<ModBus_Import>());
+                });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+
+            if (errorParsing)
+                MessageBox.Show(main.lang.languageTemplate["strings"]["importingError"], "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+
+        public void ExportClipboard()
+        {
+            try
+            {
+                string clipContent = "";
+                foreach (ModBus_Import item in list_import)
+                {
+                    clipContent += item.Offset;
+                    clipContent += "\t";
+                    clipContent += item.Register;
+                    clipContent += "\t";
+                    clipContent += item.Value;
+                    clipContent += "\t";
+                    clipContent += item.Notes;
+                    clipContent += "\r\n";
+                }
+
+                Clipboard.SetText(clipContent);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+        }
+
+        public void ImportFiles(String[] filePaths)
+        {
+            bool errorParsing = false;
+
+            try
+            {
+                if (filePaths != null)
+                {
+                    String newTitle = "PreviewImport - Files:";
+
+                    foreach (String filePath in filePaths)
+                    {
+                        newTitle += " " + System.IO.Path.GetFileName(filePath);
+                    }
+
+                    if (FC == 5)
+                        newTitle += " - FC05/FC15";
+                    else
+                        newTitle += " - FC06/FC16";
+
+                    this.Title = newTitle;
+
+                    foreach (String filePath in filePaths)
+                    {
+                        // CSV File
+                        if (filePath.IndexOf(".csv") != -1)
+                        {
+                            string[] registers = File.ReadAllText(filePath).Replace("\r", "").Split('\n');
+                            for (int i = 0; i < registers.Length; i++)
+                            {
+                                string[] row = registers[i].Split(',');
+
+                                if (row.Length < 3)
+                                    continue;
+
+                                if (row[0].ToLower().IndexOf("offset") != -1)
+                                    continue;
+
+                                ModBus_Import item = new ModBus_Import();
+
+                                UInt16 parsed = 0;
+
+                                if(!UInt16.TryParse(row[0].Replace("0x", ""), row[0].ToLower().IndexOf("0x") != -1 ? System.Globalization.NumberStyles.HexNumber : System.Globalization.NumberStyles.Integer, null, out parsed))
+                                {
+                                    errorParsing = true;
+                                    continue;
+                                }
+
+                                item.Offset = row[0];
+                                item.OffsetUInt = parsed;
+
+                                if(!UInt16.TryParse(row[1].Replace("0x", ""), row[1].ToLower().IndexOf("0x") != -1 ? System.Globalization.NumberStyles.HexNumber : System.Globalization.NumberStyles.Integer, null, out parsed))
+                                {
+                                    errorParsing = true;
+                                    continue;
+                                }
+
+                                item.Register = row[1];
+                                item.RegisterUInt = parsed;
+
+                                if (!UInt16.TryParse(row[2].Replace("0x", ""), row[2].ToLower().IndexOf("0x") != -1 ? System.Globalization.NumberStyles.HexNumber : System.Globalization.NumberStyles.Integer, null, out parsed))
+                                {
+                                    errorParsing = true;
+                                    continue;
+                                }
+
+                                item.Value = row[2];
+                                item.ValueUInt = parsed;
+
+                                if(row.Length >= 4)
+                                    item.Notes = row[3];
+                                else
+                                    item.Notes = "";
+
+                                if ((bool)main.CheckBoxDarkMode.IsChecked)
+                                {
+                                    item.Foreground = main.ForeGroundDarkStr;
+                                    item.Background = main.BackGroundDarkStr;
+                                    item.ForegroundDef = main.ForeGroundDarkStr;
+                                    item.BackgroundDef = main.BackGroundDarkStr;
+                                }
+                                else
+                                {
+                                    item.Foreground = main.ForeGroundLightStr;
+                                    item.Background = main.BackGroundLight2Str;
+                                    item.ForegroundDef = main.ForeGroundLightStr;
+                                    item.BackgroundDef = main.BackGroundLight2Str;
+                                }
+
+                                list_import.Add(item);
+                            }
+                        }
+
+                        // JSON File
+                        if (filePath.IndexOf(".json") != -1)
+                        {
+                            JavaScriptSerializer jss = new JavaScriptSerializer();
+                            jss.MaxJsonLength = main.MaxJsonLength;
+                            dynamic obj = jss.DeserializeObject(File.ReadAllText(filePath));
+
+                            foreach (dynamic reg in obj["items"])
+                            {
+                                ModBus_Import item = new ModBus_Import();
+
+                                item.Offset = reg["Offset"];
+                                item.OffsetUInt = UInt16.Parse(reg["Offset"], reg["Offset"].ToLower().IndexOf("0x") != -1 ? System.Globalization.NumberStyles.HexNumber : System.Globalization.NumberStyles.Integer);
+
+                                item.Register = reg["Register"];
+                                item.RegisterUInt = UInt16.Parse(reg["Register"], reg["Register"].ToLower().IndexOf("0x") != -1 ? System.Globalization.NumberStyles.HexNumber : System.Globalization.NumberStyles.Integer);
+
+                                item.Value = reg["Value"];
+                                item.ValueUInt = UInt16.Parse(reg["Value"], reg["Value"].ToLower().IndexOf("0x") != -1 ? System.Globalization.NumberStyles.HexNumber : System.Globalization.NumberStyles.Integer);
+
+                                item.Notes = reg["Notes"] is null ? "" : reg["Notes"];
+
+                                if ((bool)main.CheckBoxDarkMode.IsChecked)
+                                {
+                                    item.Foreground = main.ForeGroundDarkStr;
+                                    item.Background = main.BackGroundDarkStr;
+                                    item.ForegroundDef = main.ForeGroundDarkStr;
+                                    item.BackgroundDef = main.BackGroundDarkStr;
+                                }
+                                else
+                                {
+                                    item.Foreground = main.ForeGroundLightStr;
+                                    item.Background = main.BackGroundLight2Str;
+                                    item.ForegroundDef = main.ForeGroundLightStr;
+                                    item.BackgroundDef = main.BackGroundLight2Str;
+                                }
+
+                                list_import.Add(item);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+
+            if (errorParsing)
+                MessageBox.Show(main.lang.languageTemplate["strings"]["importingError"], "Error", MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -154,99 +413,23 @@ namespace ModBus_Client
 
             try
             {
-                foreach (String filePath in filePaths)
+                if (filePaths != null)
                 {
-                    // CSV File
-                    if (filePath.IndexOf(".csv") != -1)
-                    {
-                        string[] registers = File.ReadAllText(filePath).Split('\n');
-                        for (int i = 0; i < registers.Length; i++)
-                        {
-                            string[] row = registers[i].Split(',');
-
-                            if (row.Length < 3)
-                                continue;
-
-                            if (row[0].ToLower().IndexOf("offset") != -1)
-                                continue;
-
-                            ModBus_Import item = new ModBus_Import();
-
-                            item.Offset = row[0];
-                            item.OffsetUInt = UInt16.Parse(row[0].Replace("0x", ""), row[0].ToLower().IndexOf("0x") != -1 ? System.Globalization.NumberStyles.HexNumber : System.Globalization.NumberStyles.Integer);
-
-                            item.Register = row[1];
-                            item.RegisterUInt = UInt16.Parse(row[1].Replace("0x", ""), row[1].ToLower().IndexOf("0x") != -1 ? System.Globalization.NumberStyles.HexNumber : System.Globalization.NumberStyles.Integer);
-
-                            item.Value = row[2];
-                            item.ValueUInt = UInt16.Parse(row[2].Replace("0x", ""), row[2].ToLower().IndexOf("0x") != -1 ? System.Globalization.NumberStyles.HexNumber : System.Globalization.NumberStyles.Integer);
-
-                            item.Notes = row[3];
-
-                            if ((bool)main.CheckBoxDarkMode.IsChecked)
-                            {
-                                item.Foreground = main.ForeGroundDarkStr;
-                                item.Background = main.BackGroundDarkStr;
-                                item.ForegroundDef = main.ForeGroundDarkStr;
-                                item.BackgroundDef = main.BackGroundDarkStr;
-                            }
-                            else
-                            {
-                                item.Foreground = main.ForeGroundLightStr;
-                                item.Background = main.BackGroundLight2Str;
-                                item.ForegroundDef = main.ForeGroundLightStr;
-                                item.BackgroundDef = main.BackGroundLight2Str;
-                            }
-
-                            list_import.Add(item);
-                        }
-                    }
-
-                    // JSON File
-                    if (filePath.IndexOf(".json") != -1)
-                    {
-                        JavaScriptSerializer jss = new JavaScriptSerializer();
-                        jss.MaxJsonLength = main.MaxJsonLength;
-                        dynamic obj = jss.DeserializeObject(File.ReadAllText(filePath));
-
-                        foreach (dynamic reg in obj["items"])
-                        {
-                            ModBus_Import item = new ModBus_Import();
-
-                            item.Offset = reg["Offset"];
-                            item.OffsetUInt = UInt16.Parse(reg["Offset"], reg["Offset"].ToLower().IndexOf("0x") != -1 ? System.Globalization.NumberStyles.HexNumber : System.Globalization.NumberStyles.Integer);
-
-                            item.Register = reg["Register"];
-                            item.RegisterUInt = UInt16.Parse(reg["Register"], reg["Register"].ToLower().IndexOf("0x") != -1 ? System.Globalization.NumberStyles.HexNumber : System.Globalization.NumberStyles.Integer);
-
-                            item.Value = reg["Value"];
-                            item.ValueUInt = UInt16.Parse(reg["Value"], reg["Value"].ToLower().IndexOf("0x") != -1 ? System.Globalization.NumberStyles.HexNumber : System.Globalization.NumberStyles.Integer);
-
-                            item.Notes = reg["Notes"] is null ? "" : reg["Notes"];
-
-                            if ((bool)main.CheckBoxDarkMode.IsChecked)
-                            {
-                                item.Foreground = main.ForeGroundDarkStr;
-                                item.Background = main.BackGroundDarkStr;
-                                item.ForegroundDef = main.ForeGroundDarkStr;
-                                item.BackgroundDef = main.BackGroundDarkStr;
-                            }
-                            else
-                            {
-                                item.Foreground = main.ForeGroundLightStr;
-                                item.Background = main.BackGroundLight2Str;
-                                item.ForegroundDef = main.ForeGroundLightStr;
-                                item.BackgroundDef = main.BackGroundLight2Str;
-                            }
-
-                            list_import.Add(item);
-                        }
-                    }
+                    ImportFiles(filePaths);
+                }
+                else
+                {
+                    this.Title = "PreviewImport";
+                    if (FC == 5)
+                        this.Title += " - FC05/FC15";
+                    else
+                        this.Title += " - FC06/FC16";
+                    ImportClipboard();
                 }
             }
             catch(Exception err)
             {
-                MessageBox.Show("Error importing files", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show(main.lang.languageTemplate["strings"]["importingErrorFiles"], "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
                 Console.WriteLine(err);
             }
 
@@ -339,6 +522,7 @@ namespace ModBus_Client
                                         (UInt16)(list_import[i].OffsetUInt + list_import[i].RegisterUInt),
                                         new UInt16[] { list_import[i].ValueUInt },
                                         result == true ? main.colorDefaultWriteCellStr : main.colorErrorCellStr,
+                                        main.comboBoxCoilsOffset_,
                                         main.comboBoxCoilsRegistri_,
                                         "DEC",
                                         false,
@@ -431,7 +615,7 @@ namespace ModBus_Client
                         {
                             if (!UInt16.TryParse(TextBoxNrOfRegs.Text, out maxNumRegister))
                             {
-                                MessageBox.Show("Error parsing value", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                                MessageBox.Show(main.lang.languageTemplate["strings"]["importingErrorParse"], "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                                 return;
                             }
                         });
@@ -488,6 +672,7 @@ namespace ModBus_Client
                                                 startAddr,
                                                 toSendUInt16,
                                                 result == true ? main.colorDefaultWriteCellStr : main.colorErrorCellStr,
+                                                main.comboBoxHoldingOffset_,
                                                 main.comboBoxHoldingRegistri_,
                                                 "DEC",
                                                 false,
@@ -633,6 +818,7 @@ namespace ModBus_Client
                                         (UInt16)(list_import[i].OffsetUInt + list_import[i].RegisterUInt),
                                         new UInt16[] { list_import[i].ValueUInt },
                                         result == true ? main.colorDefaultWriteCellStr : main.colorErrorCellStr,
+                                        main.comboBoxHoldingOffset_,
                                         main.comboBoxHoldingRegistri_,
                                         main.comboBoxHoldingValori_,
                                         false,
@@ -723,7 +909,7 @@ namespace ModBus_Client
                         {
                             if (!UInt16.TryParse(TextBoxNrOfRegs.Text, out maxNumRegister))
                             {
-                                MessageBox.Show("Error parsing value", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                                MessageBox.Show(main.lang.languageTemplate["strings"]["importingErrorParse"], "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                                 return;
                             }
                         });
@@ -775,6 +961,7 @@ namespace ModBus_Client
                                             startAddr,
                                             writtenRegs,
                                             writtenRegs.Length == toSend.Length ? main.colorDefaultWriteCellStr : main.colorErrorCellStr,
+                                            main.comboBoxHoldingOffset_,
                                             main.comboBoxHoldingRegistri_,
                                             main.comboBoxHoldingValori_,
                                             false,
@@ -882,8 +1069,6 @@ namespace ModBus_Client
                         });
                     }
                 }
-
-
             }
             catch (Exception err)
             {
@@ -937,6 +1122,174 @@ namespace ModBus_Client
                     e.Cancel = true;
                 }
             }
+        }
+
+        private void Window_KeyUp(object sender, KeyEventArgs e)
+        {
+            try
+            {
+                // Vincolato al ctrl
+                if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl))
+                {
+                    switch (e.Key)
+                    {
+                        case Key.C:
+                            ExportClipboard();
+                            break;
+
+                        case Key.X:
+                            ExportClipboard();
+                            list_import.Clear();
+                            break;
+
+                        case Key.V:
+                            ImportClipboard();
+                            break;
+                    }
+                }
+
+                if (!Keyboard.IsKeyDown(Key.LeftCtrl) && !Keyboard.IsKeyDown(Key.RightCtrl))
+                {
+                    switch (e.Key)
+                    {
+                        case Key.Delete:
+                            list_import.Clear();
+                            break;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+        }
+
+        private void importToolStripMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.DefaultExt = ".txt";
+            openFileDialog.AddExtension = false;
+            openFileDialog.Filter = "CSV|*.csv|JSON|*.json";
+            openFileDialog.Title = main.lang.languageTemplate["strings"]["openFileCoils"];
+            openFileDialog.Multiselect = true;
+            openFileDialog.ShowDialog();
+
+            if (openFileDialog.FileNames.Length > 0)
+            {
+                ImportFiles(openFileDialog.FileNames);
+            }
+        }
+
+        private void exportToolStripMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                SaveFileDialog saveFileDialogBox = new SaveFileDialog();
+
+                saveFileDialogBox.DefaultExt = "csv";
+                saveFileDialogBox.AddExtension = false;
+
+                if (FC == 5)
+                    saveFileDialogBox.FileName = "Coils";
+                else
+                    saveFileDialogBox.FileName = "HoldingRegisters";
+
+                saveFileDialogBox.Filter = "CSV|*.csv|JSON|*.json";
+                saveFileDialogBox.Title = "";
+
+                if ((bool)saveFileDialogBox.ShowDialog())
+                {
+                    if (saveFileDialogBox.FileName.IndexOf("csv") != -1)
+                    {
+                        String file_content = "";
+
+                        for (int i = 0; i < (list_import.Count); i++)
+                        {
+                            file_content += list_import[i].Offset + ",";
+                            file_content += list_import[i].Register + ",";
+                            file_content += list_import[i].Value + ",";
+                            file_content += list_import[i].Notes + "\n";
+                        }
+
+                        StreamWriter writer = new StreamWriter(saveFileDialogBox.OpenFile());
+
+                        writer.Write(file_content);
+                        writer.Dispose();
+                        writer.Close();
+                    }
+                    else
+                    {
+                        // File JSON
+                        dataGridJson save = new dataGridJson();
+
+                        save.items = new ModBusItem_Save[list_import.Count];
+
+                        for (int i = 0; i < (list_import.Count); i++)
+                        {
+                            try
+                            {
+                                ModBusItem_Save item = new ModBusItem_Save();
+
+                                item.Offset = list_import[i].Offset;
+                                item.Register = list_import[i].Register;
+                                item.Value = list_import[i].Value;
+                                item.Notes = list_import[i].Notes;
+
+                                save.items[i] = item;
+                            }
+                            catch { }
+                        }
+
+
+                        JavaScriptSerializer jss = new JavaScriptSerializer();
+                        jss.MaxJsonLength = main.MaxJsonLength;
+                        string file_content = jss.Serialize(save);
+
+                        StreamWriter writer = new StreamWriter(saveFileDialogBox.OpenFile());
+
+                        writer.Write(file_content);
+                        writer.Dispose();
+                        writer.Close();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+        }
+
+        private void deleteToolStripMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            list_import.Clear();
+        }
+
+        private void cutToolStripMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            ExportClipboard();
+            list_import.Clear();
+        }
+
+        private void copyToolStripMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            ExportClipboard();
+        }
+
+        private void pasteToolStripMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            ImportClipboard();
+        }
+
+        private void writeSingleMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            CheckBoxWriteMultiple.IsChecked = false;
+            buttonImportPreview_Click(null, null);
+        }
+
+        private void writeMultipleMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            CheckBoxWriteMultiple.IsChecked = true;
+            buttonImportPreview_Click(null, null);
         }
     }
 

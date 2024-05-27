@@ -55,24 +55,29 @@
       "CheckBoxSendValuesOnEditCoillsTable": {},
       "CheckBoxSendValuesOnEditHoldingTable": {},
       "checkBoxUseOffsetInTextBox": {},
-      "checkBoxFollowModbusProtocol": {},
       "checkBoxCellColorMode": {},
       "checkBoxViewTableWithoutOffset": {},
       "CheckBoxDarkMode": {},
       "checkBoxModbusSecure": {},
-      "CheckBoxUseOnlyReadSingleRegistersForGroups": {}
+      "CheckBoxUseOnlyReadSingleRegistersForGroups": {},
+      "CheckBoxPreviewimportWriteMultipleRegisters": {},
+      "CheckBoxPreviewImportCloseWindowAfterWrite": {},
+      "CheckBoxPreviewImportAbortOnError": {}
     },
     "menuItems": {
+      "viewTabCoilsOffset": {},
       "viewTabCoilsRegisters": {},
       "viewTabCoilsValues": {},
       "viewTabCoilsConvertedValues": {},
       "viewTabCoilsNotes": {},
 
+      "viewTabInputsOffset": {},
       "viewTabInputsRegisters": {},
       "viewTabInputsValues": {},
       "viewTabInputsConvertedValues": {},
       "viewTabInputsNotes": {},
 
+      "viewTabInputRegistersOffset": {},
       "viewTabInputRegistersRegisters": {},
       "viewTabInputRegistersValues": {},
       "viewTabInputRegistersBinaryValues": {},
@@ -80,6 +85,7 @@
       "viewTabInputRegistersNotes": {},
       "viewTabInputRegistersMappings": {},
 
+      "viewTabHoldingRegistersOffset": {},
       "viewTabHoldingRegistersRegisters": {},
       "viewTabHoldingRegistersValues": {},
       "viewTabHoldingRegistersBinaryValues": {},
