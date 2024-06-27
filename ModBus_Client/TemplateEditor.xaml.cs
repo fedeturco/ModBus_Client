@@ -475,7 +475,7 @@ namespace ModBus_Client
 
             this.Dispatcher.Invoke((Action)delegate
             {
-                offset = comboBoxCoilsOffset.SelectedIndex == 1 ? "0x" : "" + textBoxCoilsOffset.Text;
+                offset = (comboBoxCoilsOffset.SelectedIndex == 1 ? "0x" : "") + textBoxCoilsOffset.Text;
                 registerHex = comboBoxCoilsRegistri.SelectedIndex == 1;
             });
 
@@ -512,7 +512,7 @@ namespace ModBus_Client
 
             this.Dispatcher.Invoke((Action)delegate
             {
-                offset = comboBoxInputOffset.SelectedIndex == 1 ? "0x" : "" + textBoxInputOffset.Text;
+                offset = (comboBoxInputOffset.SelectedIndex == 1 ? "0x" : "") + textBoxInputOffset.Text;
                 registerHex = comboBoxInputRegistri.SelectedIndex == 1;
             });
             
@@ -549,7 +549,7 @@ namespace ModBus_Client
 
             this.Dispatcher.Invoke((Action)delegate
             {
-                offset = comboBoxInputRegOffset.SelectedIndex == 1 ? "0x" : "" + textBoxInputRegOffset.Text;
+                offset = (comboBoxInputRegOffset.SelectedIndex == 1 ? "0x" : "") + textBoxInputRegOffset.Text;
                 registerHex = comboBoxInputRegRegistri.SelectedIndex == 1;
             });
 
@@ -586,7 +586,7 @@ namespace ModBus_Client
 
             this.Dispatcher.Invoke((Action)delegate
             {
-                offset = comboBoxHoldingOffset.SelectedIndex == 1 ? "0x" : "" + textBoxHoldingOffset.Text;
+                offset = (comboBoxHoldingOffset.SelectedIndex == 1 ? "0x" : "") + textBoxHoldingOffset.Text;
                 registerHex = comboBoxHoldingRegistri.SelectedIndex == 1;
             });
 
@@ -631,16 +631,20 @@ namespace ModBus_Client
                             content += offset + (registerHex ? ",0x" : ",") + item.Register + "," + item.Value + "," + item.Notes + "," + item.Mappings + "," + item.Group + "\n";
                             counter++;
 
-                            if (counter % (collection.Count / 100) == 0)
+                            try
                             {
-                                if (counter % (collection.Count / 100) == 0)
+                                if (collection.Count > 100)
                                 {
-                                    this.Dispatcher.Invoke((Action)delegate
+                                    if (counter % (collection.Count / 100) == 0)
                                     {
-                                        TaskbarItemInfo.ProgressValue = (double)(counter) / (double)(collection.Count);
-                                    });
+                                        this.Dispatcher.Invoke((Action)delegate
+                                        {
+                                            TaskbarItemInfo.ProgressValue = (double)(counter) / (double)(collection.Count);
+                                        });
+                                    }
                                 }
                             }
+                            catch { }
                         }
                     }
 
@@ -655,15 +659,8 @@ namespace ModBus_Client
             });
         }
 
-        public void exportCsvThread()
-        {
-
-        }
-
         public void importCsv(ObservableCollection<ModBus_Item> collection, ComboBox comboBox, TextBox textBox, ComboBox comboBoxReg)
         {
-            collection.Clear();
-
             OpenFileDialog window = new OpenFileDialog();
 
             window.Filter = "csv Files | *.csv";
@@ -671,6 +668,8 @@ namespace ModBus_Client
 
             if ((bool)window.ShowDialog())
             {
+                collection.Clear();
+
                 string content = File.ReadAllText(window.FileName);
                 string[] splitted = content.Split('\n');
 

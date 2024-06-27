@@ -124,7 +124,8 @@
     "CheckBoxUseOnlyReadSingleRegistersForGroups": "Usa solo \"ReadSingleRegister\" per risorse di gruppo",
     "CheckBoxPreviewimportWriteMultipleRegisters": "Write multiple registers (FC15 / FC16)",
     "CheckBoxPreviewImportCloseWindowAfterWrite": "Chiudi finestra al termine",
-    "CheckBoxPreviewImportAbortOnError": "Interrompi in caso di errore"
+    "CheckBoxPreviewImportAbortOnError": "Interrompi in caso di errore",
+    "CheckBoxSendCellEditOnlyOnChange": "Invia modifiche celle solo su variazione"
   },
   "buttons": {
     "buttonUpdateSerialList": "Aggiorna",

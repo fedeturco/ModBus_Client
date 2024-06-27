@@ -62,7 +62,8 @@
       "CheckBoxUseOnlyReadSingleRegistersForGroups": {},
       "CheckBoxPreviewimportWriteMultipleRegisters": {},
       "CheckBoxPreviewImportCloseWindowAfterWrite": {},
-      "CheckBoxPreviewImportAbortOnError": {}
+      "CheckBoxPreviewImportAbortOnError": {},
+      "CheckBoxSendCellEditOnlyOnChange": {}
     },
     "menuItems": {
       "viewTabCoilsOffset": {},

@@ -1262,6 +1262,7 @@
                     <CheckBox x:Name="CheckBoxPreviewImportAbortOnError" Content="Abort write on error" HorizontalAlignment="Left" Margin="43,402,0,0" VerticalAlignment="Top"/>
                     <Label x:Name="labelSettings_7" Content="Nr. of registers multiple write:" HorizontalAlignment="Left" Margin="44,424,0,0" VerticalAlignment="Top"/>
                     <TextBox x:Name="textBoxReadTimeout_Copy" HorizontalAlignment="Left" Height="23" Margin="325,424,0,0" TextWrapping="Wrap" Text="123" VerticalAlignment="Top" Width="69" TextChanged="TextBoxReadTimeout_TextChanged"/>
+                    <CheckBox x:Name="CheckBoxSendCellEditOnlyOnChange" Content="Invia modifiche celle solo su variazione" HorizontalAlignment="Left" Margin="44,271,0,0" VerticalAlignment="Top" Checked="CheckBoxSendCellEditOnlyOnChange_Checked" Unchecked="CheckBoxSendCellEditOnlyOnChange_Checked"/>
                 </Grid>
             </TabItem>
         </TabControl>

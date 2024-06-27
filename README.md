@@ -3,11 +3,11 @@ Client ModBus TCP/RTU per interrogare slave ModBus.
 
 ## Release
 
-### v2.42 New Version
-[ModBus_Client_v2.42 - Portable Zip](https://github.com/fedeturco/ModBus_Client/releases/download/2.42/ModBus_Client_v2.42.zip)
+### v2.43 New Version
+[ModBus_Client_v2.43 - Portable Zip](https://github.com/fedeturco/ModBus_Client/releases/download/2.43/ModBus_Client_v2.43.zip)
 
-### v2.40 Stable
-[ModBus_Client_v2.40 - Portable Zip](https://github.com/fedeturco/ModBus_Client/releases/download/2.40/ModBus_Client_v2.40.zip)
+### v2.42 Stable
+[ModBus_Client_v2.42 - Portable Zip](https://github.com/fedeturco/ModBus_Client/releases/download/2.42/ModBus_Client_v2.42.zip)
 
 ### Manual
 [Manual EN](https://github.com/fedeturco/ModBus_Client/blob/master/ModBus_Client/Manuals/ModBus_Client_EN.pdf)
