@@ -52,7 +52,7 @@ Other datatypes:
 - String(len): 			"String(8):Model"
  -> Convert 8 bytes (4 words) as ASCII string starting from current register
 
-- String(len, offset): 	"String(8,-2):Model"
+- String(len.offset): 	"String(8.-2):Model"
  -> Convert 8 bytes (4 words) as ASCII string starting from previous register (offset of -2 bytes)
 -----------------------------------------------------------------------
 

@@ -4117,6 +4117,8 @@ namespace ModBus_Client
 
                             labels[index] = match.Split(':')[1];
                             type = 1;
+
+                            convertedValue = "(bitmask)";
                         }
 
                         // bytemap (type 2)
@@ -4127,7 +4129,7 @@ namespace ModBus_Client
                             labels[index] = match.Split(':')[1];
                             type = 2;
 
-                            convertedValue = String.Format("H: {0} L: {1}", ((values_[3]) >> 8), (values_[3] & 0xFF));
+                            convertedValue = String.Format("(mask): H: {0} L: {1}", ((values_[3]) >> 8), (values_[3] & 0xFF));
                         }
 
                         // enum (type 10)
@@ -4393,8 +4395,8 @@ namespace ModBus_Client
                             int start = 0;
                             int stop = 0;
 
-                            start = list_index - (Math.Abs(offset) / 2);
-                            stop = list_index + (length / 2) - (Math.Abs(offset) / 2);
+                            start = list_index + ((offset) / 2);
+                            stop = list_index + (length / 2) + ((offset) / 2);
 
                             for (int i = start; i < stop; i += 1)
                             {
@@ -7786,7 +7788,10 @@ namespace ModBus_Client
                             this.Dispatcher.Invoke((Action)delegate
                             {
                                 if (((double)counter / (double)template.Groups.Count) > 0.01)
+                                {
                                     TaskbarItemInfo.ProgressValue = (double)counter / (double)template.Groups.Count;
+                                    TaskbarItemInfo.ProgressState = TaskbarItemProgressState.Normal;
+                                }
                             });
 
                             counter++;
@@ -7797,19 +7802,19 @@ namespace ModBus_Client
                         }
                     }
 
-                    this.Dispatcher.Invoke((Action)delegate
+                    try
                     {
-                        try
+                        this.Dispatcher.Invoke((Action)delegate
                         {
                             TaskbarItemInfo.ProgressValue = 0;
                             TaskbarItemInfo.ProgressState = TaskbarItemProgressState.None;
 
                             richTextBoxAppend(richTextBoxStatus, lang.languageTemplate["strings"]["loadedProfile"]);
-                        }
-                        catch
-                        {
-                        }
-                    });
+                        });
+                    }
+                    catch
+                    {
+                    }
                 }
             }
             else
@@ -8886,10 +8891,12 @@ namespace ModBus_Client
 
                             if (item.Mappings.ToLower().IndexOf("string") != -1)
                             {
-                                uint offset = 0;
+                                int offset = 0;
+
                                 if (item.Mappings.IndexOf('.') != -1)
-                                    offset = uint.Parse(item.Mappings.Split('.')[1].ToLower().Split(')')[0]);
-                                address_start = address_start - (offset / 2 + offset % 2);
+                                    int.TryParse(item.Mappings.Split('.')[1].ToLower().Split(')')[0], out offset);
+                                
+                                address_start = (uint)(address_start + (offset / 2 + offset % 2));
 
                                 num_regs = uint.Parse(item.Mappings.Split('.')[0].ToLower().Replace("string(", "").Replace(")", ""));
                                 num_regs = num_regs / 2 + num_regs % 2;
@@ -9020,10 +9027,12 @@ namespace ModBus_Client
 
                             if (item.Mappings.ToLower().IndexOf("string") != -1)
                             {
-                                uint offset = 0;
+                                int offset = 0;
+
                                 if (item.Mappings.IndexOf('.') != -1)
-                                    offset = uint.Parse(item.Mappings.Split('.')[1].ToLower().Split(')')[0]);
-                                address_start = address_start - (offset / 2 + offset % 2);
+                                    int.TryParse(item.Mappings.Split('.')[1].ToLower().Split(')')[0], out offset);
+                                
+                                address_start = (uint)(address_start + (offset / 2 + offset % 2));
 
                                 curr_len = uint.Parse(item.Mappings.Split('.')[0].ToLower().Replace("string(", "").Replace(")", ""));
                                 curr_len = curr_len / 2 + curr_len % 2;
@@ -9275,10 +9284,12 @@ namespace ModBus_Client
 
                             if (item.Mappings.ToLower().IndexOf("string") != -1)
                             {
-                                uint offset = 0;
+                                int offset = 0;
+
                                 if (item.Mappings.IndexOf('.') != -1)
-                                    offset = uint.Parse(item.Mappings.Split('.')[1].ToLower().Split(')')[0]);
-                                address_start = address_start - (offset / 2 + offset % 2);
+                                    int.TryParse(item.Mappings.Split('.')[1].ToLower().Split(')')[0], out offset);
+                                
+                                address_start = (uint)(address_start + (offset / 2 + offset % 2));
 
                                 num_regs = uint.Parse(item.Mappings.Split('.')[0].ToLower().Replace("string(", "").Replace(")", ""));
                                 num_regs = num_regs / 2 + num_regs % 2;
@@ -9388,9 +9399,14 @@ namespace ModBus_Client
                 {
                     foreach (ModBus_Item item in toRead)
                     {
+                        if (item == null)
+                            continue;
+
+                        if (toRemove.Contains(item.RegisterUInt))
+                            continue;
+
                         curr_start = item.RegisterUInt;
                         curr_len = 1;
-
                         counter++;
 
                         if (item.Mappings != null)
@@ -9403,11 +9419,12 @@ namespace ModBus_Client
 
                             if (item.Mappings.ToLower().IndexOf("string") != -1)
                             {
-                                uint offset = 0;
+                                int offset = 0;
+
                                 if (item.Mappings.IndexOf('.') != -1)
-                                    offset = uint.Parse(item.Mappings.Split('.')[1].ToLower().Split(')')[0]);
-                                if (address_start == 0xFFFF)
-                                    address_start = address_start - (offset / 2 + offset % 2);
+                                    int.TryParse(item.Mappings.Split('.')[1].ToLower().Split(')')[0], out offset);
+
+                                curr_start = (uint)(curr_start + (offset / 2 + offset % 2));
 
                                 curr_len = uint.Parse(item.Mappings.Split('.')[0].ToLower().Replace("string(", "").Replace(")", ""));
                                 curr_len = curr_len / 2 + curr_len % 2;
@@ -9626,10 +9643,12 @@ namespace ModBus_Client
 
                             if (item.Mappings.ToLower().IndexOf("string") != -1)
                             {
-                                uint offset = 0;
+                                int offset = 0;
+
                                 if (item.Mappings.IndexOf('.') != -1)
-                                    offset = uint.Parse(item.Mappings.Split('.')[1].ToLower().Split(')')[0]);
-                                address_start = address_start - (offset / 2 + offset % 2);
+                                    int.TryParse(item.Mappings.Split('.')[1].ToLower().Split(')')[0], out offset);
+                                
+                                address_start = (uint)(address_start + (offset / 2 + offset % 2));
 
                                 num_regs = uint.Parse(item.Mappings.Split('.')[0].ToLower().Replace("string(", "").Replace(")", ""));
                                 num_regs = num_regs / 2 + num_regs % 2;
@@ -9763,10 +9782,12 @@ namespace ModBus_Client
 
                             if (item.Mappings.ToLower().IndexOf("string") != -1)
                             {
-                                uint offset = 0;
+                                int offset = 0;
+
                                 if (item.Mappings.IndexOf('.') != -1)
-                                    offset = uint.Parse(item.Mappings.Split('.')[1].ToLower().Split(')')[0]);
-                                address_start = address_start - (offset / 2 + offset % 2);
+                                    int.TryParse(item.Mappings.Split('.')[1].ToLower().Split(')')[0], out offset);
+
+                                curr_start = (uint)(curr_start + (offset / 2 + offset % 2));
 
                                 curr_len = uint.Parse(item.Mappings.Split('.')[0].ToLower().Replace("string(", "").Replace(")", ""));
                                 curr_len = curr_len / 2 + curr_len % 2;
@@ -10018,10 +10039,12 @@ namespace ModBus_Client
 
                             if (item.Mappings.ToLower().IndexOf("string") != -1)
                             {
-                                uint offset = 0;
+                                int offset = 0;
+
                                 if (item.Mappings.IndexOf('.') != -1)
-                                    offset = uint.Parse(item.Mappings.Split('.')[1].ToLower().Split(')')[0]);
-                                address_start = address_start - (offset / 2 + offset % 2);
+                                    int.TryParse(item.Mappings.Split('.')[1].ToLower().Split(')')[0], out offset);
+                                
+                                address_start = (uint)(address_start + (offset / 2 + offset % 2));
 
                                 num_regs = uint.Parse(item.Mappings.Split('.')[0].ToLower().Replace("string(", "").Replace(")", ""));
                                 num_regs = num_regs / 2 + num_regs % 2;
@@ -10133,6 +10156,14 @@ namespace ModBus_Client
                 {
                     foreach (ModBus_Item item in toRead)
                     {
+                        Console.WriteLine("curr_start {0}, item.RegisterUInt: {1}", curr_start, item.RegisterUInt);
+
+                        if (item == null)
+                            continue;
+
+                        if (toRemove.Contains(item.RegisterUInt))
+                            continue;
+                        
                         curr_start = item.RegisterUInt;
                         curr_len = 1;
                         counter++;
@@ -10147,17 +10178,14 @@ namespace ModBus_Client
 
                             if (item.Mappings.ToLower().IndexOf("string") != -1)
                             {
-                                uint offset = 0;
+                                int offset = 0;
+
                                 if (item.Mappings.IndexOf('.') != -1)
-                                {
-                                    if (!uint.TryParse(item.Mappings.Split('.')[1].ToLower().Split(')')[0], out offset))
-                                        Console.WriteLine("Error parsing \"" + item.Mappings.Split('.')[1].ToLower().Split(')')[0] + "\"");
-                                }
-                                address_start = address_start - (offset / 2 + offset % 2);
+                                    int.TryParse(item.Mappings.Split('.')[1].ToLower().Split(')')[0], out offset);
 
-                                if (!uint.TryParse(item.Mappings.Split('.')[0].ToLower().Replace("string(", "").Replace(")", ""), out curr_len))
-                                    Console.WriteLine("Error parsing \"" + item.Mappings.Split('.')[0].ToLower().Replace("string(", "").Replace(")", "") + "\"");
+                                curr_start = (uint)(curr_start + (offset / 2 + offset % 2));
 
+                                curr_len = uint.Parse(item.Mappings.Split('.')[0].ToLower().Replace("string(", "").Replace(")", ""));
                                 curr_len = curr_len / 2 + curr_len % 2;
                             }
                             else
@@ -10165,6 +10193,8 @@ namespace ModBus_Client
                                 if (item.Mappings.IndexOf("+") == -1)
                                     curr_start = curr_start - curr_len + 1;
                             }
+
+                            Console.WriteLine("curr_start {0}, curr_len: {1}", curr_start, curr_len);
 
                             if (curr_len > 1)
                             {

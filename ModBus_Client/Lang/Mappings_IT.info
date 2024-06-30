@@ -56,7 +56,7 @@ Altri formati:
 - String(len): 			"String(8):Modello"
  -> Converte 8 byte in caratteri ASCII partendo dal registro corrente in poi.
 
-- String(len, offset): 	"String(8,-2):Modello"
+- String(len.offset): 	"String(8.-2):Modello"
  -> Converte 8 byte in caratteri ASCII con un offset di -2 (la stringa inizia dal registro precedente).
 -----------------------------------------------------------------------
 

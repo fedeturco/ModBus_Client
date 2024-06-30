@@ -82,10 +82,10 @@
                             <DrawingBrush Stretch="None">
                                 <DrawingBrush.Drawing>
                                     <DrawingGroup>
-                                        <DrawingGroup x:Name="canvas">
+                                        <DrawingGroup>
                                             <GeometryDrawing Brush="{DynamicResource canvas}" Geometry="F1M16,16H0V0H16Z" />
                                         </DrawingGroup>
-                                        <DrawingGroup x:Name="level_1">
+                                        <DrawingGroup>
                                             <GeometryDrawing Brush="{DynamicResource light-yellow-10}" Geometry="F1M14.5,3.5v9H1.5V2.5h6l1,1Z" />
                                             <GeometryDrawing Brush="{DynamicResource light-yellow}" Geometry="F1M14.5,3H8.707l-.853-.854L7.5,2h-6L1,2.5v10l.5.5h13l.5-.5v-9ZM7.293,3l.488.488L7.268,4H2V3ZM14,12H2V5H7.475l.354-.146L8.682,4H14Z" />
                                         </DrawingGroup>
@@ -95,7 +95,7 @@
                         </Rectangle.Fill>
                     </Rectangle>
                 </Viewbox>
-                <TextBlock Margin="5,0,0,0" Text="Open directory"></TextBlock>
+                <TextBlock x:Name="textBlockOpenFileLocation" Margin="5,0,0,0" Text="Open directory"></TextBlock>
             </StackPanel>
         </Button>
         <Button x:Name="ButtonRefresh" Content="Refresh" HorizontalAlignment="Left" Margin="119,0,0,10" Width="75" Click="ButtonRefresh_Click" Height="21" VerticalAlignment="Bottom" Visibility="Hidden"/>
@@ -113,10 +113,10 @@
                             <DrawingBrush Stretch="None">
                                 <DrawingBrush.Drawing>
                                     <DrawingGroup>
-                                        <DrawingGroup x:Name="canvas2">
+                                        <DrawingGroup>
                                             <GeometryDrawing Brush="{DynamicResource canvas2}" Geometry="F1M16,16H0V0H16Z" />
                                         </DrawingGroup>
-                                        <DrawingGroup x:Name="level_12">
+                                        <DrawingGroup>
                                             <GeometryDrawing Brush="{DynamicResource light-defaultgrey-10}" Geometry="F1M12.5,2.5v13H2.5V2.5Z" />
                                             <GeometryDrawing Brush="{DynamicResource light-defaultgrey}" Geometry="F1M14,2H10V1A1,1,0,0,0,9,0H6A1,1,0,0,0,5,1V2H1V3H2V15.5l.5.5h10l.5-.5V3h1ZM6,1H9V2H6Zm6,14H3V3h9ZM5,13V5H6v8Zm5,0H9V5h1ZM8,13H7V5H8Z" />
                                         </DrawingGroup>
@@ -126,7 +126,7 @@
                         </Rectangle.Fill>
                     </Rectangle>
                 </Viewbox>
-                <TextBlock Margin="5,0,0,0" Text="Delete"></TextBlock>
+                <TextBlock x:Name="textBlockDeleteProfile" Margin="5,0,0,0" Text="Delete"></TextBlock>
             </StackPanel>
         </Button>
         <ListBox x:Name="ListBoxProfiles" d:ItemsSource="{d:SampleData ItemCount=5}" Margin="10,10,10,72" SelectionChanged="ListBoxProfiles_SelectionChanged" FontSize="14"/>

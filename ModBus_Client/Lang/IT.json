@@ -211,13 +211,9 @@
     "buttonColorCellError": "Color",
     "buttonOpen": "Carica",
     "buttonSave": "Salva",
-    "buttonOpenFileLocation": "Apri cartella",
     "buttonPingIp": {
       "label": "Ping",
       "toolTip": "Ctrl+P"
-    },
-    "ButtonDeleteProfile": {
-      "label": "Cancella"
     },
     "ButtonFullSize": {
       "toolTip": "Visualizza tabelle a schermo intero (Ctrl+F)"
@@ -249,35 +245,37 @@
   "textBlocks": {
     "textBlockClearSerialStatus": "Cancella",
     "textBlockClearCoils": {
-      "label":"Clear",
-      "toolTip":"Canc"
+      "label": "Clear",
+      "toolTip": "Canc"
     },
     "textBlockClearInput": {
-      "label":"Clear",
-      "toolTip":"Canc"
+      "label": "Clear",
+      "toolTip": "Canc"
     },
     "textBlockClearInputReg": {
-      "label":"Clear",
-      "toolTip":"Canc"
+      "label": "Clear",
+      "toolTip": "Canc"
     },
     "textBlockClearHoldingReg": {
-      "label":"Clear",
-      "toolTip":"Canc"
+      "label": "Clear",
+      "toolTip": "Canc"
     },
     "textBlockClearSent": {
-      "label":"Clear",
-      "toolTip":"Canc"
+      "label": "Clear",
+      "toolTip": "Canc"
     },
     "textBlockClearReceived": {
-      "label":"Clear",
-      "toolTip":"Canc"
+      "label": "Clear",
+      "toolTip": "Canc"
     },
     "textBlockClearAll": {
-      "label":"Clear",
-      "toolTip":"Canc"
+      "label": "Clear",
+      "toolTip": "Canc"
     },
     "textBlockSerialActive": "Connetti",
-    "textBlockTcpActive": "Connetti"
+    "textBlockTcpActive": "Connetti",
+    "textBlockOpenFileLocation": "Apri cartella",
+    "textBlockDeleteProfile": "Cancella"
   },
   "comboBoxes": {
     "comboBoxCoilsRegisters": {

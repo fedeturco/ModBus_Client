@@ -209,13 +209,9 @@
     "buttonColorCellRead": "Color",
     "buttonCellWrote": "Color",
     "buttonColorCellError": "Color",
-    "buttonOpenFileLocation": "Open directory",
     "buttonPingIp": {
       "label": "Ping",
       "toolTip": "Ctrl+P"
-    },
-    "ButtonDeleteProfile": {
-      "label": "Delete"
     },
     "ButtonFullSize": {
       "toolTip": "Switch to Fullscreen table (Ctrl+F)"
@@ -231,7 +227,9 @@
     "textBlockTcpActive": "Connect",
     "textBlockClearSent": "Clear",
     "textBlockClearInput": "Clear",
-    "textBlockClearHoldingReg": "Clear"
+    "textBlockClearHoldingReg": "Clear",
+    "textBlockOpenFileLocation": "Open directory",
+    "textBlockDeleteProfile": "Delete"
   },
   "tabItems": {
     "tabItem0": "Connection",
