@@ -1862,6 +1862,10 @@ namespace ModBus_Client
                     {
                         SetTableModBusError(list_coilsTable, (ModbusException)ex, false);
                     }
+                    if (ex.Message.IndexOf("ModbusProtocolError") != -1)
+                    {
+                        SetTableStringError(list_coilsTable, (ModbusException)ex, true);
+                    }
                     if (ex.Message.IndexOf("CRC Error") != -1)
                     {
                         SetTableCrcError(list_coilsTable, false);
@@ -2031,6 +2035,10 @@ namespace ModBus_Client
                     {
                         SetTableModBusError(list_coilsTable, (ModbusException)ex, false);
                     }
+                    if (ex.Message.IndexOf("ModbusProtocolError") != -1)
+                    {
+                        SetTableStringError(list_coilsTable, (ModbusException)ex, true);
+                    }
                     if (ex.Message.IndexOf("CRC Error") != -1)
                     {
                         SetTableCrcError(list_coilsTable, false);
@@ -2129,6 +2137,27 @@ namespace ModBus_Client
             tmp.Notes = tmp.ValueBin;
             tmp.Foreground = ForeGroundLightStr;
             tmp.Background = Brushes.OrangeRed.ToString();
+
+            this.Dispatcher.Invoke((Action)delegate
+            {
+                if (clear)
+                    list_.Clear();
+
+                list_.Add(tmp);
+            });
+        }
+        public void SetTableStringError(ObservableCollection<ModBus_Item> list_, ModbusException err, bool clear)
+        {
+            ModBus_Item tmp = new ModBus_Item();
+
+            Console.WriteLine("err.ToString(): " + err.ToString());
+
+            tmp.Register = "Protocol";
+            tmp.Value = "Error";
+            tmp.ValueBin = err.Message;
+            tmp.Notes = err.Message;
+            tmp.Foreground = ForeGroundLightStr;
+            tmp.Background = Brushes.PaleVioletRed.ToString();
 
             this.Dispatcher.Invoke((Action)delegate
             {
@@ -2250,6 +2279,10 @@ namespace ModBus_Client
                     {
                         SetTableModBusError(list_coilsTable, (ModbusException)ex, false);
                     }
+                    if (ex.Message.IndexOf("ModbusProtocolError") != -1)
+                    {
+                        SetTableStringError(list_coilsTable, (ModbusException)ex, true);
+                    }
                     if (ex.Message.IndexOf("CRC Error") != -1)
                     {
                         SetTableCrcError(list_coilsTable, false);
@@ -2367,6 +2400,10 @@ namespace ModBus_Client
                     if (ex.Message.IndexOf("ModBus ErrCode") != -1)
                     {
                         SetTableModBusError(list_coilsTable, (ModbusException)ex, false);
+                    }
+                    if (ex.Message.IndexOf("ModbusProtocolError") != -1)
+                    {
+                        SetTableStringError(list_coilsTable, (ModbusException)ex, true);
                     }
                     if (ex.Message.IndexOf("CRC Error") != -1)
                     {
@@ -2499,6 +2536,10 @@ namespace ModBus_Client
                     if (ex.Message.IndexOf("ModBus ErrCode") != -1)
                     {
                         SetTableModBusError(list_coilsTable, (ModbusException)ex, true);
+                    }
+                    if (ex.Message.IndexOf("ModbusProtocolError") != -1)
+                    {
+                        SetTableStringError(list_coilsTable, (ModbusException)ex, true);
                     }
                     if (ex.Message.IndexOf("CRC Error") != -1)
                     {
@@ -2637,6 +2678,10 @@ namespace ModBus_Client
                     if (ex.Message.IndexOf("ModBus ErrCode") != -1)
                     {
                         SetTableModBusError(list_inputsTable, (ModbusException)ex, true);
+                    }
+                    if (ex.Message.IndexOf("ModbusProtocolError") != -1)
+                    {
+                        SetTableStringError(list_inputsTable, (ModbusException)ex, true);
                     }
                     if (ex.Message.IndexOf("CRC Error") != -1)
                     {
@@ -2814,6 +2859,10 @@ namespace ModBus_Client
                     {
                         SetTableModBusError(list_inputsTable, (ModbusException)ex, false);
                     }
+                    if (ex.Message.IndexOf("ModbusProtocolError") != -1)
+                    {
+                        SetTableStringError(list_inputsTable, (ModbusException)ex, true);
+                    }
                     if (ex.Message.IndexOf("CRC Error") != -1)
                     {
                         SetTableCrcError(list_inputsTable, false);
@@ -2963,6 +3012,10 @@ namespace ModBus_Client
                     if (ex.Message.IndexOf("ModBus ErrCode") != -1)
                     {
                         SetTableModBusError(list_inputRegistersTable, (ModbusException)ex, true);
+                    }
+                    if (ex.Message.IndexOf("ModbusProtocolError") != -1)
+                    {
+                        SetTableStringError(list_inputRegistersTable, (ModbusException)ex, true);
                     }
                     if (ex.Message.IndexOf("CRC Error") != -1)
                     {
@@ -3147,6 +3200,10 @@ namespace ModBus_Client
                     {
                         SetTableModBusError(list_inputRegistersTable, (ModbusException)ex, false);
                     }
+                    if (ex.Message.IndexOf("ModbusProtocolError") != -1)
+                    {
+                        SetTableStringError(list_inputRegistersTable, (ModbusException)ex, true);
+                    }
                     if (ex.Message.IndexOf("CRC Error") != -1)
                     {
                         SetTableCrcError(list_inputRegistersTable, false);
@@ -3297,6 +3354,10 @@ namespace ModBus_Client
                     {
                         SetTableModBusError(list_holdingRegistersTable, (ModbusException)ex, true);
                     }
+                    if (ex.Message.IndexOf("ModbusProtocolError") != -1)
+                    {
+                        SetTableStringError(list_holdingRegistersTable, (ModbusException)ex, true);
+                    }
                     if (ex.Message.IndexOf("CRC Error") != -1)
                     {
                         SetTableCrcError(list_holdingRegistersTable, true);
@@ -3418,6 +3479,10 @@ namespace ModBus_Client
                     if (ex.Message.IndexOf("ModBus ErrCode") != -1)
                     {
                         SetTableModBusError(list_holdingRegistersTable, (ModbusException)ex, true);
+                    }
+                    if (ex.Message.IndexOf("ModbusProtocolError") != -1)
+                    {
+                        SetTableStringError(list_holdingRegistersTable, (ModbusException)ex, true);
                     }
                     if (ex.Message.IndexOf("CRC Error") != -1)
                     {
@@ -3604,6 +3669,10 @@ namespace ModBus_Client
                     if (ex.Message.IndexOf("ModBus ErrCode") != -1)
                     {
                         SetTableModBusError(list_holdingRegistersTable, (ModbusException)ex, true);
+                    }
+                    if (ex.Message.IndexOf("ModbusProtocolError") != -1)
+                    {
+                        SetTableStringError(list_holdingRegistersTable, (ModbusException)ex, true);
                     }
                     if (ex.Message.IndexOf("CRC Error") != -1)
                     {
@@ -3800,6 +3869,10 @@ namespace ModBus_Client
                     if (ex.Message.IndexOf("ModBus ErrCode") != -1)
                     {
                         SetTableModBusError(list_holdingRegistersTable, (ModbusException)ex, false);
+                    }
+                    if (ex.Message.IndexOf("ModbusProtocolError") != -1)
+                    {
+                        SetTableStringError(list_holdingRegistersTable, (ModbusException)ex, true);
                     }
                     if (ex.Message.IndexOf("CRC Error") != -1)
                     {
@@ -4660,7 +4733,6 @@ namespace ModBus_Client
         private void infoToolStripMenuItem1_Click(object sender, RoutedEventArgs e)
         {
             Info info = new Info(title, version);
-
             info.Show();
         }
 
@@ -4890,6 +4962,10 @@ namespace ModBus_Client
                     if (ex.Message.IndexOf("ModBus ErrCode") != -1)
                     {
                         SetTableModBusError(list_holdingRegistersTable, (ModbusException)ex, true);
+                    }
+                    if (ex.Message.IndexOf("ModbusProtocolError") != -1)
+                    {
+                        SetTableStringError(list_holdingRegistersTable, (ModbusException)ex, true);
                     }
                     if (ex.Message.IndexOf("CRC Error") != -1)
                     {
@@ -5922,6 +5998,10 @@ namespace ModBus_Client
                 {
                     SetTableModBusError(list_holdingRegistersTable, err, true);
                 }
+                if (err.Message.IndexOf("ModbusProtocolError") != -1)
+                {
+                    SetTableStringError(list_holdingRegistersTable, (ModbusException)err, true);
+                }
                 if (err.Message.IndexOf("CRC Error") != -1)
                 {
                     SetTableCrcError(list_holdingRegistersTable, true);
@@ -6099,6 +6179,10 @@ namespace ModBus_Client
                 {
                     SetTableModBusError(list_coilsTable, err, true);
                 }
+                if (err.Message.IndexOf("ModbusProtocolError") != -1)
+                {
+                    SetTableStringError(list_coilsTable, (ModbusException)err, true);
+                }
                 if (err.Message.IndexOf("CRC Error") != -1)
                 {
                     SetTableCrcError(list_coilsTable, true);
@@ -6273,6 +6357,11 @@ namespace ModBus_Client
                                 buttonLoopInputRegister04_Click(sender, e);
                         }
 
+                        break;
+
+                    // Finestra statistiche
+                    case Key.J:
+                        statisticsToolStripMenuItem_Click(null, null);
                         break;
 
                     // Comandi polling
@@ -8980,6 +9069,10 @@ namespace ModBus_Client
                             {
                                 SetTableModBusError(list_holdingRegistersTable, (ModbusException)ex, false);
                             }
+                            if (ex.Message.IndexOf("ModbusProtocolError") != -1)
+                            {
+                                SetTableStringError(list_holdingRegistersTable, (ModbusException)ex, true);
+                            }
                             if (ex.Message.IndexOf("CRC Error") != -1)
                             {
                                 SetTableCrcError(list_holdingRegistersTable, false);
@@ -9164,6 +9257,10 @@ namespace ModBus_Client
                         if (ex.Message.IndexOf("ModBus ErrCode") != -1)
                         {
                             SetTableModBusError(list_holdingRegistersTable, (ModbusException)ex, false);
+                        }
+                        if (ex.Message.IndexOf("ModbusProtocolError") != -1)
+                        {
+                            SetTableStringError(list_holdingRegistersTable, (ModbusException)ex, true);
                         }
                         if (ex.Message.IndexOf("CRC Error") != -1)
                         {
@@ -9373,6 +9470,10 @@ namespace ModBus_Client
                             {
                                 SetTableModBusError(list_holdingRegistersTable, (ModbusException)ex, false);
                             }
+                            if (ex.Message.IndexOf("ModbusProtocolError") != -1)
+                            {
+                                SetTableStringError(list_holdingRegistersTable, (ModbusException)ex, true);
+                            }
                             if (ex.Message.IndexOf("CRC Error") != -1)
                             {
                                 SetTableCrcError(list_holdingRegistersTable, false);
@@ -9557,6 +9658,10 @@ namespace ModBus_Client
                         {
                             SetTableModBusError(list_holdingRegistersTable, (ModbusException)ex, false);
                         }
+                        if (ex.Message.IndexOf("ModbusProtocolError") != -1)
+                        {
+                            SetTableStringError(list_holdingRegistersTable, (ModbusException)ex, true);
+                        }
                         if (ex.Message.IndexOf("CRC Error") != -1)
                         {
                             SetTableCrcError(list_holdingRegistersTable, false);
@@ -9733,6 +9838,10 @@ namespace ModBus_Client
                             if (ex.Message.IndexOf("ModBus ErrCode") != -1)
                             {
                                 SetTableModBusError(list_inputRegistersTable, (ModbusException)ex, false);
+                            }
+                            if (ex.Message.IndexOf("ModbusProtocolError") != -1)
+                            {
+                                SetTableStringError(list_inputRegistersTable, (ModbusException)ex, true);
                             }
                             if (ex.Message.IndexOf("CRC Error") != -1)
                             {
@@ -9921,6 +10030,10 @@ namespace ModBus_Client
                         if (ex.Message.IndexOf("ModBus ErrCode") != -1)
                         {
                             SetTableModBusError(list_inputRegistersTable, (ModbusException)ex, false);
+                        }
+                        if (ex.Message.IndexOf("ModbusProtocolError") != -1)
+                        {
+                            SetTableStringError(list_inputRegistersTable, (ModbusException)ex, true);
                         }
                         if (ex.Message.IndexOf("CRC Error") != -1)
                         {
@@ -10130,6 +10243,10 @@ namespace ModBus_Client
                             {
                                 SetTableModBusError(list_inputRegistersTable, (ModbusException)ex, false);
                             }
+                            if (ex.Message.IndexOf("ModbusProtocolError") != -1)
+                            {
+                                SetTableStringError(list_inputRegistersTable, (ModbusException)ex, true);
+                            }
                             if (ex.Message.IndexOf("CRC Error") != -1)
                             {
                                 SetTableCrcError(list_inputRegistersTable, false);
@@ -10320,6 +10437,10 @@ namespace ModBus_Client
                         {
                             SetTableModBusError(list_inputRegistersTable, (ModbusException)ex, false);
                         }
+                        if (ex.Message.IndexOf("ModbusProtocolError") != -1)
+                        {
+                            SetTableStringError(list_inputRegistersTable, (ModbusException)ex, true);
+                        }
                         if (ex.Message.IndexOf("CRC Error") != -1)
                         {
                             SetTableCrcError(list_inputRegistersTable, false);
@@ -10455,6 +10576,10 @@ namespace ModBus_Client
                             if (ex.Message.IndexOf("ModBus ErrCode") != -1)
                             {
                                 SetTableModBusError(list_inputsTable, (ModbusException)ex, false);
+                            }
+                            if (ex.Message.IndexOf("ModbusProtocolError") != -1)
+                            {
+                                SetTableStringError(list_inputsTable, (ModbusException)ex, true);
                             }
                             if (ex.Message.IndexOf("CRC Error") != -1)
                             {
@@ -10597,6 +10722,10 @@ namespace ModBus_Client
                         if (ex.Message.IndexOf("ModBus ErrCode") != -1)
                         {
                             SetTableModBusError(list_inputsTable, (ModbusException)ex, false);
+                        }
+                        if (ex.Message.IndexOf("ModbusProtocolError") != -1)
+                        {
+                            SetTableStringError(list_inputsTable, (ModbusException)ex, true);
                         }
                         if (ex.Message.IndexOf("CRC Error") != -1)
                         {
@@ -10766,6 +10895,10 @@ namespace ModBus_Client
                             {
                                 SetTableModBusError(list_inputsTable, (ModbusException)ex, false);
                             }
+                            if (ex.Message.IndexOf("ModbusProtocolError") != -1)
+                            {
+                                SetTableStringError(list_inputsTable, (ModbusException)ex, true);
+                            }
                             if (ex.Message.IndexOf("CRC Error") != -1)
                             {
                                 SetTableCrcError(list_inputsTable, false);
@@ -10903,6 +11036,10 @@ namespace ModBus_Client
                         if (ex.Message.IndexOf("ModBus ErrCode") != -1)
                         {
                             SetTableModBusError(list_inputsTable, (ModbusException)ex, false);
+                        }
+                        if (ex.Message.IndexOf("ModbusProtocolError") != -1)
+                        {
+                            SetTableStringError(list_inputsTable, (ModbusException)ex, true);
                         }
                         if (ex.Message.IndexOf("CRC Error") != -1)
                         {
@@ -11048,6 +11185,10 @@ namespace ModBus_Client
                                 if (ex.Message.IndexOf("ModBus ErrCode") != -1)
                                 {
                                     SetTableModBusError(list_coilsTable, (ModbusException)ex, false);
+                                }
+                                if (ex.Message.IndexOf("ModbusProtocolError") != -1)
+                                {
+                                    SetTableStringError(list_coilsTable, (ModbusException)ex, true);
                                 }
                                 if (ex.Message.IndexOf("CRC Error") != -1)
                                 {
@@ -11197,6 +11338,10 @@ namespace ModBus_Client
                             if (ex.Message.IndexOf("ModBus ErrCode") != -1)
                             {
                                 SetTableModBusError(list_coilsTable, (ModbusException)ex, false);
+                            }
+                            if (ex.Message.IndexOf("ModbusProtocolError") != -1)
+                            {
+                                SetTableStringError(list_coilsTable, (ModbusException)ex, true);
                             }
                             if (ex.Message.IndexOf("CRC Error") != -1)
                             {
@@ -11379,6 +11524,10 @@ namespace ModBus_Client
                             {
                                 SetTableModBusError(list_coilsTable, (ModbusException)ex, false);
                             }
+                            if (ex.Message.IndexOf("ModbusProtocolError") != -1)
+                            {
+                                SetTableStringError(list_coilsTable, (ModbusException)ex, true);
+                            }
                             if (ex.Message.IndexOf("CRC Error") != -1)
                             {
                                 SetTableCrcError(list_coilsTable, false);
@@ -11520,6 +11669,10 @@ namespace ModBus_Client
                         if (ex.Message.IndexOf("ModBus ErrCode") != -1)
                         {
                             SetTableModBusError(list_coilsTable, (ModbusException)ex, false);
+                        }
+                        if (ex.Message.IndexOf("ModbusProtocolError") != -1)
+                        {
+                            SetTableStringError(list_coilsTable, (ModbusException)ex, true);
                         }
                         if (ex.Message.IndexOf("CRC Error") != -1)
                         {
@@ -11946,6 +12099,15 @@ namespace ModBus_Client
         private void CheckBoxSendCellEditOnlyOnChange_Checked(object sender, RoutedEventArgs e)
         {
             sendCellEditOnlyOnChange = (bool)CheckBoxSendCellEditOnlyOnChange.IsChecked;
+        }
+
+        private void statisticsToolStripMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            if (ModBus != null)
+            {
+                Statistics statistics = new Statistics(this.title, ModBus);
+                statistics.Show();
+            }
         }
     }
 

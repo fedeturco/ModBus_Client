@@ -95,6 +95,7 @@
                 <MenuItem x:Name="infoToolStripMenuItem" Header="Info">
                     <MenuItem x:Name="licenseToolStripMenuItem" Header="License" Click="licenseToolStripMenuItem_Click" Foreground="#2d2d30"/>
                     <MenuItem x:Name="guidaToolStripMenuItem" Header="Guide" Click="guidaToolStripMenuItem_Click" Foreground="#2d2d30"/>
+                    <MenuItem x:Name="statisticsToolStripMenuItem" Header="Statistics" Click="statisticsToolStripMenuItem_Click" Foreground="#2d2d30"/>
                     <MenuItem x:Name="infoToolStripMenuItem1" Header="Info" Click="infoToolStripMenuItem1_Click" Foreground="#2d2d30"/>
                 </MenuItem>
             </Menu>
