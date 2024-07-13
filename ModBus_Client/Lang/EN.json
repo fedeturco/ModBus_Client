@@ -242,48 +242,49 @@
     "tabItem7": "Settings"
   },
   "menuItems": {
-    "salvaToolStripMenuItem":{
-      "label":"Save configuration",
-      "toolTip":"Ctrl+S"
+    "salvaToolStripMenuItem": {
+      "label": "Save configuration",
+      "toolTip": "Ctrl+S"
     },
     "caricaToolStripMenuItem": "Load configuration",
     "apriConsoleToolStripMenuItem": {
-      "label":"Open console",
-      "toolTip":"Ctrl+Shift+S"
+      "label": "Open console",
+      "toolTip": "Ctrl+Shift+S"
     },
     "chiudiConsoleToolStripMenuItem": {
-      "label":"Close console",
-      "toolTip":"Ctrl+Shift+S"
+      "label": "Close console",
+      "toolTip": "Ctrl+Shift+S"
     },
     "impostazioniToolStripMenuItem": "Settings",
     "salvaConfigurazioneNelDatabaseToolStripMenuItem": {
-      "label":"Save configuration to database",
-      "toolTip":"Ctrl+Shift+S"
+      "label": "Save configuration to database",
+      "toolTip": "Ctrl+Shift+S"
     },
     "caricaConfigurazioneDalDatabaseToolStripMenuItem": {
-      "label":"Load configuration from database",
-      "toolTip":"Ctrl+O"
+      "label": "Load configuration from database",
+      "toolTip": "Ctrl+O"
     },
     "apriTemplateEditor": {
-      "label":"Open template editor",
-      "toolTip":"Ctrl+T"
+      "label": "Open template editor",
+      "toolTip": "Ctrl+T"
     },
     "gestisciDatabaseToolStripMenuItem": {
-      "label":"Manage database",
-      "toolTip":"Ctrl+D"
+      "label": "Manage database",
+      "toolTip": "Ctrl+D"
     },
     "menuItemToolBit": "Tool comamnd bit",
     "menuItemToolByte": "Tool command byte",
     "menuItemToolWord": "Tool command word",
     "licenseToolStripMenuItem": "License",
     "guidaToolStripMenuItem": "Guide",
+    "statisticsToolStripMenuItem": "Statistics",
     "infoToolStripMenuItem1": {
-      "label":"Info",
-      "toolTip":"Ctrl+I"
+      "label": "Info",
+      "toolTip": "Ctrl+I"
     },
     "logToolStripMenu": {
-      "label":"Packets log",
-      "toolTip":"Ctrl+L"
+      "label": "Packets log",
+      "toolTip": "Ctrl+L"
     },
     "modificaToolStripMenuItem": "Edit",
     "menuItemToolRegistri": "Tool registers",

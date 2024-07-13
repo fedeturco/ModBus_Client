@@ -331,50 +331,51 @@
     "tabItem7": "Settings"
   },
   "menuItems": {
-    "salvaToolStripMenuItem":{
-      "label":"Salva configurazione",
-      "toolTip":"Ctrl+S"
+    "salvaToolStripMenuItem": {
+      "label": "Salva configurazione",
+      "toolTip": "Ctrl+S"
     },
     "caricaToolStripMenuItem": "Carica configurazione",
     "apriConsoleToolStripMenuItem": {
-      "label":"Apri console",
-      "toolTip":"Ctrl+Shift+S"
+      "label": "Apri console",
+      "toolTip": "Ctrl+Shift+S"
     },
     "chiudiConsoleToolStripMenuItem": {
-      "label":"Chiudi console",
-      "toolTip":"Ctrl+Shift+S"
+      "label": "Chiudi console",
+      "toolTip": "Ctrl+Shift+S"
     },
     "impostazioniToolStripMenuItem": "Impostazioni",
     "salvaConfigurazioneNelDatabaseToolStripMenuItem": {
-      "label":"Salva configurazione sul database",
-      "toolTip":"Ctrl+Shift+S"
+      "label": "Salva configurazione sul database",
+      "toolTip": "Ctrl+Shift+S"
     },
     "caricaConfigurazioneDalDatabaseToolStripMenuItem": {
-      "label":"Carica configurazione dal database",
-      "toolTip":"Ctrl+O"
+      "label": "Carica configurazione dal database",
+      "toolTip": "Ctrl+O"
     },
     "apriTemplateEditor": {
-      "label":"Apri template editor",
-      "toolTip":"Ctrl+T"
+      "label": "Apri template editor",
+      "toolTip": "Ctrl+T"
     },
     "gestisciDatabaseToolStripMenuItem": {
-      "label":"Gestisci database",
-      "toolTip":"Ctrl+D"
+      "label": "Gestisci database",
+      "toolTip": "Ctrl+D"
     },
     "menuItemToolBit": "Tool comandi bit",
     "menuItemToolByte": "Tool comandi byte",
     "menuItemToolWord": "Tool comandi word",
     "licenseToolStripMenuItem": "Licenza",
     "guidaToolStripMenuItem": "Guida",
+    "statisticsToolStripMenuItem": "Statistiche",
     "infoToolStripMenuItem1": {
-      "label":"Info",
-      "toolTip":"Ctrl+I"
+      "label": "Info",
+      "toolTip": "Ctrl+I"
     },
     "viewToolStripMenuItem": "Visualizza",
     "languageToolStripMenu": "Lingua",
     "logToolStripMenu": {
-      "label":"Log pacchetti",
-      "toolTip":"Ctrl+L"
+      "label": "Log pacchetti",
+      "toolTip": "Ctrl+L"
     },
     "modificaToolStripMenuItem": "Modifica",
     "menuItemToolRegistri": "Tool registri",

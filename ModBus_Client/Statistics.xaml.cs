@@ -21,7 +21,7 @@ namespace ModBus_Client
     /// </summary>
     public partial class Statistics : Window
     {
-        public Statistics(String title, ModBus_Chicco Modbus)
+        public Statistics(ModBus_Chicco Modbus)
         {
             InitializeComponent();
 
@@ -53,6 +53,14 @@ namespace ModBus_Client
                     Modbus.Count_FC08 +
                     Modbus.Count_FC15 +
                     Modbus.Count_FC16).ToString();
+            }
+        }
+
+        private void Window_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Escape)
+            {
+                this.Close();
             }
         }
     }

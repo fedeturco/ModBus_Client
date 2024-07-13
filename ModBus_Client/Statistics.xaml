@@ -5,29 +5,32 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ModBus_Client"
         mc:Ignorable="d"
-        Title="Statistics" Height="275" Width="324" MinWidth="330" MaxWidth="330" MinHeight="275" MaxHeight="275">
+        Title="Statistics" Height="290" Width="324" MinWidth="330" MaxWidth="330" MinHeight="290" MaxHeight="290" KeyUp="Window_KeyUp">
     <Grid>
         <Label Content="FC01:" HorizontalAlignment="Left" Margin="20,16,0,0" VerticalAlignment="Top" FontSize="14"/>
         <Label x:Name="LabelFC01" Content="" HorizontalAlignment="Left" Margin="75,16,0,0" VerticalAlignment="Top" Width="80" FontSize="14"/>
-        <Label Content="FC02:" HorizontalAlignment="Left" Margin="20,47,0,0" VerticalAlignment="Top" FontSize="14"/>
-        <Label x:Name="LabelFC02" Content="" HorizontalAlignment="Left" Margin="75,47,0,0" VerticalAlignment="Top" Width="80" FontSize="14"/>
+        <Label Content="FC02:" HorizontalAlignment="Left" Margin="20,45,0,0" VerticalAlignment="Top" FontSize="14"/>
+        <Label x:Name="LabelFC02" Content="" HorizontalAlignment="Left" Margin="75,45,0,0" VerticalAlignment="Top" Width="80" FontSize="14"/>
         <Label Content="FC03:" HorizontalAlignment="Left" Margin="159,16,0,0" VerticalAlignment="Top" FontSize="14"/>
         <Label x:Name="LabelFC03" Content="" HorizontalAlignment="Left" Margin="214,16,0,0" VerticalAlignment="Top" Width="80" FontSize="14"/>
-        <Label Content="FC04:" HorizontalAlignment="Left" Margin="159,47,0,0" VerticalAlignment="Top" FontSize="14"/>
-        <Label x:Name="LabelFC04" Content="" HorizontalAlignment="Left" Margin="214,47,0,0" VerticalAlignment="Top" Width="80" FontSize="14"/>
-        <Label Content="FC05:" HorizontalAlignment="Left" Margin="20,0,0,0" VerticalAlignment="Center" FontSize="14"/>
-        <Label x:Name="LabelFC05" Content="" HorizontalAlignment="Left" Margin="75,0,0,0" VerticalAlignment="Center" Width="80" FontSize="14"/>
-        <Label Content="FC06:" HorizontalAlignment="Left" Margin="20,145,0,0" VerticalAlignment="Top" FontSize="14"/>
-        <Label x:Name="LabelFC06" Content="" HorizontalAlignment="Left" Margin="75,145,0,0" VerticalAlignment="Top" Width="80" FontSize="14"/>
-        <Label Content="FC08:" HorizontalAlignment="Left" Margin="20,81,0,0" VerticalAlignment="Top" FontSize="14"/>
-        <Label x:Name="LabelFC08" Content="" HorizontalAlignment="Left" Margin="76,81,0,0" VerticalAlignment="Top" Width="80" FontSize="14"/>
-        <Label Content="FC15:" HorizontalAlignment="Left" Margin="159,0,0,0" VerticalAlignment="Center" FontSize="14"/>
-        <Label x:Name="LabelFC15" Content="" HorizontalAlignment="Left" Margin="215,0,0,0" VerticalAlignment="Center" Width="80" FontSize="14"/>
-        <Label Content="FC16:" HorizontalAlignment="Left" Margin="159,145,0,0" VerticalAlignment="Top" FontSize="14"/>
-        <Label x:Name="LabelFC16" Content="" HorizontalAlignment="Left" Margin="215,145,0,0" VerticalAlignment="Top" Width="80" FontSize="14"/>
-        <Label Content="Total:" HorizontalAlignment="Left" Margin="20,198,0,0" VerticalAlignment="Top" FontSize="14"/>
-        <Label x:Name="LabelTotal" Content="" HorizontalAlignment="Left" Margin="75,198,0,0" VerticalAlignment="Top" Width="136" FontSize="14"/>
-        <Image HorizontalAlignment="Left" Margin="257,181,0,0" Width="44" Source="/Logo/Modbus_logo_Lens_256_B.ico" Height="44" VerticalAlignment="Top"/>
+        <Label Content="FC04:" HorizontalAlignment="Left" Margin="159,45,0,0" VerticalAlignment="Top" FontSize="14"/>
+        <Label x:Name="LabelFC04" Content="" HorizontalAlignment="Left" Margin="214,45,0,0" VerticalAlignment="Top" Width="80" FontSize="14"/>
+        <Label Content="FC05:" HorizontalAlignment="Left" Margin="20,129,0,0" VerticalAlignment="Top" FontSize="14"/>
+        <Label x:Name="LabelFC05" Content="" HorizontalAlignment="Left" Margin="75,129,0,0" VerticalAlignment="Top" Width="80" FontSize="14"/>
+        <Label Content="FC06:" HorizontalAlignment="Left" Margin="20,158,0,0" VerticalAlignment="Top" FontSize="14"/>
+        <Label x:Name="LabelFC06" Content="" HorizontalAlignment="Left" Margin="75,158,0,0" VerticalAlignment="Top" Width="80" FontSize="14"/>
+        <Label Content="FC08:" HorizontalAlignment="Left" Margin="20,88,0,0" VerticalAlignment="Top" FontSize="14"/>
+        <Label x:Name="LabelFC08" Content="" HorizontalAlignment="Left" Margin="75,88,0,0" VerticalAlignment="Top" Width="80" FontSize="14"/>
+        <Label Content="FC15:" HorizontalAlignment="Left" Margin="159,129,0,0" FontSize="14" Height="29" VerticalAlignment="Top"/>
+        <Label x:Name="LabelFC15" Content="" HorizontalAlignment="Left" Margin="215,129,0,0" VerticalAlignment="Top" Width="80" FontSize="14"/>
+        <Label Content="FC16:" HorizontalAlignment="Left" Margin="159,158,0,0" VerticalAlignment="Top" FontSize="14"/>
+        <Label x:Name="LabelFC16" Content="" HorizontalAlignment="Left" Margin="215,158,0,0" VerticalAlignment="Top" Width="80" FontSize="14"/>
+        <Label Content="Total:" HorizontalAlignment="Left" Margin="20,201,0,0" VerticalAlignment="Top" FontSize="14"/>
+        <Label x:Name="LabelTotal" Content="" HorizontalAlignment="Left" Margin="75,201,0,0" VerticalAlignment="Top" Width="136" FontSize="14"/>
+        <Image HorizontalAlignment="Left" Margin="254,191,0,0" Width="44" Source="/Logo/Modbus_logo_Lens_256_B.ico" Height="44" VerticalAlignment="Top"/>
+        <Label Content="FC02:" HorizontalAlignment="Left" Margin="20,74,0,0" VerticalAlignment="Top" FontSize="14" Height="14"/>
+        <Label Content="FC02:" HorizontalAlignment="Left" Margin="20,115,0,0" VerticalAlignment="Top" FontSize="14" Height="14"/>
+        <Label Content="FC02:" HorizontalAlignment="Left" Margin="20,187,0,0" VerticalAlignment="Top" FontSize="14" Height="14"/>
 
     </Grid>
 </Window>

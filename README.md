@@ -1,13 +1,13 @@
 # ModBus_Client
-Client ModBus TCP/RTU per interrogare slave ModBus.
+Client ModBus TCP/RTU written in C# useful for Modbus read and write operations on RTU-485 or TCP/TLS slaves.
 
 ## Release
 
-### v2.45 New Version
-[ModBus_Client_v2.45 - Portable Zip](https://github.com/fedeturco/ModBus_Client/releases/download/2.45/ModBus_Client_v2.45.zip)
+### v2.46 New Version
+[ModBus_Client_v2.46 - Portable Zip](https://github.com/fedeturco/ModBus_Client/releases/download/2.46/ModBus_Client_v2.46.zip)
 
-### v2.44 Stable
-[ModBus_Client_v2.44 - Portable Zip](https://github.com/fedeturco/ModBus_Client/releases/download/2.44/ModBus_Client_v2.44.zip)
+### v2.45 Stable
+[ModBus_Client_v2.45 - Portable Zip](https://github.com/fedeturco/ModBus_Client/releases/download/2.45/ModBus_Client_v2.45.zip)
 
 ### Manual
 [Manual EN](https://github.com/fedeturco/ModBus_Client/blob/master/ModBus_Client/Manuals/ModBus_Client_EN.pdf)
@@ -15,7 +15,7 @@ Client ModBus TCP/RTU per interrogare slave ModBus.
 
 ## Info
 
-Si riportano a seguire alcuni screenshot del programma, si rimanda al manuale per una descrizione più dettagliata delle varie funzioni. 
+Following are some screenshots of the program; please refer to the manual for a more detailed description of the various functions.
 
 ### Homepage
 

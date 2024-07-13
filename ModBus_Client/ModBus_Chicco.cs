@@ -286,8 +286,6 @@ namespace ModBusMaster_Chicco
             }
             if (type == def.TYPE_TCP_SECURE)
             {
-                System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
-
                 SslProtocols tlsProtocol = SslProtocols.Tls12;
                 if (tlsVersion == 0)
                     tlsProtocol = SslProtocols.Tls12;

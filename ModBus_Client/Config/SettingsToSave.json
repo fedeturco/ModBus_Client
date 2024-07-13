@@ -4,6 +4,7 @@
       "textBoxModbusAddress": {},
       "textBoxTcpClientIpAddress": {},
       "textBoxTcpClientPort": {},
+      "textBoxTcpClientPortSecure": {},
       "textBoxCoilsAddress01": {},
       "textBoxCoilNumber": {},
       "textBoxCoilsRange_A": {},

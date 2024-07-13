@@ -722,13 +722,14 @@ namespace ModBus_Client
             ImageLogoTCP.Visibility = !(bool)radioButtonModeSerial.IsChecked ? Visibility.Visible : Visibility.Hidden;
 
             textBoxTcpClientIpAddress.IsEnabled = !(bool)radioButtonModeSerial.IsChecked;
-            textBoxTcpClientPort.IsEnabled = !(bool)radioButtonModeSerial.IsChecked;
+            textBoxTcpClientPort.IsEnabled = (!(bool)radioButtonModeSerial.IsChecked) && (!(bool)checkBoxModbusSecure.IsChecked);
             buttonPingIp.IsEnabled = !(bool)radioButtonModeSerial.IsChecked;
             buttonLoadClientCertificate.IsEnabled = !(bool)radioButtonModeSerial.IsChecked;
             buttonLoadClientKey.IsEnabled = !(bool)radioButtonModeSerial.IsChecked;
             textBoxCertificatePassword.IsEnabled = !(bool)radioButtonModeSerial.IsChecked;
             comboBoxTlsVersion.IsEnabled = !(bool)radioButtonModeSerial.IsChecked;
             checkBoxModbusSecure.IsEnabled = !(bool)radioButtonModeSerial.IsChecked;
+            textBoxTcpClientPortSecure.IsEnabled = !(bool)radioButtonModeSerial.IsChecked;
         }
 
         public void buttonSerialActive_Click(object sender, RoutedEventArgs e)
@@ -1581,15 +1582,20 @@ namespace ModBus_Client
             this.Dispatcher.Invoke((Action)delegate
             {
                 ip_address = textBoxTcpClientIpAddress.Text;
-                port = textBoxTcpClientPort.Text;
                 check = pictureBoxTcp.Background == Brushes.LightGray;
                 if (check)
                     richTextBoxAppend(richTextBoxStatus, lang.languageTemplate["strings"]["connectingTo"] + " " + ip_address + ":" + port);
 
-                if((bool)checkBoxModbusSecure.IsChecked)
+                if ((bool)checkBoxModbusSecure.IsChecked)
+                {
                     TCPMode = ModBus_Def.TYPE_TCP_SECURE;
+                    port = textBoxTcpClientPortSecure.Text;
+                }
                 else
+                {
                     TCPMode = comboBoxTcpConnectionMode.SelectedIndex == 0 ? ModBus_Def.TYPE_TCP_SOCK : ModBus_Def.TYPE_TCP_REOPEN;
+                    port = textBoxTcpClientPort.Text;
+                }
             });
 
             if (check)
@@ -1674,12 +1680,6 @@ namespace ModBus_Client
                         textBoxTcpClientIpAddress.IsEnabled = false;
                         textBoxTcpClientPort.IsEnabled = false;
                         languageToolStripMenu.IsEnabled = false;
-
-                        buttonLoadClientCertificate.IsEnabled = false;
-                        buttonLoadClientKey.IsEnabled = false;
-                        textBoxCertificatePassword.IsEnabled = false;
-                        comboBoxTlsVersion.IsEnabled = false;
-                        checkBoxModbusSecure.IsEnabled = false;
 
                         checkBoxModbusSecure.IsEnabled = false;
                         buttonLoadClientCertificate.IsEnabled = false;
@@ -11835,6 +11835,9 @@ namespace ModBus_Client
             buttonLoadClientCertificate.Visibility = (bool)checkBoxModbusSecure.IsChecked ? Visibility.Visible : Visibility.Hidden;
             labelClientTLSVersion.Visibility = (bool)checkBoxModbusSecure.IsChecked ? Visibility.Visible : Visibility.Hidden;
             comboBoxTlsVersion.Visibility = (bool)checkBoxModbusSecure.IsChecked ? Visibility.Visible : Visibility.Hidden;
+            textBoxTcpClientPortSecure.Visibility = (bool)checkBoxModbusSecure.IsChecked ? Visibility.Visible : Visibility.Hidden;
+
+            textBoxTcpClientPort.IsEnabled = (!(bool)checkBoxModbusSecure.IsChecked) && (!(bool)radioButtonModeSerial.IsChecked);
 
             if ((bool)checkBoxModbusSecure.IsChecked)
             {
@@ -12105,7 +12108,7 @@ namespace ModBus_Client
         {
             if (ModBus != null)
             {
-                Statistics statistics = new Statistics(this.title, ModBus);
+                Statistics statistics = new Statistics(ModBus);
                 statistics.Show();
             }
         }
