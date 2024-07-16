@@ -1602,10 +1602,6 @@ namespace ModBus_Client
             {
                 try
                 {
-                    // Open, test the connection and close
-                    // TcpClient client = new TcpClient(ip_address, int.Parse(port));
-                    // client.Close();
-
                     // If TCPMode check if certificate file exists
                     if(TCPMode == ModBus_Def.TYPE_TCP_SECURE)
                     {
@@ -1650,9 +1646,9 @@ namespace ModBus_Client
                     {
                         // Initialise Modbus Object
                         ModBus = new ModBus_Chicco(
-                            serialPort, 
-                            textBoxTcpClientIpAddress.Text, 
-                            textBoxTcpClientPort.Text, 
+                            serialPort,
+                            ip_address,
+                            port, 
                             TCPMode, 
                             pictureBoxTx, 
                             pictureBoxRx,
