@@ -914,7 +914,7 @@ namespace ModBusMaster_Chicco
                 if (response.Length == 0)
                 {
                     Console_print(" Timed out", null, 0);
-                    return null;
+                    throw new ModbusException("Timed out");
                 }
 
                 RX_set = true;        // pictureBox gialla
@@ -1855,7 +1855,7 @@ namespace ModBusMaster_Chicco
                 if (response.Length == 0)
                 {
                     Console_print(" Timed out", null, 0);
-                    return null;
+                    throw new ModbusException("Timed out");
                 }
 
                 RX_set = true;        // pictureBox gialla
@@ -1864,7 +1864,7 @@ namespace ModBusMaster_Chicco
                 Console_print(" Rx <- ", response, response.Length);
 
                 // Check CRC
-                if(!Check_CRC(response, response.Length))
+                if (!Check_CRC(response, response.Length))
                 {
                     throw new ModbusException("CRC Error");
                 }
@@ -2100,7 +2100,11 @@ namespace ModBusMaster_Chicco
                     Console.WriteLine("Timeout lettura porta seriale");
                 }
 
-                Check_CRC(response, Length);
+                // Check CRC
+                if (!Check_CRC(response, Length))
+                {
+                    throw new ModbusException("CRC Error");
+                }
 
                 // Timeout
                 if (Length == 0)
@@ -2713,9 +2717,10 @@ namespace ModBusMaster_Chicco
                 Console_printByte("Rx: ", response, response.Length);
                 Console_print(" Rx <- ", response, response.Length);
 
-                if(!Check_CRC(response, response.Length))
+                // Check CRC
+                if (!Check_CRC(response, response.Length))
                 {
-                    return new UInt16[0] { };
+                    throw new ModbusException("CRC Error");
                 }
 
                 // Modbus Error Code

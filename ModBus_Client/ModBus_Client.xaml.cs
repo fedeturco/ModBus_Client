@@ -2542,10 +2542,20 @@ namespace ModBus_Client
                     {
                         SetTableCrcError(list_coilsTable, true);
                     }
+
+                    this.Dispatcher.Invoke((Action)delegate
+                    {
+                        buttonWriteCoils15.IsEnabled = true;
+                    });
                 }
                 else
                 {
                     SetTableInternalError(list_coilsTable, true);
+
+                    this.Dispatcher.Invoke((Action)delegate
+                    {
+                        buttonWriteCoils15.IsEnabled = true;
+                    });
                 }
 
                 this.Dispatcher.Invoke((Action)delegate
@@ -2692,6 +2702,8 @@ namespace ModBus_Client
                 }
                 else
                 {
+                    SetTableInternalError(list_inputsTable, true);
+
                     this.Dispatcher.Invoke((Action)delegate
                     {
                         buttonReadInput02.IsEnabled = true;
@@ -3573,8 +3585,12 @@ namespace ModBus_Client
                         else
                         {
                             MessageBox.Show(lang.languageTemplate["strings"]["errSetReg"], "Alert");
-                            list_holdingRegistersTable[(int)(address_start)].Foreground = ForeGroundLight.ToString();
-                            list_holdingRegistersTable[(int)(address_start)].Background = Brushes.Red.ToString();
+
+                            this.Dispatcher.Invoke((Action)delegate
+                            { 
+                                list_holdingRegistersTable[(int)(address_start)].Foreground = ForeGroundLight.ToString();
+                                list_holdingRegistersTable[(int)(address_start)].Background = Brushes.Red.ToString();
+                            });
                         }
                     }
                 }
@@ -3613,8 +3629,12 @@ namespace ModBus_Client
                         else
                         {
                             MessageBox.Show(lang.languageTemplate["strings"]["errSetReg"], "Alert");
-                            list_holdingRegistersTable[(int)(address_start)].Foreground = ForeGroundLight.ToString();
-                            list_holdingRegistersTable[(int)(address_start)].Background = Brushes.Red.ToString();
+
+                            this.Dispatcher.Invoke((Action)delegate
+                            {
+                                list_holdingRegistersTable[(int)(address_start)].Foreground = ForeGroundLight.ToString();
+                                list_holdingRegistersTable[(int)(address_start)].Background = Brushes.Red.ToString();
+                            });
                         }
                     }
                 }
