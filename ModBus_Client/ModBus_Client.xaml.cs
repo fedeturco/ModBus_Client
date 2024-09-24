@@ -790,7 +790,7 @@ namespace ModBus_Client
                     serialPort.DataBits = 8;
 
                     // DEBUG
-                    Console.WriteLine("comboBoxSerialStop.SelectedIndex:" + comboBoxSerialStop.SelectedIndex.ToString());
+                    // Console.WriteLine("comboBoxSerialStop.SelectedIndex:" + comboBoxSerialStop.SelectedIndex.ToString());
 
                     switch (comboBoxSerialStop.SelectedIndex)
                     {
@@ -1481,13 +1481,14 @@ namespace ModBus_Client
                     comboBoxInputGroup.IsEnabled = false;
                     comboBoxCoilsGroup.IsEnabled = false;
                 }
+
+                comboBoxProfileHome.IsEnabled = true;
             }
             catch (Exception err)
             {
                 Console.WriteLine("Error loading configuration\n");
                 Console.WriteLine(err);
             }
-
         }
 
         private void salvaToolStripMenuItem_Click(object sender, RoutedEventArgs e)
@@ -7926,6 +7927,11 @@ namespace ModBus_Client
             });
 
             importingProfile = false;
+
+            this.Dispatcher.Invoke((Action)delegate
+            {
+                comboBoxProfileHome.IsEnabled = true;
+            });
         }
 
         public void changeColumnVisibility(object sender, RoutedEventArgs e)
@@ -11743,6 +11749,7 @@ namespace ModBus_Client
             {
                 if (comboBoxProfileHome.SelectedItem != null)
                 {
+                    comboBoxProfileHome.IsEnabled = false;
                     LoadProfile(comboBoxProfileHome.SelectedItem.ToString());
                 }
             }

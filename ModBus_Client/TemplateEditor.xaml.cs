@@ -670,7 +670,7 @@ namespace ModBus_Client
             {
                 collection.Clear();
 
-                string content = File.ReadAllText(window.FileName);
+                string content = File.ReadAllText(window.FileName).Replace("\r", "");
                 string[] splitted = content.Split('\n');
 
                 for (int i = 1; i < splitted.Count(); i++)
@@ -1061,6 +1061,208 @@ namespace ModBus_Client
             LabelStatisticsValueHoldingRegisters.Content = list_holdingRegistersTable.Count.ToString();
             LabelStatisticsValueInputRegisters.Content = list_inputRegistersTable.Count.ToString();
             LabelStatisticsValueGroups.Content = list_groups.Count.ToString();
+        }
+
+        public void CopyClipboardToList(ObservableCollection<ModBus_Item> list)
+        {
+            string clipContent = Clipboard.GetText(TextDataFormat.Text);
+            string[] registers = clipContent.Replace("\r", "").Split('\n');
+            bool errorParsing = false;
+
+            for (int i = 0; i < registers.Length; i++)
+            {
+                string[] row = registers[i].Split('\t');
+
+                if (row.Length < 3)
+                    continue;
+
+                if (row[0].ToLower().IndexOf("offset") != -1)
+                    continue;
+
+                ModBus_Item item = new ModBus_Item();
+
+                UInt16 parsed = 0;
+
+                item.Offset = row[0];
+
+                if (!UInt16.TryParse(row[1].Replace("0x", ""), row[1].ToLower().IndexOf("0x") != -1 ? System.Globalization.NumberStyles.HexNumber : System.Globalization.NumberStyles.Integer, null, out parsed))
+                {
+                    errorParsing = true;
+                    continue;
+                }
+
+                item.Register = row[1];
+                item.RegisterUInt = parsed;
+
+                if (row.Length >= 3)
+                    item.Notes = row[3];
+                else
+                    item.Notes = "";
+
+                if (row.Length >= 4)
+                    item.Mappings = row[4];
+                else
+                    item.Mappings = "";
+
+                if (row.Length >= 5)
+                    item.Group = row[5];
+                else
+                    item.Group = "";
+
+                if(!errorParsing)
+                    list.Add(item);
+            }
+        }
+
+        public void CopyClipboardToListGroup(ObservableCollection<Group_Item> list)
+        {
+            string clipContent = Clipboard.GetText(TextDataFormat.Text);
+            string[] groups = clipContent.Replace("\r", "").Split('\n');
+
+            for (int i = 0; i < groups.Length; i++)
+            {
+                string[] row = groups[i].Split('\t');
+
+                if (row.Length < 2)
+                    continue;
+
+                Group_Item group = new Group_Item();
+
+                group.Group = row[0];
+                group.Label = row[1];
+
+                list.Add(group);
+            }
+        }
+
+        public void CopyListToClipboard(ObservableCollection<ModBus_Item> list)
+        {
+            try
+            {
+                string clipContent = "";
+                foreach (ModBus_Item item in list)
+                {
+                    clipContent += item.Offset;
+                    clipContent += "\t";
+                    clipContent += item.Register;
+                    clipContent += "\t";
+                    clipContent += item.Value;
+                    clipContent += "\t";
+                    clipContent += item.Notes;
+                    clipContent += "\t";
+                    clipContent += item.Mappings;
+                    clipContent += "\t";
+                    clipContent += item.Group;
+                    clipContent += "\r\n";
+                }
+
+                Clipboard.SetText(clipContent);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+        }
+
+        public void CopyListToClipboardGroup(ObservableCollection<Group_Item> list)
+        {
+            try
+            {
+                string clipContent = "";
+                foreach (Group_Item item in list)
+                {
+                    clipContent += item.Group;
+                    clipContent += "\t";
+                    clipContent += item.Label;
+                    clipContent += "\r\n";
+                }
+
+                Clipboard.SetText(clipContent);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+        }
+
+        private void coilsMenuItemCut_Click(object sender, RoutedEventArgs e)
+        {
+            CopyListToClipboard(list_coilsTable);
+            list_coilsTable.Clear();
+        }
+
+        private void coilsMenuItemCopy_Click(object sender, RoutedEventArgs e)
+        {
+            CopyListToClipboard(list_coilsTable);
+        }
+
+        private void coilsMenuItemPaste_Click(object sender, RoutedEventArgs e)
+        {
+            CopyClipboardToList(list_coilsTable);
+        }
+
+        private void discreteInputsMenuItemCut_Click(object sender, RoutedEventArgs e)
+        {
+            CopyListToClipboard(list_inputsTable);
+            list_inputsTable.Clear();
+        }
+
+        private void discreteInputsMenuItemCopy_Click(object sender, RoutedEventArgs e)
+        {
+            CopyListToClipboard(list_inputsTable);
+        }
+
+        private void discreteInputsMenuItemPaste_Click(object sender, RoutedEventArgs e)
+        {
+            CopyClipboardToList(list_inputsTable);
+        }
+
+        private void holdingRegistersMenuItemCut_Click(object sender, RoutedEventArgs e)
+        {
+            CopyListToClipboard(list_holdingRegistersTable);
+            list_holdingRegistersTable.Clear();
+        }
+
+        private void holdingRegistersMenuItemCopy_Click(object sender, RoutedEventArgs e)
+        {
+            CopyListToClipboard(list_holdingRegistersTable);
+        }
+
+        private void holdingRegistersMenuItemPaste_Click(object sender, RoutedEventArgs e)
+        {
+            CopyClipboardToList(list_holdingRegistersTable);
+        }
+
+        private void inputRegistersMenuItemCut_Click(object sender, RoutedEventArgs e)
+        {
+            CopyListToClipboard(list_inputRegistersTable);
+            list_inputRegistersTable.Clear();
+        }
+
+        private void inputRegistersMenuItemCopy_Click(object sender, RoutedEventArgs e)
+        {
+            CopyListToClipboard(list_inputRegistersTable);
+        }
+
+        private void inputRegistersMenuItemPaste_Click(object sender, RoutedEventArgs e)
+        {
+            CopyClipboardToList(list_inputRegistersTable);
+        }
+
+        private void groupsMenuItemCut_Click(object sender, RoutedEventArgs e)
+        {
+            CopyListToClipboardGroup(list_groups);
+            list_groups.Clear();
+        }
+
+        private void groupsMenuItemCopy_Click(object sender, RoutedEventArgs e)
+        {
+            CopyListToClipboardGroup(list_groups);
+        }
+
+        private void groupsMenuItemPaste_Click(object sender, RoutedEventArgs e)
+        {
+            CopyClipboardToListGroup(list_groups);
         }
     }
 

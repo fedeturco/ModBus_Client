@@ -570,7 +570,6 @@ namespace ModBusMaster_Chicco
                     }
                 }
 
-
                 if(type == def.TYPE_TCP_REOPEN)
                     client.Close();
 
@@ -601,31 +600,21 @@ namespace ModBusMaster_Chicco
                     throw new ModbusException("ModBus ErrCode: " + errCode.ToString() + " - " + ModbusErrorCodes[errCode]);
                 }
 
-                //Leggo i bit di ciascun byte partendo dal 9 che contiene le prime 8 coils
-                //La coil 0 e nel LSb, la coil 7 nel MSb del primo byte, la 8 nel LSb del secondo byte
+                // Leggo i bit di ciascun byte partendo dal 9 che contiene le prime 8 coils
+                // La coil 0 e nel LSb, la coil 7 nel MSb del primo byte, la 8 nel LSb del secondo byte
                 for (int i = 9; i < Length; i += 1)
                 {
                     for (int a = 0; a < 8; a++)
                     {
-                        try
-                        {
-                            // Se supero l'indice pazienza (accade se coil % 8 != 0)
-                            // che tanto va nel catch
+                        if ((i - 9) * 8 + a >= no_of_coils)
+                            break;
 
-                            // DEBUG
-                            // Console.WriteLine("i: " + i.ToString() + " a: " + a.ToString());
-
-                            result[(i - 9) * 8 + a] = (response[i] & (1 << a)) > 0 ? (byte)(1) : (byte)(0);
-                        }
-                        catch
-                        {
-                            // result[(i - 9) * 8 + a] = "?";
-                        }
+                        result[(i - 9) * 8 + a] = (response[i] & (1 << a)) > 0 ? (byte)(1) : (byte)(0);
                     }
                 }
 
                 // debug
-                //Console.WriteLine("Result (array of coils): " + result);
+                // Console.WriteLine("Result (array of coils): " + result);
 
                 return result;
 
@@ -691,35 +680,6 @@ namespace ModBusMaster_Chicco
                 Console_printByte("Rx: ", response, response.Length);
                 Console_print(" Rx <- ", response, response.Length);
 
-                //Leggo i bit di ciascun byte partendo dal 3 che contiene le prime 8 coils
-                //La coil 0 e' nel LSb, la coil 7 nel MSb del primo byte, la 8 nel LSb del secondo byte
-                for (int i = 3; i < response.Length; i += 1)
-                {
-                    for (int a = 0; a < 8; a++)
-                    {
-                        try
-                        {
-                            //Se supero l'indice me ne frego (accade se coil % 8 != 0)
-                            //che tanto va nel catch
-
-                            //DEBUG
-                            //Console.WriteLine("i: " + i.ToString() + " a: " + a.ToString());
-
-                            result[(i - 3) * 8 + a] = (response[i] & (1 << a)) > 0 ? (byte)(1) : (byte)(0);
-
-                            //DEBUG
-                            //Console.WriteLine(((response[i] & (1 << a)) > 0).ToString());
-                            //Console.WriteLine(response[i].ToString());
-                            //Console.WriteLine((1 << a).ToString());
-                        }
-                        catch
-                        {
-                            result[(i - 3) * 8 + a] = 0xFF;
-                        }
-                    }
-                }
-
-
                 // Check CRC
                 if (!Check_CRC(response, response.Length))
                 {
@@ -733,6 +693,19 @@ namespace ModBusMaster_Chicco
 
                     Console_print(" ModBus ErrCode: " + errCode.ToString() + " - " + ModbusErrorCodes[errCode], null, 0);
                     throw new ModbusException("ModBus ErrCode: " + errCode.ToString() + " - " + ModbusErrorCodes[errCode]);
+                }
+
+                // Leggo i bit di ciascun byte partendo dal 3 che contiene le prime 8 coils
+                // La coil 0 e' nel LSb, la coil 7 nel MSb del primo byte, la 8 nel LSb del secondo byte
+                for (int i = 3; i < (response.Length - 2); i++)
+                {
+                    for (int a = 0; a < 8; a++)
+                    {
+                        if ((i - 3) * 8 + a >= no_of_coils)
+                            break;
+
+                        result[(i - 3) * 8 + a] = (response[i] & (1 << a)) > 0 ? (byte)(1) : (byte)(0);
+                    }
                 }
 
                 return result;
@@ -869,31 +842,21 @@ namespace ModBusMaster_Chicco
                     throw new ModbusException("ModBus ErrCode: " + errCode.ToString() + " - " + ModbusErrorCodes[errCode]);
                 }
 
-                //Leggo i bit di ciascun byte partendo dal 9 che contiene le prime 8 coils
-                //La coil 0 e nel LSb, la coil 7 nel MSb del primo byte, la 8 nel LSb del secondo byte
+                // Leggo i bit di ciascun byte partendo dal 9 che contiene le prime 8 coils
+                // La coil 0 e nel LSb, la coil 7 nel MSb del primo byte, la 8 nel LSb del secondo byte
                 for (int i = 9; i < Length; i += 1)
                 {
                     for (int a = 0; a < 8; a++)
                     {
-                        try
-                        {
-                            //Se supero l'indice del max me ne frego (accade se coil % 8 != 0)
-                            //che tanto va nel catch
+                        if ((i - 9) * 8 + a >= no_of_input)
+                            break;
 
-                            //DEBUG
-                            //Console.WriteLine("i: " + i.ToString() + " a: " + a.ToString());
-
-                            result[(i - 9) * 8 + a] = (response[i] & (1 << a)) > 0 ? (byte)(1) : (byte)(0);
-                        }
-                        catch
-                        {
-                            ;
-                        }
+                        result[(i - 9) * 8 + a] = (response[i] & (1 << a)) > 0 ? (byte)(1) : (byte)(0);
                     }
                 }
 
                 // debug
-                //Console.WriteLine("Result (array of inputs): " + result);
+                // Console.WriteLine("Result (array of inputs): " + result);
 
                 return result;
 
@@ -941,50 +904,23 @@ namespace ModBusMaster_Chicco
                 try
                 {
                     response = readSerialCustom((UInt16)((no_of_input / 8)) + (no_of_input % 8 > 0 ? 1 : 0) + 5, readTimeout);
-
-                    if (response.Length == 0)
-                    {
-                        Console_print(" Timed out", null, 0);
-                        return null;
-                    }
-
-                    RX_set = true;        // pictureBox gialla
-
-                    Console_printByte("Rx: ", response, response.Length);
-                    Console_print(" Rx <- ", response, response.Length);
-
-                    //Leggo i bit di ciascun byte partendo dal 9 che contiene le prime 8 coils
-                    //La coil 0 e nel LSb, la coil 7 nel MSb del primo byte, la 8 nel LSb del secondo byte
-                    for (int i = 3; i < response.Length; i += 1)
-                    {
-                        for (int a = 0; a < 8; a++)
-                        {
-                            try
-                            {
-                                //Se supero l'indice me ne frego (accade se coil % 8 != 0)
-                                //che tanto va nel catch
-                                result[(i - 3) * 8 + a] = (response[i] & (1 << a)) > 0 ? (byte)(1) : (byte)(0);
-
-                                //DEBUG
-                                //Console.WriteLine(((response[i] & (1 << a)) > 0).ToString());
-                                //Console.WriteLine(response[i].ToString());
-                                //Console.WriteLine((1 << a).ToString());
-                            }
-                            catch
-                            {
-                                ;
-                            }
-                        }
-                    }
-
-                    // debug
-                    //Console.WriteLine("Result (array of inputs): " + result);
                 }
                 catch
                 {
                     // debug
-                    //Console.WriteLine("Result (array of inputs): " + result);
+                    // Console.WriteLine("Result (array of inputs): " + result);
                 }
+
+                if (response.Length == 0)
+                {
+                    Console_print(" Timed out", null, 0);
+                    return null;
+                }
+
+                RX_set = true;        // pictureBox gialla
+
+                Console_printByte("Rx: ", response, response.Length);
+                Console_print(" Rx <- ", response, response.Length);
 
                 // Check CRC
                 if (!Check_CRC(response, response.Length))
@@ -1000,6 +936,22 @@ namespace ModBusMaster_Chicco
                     Console_print(" ModBus ErrCode: " + errCode.ToString() + " - " + ModbusErrorCodes[errCode], null, 0);
                     throw new ModbusException("ModBus ErrCode: " + errCode.ToString() + " - " + ModbusErrorCodes[errCode]);
                 }
+
+                // Leggo i bit di ciascun byte partendo dal 9 che contiene le prime 8 coils
+                // La coil 0 e nel LSb, la coil 7 nel MSb del primo byte, la 8 nel LSb del secondo byte
+                for (int i = 3; i < (response.Length - 2); i++)
+                {
+                    for (int a = 0; a < 8; a++)
+                    {
+                        if ((i - 3) * 8 + a >= no_of_input)
+                            break;
+
+                        result[(i - 3) * 8 + a] = (response[i] & (1 << a)) > 0 ? (byte)(1) : (byte)(0);
+                    }
+                }
+
+                // debug
+                // Console.WriteLine("Result (array of inputs): " + result);
 
                 return result;
             }
@@ -1595,9 +1547,17 @@ namespace ModBusMaster_Chicco
                     throw new ModbusException("ModBus ErrCode: " + errCode.ToString() + " - " + ModbusErrorCodes[errCode]);
                 }
 
-                if (Length == query.Length)
+                // Check response
+                if (response[6] == query[6] &&      // Slave ID
+                    response[7] == query[7] &&      // FC
+                    response[8] == query[8] &&      // Start Addr
+                    response[9] == query[9] &&      // Start Addr
+                    response[10] == query[10] &&    // Value
+                    response[11] == query[11])      // Value
+                {
                     return true;
-
+                }
+                    
                 return false;
 
             }
@@ -1682,9 +1642,18 @@ namespace ModBusMaster_Chicco
                     throw new ModbusException("ModBus ErrCode: " + errCode.ToString() + " - " + ModbusErrorCodes[errCode]);
                 }
 
-                // TODO Check echo
-                return true;
+                // Check response
+                if (response[0] == query[0] &&    // Slave ID
+                    response[1] == query[1] &&    // FC
+                    response[2] == query[2] &&    // Start Addr
+                    response[3] == query[3] &&    // Start Addr
+                    response[4] == query[4] &&    // Value
+                    response[5] == query[5])      // Value
+                {
+                    return true;
+                }
 
+                return false;
             }
             else
             {
@@ -1819,8 +1788,16 @@ namespace ModBusMaster_Chicco
                     throw new ModbusException("ModBus ErrCode: " + errCode.ToString() + " - " + ModbusErrorCodes[errCode]);
                 }
 
-                if (Length == query.Length)
+                // Check response
+                if (response[6] == query[6] &&      // Slave ID
+                    response[7] == query[7] &&      // FC
+                    response[8] == query[8] &&      // Start Addr
+                    response[9] == query[9] &&      // Start Addr
+                    response[10] == query[10] &&    // Value
+                    response[11] == query[11])      // Value
+                {
                     return true;
+                }
 
                 return false;
 
@@ -1901,8 +1878,18 @@ namespace ModBusMaster_Chicco
                     throw new ModbusException("ModBus ErrCode: " + errCode.ToString() + " - " + ModbusErrorCodes[errCode]);
                 }
 
-                // TODO Check della echo
-                return true;
+                // Check response
+                if (response[0] == query[0] &&    // Slave ID
+                    response[1] == query[1] &&    // FC
+                    response[2] == query[2] &&    // Start Addr
+                    response[3] == query[3] &&    // Start Addr
+                    response[4] == query[4] &&    // Value
+                    response[5] == query[5])      // Value
+                {
+                    return true;
+                }
+
+                return false;
             }
             else
             {
@@ -2334,10 +2321,12 @@ namespace ModBusMaster_Chicco
 
                 if (response.Length > 11)
                 {
-                    if (response[8] == query[8] &&
-                        response[9] == query[9] &&
-                        response[10] == query[10] &&
-                        response[11] == query[11])
+                    if (response[6] == query[6] &&      // Slave ID
+                        response[7] == query[7] &&      // FC
+                        response[8] == query[8] &&      // Start Addr
+                        response[9] == query[9] &&      // Start Addr
+                        response[10] == query[10] &&    // Nr of coils
+                        response[11] == query[11])      // Nr of coils
                     {
                         return true;
                     }
@@ -2353,7 +2342,7 @@ namespace ModBusMaster_Chicco
                 /*
                 RTU
                 0x07 -> Slave Address
-                0x06 -> Header
+                0x06 -> FC
                 0x01 -> Start Addr Hi
                 0x2C -> Start Addr Lo
                 0x00 -> No of Registers Hi
@@ -2450,6 +2439,12 @@ namespace ModBusMaster_Chicco
                 Console_printByte("Rx: ", response, response.Length);
                 Console_print(" Rx <- ", response, response.Length);
 
+                // Check CRC
+                if (!Check_CRC(response, response.Length))
+                {
+                    throw new ModbusException("CRC Error");
+                }
+
                 // Modbus Error Code
                 if ((response[1] & 0x80) > 0)
                 {
@@ -2459,7 +2454,21 @@ namespace ModBusMaster_Chicco
                     throw new ModbusException("ModBus ErrCode: " + errCode.ToString() + " - " + ModbusErrorCodes[errCode]);
                 }
 
-                return Check_CRC(response, response.Length);
+                // Check response
+                if (response.Length > 5)
+                {
+                    if (response[0] == query[0] &&  // Slave ID
+                        response[1] == query[1] &&  // FC
+                        response[2] == query[2] &&  // Start Addr
+                        response[3] == query[3] &&  // Start Addr
+                        response[4] == query[4] &&  // Nr of coils
+                        response[5] == query[5])    // Nr of coils
+                    {
+                        return true;
+                    }
+                }
+
+                return false;
             }
             else
             {
@@ -2613,10 +2622,12 @@ namespace ModBusMaster_Chicco
                 }
 
                 if (response.Length > 11) {
-                    if (response[8] == query[8] &&
-                        response[9] == query[9] &&
-                        response[10] == query[10] &&
-                        response[11] == query[11])
+                    if (response[6] == query[6] &&      // Slave ID
+                        response[7] == query[7] &&      // FC
+                        response[8] == query[8] &&      // Start Addr
+                        response[9] == query[9] &&      // Start Addr
+                        response[10] == query[10] &&    // Nr of regs
+                        response[11] == query[11])      // Nr of regs
                     {
                         return register_value;
                     }
@@ -2718,10 +2729,12 @@ namespace ModBusMaster_Chicco
 
                 if (response.Length > 5)
                 {
-                    if (response[2] == query[2] &&
-                        response[3] == query[3] &&
-                        response[4] == query[4] &&
-                        response[5] == query[5])
+                    if (response[0] == query[0] &&  // Slave ID
+                        response[1] == query[1] &&  // FC
+                        response[2] == query[2] &&  // Start Addr
+                        response[3] == query[3] &&  // Start Addr
+                        response[4] == query[4] &&  // Nr of regs
+                        response[5] == query[5])    // Nr of regs
                     {
                         return register_value;
                     }
