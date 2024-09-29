@@ -140,7 +140,6 @@ namespace ModBus_Client
         SerialPort serialPort = new SerialPort();
 
         SaveFileDialog saveFileDialogBox;
-        //OpenFileDialog openFileDialogBox;
 
         // Le liste seguenti contengono il registro già convertito in DEC duramte il caricamento del file Template.json
         public ObservableCollection<ModBus_Item> list_template_coilsTable = new ObservableCollection<ModBus_Item>();
@@ -454,20 +453,17 @@ namespace ModBus_Client
         {
             dequeueExit = true;
 
-            //SaveConfiguration_v1(false);
-            SaveConfiguration_v2(false);
-
             try
             {
-                if (ModBus != null)
-                {
-                    ModBus.close(); // Se non attivo niente ModBUs risulta null
-                }
+                if(ModBus != null)
+                    ModBus.close();
             }
             catch
             {
 
             }
+
+            SaveConfiguration_v2(false);
 
             try
             {
@@ -722,13 +718,14 @@ namespace ModBus_Client
             ImageLogoTCP.Visibility = !(bool)radioButtonModeSerial.IsChecked ? Visibility.Visible : Visibility.Hidden;
 
             textBoxTcpClientIpAddress.IsEnabled = !(bool)radioButtonModeSerial.IsChecked;
-            textBoxTcpClientPort.IsEnabled = (!(bool)radioButtonModeSerial.IsChecked) && (!(bool)checkBoxModbusSecure.IsChecked);
             buttonPingIp.IsEnabled = !(bool)radioButtonModeSerial.IsChecked;
             buttonLoadClientCertificate.IsEnabled = !(bool)radioButtonModeSerial.IsChecked;
             buttonLoadClientKey.IsEnabled = !(bool)radioButtonModeSerial.IsChecked;
             textBoxCertificatePassword.IsEnabled = !(bool)radioButtonModeSerial.IsChecked;
             comboBoxTlsVersion.IsEnabled = !(bool)radioButtonModeSerial.IsChecked;
             checkBoxModbusSecure.IsEnabled = !(bool)radioButtonModeSerial.IsChecked;
+
+            textBoxTcpClientPort.IsEnabled = (!(bool)radioButtonModeSerial.IsChecked) && (!(bool)checkBoxModbusSecure.IsChecked);
             textBoxTcpClientPortSecure.IsEnabled = !(bool)radioButtonModeSerial.IsChecked;
         }
 
@@ -1675,7 +1672,10 @@ namespace ModBus_Client
                         gestisciDatabaseToolStripMenuItem.IsEnabled = false;
 
                         textBoxTcpClientIpAddress.IsEnabled = false;
+
                         textBoxTcpClientPort.IsEnabled = false;
+                        textBoxTcpClientPortSecure.IsEnabled = false;
+
                         languageToolStripMenu.IsEnabled = false;
 
                         checkBoxModbusSecure.IsEnabled = false;
@@ -1685,9 +1685,9 @@ namespace ModBus_Client
                         comboBoxTlsVersion.IsEnabled = false;
 
                         if (pathToConfiguration != defaultPathToConfiguration)
-                            this.Title = title + " " + version + " - File: " + pathToConfiguration + " - Ip: " + textBoxTcpClientIpAddress.Text + ":" + textBoxTcpClientPort.Text;
+                            this.Title = title + " " + version + " - File: " + pathToConfiguration + " - Ip: " + textBoxTcpClientIpAddress.Text + ":" + port.ToString();
                         else
-                            this.Title = title + " " + version + " - Ip: " + textBoxTcpClientIpAddress.Text + ":" + textBoxTcpClientPort.Text;
+                            this.Title = title + " " + version + " - Ip: " + textBoxTcpClientIpAddress.Text + ":" + port.ToString();
                     });
                 }
                 catch(Exception err)
@@ -1735,7 +1735,10 @@ namespace ModBus_Client
                     radioButtonModeTcp.IsEnabled = true;
 
                     textBoxTcpClientIpAddress.IsEnabled = true;
-                    textBoxTcpClientPort.IsEnabled = true;
+                    
+                    textBoxTcpClientPort.IsEnabled = !(bool)checkBoxModbusSecure.IsChecked;
+                    textBoxTcpClientPortSecure.IsEnabled = (bool)checkBoxModbusSecure.IsChecked;
+
                     languageToolStripMenu.IsEnabled = true;
 
                     checkBoxModbusSecure.IsEnabled = true;
@@ -4228,8 +4231,8 @@ namespace ModBus_Client
                             if (UInt16.Parse(test.Substring(1)) == values_[3])
                             {
                                 convertedValue = String.Format("(enum): {1}", match.Split(':')[0], match.Split(':')[1]);
-                                type = 10;
                             }
+                            type = 10;
 
                             result += labels[0] + String.Format("{0}: {1}", match.Split(':')[0], match.Split(':')[1]);
                             labels[0] = "\n";
@@ -4603,6 +4606,16 @@ namespace ModBus_Client
                     }*/
 
                     result += labels[0];
+                }
+
+                // enum
+                if(type == 10)
+                {
+                    if(convertedValue.Length == 0)
+                    {
+                        labels[0] = "value (uint16): " + values_[3].ToString();
+                        convertedValue = labels[0].Replace("value", "");
+                    }
                 }
 
                 // etichetta generica
@@ -5981,9 +5994,9 @@ namespace ModBus_Client
                     }
                 }
             }
-            catch (InvalidOperationException err)
+            catch (Exception ex)
             {
-                if (err.Message.IndexOf("non-connected socket") != -1)
+                if (ex is InvalidOperationException || ex is IOException || ex is SocketException)
                 {
                     SetTableDisconnectError(list_holdingRegistersTable, true);
 
@@ -5991,61 +6004,50 @@ namespace ModBus_Client
                     {
                         this.Dispatcher.Invoke((Action)delegate
                         {
-                            buttonSerialActive_Click(null, null);
+                            if (ModBus.ClientActive)
+                                buttonSerialActive_Click(null, null);
                         });
                     }
-                    else
+                    else if (ModBus.type == ModBus_Def.TYPE_TCP_SOCK || ModBus.type == ModBus_Def.TYPE_TCP_SECURE)
                     {
                         this.Dispatcher.Invoke((Action)delegate
                         {
-                            buttonTcpActive_Click(null, null);
+                            if (ModBus.ClientActive)
+                                buttonTcpActive_Click(null, null);
                         });
                     }
                 }
-
-                Console.WriteLine(err);
-            }
-            catch (ModbusException err)
-            {
-                if (err.Message.IndexOf("Timed out") != -1)
+                else if (ex is ModbusException)
                 {
-                    SetTableTimeoutError(list_holdingRegistersTable, true);
+                    if (ex.Message.IndexOf("Timed out") != -1)
+                    {
+                        SetTableTimeoutError(list_holdingRegistersTable, false);
+                    }
+                    if (ex.Message.IndexOf("ModBus ErrCode") != -1)
+                    {
+                        SetTableModBusError(list_holdingRegistersTable, (ModbusException)ex, false);
+                    }
+                    if (ex.Message.IndexOf("ModbusProtocolError") != -1)
+                    {
+                        SetTableStringError(list_holdingRegistersTable, (ModbusException)ex, true);
+                    }
+                    if (ex.Message.IndexOf("CRC Error") != -1)
+                    {
+                        SetTableCrcError(list_holdingRegistersTable, false);
+                    }
                 }
-                if (err.Message.IndexOf("ModBus ErrCode") != -1)
+                else
                 {
-                    SetTableModBusError(list_holdingRegistersTable, err, true);
+                    SetTableInternalError(list_holdingRegistersTable, false);
                 }
-                if (err.Message.IndexOf("ModbusProtocolError") != -1)
-                {
-                    SetTableStringError(list_holdingRegistersTable, (ModbusException)err, true);
-                }
-                if (err.Message.IndexOf("CRC Error") != -1)
-                {
-                    SetTableCrcError(list_holdingRegistersTable, true);
-                }
-
-                Console.WriteLine(err);
 
                 this.Dispatcher.Invoke((Action)delegate
                 {
-                    buttonWriteHolding06_b.IsEnabled = true;
-
                     dataGridViewHolding.ItemsSource = null;
                     dataGridViewHolding.ItemsSource = list_holdingRegistersTable;
                 });
-            }
-            catch (Exception err)
-            {
-                SetTableInternalError(list_holdingRegistersTable, true);
-                Console.WriteLine(err);
 
-                this.Dispatcher.Invoke((Action)delegate
-                {
-                    buttonWriteHolding06_b.IsEnabled = true;
-
-                    dataGridViewHolding.ItemsSource = null;
-                    dataGridViewHolding.ItemsSource = list_holdingRegistersTable;
-                });
+                Console.WriteLine(ex);
             }
         }
 
@@ -6134,9 +6136,8 @@ namespace ModBus_Client
                                             lastEditModbusItem.Foreground = ForeGroundLight.ToString();
                                             lastEditModbusItem.Background = colorDefaultWriteCell.ToString();
 
-                                            /*if(index + 1 < dataGridViewCoils.Items.Count)
-                                                dataGridViewCoils.SelectedItem = list_coilsTable[index + 1];*/
-
+                                            dataGridViewCoils.CommitEdit();   // Stackover consiglia due volte one evitare exception
+                                            dataGridViewCoils.CommitEdit();
                                             dataGridViewCoils.Items.Refresh();
                                         });
                                     }
@@ -6162,9 +6163,9 @@ namespace ModBus_Client
                     });
                 }
             }
-            catch (InvalidOperationException err)
+            catch (Exception ex)
             {
-                if (err.Message.IndexOf("non-connected socket") != -1)
+                if (ex is InvalidOperationException || ex is IOException || ex is SocketException)
                 {
                     SetTableDisconnectError(list_coilsTable, true);
 
@@ -6172,62 +6173,50 @@ namespace ModBus_Client
                     {
                         this.Dispatcher.Invoke((Action)delegate
                         {
-                            buttonSerialActive_Click(null, null);
+                            if (ModBus.ClientActive)
+                                buttonSerialActive_Click(null, null);
                         });
                     }
-                    else
+                    else if (ModBus.type == ModBus_Def.TYPE_TCP_SOCK || ModBus.type == ModBus_Def.TYPE_TCP_SECURE)
                     {
                         this.Dispatcher.Invoke((Action)delegate
                         {
-                            buttonTcpActive_Click(null, null);
+                            if (ModBus.ClientActive)
+                                buttonTcpActive_Click(null, null);
                         });
                     }
                 }
-
-                Console.WriteLine(err);
-            }
-            catch (ModbusException err)
-            {
-                if (err.Message.IndexOf("Timed out") != -1)
+                else if (ex is ModbusException)
                 {
-                    SetTableTimeoutError(list_coilsTable, true);
+                    if (ex.Message.IndexOf("Timed out") != -1)
+                    {
+                        SetTableTimeoutError(list_coilsTable, false);
+                    }
+                    if (ex.Message.IndexOf("ModBus ErrCode") != -1)
+                    {
+                        SetTableModBusError(list_coilsTable, (ModbusException)ex, false);
+                    }
+                    if (ex.Message.IndexOf("ModbusProtocolError") != -1)
+                    {
+                        SetTableStringError(list_coilsTable, (ModbusException)ex, true);
+                    }
+                    if (ex.Message.IndexOf("CRC Error") != -1)
+                    {
+                        SetTableCrcError(list_coilsTable, false);
+                    }
                 }
-                if (err.Message.IndexOf("ModBus ErrCode") != -1)
+                else
                 {
-                    SetTableModBusError(list_coilsTable, err, true);
+                    SetTableInternalError(list_coilsTable, false);
                 }
-                if (err.Message.IndexOf("ModbusProtocolError") != -1)
-                {
-                    SetTableStringError(list_coilsTable, (ModbusException)err, true);
-                }
-                if (err.Message.IndexOf("CRC Error") != -1)
-                {
-                    SetTableCrcError(list_coilsTable, true);
-                }
-
-                Console.WriteLine(err);
 
                 this.Dispatcher.Invoke((Action)delegate
                 {
-                    buttonWriteCoils05_B.IsEnabled = true;
-
                     dataGridViewCoils.ItemsSource = null;
                     dataGridViewCoils.ItemsSource = list_coilsTable;
                 });
-            }
-            catch (Exception err)
-            {
-                SetTableInternalError(list_coilsTable, true);
 
-                Console.WriteLine(err);
-
-                this.Dispatcher.Invoke((Action)delegate
-                {
-                    buttonWriteCoils05_B.IsEnabled = true;
-
-                    dataGridViewCoils.ItemsSource = null;
-                    dataGridViewCoils.ItemsSource = list_coilsTable;
-                });
+                Console.WriteLine(ex);
             }
         }
 
@@ -11861,6 +11850,7 @@ namespace ModBus_Client
             textBoxTcpClientPortSecure.Visibility = (bool)checkBoxModbusSecure.IsChecked ? Visibility.Visible : Visibility.Hidden;
 
             textBoxTcpClientPort.IsEnabled = (!(bool)checkBoxModbusSecure.IsChecked) && (!(bool)radioButtonModeSerial.IsChecked);
+            textBoxTcpClientPortSecure.IsEnabled = ((bool)checkBoxModbusSecure.IsChecked) && (!(bool)radioButtonModeSerial.IsChecked);
 
             if ((bool)checkBoxModbusSecure.IsChecked)
             {

@@ -3,11 +3,11 @@ Client ModBus TCP/RTU written in C# useful for Modbus read and write operations 
 
 ## Release
 
-### v2.48 New Version
-[ModBus_Client_v2.48 - Portable Zip](https://github.com/fedeturco/ModBus_Client/releases/download/2.48/ModBus_Client_v2.48.zip)
+### v2.49 New Version
+[ModBus_Client_v2.49 - Portable Zip](https://github.com/fedeturco/ModBus_Client/releases/download/2.49/ModBus_Client_v2.49.zip)
 
-### v2.47 Stable
-[ModBus_Client_v2.47 - Portable Zip](https://github.com/fedeturco/ModBus_Client/releases/download/2.47/ModBus_Client_v2.47.zip)
+### v2.48 Stable
+[ModBus_Client_v2.48 - Portable Zip](https://github.com/fedeturco/ModBus_Client/releases/download/2.48/ModBus_Client_v2.48.zip)
 
 ### Manual
 [Manual EN](https://github.com/fedeturco/ModBus_Client/blob/master/ModBus_Client/Manuals/ModBus_Client_EN.pdf)

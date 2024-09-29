@@ -41,6 +41,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Net.Sockets;
 
 using ModBus_Client;
 using ModBusMaster_Chicco;
@@ -62,7 +63,6 @@ namespace ModBus_Client
     /// </summary>
     public partial class ComandiWord : Window
     {
-        ModBus_Chicco ModBus;
         MainWindow main;
         Language lang;
 
@@ -95,7 +95,6 @@ namespace ModBus_Client
             // Creo evento di chiusura del form
             this.Closing += Sim_Form_cs_Closing;
 
-            ModBus = ModBus_;
             main = main_;
             pathToConfiguration = main.pathToConfiguration;
 
@@ -381,7 +380,7 @@ namespace ModBus_Client
             {
                 uint address_start = P.uint_parser(textBoxHoldingOffset, comboBoxHoldingOffset) + P.uint_parser(textBoxHoldingAddress[row], comboBoxHoldingAddress[row]);
 
-                UInt16[] response = ModBus.readHoldingRegister_03(byte.Parse(textBoxModBusAddress.Text), address_start, 1, main.readTimeout);
+                UInt16[] response = main.ModBus.readHoldingRegister_03(byte.Parse(textBoxModBusAddress.Text), address_start, 1, main.readTimeout);
 
                 if (comboBoxHoldingValue[row].SelectedIndex == 0)
                 {
@@ -415,79 +414,79 @@ namespace ModBus_Client
                 if (value < 65536 && value >= 0)
                 {
 
-                    if ((bool)ModBus.presetSingleRegister_06(byte.Parse(textBoxModBusAddress.Text), address_start, value, main.readTimeout))
+                    if ((bool)main.ModBus.presetSingleRegister_06(byte.Parse(textBoxModBusAddress.Text), address_start, value, main.readTimeout))
                     {
                         textBoxHoldingValue[row].Background = Brushes.LightGreen;
                     }
                     else
                     {
                         textBoxHoldingValue[row].Background = Brushes.PaleVioletRed;
-                        MessageBox.Show("Errore nel settaggio del registro", "Alert");
+                        MessageBox.Show("Error writing register", "Alert", MessageBoxButton.OK, MessageBoxImage.Error);
                     }
                 }
                 else
                 {
-                    Console.WriteLine("Valore inserito non valido: " + value.ToString());
-                    MessageBox.Show("Valore inserito non valido: " + value.ToString(), "Alert");
+                    Console.WriteLine("Inserted value not valid: " + value.ToString());
+                    MessageBox.Show("Inserted value not valid: " + value.ToString(), "Alert");
                 }
             }
-            catch (InvalidOperationException err)
+            catch (Exception ex)
             {
-                if (err.Message.IndexOf("non-connected socket") != -1)
+                textBoxHoldingValue[row].Background = Brushes.PaleVioletRed;
+                MessageBox.Show("Error writing register", "Alert", MessageBoxButton.OK, MessageBoxImage.Error);
+
+                if (ex is InvalidOperationException || ex is IOException || ex is SocketException)
                 {
-                    main.SetTableDisconnectError(main.list_coilsTable, true);
+                    main.SetTableDisconnectError(main.list_holdingRegistersTable, true);
 
                     if (main.ModBus.type == main.ModBus_Def.TYPE_RTU || main.ModBus.type == main.ModBus_Def.TYPE_ASCII)
                     {
                         this.Dispatcher.Invoke((Action)delegate
                         {
-                            main.buttonSerialActive_Click(null, null);
+                            if (main.ModBus.ClientActive)
+                                main.buttonSerialActive_Click(null, null);
                         });
                     }
-                    else
+                    else if (main.ModBus.type == main.ModBus_Def.TYPE_TCP_SOCK || main.ModBus.type == main.ModBus_Def.TYPE_TCP_SECURE)
                     {
                         this.Dispatcher.Invoke((Action)delegate
                         {
-                            main.buttonTcpActive_Click(null, null);
+                            if (main.ModBus.ClientActive)
+                                main.buttonTcpActive_Click(null, null);
                         });
                     }
                 }
-
-                Console.WriteLine(err);
-            }
-            catch (ModbusException err)
-            {
-                if (err.Message.IndexOf("Timed out") != -1)
+                else if (ex is ModbusException)
                 {
-                    main.SetTableTimeoutError(main.list_holdingRegistersTable, true);
+                    if (ex.Message.IndexOf("Timed out") != -1)
+                    {
+                        main.SetTableTimeoutError(main.list_holdingRegistersTable, false);
+                    }
+                    if (ex.Message.IndexOf("ModBus ErrCode") != -1)
+                    {
+                        main.SetTableModBusError(main.list_holdingRegistersTable, (ModbusException)ex, false);
+                    }
+                    if (ex.Message.IndexOf("ModbusProtocolError") != -1)
+                    {
+                        main.SetTableStringError(main.list_holdingRegistersTable, (ModbusException)ex, true);
+                    }
+                    if (ex.Message.IndexOf("CRC Error") != -1)
+                    {
+                        main.SetTableCrcError(main.list_holdingRegistersTable, false);
+                    }
                 }
-                if (err.Message.IndexOf("ModBus ErrCode") != -1)
+                else
                 {
-                    main.SetTableModBusError(main.list_holdingRegistersTable, err, true);
+                    main.SetTableInternalError(main.list_holdingRegistersTable, false);
                 }
-                if (err.Message.IndexOf("CRC Error") != -1)
-                {
-                    main.SetTableCrcError(main.list_holdingRegistersTable, true);
-                }
-
-                Console.WriteLine(err);
 
                 this.Dispatcher.Invoke((Action)delegate
                 {
                     main.dataGridViewHolding.ItemsSource = null;
                     main.dataGridViewHolding.ItemsSource = main.list_holdingRegistersTable;
                 });
-            }
-            catch (Exception err)
-            {
-                main.SetTableInternalError(main.list_holdingRegistersTable, true);
-                Console.WriteLine(err);
 
-                this.Dispatcher.Invoke((Action)delegate
-                {
-                    main.dataGridViewHolding.ItemsSource = null;
-                    main.dataGridViewHolding.ItemsSource = main.list_holdingRegistersTable;
-                });
+                Console.WriteLine(ex);
             }
 
             pictureBoxBusy.Background = Brushes.LightGray;

@@ -713,7 +713,7 @@ namespace ModBusMaster_Chicco
             }
             else
             {
-                Console.WriteLine("Nessuna connessione attiva");
+                Console.WriteLine("No Modbus context available");
                 return null;
             }
         }
@@ -957,7 +957,7 @@ namespace ModBusMaster_Chicco
             }
             else
             {
-                Console.WriteLine("Nessuna connessione attiva");
+                Console.WriteLine("No Modbus context available");
                 return null;
             }
         }
@@ -1183,7 +1183,7 @@ namespace ModBusMaster_Chicco
             else
             {
                 string[] error = { "?" };
-                Console.WriteLine("Nessuna connessione attiva");
+                Console.WriteLine("No Modbus context available");
                 return null;
             }
         }
@@ -1411,7 +1411,7 @@ namespace ModBusMaster_Chicco
             }
             else
             {
-                Console.WriteLine("Nessuna connessione attiva");
+                Console.WriteLine("No Modbus context available");
                 return null;
             }
         }
@@ -1657,7 +1657,7 @@ namespace ModBusMaster_Chicco
             }
             else
             {
-                Console.WriteLine("Nessuna connessione attiva");
+                Console.WriteLine("No Modbus context available");
                 return false;
             }
         }
@@ -1893,7 +1893,7 @@ namespace ModBusMaster_Chicco
             }
             else
             {
-                Console.WriteLine("Nessuna connessione attiva");
+                Console.WriteLine("No Modbus context available");
                 return false;
             }
         }
@@ -2151,7 +2151,7 @@ namespace ModBusMaster_Chicco
             }
             else
             {
-                Console.WriteLine("Nessuna connessione attiva");
+                Console.WriteLine("No Modbus context available");
                 return null;
             }
         }
@@ -2476,7 +2476,7 @@ namespace ModBusMaster_Chicco
             }
             else
             {
-                Console.WriteLine("Nessuna connessione attiva");
+                Console.WriteLine("No Modbus context available");
                 return false;
             }
         }
@@ -2749,7 +2749,7 @@ namespace ModBusMaster_Chicco
             }
             else
             {
-                Console.WriteLine("Nessuna connessione attiva");
+                Console.WriteLine("No Modbus context available");
                 return new UInt16[0] { };
             }
         }
