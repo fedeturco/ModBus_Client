@@ -297,9 +297,9 @@
     "viewToolStripMenuItem": "View",
 
     "viewTabCoils": "Coils table",
-    "viewTabInputs": "Inputs table",
-    "viewTabInputRgisters": "Input Registers table",
-    "viewTabHoldingRgisters": "Holding Registers table",
+    "viewTabInputs": "Discrete inputs table",
+    "viewTabInputRgisters": "Input registers table",
+    "viewTabHoldingRgisters": "Holding registers table",
 
     "viewTabCoilsRegisters": "Registers",
     "viewTabCoilsValues": "Values",

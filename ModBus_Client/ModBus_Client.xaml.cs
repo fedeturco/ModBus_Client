@@ -737,9 +737,7 @@ namespace ModBus_Client
                 pictureBoxSerial.Background = Brushes.Lime;
                 pictureBoxRunningAs.Background = Brushes.Lime;
 
-
                 textBlockSerialActive.Text = lang.languageTemplate["strings"]["disconnect"];
-                // holdingSuiteToolStripMenuItem.IsEnabled = true;
 
                 menuItemToolBit.IsEnabled = true;
                 menuItemToolWord.IsEnabled = true;
@@ -747,7 +745,6 @@ namespace ModBus_Client
                 salvaConfigurazioneNelDatabaseToolStripMenuItem.IsEnabled = false;
                 caricaConfigurazioneDalDatabaseToolStripMenuItem.IsEnabled = false;
                 gestisciDatabaseToolStripMenuItem.IsEnabled = false;
-
 
                 try
                 {
@@ -760,13 +757,13 @@ namespace ModBus_Client
                     serialPort.PortName = comboBoxSerialPort.SelectedItem.ToString();
 
                     // debug
-                    //Console.WriteLine(comboBoxSerialSpeed.SelectedValue.ToString());
-                    //Console.WriteLine(comboBoxSerialSpeed.SelectedItem.ToString());
+                    // Console.WriteLine(comboBoxSerialSpeed.SelectedValue.ToString());
+                    // Console.WriteLine(comboBoxSerialSpeed.SelectedItem.ToString());
 
                     serialPort.BaudRate = int.Parse(comboBoxSerialSpeed.SelectedValue.ToString().Split(' ')[1]);
 
-                    // DEBUG
-                    //Console.WriteLine("comboBoxSerialParity.SelectedIndex:" + comboBoxSerialParity.SelectedIndex.ToString());
+                    // debug
+                    // Console.WriteLine("comboBoxSerialParity.SelectedIndex:" + comboBoxSerialParity.SelectedIndex.ToString());
 
                     switch (comboBoxSerialParity.SelectedIndex)
                     {
@@ -786,7 +783,7 @@ namespace ModBus_Client
 
                     serialPort.DataBits = 8;
 
-                    // DEBUG
+                    // debug
                     // Console.WriteLine("comboBoxSerialStop.SelectedIndex:" + comboBoxSerialStop.SelectedIndex.ToString());
 
                     switch (comboBoxSerialStop.SelectedIndex)
@@ -826,7 +823,6 @@ namespace ModBus_Client
 
                     radioButtonModeSerial.IsEnabled = false;
                     radioButtonModeTcp.IsEnabled = false;
-
 
                     comboBoxSerialPort.IsEnabled = false;
                     comboBoxSerialSpeed.IsEnabled = false;
@@ -878,7 +874,6 @@ namespace ModBus_Client
                 pictureBoxSerial.Background = Brushes.LightGray;
                 pictureBoxRunningAs.Background = Brushes.LightGray;
 
-
                 textBlockSerialActive.Text = lang.languageTemplate["strings"]["connect"];
 
                 radioButtonModeSerial.IsEnabled = true;
@@ -897,6 +892,11 @@ namespace ModBus_Client
                 comboBoxSerialStop.IsEnabled = true;
                 languageToolStripMenu.IsEnabled = true;
 
+                if (pathToConfiguration != defaultPathToConfiguration)
+                    this.Title = title + " " + version + " - File: " + pathToConfiguration;
+                else
+                    this.Title = title + " " + version;
+
                 // Fermo eventuali loop
                 disableAllLoops();
 
@@ -904,6 +904,7 @@ namespace ModBus_Client
                 // ----------------------Chiusura comunicazione seriale-----------------------------
                 // ---------------------------------------------------------------------------------
                 serialPort.Close();
+
                 richTextBoxAppend(richTextBoxStatus, "Port closed");
             }
 
@@ -1581,8 +1582,6 @@ namespace ModBus_Client
             {
                 ip_address = textBoxTcpClientIpAddress.Text;
                 check = pictureBoxTcp.Background == Brushes.LightGray;
-                if (check)
-                    richTextBoxAppend(richTextBoxStatus, lang.languageTemplate["strings"]["connectingTo"] + " " + ip_address + ":" + port);
 
                 if ((bool)checkBoxModbusSecure.IsChecked)
                 {
@@ -1594,6 +1593,9 @@ namespace ModBus_Client
                     TCPMode = comboBoxTcpConnectionMode.SelectedIndex == 0 ? ModBus_Def.TYPE_TCP_SOCK : ModBus_Def.TYPE_TCP_REOPEN;
                     port = textBoxTcpClientPort.Text;
                 }
+
+                if (check)
+                    richTextBoxAppend(richTextBoxStatus, lang.languageTemplate["strings"]["connectingTo"] + " " + ip_address + ":" + port);
             });
 
             if (check)
@@ -1746,6 +1748,11 @@ namespace ModBus_Client
                     buttonLoadClientKey.IsEnabled = true;
                     textBoxCertificatePassword.IsEnabled = true;
                     comboBoxTlsVersion.IsEnabled = true;
+
+                    if (pathToConfiguration != defaultPathToConfiguration)
+                        this.Title = title + " " + version + " - File: " + pathToConfiguration;
+                    else
+                        this.Title = title + " " + version;
 
                     // Close the connection
                     ModBus.close();
@@ -2273,11 +2280,11 @@ namespace ModBus_Client
                 {
                     if (ex.Message.IndexOf("Timed out") != -1)
                     {
-                        SetTableTimeoutError(list_coilsTable, false);
+                        SetTableTimeoutError(list_coilsTable, true);
                     }
                     if (ex.Message.IndexOf("ModBus ErrCode") != -1)
                     {
-                        SetTableModBusError(list_coilsTable, (ModbusException)ex, false);
+                        SetTableModBusError(list_coilsTable, (ModbusException)ex, true);
                     }
                     if (ex.Message.IndexOf("ModbusProtocolError") != -1)
                     {
@@ -2285,7 +2292,7 @@ namespace ModBus_Client
                     }
                     if (ex.Message.IndexOf("CRC Error") != -1)
                     {
-                        SetTableCrcError(list_coilsTable, false);
+                        SetTableCrcError(list_coilsTable, true);
                     }
 
                     this.Dispatcher.Invoke((Action)delegate
@@ -2395,11 +2402,11 @@ namespace ModBus_Client
                 {
                     if (ex.Message.IndexOf("Timed out") != -1)
                     {
-                        SetTableTimeoutError(list_coilsTable, false);
+                        SetTableTimeoutError(list_coilsTable, true);
                     }
                     if (ex.Message.IndexOf("ModBus ErrCode") != -1)
                     {
-                        SetTableModBusError(list_coilsTable, (ModbusException)ex, false);
+                        SetTableModBusError(list_coilsTable, (ModbusException)ex, true);
                     }
                     if (ex.Message.IndexOf("ModbusProtocolError") != -1)
                     {
@@ -2407,7 +2414,7 @@ namespace ModBus_Client
                     }
                     if (ex.Message.IndexOf("CRC Error") != -1)
                     {
-                        SetTableCrcError(list_coilsTable, false);
+                        SetTableCrcError(list_coilsTable, true);
                     }
 
                     this.Dispatcher.Invoke((Action)delegate
@@ -6021,11 +6028,11 @@ namespace ModBus_Client
                 {
                     if (ex.Message.IndexOf("Timed out") != -1)
                     {
-                        SetTableTimeoutError(list_holdingRegistersTable, false);
+                        SetTableTimeoutError(list_holdingRegistersTable, true);
                     }
                     if (ex.Message.IndexOf("ModBus ErrCode") != -1)
                     {
-                        SetTableModBusError(list_holdingRegistersTable, (ModbusException)ex, false);
+                        SetTableModBusError(list_holdingRegistersTable, (ModbusException)ex, true);
                     }
                     if (ex.Message.IndexOf("ModbusProtocolError") != -1)
                     {
@@ -6033,12 +6040,12 @@ namespace ModBus_Client
                     }
                     if (ex.Message.IndexOf("CRC Error") != -1)
                     {
-                        SetTableCrcError(list_holdingRegistersTable, false);
+                        SetTableCrcError(list_holdingRegistersTable, true);
                     }
                 }
                 else
                 {
-                    SetTableInternalError(list_holdingRegistersTable, false);
+                    SetTableInternalError(list_holdingRegistersTable, true);
                 }
 
                 this.Dispatcher.Invoke((Action)delegate
@@ -6190,11 +6197,11 @@ namespace ModBus_Client
                 {
                     if (ex.Message.IndexOf("Timed out") != -1)
                     {
-                        SetTableTimeoutError(list_coilsTable, false);
+                        SetTableTimeoutError(list_coilsTable, true);
                     }
                     if (ex.Message.IndexOf("ModBus ErrCode") != -1)
                     {
-                        SetTableModBusError(list_coilsTable, (ModbusException)ex, false);
+                        SetTableModBusError(list_coilsTable, (ModbusException)ex, true);
                     }
                     if (ex.Message.IndexOf("ModbusProtocolError") != -1)
                     {
@@ -6202,12 +6209,12 @@ namespace ModBus_Client
                     }
                     if (ex.Message.IndexOf("CRC Error") != -1)
                     {
-                        SetTableCrcError(list_coilsTable, false);
+                        SetTableCrcError(list_coilsTable, true);
                     }
                 }
                 else
                 {
-                    SetTableInternalError(list_coilsTable, false);
+                    SetTableInternalError(list_coilsTable, true);
                 }
 
                 this.Dispatcher.Invoke((Action)delegate

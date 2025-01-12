@@ -37,21 +37,12 @@
                         <MenuItem x:Name="viewTabCoilsConvertedValues" Header="Converted Values" IsCheckable="True" Checked="changeColumnVisibility" Unchecked="changeColumnVisibility" Foreground="#2d2d30"></MenuItem>
                         <MenuItem x:Name="viewTabCoilsNotes" Header="Notes" IsCheckable="True" Checked="changeColumnVisibility" Unchecked="changeColumnVisibility" Foreground="#2d2d30"></MenuItem>
                     </MenuItem>
-                    <MenuItem x:Name="viewTabInputs" Header="Inputs" Foreground="#2d2d30">
+                    <MenuItem x:Name="viewTabInputs" Header="Discrete inputs" Foreground="#2d2d30">
                         <MenuItem x:Name="viewTabInputsOffset" Header="Offset" IsCheckable="True" Checked="changeColumnVisibility" Unchecked="changeColumnVisibility" Foreground="#2d2d30"></MenuItem>
                         <MenuItem x:Name="viewTabInputsRegisters" Header="Register" IsCheckable="True" Checked="changeColumnVisibility" Unchecked="changeColumnVisibility" Foreground="#2d2d30"></MenuItem>
                         <MenuItem x:Name="viewTabInputsValues" Header="Values" IsCheckable="True" Checked="changeColumnVisibility" Unchecked="changeColumnVisibility" Foreground="#2d2d30"></MenuItem>
                         <MenuItem x:Name="viewTabInputsConvertedValues" Header="Converted Values" IsCheckable="True" Checked="changeColumnVisibility" Unchecked="changeColumnVisibility" Foreground="#2d2d30"></MenuItem>
                         <MenuItem x:Name="viewTabInputsNotes" Header="Notes" IsCheckable="True" Checked="changeColumnVisibility" Unchecked="changeColumnVisibility" Foreground="#2d2d30"></MenuItem>
-                    </MenuItem>
-                    <MenuItem x:Name="viewTabInputRgisters" Header="Input Registers" Foreground="#2d2d30">
-                        <MenuItem x:Name="viewTabInputRegistersOffset" Header="Offset" IsCheckable="True" Checked="changeColumnVisibility" Unchecked="changeColumnVisibility" Foreground="#2d2d30"></MenuItem>
-                        <MenuItem x:Name="viewTabInputRegistersRegisters" Header="Register" IsCheckable="True" Checked="changeColumnVisibility" Unchecked="changeColumnVisibility" Foreground="#2d2d30"></MenuItem>
-                        <MenuItem x:Name="viewTabInputRegistersValues" Header="Values" IsCheckable="True" Checked="changeColumnVisibility" Unchecked="changeColumnVisibility" Foreground="#2d2d30"></MenuItem>
-                        <MenuItem x:Name="viewTabInputRegistersBinaryValues" Header="Binary Values" IsCheckable="True" Checked="changeColumnVisibility" Unchecked="changeColumnVisibility" Foreground="#2d2d30"></MenuItem>
-                        <MenuItem x:Name="viewTabInputRegistersConvertedValues" Header="Converted Values" IsCheckable="True" Checked="changeColumnVisibility" Unchecked="changeColumnVisibility" Foreground="#2d2d30"></MenuItem>
-                        <MenuItem x:Name="viewTabInputRegistersNotes" Header="Notes" IsCheckable="True" Checked="changeColumnVisibility" Unchecked="changeColumnVisibility" Foreground="#2d2d30"></MenuItem>
-                        <MenuItem x:Name="viewTabInputRegistersMappings" Header="Mappings" IsCheckable="True" Checked="changeColumnVisibility" Unchecked="changeColumnVisibility" Foreground="#2d2d30"></MenuItem>
                     </MenuItem>
                     <MenuItem x:Name="viewTabHoldingRgisters" Header="Holding Registers" Foreground="#2d2d30">
                         <MenuItem x:Name="viewTabHoldingRegistersOffset" Header="Offset" IsCheckable="True" Checked="changeColumnVisibility" Unchecked="changeColumnVisibility" Foreground="#2d2d30"></MenuItem>
@@ -61,6 +52,15 @@
                         <MenuItem x:Name="viewTabHoldingRegistersConvertedValues" Header="Converted Values" IsCheckable="True" Checked="changeColumnVisibility" Unchecked="changeColumnVisibility" Foreground="#2d2d30"></MenuItem>
                         <MenuItem x:Name="viewTabHoldingRegistersNotes" Header="Notes" IsCheckable="True" Checked="changeColumnVisibility" Unchecked="changeColumnVisibility" Foreground="#2d2d30"></MenuItem>
                         <MenuItem x:Name="viewTabHoldingRegistersMappings" Header="Mappings" IsCheckable="True" Checked="changeColumnVisibility" Unchecked="changeColumnVisibility" Foreground="#2d2d30"></MenuItem>
+                    </MenuItem>
+                    <MenuItem x:Name="viewTabInputRgisters" Header="Input Registers" Foreground="#2d2d30">
+                        <MenuItem x:Name="viewTabInputRegistersOffset" Header="Offset" IsCheckable="True" Checked="changeColumnVisibility" Unchecked="changeColumnVisibility" Foreground="#2d2d30"></MenuItem>
+                        <MenuItem x:Name="viewTabInputRegistersRegisters" Header="Register" IsCheckable="True" Checked="changeColumnVisibility" Unchecked="changeColumnVisibility" Foreground="#2d2d30"></MenuItem>
+                        <MenuItem x:Name="viewTabInputRegistersValues" Header="Values" IsCheckable="True" Checked="changeColumnVisibility" Unchecked="changeColumnVisibility" Foreground="#2d2d30"></MenuItem>
+                        <MenuItem x:Name="viewTabInputRegistersBinaryValues" Header="Binary Values" IsCheckable="True" Checked="changeColumnVisibility" Unchecked="changeColumnVisibility" Foreground="#2d2d30"></MenuItem>
+                        <MenuItem x:Name="viewTabInputRegistersConvertedValues" Header="Converted Values" IsCheckable="True" Checked="changeColumnVisibility" Unchecked="changeColumnVisibility" Foreground="#2d2d30"></MenuItem>
+                        <MenuItem x:Name="viewTabInputRegistersNotes" Header="Notes" IsCheckable="True" Checked="changeColumnVisibility" Unchecked="changeColumnVisibility" Foreground="#2d2d30"></MenuItem>
+                        <MenuItem x:Name="viewTabInputRegistersMappings" Header="Mappings" IsCheckable="True" Checked="changeColumnVisibility" Unchecked="changeColumnVisibility" Foreground="#2d2d30"></MenuItem>
                     </MenuItem>
                     <Separator />
                     <MenuItem x:Name="ViewFullSizeTables" Header="Full size table" IsCheckable="True" Checked="ViewFullSizeTables_Checked" Unchecked="ViewFullSizeTables_Checked"/>
@@ -80,8 +80,8 @@
                     <MenuItem x:Name="menuItemToolWord" Header="Tool command word" Click="menuItemToolWord_Click" Foreground="#2d2d30"/>
                 </MenuItem>
                 <MenuItem x:Name="menuItemImportReg" Header="Import">
-                    <MenuItem x:Name="menuItemImportCoilsClipboard" Header="Import coils table (clipboard)" Click="buttonImportCoilsClipboard_Click" Foreground="#2d2d30"/>
-                    <MenuItem x:Name="menuItemImportHoldingRegistersClipboard" Header="Import holding registers table (clipboard)" Click="buttonImportHoldingRegClipboard_Click" Foreground="#2d2d30"/>
+                    <MenuItem x:Name="menuItemImportCoilsClipboard" Header="Import coils table from clipboard" Click="buttonImportCoilsClipboard_Click" Foreground="#2d2d30"/>
+                    <MenuItem x:Name="menuItemImportHoldingRegistersClipboard" Header="Import holding registers table from clipboard" Click="buttonImportHoldingRegClipboard_Click" Foreground="#2d2d30"/>
                     <Separator />
                     <MenuItem x:Name="menuItemImportCoils" Header="Import coils table (.csv / .json)" Click="buttonImportCoils_Click" Foreground="#2d2d30"/>
                     <MenuItem x:Name="menuItemImportHoldingRegisters" Header="Import holding registers table (.csv / .json)" Click="buttonImportHoldingReg_Click" Foreground="#2d2d30"/>
