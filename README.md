@@ -1,5 +1,5 @@
-# ModBus_Client
-Client ModBus TCP/RTU written in C# useful for Modbus read and write operations on RTU-485 or TCP/TLS slaves.
+# ModBus Client
+ModBus Client TCP/RTU written in C# useful for Modbus read and write operations on RTU-485 or TCP/TLS slaves.
 
 ## Release
 
