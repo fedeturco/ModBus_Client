@@ -878,11 +878,11 @@ namespace ModBus_Client
 
                     MOD_SlaveProfile slave = new MOD_SlaveProfile();
 
-                    slave.slave_id = new List<int>();
+                    slave.slave_id = new List<byte>();
 
                     main.Dispatcher.Invoke((Action)delegate
                     {
-                        slave.slave_id.Add(int.Parse(main.textBoxModbusAddress.Text));
+                        slave.slave_id.Add(byte.Parse(main.textBoxModbusAddress.Text));
                     });
 
                     slave.label = TextBoxTemplateLabel.Text;
@@ -1014,7 +1014,7 @@ namespace ModBus_Client
                         {
                             Group_Item group = new Group_Item();
 
-                            group.Group = splitted[i].Split(',')[0];
+                            group.Group = UInt16.Parse(splitted[i].Split(',')[0]);
                             group.Label = splitted[i].Split(',')[1];
 
                             list_groups.Add(group);
@@ -1128,7 +1128,7 @@ namespace ModBus_Client
 
                 Group_Item group = new Group_Item();
 
-                group.Group = row[0];
+                group.Group = UInt16.Parse(row[0]);
                 group.Label = row[1];
 
                 list.Add(group);
@@ -1311,12 +1311,12 @@ namespace ModBus_Client
 
     public class Group_Item
     {
-        public string Group { get; set; }
+        public UInt16 Group { get; set; }
         public string Label { get; set; }
     }
     public class MOD_SlaveProfile
     {
-        public List<int> slave_id { get; set; }
+        public List<byte> slave_id { get; set; }
         public string label { get; set; }
         public string notes { get; set; }
         public string type { get; set; }
