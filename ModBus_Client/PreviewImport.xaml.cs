@@ -191,14 +191,23 @@ namespace ModBus_Client
                     item.Register = row[1];
                     item.RegisterUInt = parsed;
 
-                    if (!UInt16.TryParse(row[2].Replace("0x", ""), row[2].ToLower().IndexOf("0x") != -1 ? System.Globalization.NumberStyles.HexNumber : System.Globalization.NumberStyles.Integer, null, out parsed))
+                    Int32 parsedInt32;
+                    if (!Int32.TryParse(row[2].Replace("0x", ""), row[2].ToLower().IndexOf("0x") != -1 ? System.Globalization.NumberStyles.HexNumber : System.Globalization.NumberStyles.Integer, null, out parsedInt32))
                     {
                         errorParsing = true;
                         continue;
                     }
+                    else
+                    {
+                        if (parsedInt32 < -32768 || parsedInt32 > 0xFFFF)
+                        {
+                            errorParsing = true;
+                            continue;
+                        }
+                    }
 
                     item.Value = row[2];
-                    item.ValueUInt = parsed;
+                    item.ValueUInt = (UInt16)parsedInt32;
 
                     if(row.Length >= 4)
                         item.Notes = row[3];
@@ -459,7 +468,8 @@ namespace ModBus_Client
                 {
                     list_import[i].OffsetUInt = UInt16.Parse(list_import[i].Offset.Replace("0x", ""), list_import[i].Offset.ToLower().IndexOf("0x") != -1 ? System.Globalization.NumberStyles.HexNumber : System.Globalization.NumberStyles.Integer);
                     list_import[i].RegisterUInt = UInt16.Parse(list_import[i].Register.Replace("0x", ""), list_import[i].Register.ToLower().IndexOf("0x") != -1 ? System.Globalization.NumberStyles.HexNumber : System.Globalization.NumberStyles.Integer);
-                    list_import[i].ValueUInt = UInt16.Parse(list_import[i].Value.Replace("0x", ""), list_import[i].Value.ToLower().IndexOf("0x") != -1 ? System.Globalization.NumberStyles.HexNumber : System.Globalization.NumberStyles.Integer);
+                    // Doppio cast cosi includo valori UInt16 0/65535 e Int16 -32768/32767
+                    list_import[i].ValueUInt = (UInt16)Int32.Parse(list_import[i].Value.Replace("0x", ""), list_import[i].Value.ToLower().IndexOf("0x") != -1 ? System.Globalization.NumberStyles.HexNumber : System.Globalization.NumberStyles.Integer);
 
                     if (main.darkMode)
                     {

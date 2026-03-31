@@ -12119,6 +12119,120 @@ namespace ModBus_Client
             }
         }
 
+        public void CopyRegisterToClipboard(ObservableCollection<ModBus_Item> list)
+        {
+            try
+            {
+                string clipContent = "";
+                foreach (ModBus_Item item in list)
+                {
+                    clipContent += item.Register;
+                    clipContent += "\r\n";
+                }
+
+                Clipboard.SetText(clipContent);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+        }
+        
+        public void CopyValueToClipboard(ObservableCollection<ModBus_Item> list)
+        {
+            try
+            {
+                string clipContent = "";
+                foreach (ModBus_Item item in list)
+                {
+                    clipContent += item.Value;
+                    clipContent += "\r\n";
+                }
+
+                Clipboard.SetText(clipContent);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+        }
+        
+        public void CopyBinaryValueToClipboard(ObservableCollection<ModBus_Item> list)
+        {
+            try
+            {
+                string clipContent = "";
+                foreach (ModBus_Item item in list)
+                {
+                    clipContent += item.ValueBin;
+                    clipContent += "\r\n";
+                }
+
+                Clipboard.SetText(clipContent);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+        }
+        
+        public void CopyConvertedValueToClipboard(ObservableCollection<ModBus_Item> list)
+        {
+            try
+            {
+                string clipContent = "";
+                foreach (ModBus_Item item in list)
+                {
+                    clipContent += item.ValueConverted;
+                    clipContent += "\r\n";
+                }
+
+                Clipboard.SetText(clipContent);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+        }
+       
+        public void CopyNotesToClipboard(ObservableCollection<ModBus_Item> list)
+        {
+            try
+            {
+                string clipContent = "";
+                foreach (ModBus_Item item in list)
+                {
+                    clipContent += item.Notes;
+                    clipContent += "\r\n";
+                }
+
+                Clipboard.SetText(clipContent);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+        }
+        
+        public void CopyMappingsToClipboard(ObservableCollection<ModBus_Item> list)
+        {
+            try
+            {
+                string clipContent = "";
+                foreach (ModBus_Item item in list)
+                {
+                    clipContent += item.Notes;
+                    clipContent += "\r\n";
+                }
+
+                Clipboard.SetText(clipContent);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+        }
+
         private void CheckBoxSendCellEditOnlyOnChange_Checked(object sender, RoutedEventArgs e)
         {
             sendCellEditOnlyOnChange = (bool)CheckBoxSendCellEditOnlyOnChange.IsChecked;
@@ -12131,6 +12245,106 @@ namespace ModBus_Client
                 Statistics statistics = new Statistics(ModBus);
                 statistics.Show();
             }
+        }
+
+        private void holdingRegistersMenuItemColumnRegister_Click(object sender, RoutedEventArgs e)
+        {
+            CopyRegisterToClipboard(list_holdingRegistersTable);
+        }
+
+        private void holdingRegistersMenuItemColumnValue_Click(object sender, RoutedEventArgs e)
+        {
+            CopyValueToClipboard(list_holdingRegistersTable);
+        }
+
+        private void holdingRegistersMenuItemColumnBinaryValue_Click(object sender, RoutedEventArgs e)
+        {
+            CopyBinaryValueToClipboard(list_holdingRegistersTable);
+        }
+
+        private void holdingRegistersMenuItemColumnConvertedValue_Click(object sender, RoutedEventArgs e)
+        {
+            CopyConvertedValueToClipboard(list_holdingRegistersTable);
+        }
+
+        private void holdingRegistersMenuItemColumnNotes_Click(object sender, RoutedEventArgs e)
+        {
+            CopyNotesToClipboard(list_holdingRegistersTable);
+        }
+
+        private void holdingRegistersMenuItemColumnMappings_Click(object sender, RoutedEventArgs e)
+        {
+            CopyMappingsToClipboard(list_holdingRegistersTable);
+        }
+
+        private void inputRegistersMenuItemColumnRegister_Click(object sender, RoutedEventArgs e)
+        {
+            CopyRegisterToClipboard(list_inputRegistersTable);
+        }
+
+        private void inputRegistersMenuItemColumnValue_Click(object sender, RoutedEventArgs e)
+        {
+            CopyValueToClipboard(list_inputRegistersTable);
+        }
+
+        private void inputRegistersMenuItemColumnBinaryValue_Click(object sender, RoutedEventArgs e)
+        {
+            CopyBinaryValueToClipboard(list_inputRegistersTable);
+        }
+
+        private void inputRegistersMenuItemColumnConvertedValue_Click(object sender, RoutedEventArgs e)
+        {
+            CopyConvertedValueToClipboard(list_inputRegistersTable);
+        }
+
+        private void inputRegistersMenuItemColumnNotes_Click(object sender, RoutedEventArgs e)
+        {
+            CopyNotesToClipboard(list_inputRegistersTable);
+        }
+
+        private void inputRegistersMenuItemColumnMappings_Click(object sender, RoutedEventArgs e)
+        {
+            CopyMappingsToClipboard(list_inputRegistersTable);
+        }
+
+        private void inputsMenuItemColumnRegister_Click(object sender, RoutedEventArgs e)
+        {
+            CopyRegisterToClipboard(list_inputsTable);
+        }
+
+        private void inputsMenuItemColumnValue_Click(object sender, RoutedEventArgs e)
+        {
+            CopyValueToClipboard(list_inputsTable);
+        }
+
+        private void inputsMenuItemColumnConvertedValue_Click(object sender, RoutedEventArgs e)
+        {
+            CopyConvertedValueToClipboard(list_inputsTable);
+        }
+
+        private void inputsMenuItemColumnNotes_Click(object sender, RoutedEventArgs e)
+        {
+            CopyNotesToClipboard(list_inputsTable);
+        }
+
+        private void coilsMenuItemColumnRegister_Click(object sender, RoutedEventArgs e)
+        {
+            CopyRegisterToClipboard(list_coilsTable);
+        }
+
+        private void coilsMenuItemColumnValue_Click(object sender, RoutedEventArgs e)
+        {
+            CopyValueToClipboard(list_coilsTable);
+        }
+
+        private void coilsMenuItemColumnConvertedValue_Click(object sender, RoutedEventArgs e)
+        {
+            CopyConvertedValueToClipboard(list_coilsTable);
+        }
+
+        private void coilsMenuItemColumnNotes_Click(object sender, RoutedEventArgs e)
+        {
+            CopyNotesToClipboard(list_coilsTable);
         }
     }
 

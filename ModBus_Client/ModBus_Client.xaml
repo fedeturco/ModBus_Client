@@ -595,6 +595,13 @@
                                 <MenuItem Header="Copy" Click="coilsMenuItemCopy_Click"/>
                                 <MenuItem Header="Paste" Click="coilsMenuItemPaste_Click"/>
                                 <Separator/>
+                                <MenuItem Header="Copy Column">
+                                    <MenuItem Header="Register" Click="coilsMenuItemColumnRegister_Click"/>
+                                    <MenuItem Header="Value" Click="coilsMenuItemColumnValue_Click"/>
+                                    <MenuItem Header="Converted Value" Click="coilsMenuItemColumnConvertedValue_Click"/>
+                                    <MenuItem Header="Notes" Click="coilsMenuItemColumnNotes_Click"/>
+                                </MenuItem>
+                                <Separator/>
                                 <MenuItem Header="Import" Click="coilsMenuItemImport_Click"/>
                                 <MenuItem Header="Export" Click="coilsMenuItemExport_Click"/>
                             </ContextMenu>
@@ -732,6 +739,13 @@
                                 <Separator/>
                                 <MenuItem Header="Cut" Click="inputsMenuItemCut_Click"/>
                                 <MenuItem Header="Copy" Click="inputsMenuItemCopy_Click"/>
+                                <Separator/>
+                                <MenuItem Header="Copy Column">
+                                    <MenuItem Header="Register" Click="inputsMenuItemColumnRegister_Click"/>
+                                    <MenuItem Header="Value" Click="inputsMenuItemColumnValue_Click"/>
+                                    <MenuItem Header="Converted Value" Click="inputsMenuItemColumnConvertedValue_Click"/>
+                                    <MenuItem Header="Notes" Click="inputsMenuItemColumnNotes_Click"/>
+                                </MenuItem>
                                 <Separator/>
                                 <MenuItem Header="Export" Click="inputsMenuItemExport_Click"/>
                             </ContextMenu>
@@ -989,6 +1003,15 @@
                                 <MenuItem Header="Copy" Click="holdingRegistersMenuItemCopy_Click"/>
                                 <MenuItem Header="Paste" Click="holdingRegistersMenuItemPaste_Click"/>
                                 <Separator/>
+                                <MenuItem Header="Copy Column">
+                                    <MenuItem Header="Register" Click="holdingRegistersMenuItemColumnRegister_Click"/>
+                                    <MenuItem Header="Value" Click="holdingRegistersMenuItemColumnValue_Click"/>
+                                    <MenuItem Header="Binary Value" Click="holdingRegistersMenuItemColumnBinaryValue_Click"/>
+                                    <MenuItem Header="Converted Value" Click="holdingRegistersMenuItemColumnConvertedValue_Click"/>
+                                    <MenuItem Header="Notes" Click="holdingRegistersMenuItemColumnNotes_Click"/>
+                                    <MenuItem Header="Mappings" Click="holdingRegistersMenuItemColumnMappings_Click"/>
+                                </MenuItem>
+                                <Separator/>
                                 <MenuItem Header="Import" Click="holdingRegistersMenuItemImport_Click"/>
                                 <MenuItem Header="Export" Click="holdingRegistersMenuItemExport_Click"/>
                             </ContextMenu>
@@ -1148,6 +1171,15 @@
                                 <Separator/>
                                 <MenuItem Header="Cut" Click="inputRegistersMenuItemCut_Click"/>
                                 <MenuItem Header="Copy" Click="inputRegistersMenuItemCopy_Click"/>
+                                <Separator/>
+                                <MenuItem Header="Copy Column">
+                                    <MenuItem Header="Register" Click="inputRegistersMenuItemColumnRegister_Click"/>
+                                    <MenuItem Header="Value" Click="inputRegistersMenuItemColumnValue_Click"/>
+                                    <MenuItem Header="Binary Value" Click="inputRegistersMenuItemColumnBinaryValue_Click"/>
+                                    <MenuItem Header="Converted Value" Click="inputRegistersMenuItemColumnConvertedValue_Click"/>
+                                    <MenuItem Header="Notes" Click="inputRegistersMenuItemColumnNotes_Click"/>
+                                    <MenuItem Header="Mappings" Click="inputRegistersMenuItemColumnMappings_Click"/>
+                                </MenuItem>
                                 <Separator/>
                                 <MenuItem Header="Export" Click="inputRegistersMenuItemExport_Click"/>
                             </ContextMenu>
