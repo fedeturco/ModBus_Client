@@ -161,10 +161,31 @@ namespace ModBus_Client
 
                 for (int i = 0; i < registers.Length; i++)
                 {
-                    string[] row = registers[i].Split(',');
+                    string[] source = registers[i].Split(',');
+                    string[] row = null;
 
-                    if (row.Length < 3)
+                    if (source.Length < 2)
+                    {
+                        errorParsing = true;
                         continue;
+                    }
+                    else if (source.Length == 2) // Reg Val
+                    {
+                        row = new string[] { "0", source[0], source[1] };
+                    }
+                    else if (source.Length == 3) // Reg Val Label
+                    {
+                        row = new string[] { "0", source[0], source[1], source[2] };
+                    }
+                    else if (source.Length == 4) // Offset Reg Val Label
+                    {
+                        row = new string[] {source[0], source[1], source[2], source[3] };
+                    }
+                    else
+                    {
+                        errorParsing = true;
+                        continue;
+                    }
 
                     if (row[0].ToLower().IndexOf("offset") != -1)
                         continue;

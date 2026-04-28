@@ -54,27 +54,30 @@ namespace Raccolta_funzioni_parser
 
             if (comboBox == "HEX")
             {
-                //Numero passato in hex
+                // Numero passato in hex
                 try
                 {
+                    if (textBox.ToLower().IndexOf("x") != -1)
+                        textBox = textBox.ToLower().Split('x')[1];
+
                     return UInt16.Parse(textBox, System.Globalization.NumberStyles.HexNumber);
                 }
                 catch
                 {
-                    //MessageBox.Show("Valore inserito non valido", "Alert");
+                    // MessageBox.Show("Valore inserito non valido", "Alert");
                     return 0;
                 }
             }
             else
             {
-                //Numero passato in decimale
+                // Numero passato in decimale
                 try
                 {
                     return UInt16.Parse(textBox);
                 }
                 catch
                 {
-                    //MessageBox.Show("Valore inserito non valido", "Alert");
+                    // MessageBox.Show("Valore inserito non valido", "Alert");
                     return 0;
                 }
             }

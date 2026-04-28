@@ -558,7 +558,7 @@
                     <Button x:Name="buttonReadCoilsTemplate" Content="Read all" Height="25" Margin="0,10,10,0" FontSize="12" RenderTransformOrigin="0.5,0.5" Click="buttonReadCoilsTemplate_Click" HorizontalAlignment="Right" Width="80" VerticalAlignment="Top"/>
                     <Button x:Name="buttonReadCoilsTemplateGroup" Content="Read group" Height="25" Margin="0,10,95,0" FontSize="12" RenderTransformOrigin="0.5,0.5" VerticalAlignment="Top" Click="buttonReadCoilsTemplateGroup_Click" Width="80" HorizontalAlignment="Right" Background="#FFDDDDDD" BorderBrush="#FF707070"/>
                     <ComboBox x:Name="comboBoxCoilsGroup" Margin="0,10,180,0" VerticalAlignment="Top" SelectionChanged="comboBoxCoilsGroup_SelectionChanged" DisplayMemberPath="Value" Height="25" Width="205" HorizontalAlignment="Right"/>
-                    <DataGrid x:Name="dataGridViewCoils" Margin="10,50,415,10" AutoGenerateColumns="False" HorizontalGridLinesBrush="LightGray" VerticalGridLinesBrush="LightGray" BorderThickness="1" FontSize="14" CellEditEnding="dataGridViewCoils_KeyUp" RowBackground="White">
+                    <DataGrid x:Name="dataGridViewCoils" Margin="10,50,415,10" AutoGenerateColumns="False" HorizontalGridLinesBrush="LightGray" VerticalGridLinesBrush="LightGray" BorderThickness="1" FontSize="14" CellEditEnding="dataGridViewCoils_KeyUp" RowBackground="White" BeginningEdit="dataGridViewCoils_BeginningEdit">
                         <DataGrid.Columns>
                             <DataGridTextColumn x:Name="dataGridTabCoilsOffset" Header="Offset" Binding="{Binding Offset}" Width="100" Visibility="Collapsed">
                                 <DataGridTextColumn.ElementStyle>
@@ -588,7 +588,7 @@
                             <DataGridTextColumn x:Name="dataGridTabCoilsNotes" Header="Notes" Binding="{Binding Notes}" Width="600" Visibility="Collapsed"/>
                         </DataGrid.Columns>
                         <DataGrid.ContextMenu>
-                            <ContextMenu>
+                            <ContextMenu  x:Name="contextMenuCoils">
                                 <MenuItem Header="Delete" Click="coilsMenuItemDelete_Click"/>
                                 <Separator/>
                                 <MenuItem Header="Cut" Click="coilsMenuItemCut_Click"/>
@@ -734,7 +734,7 @@
                             <DataGridTextColumn x:Name="dataGridTabInputsNotes" Header="Notes" Binding="{Binding Notes}" Width="600" Visibility="Collapsed"/>
                         </DataGrid.Columns>
                         <DataGrid.ContextMenu>
-                            <ContextMenu>
+                            <ContextMenu x:Name="contextMenuInputs">
                                 <MenuItem Header="Delete" Click="inputsMenuItemDelete_Click"/>
                                 <Separator/>
                                 <MenuItem Header="Cut" Click="inputsMenuItemCut_Click"/>
@@ -996,7 +996,7 @@
                             <DataGridTextColumn x:Name="dataGridTabHoldingRegistersMappings" Header="Mappings" Binding="{Binding Mappings}" Width="600" Visibility="Collapsed"/>
                         </DataGrid.Columns>
                         <DataGrid.ContextMenu>
-                            <ContextMenu>
+                            <ContextMenu x:Name="contextMenuHoldingRegisters">
                                 <MenuItem Header="Delete" Click="holdingRegistersMenuItemDelete_Click"/>
                                 <Separator/>
                                 <MenuItem Header="Cut" Click="holdingRegistersMenuItemCut_Click"/>
@@ -1166,7 +1166,7 @@
                             <DataGridTextColumn x:Name="dataGridTabInputRegistersMappings" Header="Mappings" Binding="{Binding Mappings}" Width="600" Visibility="Collapsed"/>
                         </DataGrid.Columns>
                         <DataGrid.ContextMenu>
-                            <ContextMenu>
+                            <ContextMenu x:Name="contextMenuInputRegisters">
                                 <MenuItem Header="Delete" Click="inputRegistersMenuItemDelete_Click"/>
                                 <Separator/>
                                 <MenuItem Header="Cut" Click="inputRegistersMenuItemCut_Click"/>

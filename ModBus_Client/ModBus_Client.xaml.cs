@@ -6102,6 +6102,8 @@ namespace ModBus_Client
                     Console.WriteLine(err);
                 }
             }
+
+            disableDeleteKey = false;
         }
 
         public void writeCoilDataGrid(object params_)
@@ -6130,7 +6132,7 @@ namespace ModBus_Client
 
                             if (UInt16.TryParse(obj, out newValue))
                             {
-                                uint address_start = P.uint_parser(textBoxCoilsOffset_, comboBoxCoilsOffset_) + P.uint_parser(lastEditModbusItem.Register, comboBoxCoilsAddress05_);
+                                uint address_start = P.uint_parser(textBoxCoilsOffset_, comboBoxCoilsOffset_) + P.uint_parser(lastEditModbusItem.Register, comboBoxCoilsRegistri_);
 
                                 bool? result = ModBus.forceSingleCoil_05(byte.Parse(textBoxModbusAddress_), address_start, newValue, readTimeout);
 
@@ -7946,7 +7948,9 @@ namespace ModBus_Client
 
             this.Dispatcher.Invoke((Action)delegate
             {
-                comboBoxProfileHome.IsEnabled = true;
+                // Sblocco la ComboBox solo se non sono connesso a qualcosa
+                if(pictureBoxRunningAs.Background != Brushes.Lime)
+                    comboBoxProfileHome.IsEnabled = true;
             });
         }
 
@@ -7996,6 +8000,7 @@ namespace ModBus_Client
 
         public void changeEnableButtonsConnect(bool enabled)
         {
+            contextMenuCoils.IsEnabled = enabled;
             buttonReadCoils01.IsEnabled = enabled;
             buttonLoopCoils01.IsEnabled = enabled;
             buttonReadCoilsRange.IsEnabled = enabled;
@@ -8005,16 +8010,19 @@ namespace ModBus_Client
             buttonWriteCoils15.IsEnabled = enabled;
             buttonImportCoils.IsEnabled = enabled;
 
+            contextMenuInputs.IsEnabled = enabled;
             buttonReadInput02.IsEnabled = enabled;
             buttonLoopInput02.IsEnabled = enabled;
             buttonReadInputRange.IsEnabled = enabled;
             buttonLoopInputRange.IsEnabled = enabled;
 
+            contextMenuInputRegisters.IsEnabled = enabled;
             buttonReadInputRegister04.IsEnabled = enabled;
             buttonLoopInputRegister04.IsEnabled = enabled;
             buttonReadInputRegisterRange.IsEnabled = enabled;
             buttonLoopInputRegisterRange.IsEnabled = enabled;
 
+            contextMenuHoldingRegisters.IsEnabled = enabled;
             buttonReadHolding03.IsEnabled = enabled;
             buttonLoopHolding03.IsEnabled = enabled;
             buttonReadHoldingRange.IsEnabled = enabled;
@@ -8148,21 +8156,29 @@ namespace ModBus_Client
         private void comboBoxHoldingRegistri_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             comboBoxHoldingRegistri_ = comboBoxHoldingRegistri.SelectedIndex == 0 ? "DEC" : "HEX";
+
+            list_holdingRegistersTable.Clear();
         }
 
         private void comboBoxHoldingValori_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             comboBoxHoldingValori_ = comboBoxHoldingValori.SelectedIndex == 0 ? "DEC" : "HEX";
+
+            list_holdingRegistersTable.Clear();
         }
 
         private void comboBoxHoldingOffset_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             comboBoxHoldingOffset_ = comboBoxHoldingOffset.SelectedIndex == 0 ? "DEC" : "HEX";
+
+            list_holdingRegistersTable.Clear();
         }
 
         private void textBoxHoldingOffset_TextChanged(object sender, TextChangedEventArgs e)
         {
             textBoxHoldingOffset_ = textBoxHoldingOffset.Text;
+
+            list_holdingRegistersTable.Clear();
         }
 
         private void textBoxModbusAddress_TextChanged(object sender, TextChangedEventArgs e)
@@ -8178,16 +8194,22 @@ namespace ModBus_Client
         private void comboBoxCoilsRegistri_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             comboBoxCoilsRegistri_ = comboBoxCoilsRegistri.SelectedIndex == 0 ? "DEC" : "HEX";
+
+            list_coilsTable.Clear();
         }
 
         private void comboBoxCoilsOffset_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             comboBoxCoilsOffset_ = comboBoxCoilsOffset.SelectedIndex == 0 ? "DEC" : "HEX";
+
+            list_coilsTable.Clear();
         }
 
         private void textBoxCoilsOffset_TextChanged(object sender, TextChangedEventArgs e)
         {
             textBoxCoilsOffset_ = textBoxCoilsOffset.Text;
+
+            list_coilsTable.Clear();
         }
 
         private void comboBoxCoilsAddress01_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -8278,16 +8300,22 @@ namespace ModBus_Client
         private void comboBoxInputRegistri_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             comboBoxInputRegistri_ = comboBoxInputRegistri.SelectedIndex == 0 ? "DEC" : "HEX";
+
+            list_inputsTable.Clear();
         }
 
         private void comboBoxInputOffset_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             comboBoxInputOffset_ = comboBoxInputOffset.SelectedIndex == 0 ? "DEC" : "HEX";
+
+            list_inputsTable.Clear();
         }
 
         private void textBoxInputOffset_TextChanged(object sender, TextChangedEventArgs e)
         {
             textBoxInputOffset_ = textBoxInputOffset.Text;
+
+            list_inputsTable.Clear();
         }
 
         private void comboBoxInputAddress02_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -8328,21 +8356,29 @@ namespace ModBus_Client
         private void comboBoxInputRegRegistri_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             comboBoxInputRegRegistri_ = comboBoxInputRegRegistri.SelectedIndex == 0 ? "DEC" : "HEX";
+
+            list_inputRegistersTable.Clear();
         }
 
         private void comboBoxInputRegValori_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             comboBoxInputRegValori_ = comboBoxInputRegValori.SelectedIndex == 0 ? "DEC" : "HEX";
+
+            list_inputRegistersTable.Clear();
         }
 
         private void comboBoxInputRegOffset_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             comboBoxInputRegOffset_ = comboBoxInputRegOffset.SelectedIndex == 0 ? "DEC" : "HEX";
+
+            list_inputRegistersTable.Clear();
         }
 
         private void textBoxInputRegOffset_TextChanged(object sender, TextChangedEventArgs e)
         {
             textBoxInputRegOffset_ = textBoxInputRegOffset.Text;
+
+            list_inputRegistersTable.Clear();
         }
 
         private void comboBoxInputRegisterAddress04_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -12345,6 +12381,11 @@ namespace ModBus_Client
         private void coilsMenuItemColumnNotes_Click(object sender, RoutedEventArgs e)
         {
             CopyNotesToClipboard(list_coilsTable);
+        }
+
+        private void dataGridViewCoils_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
+        {
+            disableDeleteKey = true;
         }
     }
 

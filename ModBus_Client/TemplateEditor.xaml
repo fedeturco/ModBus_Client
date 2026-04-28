@@ -46,6 +46,8 @@
                                 <MenuItem Header="Copy" Click="coilsMenuItemCopy_Click"/>
                                 <MenuItem Header="Paste" Click="coilsMenuItemPaste_Click"/>
                                 <Separator/>
+                                <MenuItem Header="Delete" Click="coilsMenuItemDelete_Click"/>
+                                <Separator/>
                                 <MenuItem Header="Import" Click="ButtonImportCsvCoils_Click"/>
                                 <MenuItem Header="Export" Click="ButtonExportCsvCoils_Click"/>
                             </ContextMenu>
@@ -80,6 +82,8 @@
                                 <MenuItem Header="Cut" Click="discreteInputsMenuItemCut_Click"/>
                                 <MenuItem Header="Copy" Click="discreteInputsMenuItemCopy_Click"/>
                                 <MenuItem Header="Paste" Click="discreteInputsMenuItemPaste_Click"/>
+                                <Separator/>
+                                <MenuItem Header="Delete" Click="discreteInputsMenuItemDelete_Click"/>
                                 <Separator/>
                                 <MenuItem Header="Import" Click="ButtonImportCsvCoils_Click"/>
                                 <MenuItem Header="Export" Click="ButtonExportCsvCoils_Click"/>
@@ -119,6 +123,8 @@
                                 <MenuItem Header="Copy" Click="holdingRegistersMenuItemCopy_Click"/>
                                 <MenuItem Header="Paste" Click="holdingRegistersMenuItemPaste_Click"/>
                                 <Separator/>
+                                <MenuItem Header="Delete" Click="holdingRegistersMenuItemDelete_Click"/>
+                                <Separator/>
                                 <MenuItem Header="Import" Click="ButtonImportCsvHoldingRegisters_Click"/>
                                 <MenuItem Header="Export" Click="ButtonExportCsvHoldingRegisters_Click"/>
                             </ContextMenu>
@@ -153,6 +159,8 @@
                                 <MenuItem Header="Cut" Click="inputRegistersMenuItemCut_Click"/>
                                 <MenuItem Header="Copy" Click="inputRegistersMenuItemCopy_Click"/>
                                 <MenuItem Header="Paste" Click="inputRegistersMenuItemPaste_Click"/>
+                                <Separator/>
+                                <MenuItem Header="Delete" Click="inputRegistersMenuItemDelete_Click"/>
                                 <Separator/>
                                 <MenuItem Header="Import" Click="ButtonImportCsvInputRegisters_Click"/>
                                 <MenuItem Header="Export" Click="ButtonExportCsvInputRegisters_Click"/>

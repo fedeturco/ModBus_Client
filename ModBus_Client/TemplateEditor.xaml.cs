@@ -1264,6 +1264,26 @@ namespace ModBus_Client
         {
             CopyClipboardToListGroup(list_groups);
         }
+
+        private void coilsMenuItemDelete_Click(object sender, RoutedEventArgs e)
+        {
+            list_coilsTable.Clear();
+        }
+
+        private void discreteInputsMenuItemDelete_Click(object sender, RoutedEventArgs e)
+        {
+            list_inputsTable.Clear();
+        }
+
+        private void holdingRegistersMenuItemDelete_Click(object sender, RoutedEventArgs e)
+        {
+            list_holdingRegistersTable.Clear();
+        }
+
+        private void inputRegistersMenuItemDelete_Click(object sender, RoutedEventArgs e)
+        {
+            list_inputRegistersTable.Clear();
+        }
     }
 
     // Classe per caricare dati dal file di configurazione json
