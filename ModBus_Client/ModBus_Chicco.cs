@@ -1557,9 +1557,13 @@ namespace ModBusMaster_Chicco
                 {
                     return true;
                 }
-                    
-                return false;
+                else
+                {
+                    Console_print(" ModBus InvalidEcho", null, 0);
+                    throw new ModbusException("ModBus InvalidEcho");
+                }
 
+                // return false;
             }
             else if (type == def.TYPE_RTU && ClientActive)
             {
@@ -1652,8 +1656,13 @@ namespace ModBusMaster_Chicco
                 {
                     return true;
                 }
+                else
+                {
+                    Console_print(" ModBus InvalidEcho", null, 0);
+                    throw new ModbusException("ModBus InvalidEcho");
+                }
 
-                return false;
+                // return false;
             }
             else
             {
@@ -1798,9 +1807,13 @@ namespace ModBusMaster_Chicco
                 {
                     return true;
                 }
+                else
+                {
+                    Console_print(" ModBus InvalidEcho", null, 0);
+                    throw new ModbusException("ModBus InvalidEcho");
+                }
 
-                return false;
-
+                // return false;
             }
             else if (type == def.TYPE_RTU && ClientActive)
             {
@@ -1888,8 +1901,13 @@ namespace ModBusMaster_Chicco
                 {
                     return true;
                 }
+                else
+                {
+                    Console_print(" ModBus InvalidEcho", null, 0);
+                    throw new ModbusException("ModBus InvalidEcho");
+                }
 
-                return false;
+                // return false;
             }
             else
             {
@@ -2336,8 +2354,10 @@ namespace ModBusMaster_Chicco
                     }
                 }
 
-                return false;
+                Console_print(" ModBus InvalidEcho", null, 0);
+                throw new ModbusException("ModBus InvalidEcho");
 
+                // return false;
             }
             else if (type == def.TYPE_RTU && ClientActive)
             {
@@ -2472,7 +2492,10 @@ namespace ModBusMaster_Chicco
                     }
                 }
 
-                return false;
+                Console_print(" ModBus InvalidEcho", null, 0);
+                throw new ModbusException("ModBus InvalidEcho");
+
+                // return false;
             }
             else
             {
@@ -2637,7 +2660,10 @@ namespace ModBusMaster_Chicco
                     }
                 }
 
-                return new UInt16[0] { }; ;
+                Console_print(" ModBus InvalidEcho", null, 0);
+                throw new ModbusException("ModBus InvalidEcho");
+
+                // return new UInt16[0] { }; ;
 
             }
             else if (type == def.TYPE_RTU && ClientActive)
@@ -2745,7 +2771,10 @@ namespace ModBusMaster_Chicco
                     }
                 }
 
-                return new UInt16[0] { };
+                Console_print(" ModBus InvalidEcho", null, 0);
+                throw new ModbusException("ModBus InvalidEcho");
+
+                // return new UInt16[0] { };
             }
             else
             {

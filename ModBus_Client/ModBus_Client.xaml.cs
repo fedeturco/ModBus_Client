@@ -2198,6 +2198,36 @@ namespace ModBus_Client
             });
         }
 
+        
+        public void SetTableModBusInvalidEcho(ObservableCollection<ModBus_Item> list_, ModBus_Item mb, bool clear)
+        {
+            ModBus_Item tmp = null;
+
+            if (clear)
+                tmp = new ModBus_Item();
+            else
+                tmp = mb;
+
+            if (tmp != null)
+            {
+                //tmp.Register = "Protocol";
+                tmp.Value = "Error";
+                tmp.ValueBin = "Invalid Echo";
+                tmp.Notes = "Invalid Echo";
+                tmp.Foreground = ForeGroundLightStr;
+                tmp.Background = Brushes.Orange.ToString();
+
+                this.Dispatcher.Invoke((Action)delegate
+                {
+                    if (clear)
+                    {
+                        list_.Clear();
+                        list_.Add(tmp);
+                    }
+                });
+            }
+        }
+
         private void buttonWriteCoils05_Click(object sender, RoutedEventArgs e)
         {
             buttonWriteCoils05.IsEnabled = false;
@@ -2285,6 +2315,10 @@ namespace ModBus_Client
                     if (ex.Message.IndexOf("ModBus ErrCode") != -1)
                     {
                         SetTableModBusError(list_coilsTable, (ModbusException)ex, true);
+                    }
+                    if (ex.Message.IndexOf("ModBus InvalidEcho") != -1)
+                    {
+                        SetTableModBusInvalidEcho(list_coilsTable, null, true);
                     }
                     if (ex.Message.IndexOf("ModbusProtocolError") != -1)
                     {
@@ -2407,6 +2441,10 @@ namespace ModBus_Client
                     if (ex.Message.IndexOf("ModBus ErrCode") != -1)
                     {
                         SetTableModBusError(list_coilsTable, (ModbusException)ex, true);
+                    }
+                    if (ex.Message.IndexOf("ModBus InvalidEcho") != -1)
+                    {
+                        SetTableModBusInvalidEcho(list_coilsTable, null, true);
                     }
                     if (ex.Message.IndexOf("ModbusProtocolError") != -1)
                     {
@@ -2543,6 +2581,10 @@ namespace ModBus_Client
                     if (ex.Message.IndexOf("ModBus ErrCode") != -1)
                     {
                         SetTableModBusError(list_coilsTable, (ModbusException)ex, true);
+                    }
+                    if (ex.Message.IndexOf("ModBus InvalidEcho") != -1)
+                    {
+                        SetTableModBusInvalidEcho(list_coilsTable, null, true);
                     }
                     if (ex.Message.IndexOf("ModbusProtocolError") != -1)
                     {
@@ -3499,6 +3541,10 @@ namespace ModBus_Client
                     {
                         SetTableModBusError(list_holdingRegistersTable, (ModbusException)ex, true);
                     }
+                    if (ex.Message.IndexOf("ModBus InvalidEcho") != -1)
+                    {
+                        SetTableModBusInvalidEcho(list_holdingRegistersTable, null, true);
+                    }
                     if (ex.Message.IndexOf("ModbusProtocolError") != -1)
                     {
                         SetTableStringError(list_holdingRegistersTable, (ModbusException)ex, true);
@@ -3696,6 +3742,10 @@ namespace ModBus_Client
                     if (ex.Message.IndexOf("ModBus ErrCode") != -1)
                     {
                         SetTableModBusError(list_holdingRegistersTable, (ModbusException)ex, true);
+                    }
+                    if (ex.Message.IndexOf("ModBus InvalidEcho") != -1)
+                    {
+                        SetTableModBusInvalidEcho(list_holdingRegistersTable, null, true);
                     }
                     if (ex.Message.IndexOf("ModbusProtocolError") != -1)
                     {
@@ -5000,6 +5050,10 @@ namespace ModBus_Client
                     {
                         SetTableModBusError(list_holdingRegistersTable, (ModbusException)ex, true);
                     }
+                    if (ex.Message.IndexOf("ModBus InvalidEcho") != -1)
+                    {
+                        SetTableModBusInvalidEcho(list_holdingRegistersTable, null, true);
+                    }
                     if (ex.Message.IndexOf("ModbusProtocolError") != -1)
                     {
                         SetTableStringError(list_holdingRegistersTable, (ModbusException)ex, true);
@@ -6034,6 +6088,18 @@ namespace ModBus_Client
                     {
                         SetTableModBusError(list_holdingRegistersTable, (ModbusException)ex, true);
                     }
+                    if (ex.Message.IndexOf("ModBus InvalidEcho") != -1)
+                    {
+                        SetTableModBusInvalidEcho(list_holdingRegistersTable, lastEditModbusItem, false);
+
+                        this.Dispatcher.Invoke((Action)delegate
+                        {
+                            dataGridViewHolding.CommitEdit();   // Stackover consiglia due volte one evitare exception
+                            dataGridViewHolding.CommitEdit();
+                            dataGridViewHolding.Items.Refresh();
+                            dataGridViewHolding.SelectedItem = lastEditModbusItem;
+                        });
+                    }
                     if (ex.Message.IndexOf("ModbusProtocolError") != -1)
                     {
                         SetTableStringError(list_holdingRegistersTable, (ModbusException)ex, true);
@@ -6204,6 +6270,18 @@ namespace ModBus_Client
                     if (ex.Message.IndexOf("ModBus ErrCode") != -1)
                     {
                         SetTableModBusError(list_coilsTable, (ModbusException)ex, true);
+                    }
+                    if (ex.Message.IndexOf("ModBus InvalidEcho") != -1)
+                    {
+                        SetTableModBusInvalidEcho(list_coilsTable, lastEditModbusItem, false);
+
+                        this.Dispatcher.Invoke((Action)delegate
+                        {
+                            dataGridViewCoils.CommitEdit();   // Stackover consiglia due volte one evitare exception
+                            dataGridViewCoils.CommitEdit();
+                            dataGridViewCoils.Items.Refresh();
+                            dataGridViewCoils.SelectedItem = lastEditModbusItem;
+                        });
                     }
                     if (ex.Message.IndexOf("ModbusProtocolError") != -1)
                     {
