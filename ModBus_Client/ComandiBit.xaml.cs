@@ -768,13 +768,13 @@ namespace ModBus_Client
                     {
                         main.SetTableTimeoutError(main.list_holdingRegistersTable, false);
                     }
-                    if (ex.Message.IndexOf("ModBus ErrCode") != -1)
+                    if (ex.Message.IndexOf("ModBus Exception") != -1)
                     {
-                        main.SetTableModBusError(main.list_holdingRegistersTable, (ModbusException)ex, false);
+                        main.SetTableModBusException(main.list_holdingRegistersTable, (ModbusException)ex, false);
                     }
-                    if (ex.Message.IndexOf("ModbusProtocolError") != -1)
+                    if (ex.Message.IndexOf("Modbus ProtocolError") != -1)
                     {
-                        main.SetTableStringError(main.list_holdingRegistersTable, (ModbusException)ex, true);
+                        main.SetTableModbusProtocolError(main.list_holdingRegistersTable, (ModbusException)ex, true);
                     }
                     if (ex.Message.IndexOf("CRC Error") != -1)
                     {
@@ -852,13 +852,13 @@ namespace ModBus_Client
                     {
                         main.SetTableTimeoutError(main.list_holdingRegistersTable, false);
                     }
-                    if (ex.Message.IndexOf("ModBus ErrCode") != -1)
+                    if (ex.Message.IndexOf("ModBus Exception") != -1)
                     {
-                        main.SetTableModBusError(main.list_holdingRegistersTable, (ModbusException)ex, false);
+                        main.SetTableModBusException(main.list_holdingRegistersTable, (ModbusException)ex, false);
                     }
-                    if (ex.Message.IndexOf("ModbusProtocolError") != -1)
+                    if (ex.Message.IndexOf("Modbus ProtocolError") != -1)
                     {
-                        main.SetTableStringError(main.list_holdingRegistersTable, (ModbusException)ex, true);
+                        main.SetTableModbusProtocolError(main.list_holdingRegistersTable, (ModbusException)ex, true);
                     }
                     if (ex.Message.IndexOf("CRC Error") != -1)
                     {

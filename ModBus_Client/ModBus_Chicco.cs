@@ -376,7 +376,7 @@ namespace ModBusMaster_Chicco
             if (length < 9)
             {
                 Console.WriteLine("Invalid Length {0}", length);
-                throw new ModbusException("ModbusProtocolError: Invalid Length: " + length.ToString());
+                throw new ModbusException("Modbus ProtocolError: Invalid Length: " + length.ToString());
             }
 
             if (query.Length > 1)
@@ -386,7 +386,7 @@ namespace ModBusMaster_Chicco
                 if (transactionIdQuery != transactionIdResponse)
                 {
                     Console.WriteLine("Invalid TransactionID: {0:X}, expected: {1:X}", transactionIdResponse, transactionIdQuery);
-                    throw new ModbusException("ModbusProtocolError: Invalid TransactionID: 0x" + transactionIdResponse.ToString("X").PadLeft(4, '0') + ", expected: 0x" + transactionIdQuery.ToString("X").PadLeft(4, '0'));
+                    throw new ModbusException("Modbus ProtocolError: Invalid TransactionID: 0x" + transactionIdResponse.ToString("X").PadLeft(4, '0') + ", expected: 0x" + transactionIdQuery.ToString("X").PadLeft(4, '0'));
                 }
             }
 
@@ -394,14 +394,14 @@ namespace ModBusMaster_Chicco
             if (protocolIdentifier != 0)
             {
                 Console.WriteLine("Invalid Protocol Identifier: {0:X}, expected: 0x0000", protocolIdentifier);
-                throw new ModbusException("ModbusProtocolError: Invalid Protocol Identifier: 0x" + protocolIdentifier.ToString("X").PadLeft(4, '0') + ", expected: 0x0000");
+                throw new ModbusException("Modbus ProtocolError: Invalid Protocol Identifier: 0x" + protocolIdentifier.ToString("X").PadLeft(4, '0') + ", expected: 0x0000");
             }
 
             UInt16 packetLen = (UInt16)((buffer[4] << 8) + buffer[5]);
             if (packetLen + 6 != length)
             {
                 Console.WriteLine("Invalid Packet Length: {0}+6 != received: {1}", packetLen, length);
-                throw new ModbusException("ModbusProtocolError: Invalid Packet Length: " + packetLen.ToString() + " + 6 (header) != received: " + length.ToString());
+                throw new ModbusException("Modbus ProtocolError: Invalid Packet Length: " + packetLen.ToString() + " + 6 (header) != received: " + length.ToString());
             }
 
             return true;
@@ -596,8 +596,8 @@ namespace ModBusMaster_Chicco
                 {
                     int errCode = response[8];
 
-                    Console_print(" ModBus ErrCode: " + errCode.ToString() + " - " + ModbusErrorCodes[errCode], null, 0);
-                    throw new ModbusException("ModBus ErrCode: " + errCode.ToString() + " - " + ModbusErrorCodes[errCode]);
+                    Console_print(" ModBus Exception: " + errCode.ToString() + " - " + ModbusErrorCodes[errCode], null, 0);
+                    throw new ModbusException("ModBus Exception: " + errCode.ToString() + " - " + ModbusErrorCodes[errCode]);
                 }
 
                 // Leggo i bit di ciascun byte partendo dal 9 che contiene le prime 8 coils
@@ -691,8 +691,8 @@ namespace ModBusMaster_Chicco
                 {
                     int errCode = response[2];
 
-                    Console_print(" ModBus ErrCode: " + errCode.ToString() + " - " + ModbusErrorCodes[errCode], null, 0);
-                    throw new ModbusException("ModBus ErrCode: " + errCode.ToString() + " - " + ModbusErrorCodes[errCode]);
+                    Console_print(" ModBus Exception: " + errCode.ToString() + " - " + ModbusErrorCodes[errCode], null, 0);
+                    throw new ModbusException("ModBus Exception: " + errCode.ToString() + " - " + ModbusErrorCodes[errCode]);
                 }
 
                 // Leggo i bit di ciascun byte partendo dal 3 che contiene le prime 8 coils
@@ -838,8 +838,8 @@ namespace ModBusMaster_Chicco
                 {
                     int errCode = response[8];
 
-                    Console_print(" ModBus ErrCode: " + errCode.ToString() + " - " + ModbusErrorCodes[errCode], null, 0);
-                    throw new ModbusException("ModBus ErrCode: " + errCode.ToString() + " - " + ModbusErrorCodes[errCode]);
+                    Console_print(" ModBus Exception: " + errCode.ToString() + " - " + ModbusErrorCodes[errCode], null, 0);
+                    throw new ModbusException("ModBus Exception: " + errCode.ToString() + " - " + ModbusErrorCodes[errCode]);
                 }
 
                 // Leggo i bit di ciascun byte partendo dal 9 che contiene le prime 8 coils
@@ -933,8 +933,8 @@ namespace ModBusMaster_Chicco
                 {
                     int errCode = response[2];
 
-                    Console_print(" ModBus ErrCode: " + errCode.ToString() + " - " + ModbusErrorCodes[errCode], null, 0);
-                    throw new ModbusException("ModBus ErrCode: " + errCode.ToString() + " - " + ModbusErrorCodes[errCode]);
+                    Console_print(" ModBus Exception: " + errCode.ToString() + " - " + ModbusErrorCodes[errCode], null, 0);
+                    throw new ModbusException("ModBus Exception: " + errCode.ToString() + " - " + ModbusErrorCodes[errCode]);
                 }
 
                 // Leggo i bit di ciascun byte partendo dal 9 che contiene le prime 8 coils
@@ -1082,8 +1082,8 @@ namespace ModBusMaster_Chicco
                 {
                     int errCode = response[8];
 
-                    Console_print(" ModBus ErrCode: " + errCode.ToString() + " - " + ModbusErrorCodes[errCode], null, 0);
-                    throw new ModbusException("ModBus ErrCode: " + errCode.ToString() + " - " + ModbusErrorCodes[errCode]);
+                    Console_print(" ModBus Exception: " + errCode.ToString() + " - " + ModbusErrorCodes[errCode], null, 0);
+                    throw new ModbusException("ModBus Exception: " + errCode.ToString() + " - " + ModbusErrorCodes[errCode]);
                 }
 
                 for (int i = 9; i < Length; i += 2)
@@ -1174,8 +1174,8 @@ namespace ModBusMaster_Chicco
                 {
                     int errCode = response[2];
 
-                    Console_print(" ModBus ErrCode: " + errCode.ToString() + " - " + ModbusErrorCodes[errCode], null, 0);
-                    throw new ModbusException("ModBus ErrCode: " + errCode.ToString() + " - " + ModbusErrorCodes[errCode]);
+                    Console_print(" ModBus Exception: " + errCode.ToString() + " - " + ModbusErrorCodes[errCode], null, 0);
+                    throw new ModbusException("ModBus Exception: " + errCode.ToString() + " - " + ModbusErrorCodes[errCode]);
                 }
 
                 return result;
@@ -1309,8 +1309,8 @@ namespace ModBusMaster_Chicco
                 {
                     int errCode = response[8];
 
-                    Console_print(" ModBus ErrCode: " + errCode.ToString() + " - " + ModbusErrorCodes[errCode], null, 0);
-                    throw new ModbusException("ModBus ErrCode: " + errCode.ToString() + " - " + ModbusErrorCodes[errCode]);
+                    Console_print(" ModBus Exception: " + errCode.ToString() + " - " + ModbusErrorCodes[errCode], null, 0);
+                    throw new ModbusException("ModBus Exception: " + errCode.ToString() + " - " + ModbusErrorCodes[errCode]);
                 }
 
                 for (int i = 9; i < Length; i += 2)
@@ -1403,8 +1403,8 @@ namespace ModBusMaster_Chicco
                 {
                     int errCode = response[2];
 
-                    Console_print(" ModBus ErrCode: " + errCode.ToString() + " - " + ModbusErrorCodes[errCode], null, 0);
-                    throw new ModbusException("ModBus ErrCode: " + errCode.ToString() + " - " + ModbusErrorCodes[errCode]);
+                    Console_print(" ModBus Exception: " + errCode.ToString() + " - " + ModbusErrorCodes[errCode], null, 0);
+                    throw new ModbusException("ModBus Exception: " + errCode.ToString() + " - " + ModbusErrorCodes[errCode]);
                 }
 
                 return result;
@@ -1543,8 +1543,8 @@ namespace ModBusMaster_Chicco
                 {
                     int errCode = response[8];
 
-                    Console_print(" ModBus ErrCode: " + errCode.ToString() + " - " + ModbusErrorCodes[errCode], null, 0);
-                    throw new ModbusException("ModBus ErrCode: " + errCode.ToString() + " - " + ModbusErrorCodes[errCode]);
+                    Console_print(" ModBus Exception: " + errCode.ToString() + " - " + ModbusErrorCodes[errCode], null, 0);
+                    throw new ModbusException("ModBus Exception: " + errCode.ToString() + " - " + ModbusErrorCodes[errCode]);
                 }
 
                 // Check response
@@ -1642,8 +1642,8 @@ namespace ModBusMaster_Chicco
                 {
                     int errCode = response[2];
 
-                    Console_print(" ModBus ErrCode: " + errCode.ToString() + " - " + ModbusErrorCodes[errCode], null, 0);
-                    throw new ModbusException("ModBus ErrCode: " + errCode.ToString() + " - " + ModbusErrorCodes[errCode]);
+                    Console_print(" ModBus Exception: " + errCode.ToString() + " - " + ModbusErrorCodes[errCode], null, 0);
+                    throw new ModbusException("ModBus Exception: " + errCode.ToString() + " - " + ModbusErrorCodes[errCode]);
                 }
 
                 // Check response
@@ -1793,8 +1793,8 @@ namespace ModBusMaster_Chicco
                 {
                     int errCode = response[8];
 
-                    Console_print(" ModBus ErrCode: " + errCode.ToString() + " - " + ModbusErrorCodes[errCode], null, 0);
-                    throw new ModbusException("ModBus ErrCode: " + errCode.ToString() + " - " + ModbusErrorCodes[errCode]);
+                    Console_print(" ModBus Exception: " + errCode.ToString() + " - " + ModbusErrorCodes[errCode], null, 0);
+                    throw new ModbusException("ModBus Exception: " + errCode.ToString() + " - " + ModbusErrorCodes[errCode]);
                 }
 
                 // Check response
@@ -1887,8 +1887,8 @@ namespace ModBusMaster_Chicco
                 {
                     int errCode = response[2];
 
-                    Console_print(" ModBus ErrCode: " + errCode.ToString() + " - " + ModbusErrorCodes[errCode], null, 0);
-                    throw new ModbusException("ModBus ErrCode: " + errCode.ToString() + " - " + ModbusErrorCodes[errCode]);
+                    Console_print(" ModBus Exception: " + errCode.ToString() + " - " + ModbusErrorCodes[errCode], null, 0);
+                    throw new ModbusException("ModBus Exception: " + errCode.ToString() + " - " + ModbusErrorCodes[errCode]);
                 }
 
                 // Check response
@@ -2037,8 +2037,8 @@ namespace ModBusMaster_Chicco
                 {
                     int errCode = response[8];
 
-                    Console_print(" ModBus ErrCode: " + errCode.ToString() + " - " + ModbusErrorCodes[errCode], null, 0);
-                    throw new ModbusException("ModBus ErrCode: " + errCode.ToString() + " - " + ModbusErrorCodes[errCode]);
+                    Console_print(" ModBus Exception: " + errCode.ToString() + " - " + ModbusErrorCodes[errCode], null, 0);
+                    throw new ModbusException("ModBus Exception: " + errCode.ToString() + " - " + ModbusErrorCodes[errCode]);
                 }
 
                 // debug
@@ -2141,8 +2141,8 @@ namespace ModBusMaster_Chicco
                 {
                     int errCode = response[2];
 
-                    Console_print(" ModBus ErrCode: " + errCode.ToString() + " - " + ModbusErrorCodes[errCode], null, 0);
-                    throw new ModbusException("ModBus ErrCode: " + errCode.ToString() + " - " + ModbusErrorCodes[errCode]);
+                    Console_print(" ModBus Exception: " + errCode.ToString() + " - " + ModbusErrorCodes[errCode], null, 0);
+                    throw new ModbusException("ModBus Exception: " + errCode.ToString() + " - " + ModbusErrorCodes[errCode]);
                 }
 
                 string result_ = "";
@@ -2337,8 +2337,8 @@ namespace ModBusMaster_Chicco
                 {
                     int errCode = response[8];
 
-                    Console_print(" ModBus ErrCode: " + errCode.ToString() + " - " + ModbusErrorCodes[errCode], null, 0);
-                    throw new ModbusException("ModBus ErrCode: " + errCode.ToString() + " - " + ModbusErrorCodes[errCode]);
+                    Console_print(" ModBus Exception: " + errCode.ToString() + " - " + ModbusErrorCodes[errCode], null, 0);
+                    throw new ModbusException("ModBus Exception: " + errCode.ToString() + " - " + ModbusErrorCodes[errCode]);
                 }
 
                 if (response.Length > 11)
@@ -2474,8 +2474,8 @@ namespace ModBusMaster_Chicco
                 {
                     int errCode = response[2];
 
-                    Console_print(" ModBus ErrCode: " + errCode.ToString() + " - " + ModbusErrorCodes[errCode], null, 0);
-                    throw new ModbusException("ModBus ErrCode: " + errCode.ToString() + " - " + ModbusErrorCodes[errCode]);
+                    Console_print(" ModBus Exception: " + errCode.ToString() + " - " + ModbusErrorCodes[errCode], null, 0);
+                    throw new ModbusException("ModBus Exception: " + errCode.ToString() + " - " + ModbusErrorCodes[errCode]);
                 }
 
                 // Check response
@@ -2644,8 +2644,8 @@ namespace ModBusMaster_Chicco
                 {
                     int errCode = response[8];
 
-                    Console_print(" ModBus ErrCode: " + errCode.ToString() + " - " + ModbusErrorCodes[errCode], null, 0);
-                    throw new ModbusException("ModBus ErrCode: " + errCode.ToString() + " - " + ModbusErrorCodes[errCode]);
+                    Console_print(" ModBus Exception: " + errCode.ToString() + " - " + ModbusErrorCodes[errCode], null, 0);
+                    throw new ModbusException("ModBus Exception: " + errCode.ToString() + " - " + ModbusErrorCodes[errCode]);
                 }
 
                 if (response.Length > 11) {
@@ -2754,8 +2754,8 @@ namespace ModBusMaster_Chicco
                 {
                     int errCode = response[2];
 
-                    Console_print(" ModBus ErrCode: " + errCode.ToString() + " - " + ModbusErrorCodes[errCode], null, 0);
-                    throw new ModbusException("ModBus ErrCode: " + errCode.ToString() + " - " + ModbusErrorCodes[errCode]);
+                    Console_print(" ModBus Exception: " + errCode.ToString() + " - " + ModbusErrorCodes[errCode], null, 0);
+                    throw new ModbusException("ModBus Exception: " + errCode.ToString() + " - " + ModbusErrorCodes[errCode]);
                 }
 
                 if (response.Length > 5)

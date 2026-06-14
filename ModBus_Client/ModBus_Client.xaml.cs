@@ -1481,6 +1481,11 @@ namespace ModBus_Client
                 }
 
                 comboBoxProfileHome.IsEnabled = true;
+                buttonEditProfile.IsEnabled = true;
+                buttonImportZip.IsEnabled = true;
+                buttonExportZip.IsEnabled = true;
+                buttonNewProfile.IsEnabled = true;
+                databaseToolStripMenuItem.IsEnabled = true;
             }
             catch (Exception err)
             {
@@ -1865,13 +1870,13 @@ namespace ModBus_Client
                     {
                         SetTableTimeoutError(list_coilsTable, false);
                     }
-                    if (ex.Message.IndexOf("ModBus ErrCode") != -1)
+                    if (ex.Message.IndexOf("ModBus Exception") != -1)
                     {
-                        SetTableModBusError(list_coilsTable, (ModbusException)ex, false);
+                        SetTableModBusException(list_coilsTable, (ModbusException)ex, false);
                     }
-                    if (ex.Message.IndexOf("ModbusProtocolError") != -1)
+                    if (ex.Message.IndexOf("Modbus ProtocolError") != -1)
                     {
-                        SetTableStringError(list_coilsTable, (ModbusException)ex, true);
+                        SetTableModbusProtocolError(list_coilsTable, (ModbusException)ex, true);
                     }
                     if (ex.Message.IndexOf("CRC Error") != -1)
                     {
@@ -2038,13 +2043,13 @@ namespace ModBus_Client
                     {
                         SetTableTimeoutError(list_coilsTable, false);
                     }
-                    if (ex.Message.IndexOf("ModBus ErrCode") != -1)
+                    if (ex.Message.IndexOf("ModBus Exception") != -1)
                     {
-                        SetTableModBusError(list_coilsTable, (ModbusException)ex, false);
+                        SetTableModBusException(list_coilsTable, (ModbusException)ex, false);
                     }
-                    if (ex.Message.IndexOf("ModbusProtocolError") != -1)
+                    if (ex.Message.IndexOf("Modbus ProtocolError") != -1)
                     {
-                        SetTableStringError(list_coilsTable, (ModbusException)ex, true);
+                        SetTableModbusProtocolError(list_coilsTable, (ModbusException)ex, true);
                     }
                     if (ex.Message.IndexOf("CRC Error") != -1)
                     {
@@ -2082,8 +2087,11 @@ namespace ModBus_Client
         {
             ModBus_Item tmp = new ModBus_Item();
 
-            tmp.Register = "Internal";
-            tmp.Value = "Error";
+            // tmp.Register = "";
+            tmp.Value = "Error:";
+            tmp.ValueBin = "Internal error";
+            tmp.ValueConverted = tmp.ValueBin;
+            tmp.Notes = tmp.ValueBin;
             tmp.Foreground = ForeGroundLightStr;
             tmp.Background = Brushes.Red.ToString();
 
@@ -2100,8 +2108,11 @@ namespace ModBus_Client
         {
             ModBus_Item tmp = new ModBus_Item();
 
-            tmp.Register = "CRC";
-            tmp.Value = "Error";
+            // tmp.Register = "";
+            tmp.Value = "Error:";
+            tmp.ValueBin = "CRC Fail";
+            tmp.ValueConverted = tmp.ValueBin;
+            tmp.Notes = tmp.ValueBin;
             tmp.Foreground = ForeGroundLightStr;
             tmp.Background = Brushes.Tomato.ToString();
 
@@ -2118,8 +2129,11 @@ namespace ModBus_Client
         {
             ModBus_Item tmp = new ModBus_Item();
 
-            tmp.Register = "Timeout";
-            tmp.Value = "";
+            // tmp.Register = "";
+            tmp.Value = "Error:";
+            tmp.ValueBin = "Timeout";
+            tmp.ValueConverted = tmp.ValueBin;
+            tmp.Notes = tmp.ValueBin;
             tmp.Foreground = ForeGroundLightStr;
             tmp.Background = Brushes.Violet.ToString();
 
@@ -2132,15 +2146,16 @@ namespace ModBus_Client
             });
         }
 
-        public void SetTableModBusError(ObservableCollection<ModBus_Item> list_, ModbusException err, bool clear)
+        public void SetTableModBusException(ObservableCollection<ModBus_Item> list_, ModbusException err, bool clear)
         {
             ModBus_Item tmp = new ModBus_Item();
 
             Console.WriteLine("err.ToString(): " + err.ToString());
 
-            tmp.Register = "ErrCode:";
-            tmp.Value = err.ToString().Split('-')[0].Split(':')[2];
+            // tmp.Register = "";
+            tmp.Value = "Exception: " + err.ToString().Split('-')[0].Split(':')[2];
             tmp.ValueBin = err.ToString().Split('-')[1].Split('\n')[0].Replace("\r", "");
+            tmp.ValueConverted = tmp.ValueBin;
             tmp.Notes = tmp.ValueBin;
             tmp.Foreground = ForeGroundLightStr;
             tmp.Background = Brushes.OrangeRed.ToString();
@@ -2153,16 +2168,17 @@ namespace ModBus_Client
                 list_.Add(tmp);
             });
         }
-        public void SetTableStringError(ObservableCollection<ModBus_Item> list_, ModbusException err, bool clear)
+        public void SetTableModbusProtocolError(ObservableCollection<ModBus_Item> list_, ModbusException err, bool clear)
         {
             ModBus_Item tmp = new ModBus_Item();
 
             Console.WriteLine("err.ToString(): " + err.ToString());
 
-            tmp.Register = "Protocol";
-            tmp.Value = "Error";
+            // tmp.Register = "";
+            tmp.Value = "Error:";
             tmp.ValueBin = err.Message;
-            tmp.Notes = err.Message;
+            tmp.ValueConverted = tmp.ValueBin;
+            tmp.Notes = tmp.ValueBin;
             tmp.Foreground = ForeGroundLightStr;
             tmp.Background = Brushes.PaleVioletRed.ToString();
 
@@ -2180,8 +2196,9 @@ namespace ModBus_Client
             ModBus_Item tmp = new ModBus_Item();
 
             tmp.Register = "Sock err";
-            tmp.Value = "";
+            tmp.Value = "Error:";
             tmp.ValueBin = "Socket closed";
+            tmp.ValueConverted = tmp.ValueBin;
             tmp.Notes = tmp.ValueBin;
             tmp.Foreground = ForeGroundLightStr;
             tmp.Background = Brushes.LightBlue.ToString();
@@ -2210,10 +2227,11 @@ namespace ModBus_Client
 
             if (tmp != null)
             {
-                //tmp.Register = "Protocol";
-                tmp.Value = "Error";
+                // tmp.Register = "";
+                tmp.Value = "Error:";
                 tmp.ValueBin = "Invalid Echo";
-                tmp.Notes = "Invalid Echo";
+                tmp.ValueConverted = tmp.ValueBin;
+                tmp.Notes = tmp.ValueBin;
                 tmp.Foreground = ForeGroundLightStr;
                 tmp.Background = Brushes.Orange.ToString();
 
@@ -2312,17 +2330,17 @@ namespace ModBus_Client
                     {
                         SetTableTimeoutError(list_coilsTable, true);
                     }
-                    if (ex.Message.IndexOf("ModBus ErrCode") != -1)
+                    if (ex.Message.IndexOf("ModBus Exception") != -1)
                     {
-                        SetTableModBusError(list_coilsTable, (ModbusException)ex, true);
+                        SetTableModBusException(list_coilsTable, (ModbusException)ex, true);
                     }
                     if (ex.Message.IndexOf("ModBus InvalidEcho") != -1)
                     {
                         SetTableModBusInvalidEcho(list_coilsTable, null, true);
                     }
-                    if (ex.Message.IndexOf("ModbusProtocolError") != -1)
+                    if (ex.Message.IndexOf("Modbus ProtocolError") != -1)
                     {
-                        SetTableStringError(list_coilsTable, (ModbusException)ex, true);
+                        SetTableModbusProtocolError(list_coilsTable, (ModbusException)ex, true);
                     }
                     if (ex.Message.IndexOf("CRC Error") != -1)
                     {
@@ -2438,17 +2456,17 @@ namespace ModBus_Client
                     {
                         SetTableTimeoutError(list_coilsTable, true);
                     }
-                    if (ex.Message.IndexOf("ModBus ErrCode") != -1)
+                    if (ex.Message.IndexOf("ModBus Exception") != -1)
                     {
-                        SetTableModBusError(list_coilsTable, (ModbusException)ex, true);
+                        SetTableModBusException(list_coilsTable, (ModbusException)ex, true);
                     }
                     if (ex.Message.IndexOf("ModBus InvalidEcho") != -1)
                     {
                         SetTableModBusInvalidEcho(list_coilsTable, null, true);
                     }
-                    if (ex.Message.IndexOf("ModbusProtocolError") != -1)
+                    if (ex.Message.IndexOf("Modbus ProtocolError") != -1)
                     {
-                        SetTableStringError(list_coilsTable, (ModbusException)ex, true);
+                        SetTableModbusProtocolError(list_coilsTable, (ModbusException)ex, true);
                     }
                     if (ex.Message.IndexOf("CRC Error") != -1)
                     {
@@ -2578,17 +2596,17 @@ namespace ModBus_Client
                     {
                         SetTableTimeoutError(list_coilsTable, true);
                     }
-                    if (ex.Message.IndexOf("ModBus ErrCode") != -1)
+                    if (ex.Message.IndexOf("ModBus Exception") != -1)
                     {
-                        SetTableModBusError(list_coilsTable, (ModbusException)ex, true);
+                        SetTableModBusException(list_coilsTable, (ModbusException)ex, true);
                     }
                     if (ex.Message.IndexOf("ModBus InvalidEcho") != -1)
                     {
                         SetTableModBusInvalidEcho(list_coilsTable, null, true);
                     }
-                    if (ex.Message.IndexOf("ModbusProtocolError") != -1)
+                    if (ex.Message.IndexOf("Modbus ProtocolError") != -1)
                     {
-                        SetTableStringError(list_coilsTable, (ModbusException)ex, true);
+                        SetTableModbusProtocolError(list_coilsTable, (ModbusException)ex, true);
                     }
                     if (ex.Message.IndexOf("CRC Error") != -1)
                     {
@@ -2734,13 +2752,13 @@ namespace ModBus_Client
                     {
                         SetTableTimeoutError(list_inputsTable, true);
                     }
-                    if (ex.Message.IndexOf("ModBus ErrCode") != -1)
+                    if (ex.Message.IndexOf("ModBus Exception") != -1)
                     {
-                        SetTableModBusError(list_inputsTable, (ModbusException)ex, true);
+                        SetTableModBusException(list_inputsTable, (ModbusException)ex, true);
                     }
-                    if (ex.Message.IndexOf("ModbusProtocolError") != -1)
+                    if (ex.Message.IndexOf("Modbus ProtocolError") != -1)
                     {
-                        SetTableStringError(list_inputsTable, (ModbusException)ex, true);
+                        SetTableModbusProtocolError(list_inputsTable, (ModbusException)ex, true);
                     }
                     if (ex.Message.IndexOf("CRC Error") != -1)
                     {
@@ -2916,13 +2934,13 @@ namespace ModBus_Client
                     {
                         SetTableTimeoutError(list_inputsTable, false);
                     }
-                    if (ex.Message.IndexOf("ModBus ErrCode") != -1)
+                    if (ex.Message.IndexOf("ModBus Exception") != -1)
                     {
-                        SetTableModBusError(list_inputsTable, (ModbusException)ex, false);
+                        SetTableModBusException(list_inputsTable, (ModbusException)ex, false);
                     }
-                    if (ex.Message.IndexOf("ModbusProtocolError") != -1)
+                    if (ex.Message.IndexOf("Modbus ProtocolError") != -1)
                     {
-                        SetTableStringError(list_inputsTable, (ModbusException)ex, true);
+                        SetTableModbusProtocolError(list_inputsTable, (ModbusException)ex, true);
                     }
                     if (ex.Message.IndexOf("CRC Error") != -1)
                     {
@@ -3070,13 +3088,13 @@ namespace ModBus_Client
                     {
                         SetTableTimeoutError(list_inputRegistersTable, true);
                     }
-                    if (ex.Message.IndexOf("ModBus ErrCode") != -1)
+                    if (ex.Message.IndexOf("ModBus Exception") != -1)
                     {
-                        SetTableModBusError(list_inputRegistersTable, (ModbusException)ex, true);
+                        SetTableModBusException(list_inputRegistersTable, (ModbusException)ex, true);
                     }
-                    if (ex.Message.IndexOf("ModbusProtocolError") != -1)
+                    if (ex.Message.IndexOf("Modbus ProtocolError") != -1)
                     {
-                        SetTableStringError(list_inputRegistersTable, (ModbusException)ex, true);
+                        SetTableModbusProtocolError(list_inputRegistersTable, (ModbusException)ex, true);
                     }
                     if (ex.Message.IndexOf("CRC Error") != -1)
                     {
@@ -3257,13 +3275,13 @@ namespace ModBus_Client
                     {
                         SetTableTimeoutError(list_inputRegistersTable, false);
                     }
-                    if (ex.Message.IndexOf("ModBus ErrCode") != -1)
+                    if (ex.Message.IndexOf("ModBus Exception") != -1)
                     {
-                        SetTableModBusError(list_inputRegistersTable, (ModbusException)ex, false);
+                        SetTableModBusException(list_inputRegistersTable, (ModbusException)ex, false);
                     }
-                    if (ex.Message.IndexOf("ModbusProtocolError") != -1)
+                    if (ex.Message.IndexOf("Modbus ProtocolError") != -1)
                     {
-                        SetTableStringError(list_inputRegistersTable, (ModbusException)ex, true);
+                        SetTableModbusProtocolError(list_inputRegistersTable, (ModbusException)ex, true);
                     }
                     if (ex.Message.IndexOf("CRC Error") != -1)
                     {
@@ -3411,13 +3429,13 @@ namespace ModBus_Client
                     {
                         SetTableTimeoutError(list_holdingRegistersTable, true);
                     }
-                    if (ex.Message.IndexOf("ModBus ErrCode") != -1)
+                    if (ex.Message.IndexOf("ModBus Exception") != -1)
                     {
-                        SetTableModBusError(list_holdingRegistersTable, (ModbusException)ex, true);
+                        SetTableModBusException(list_holdingRegistersTable, (ModbusException)ex, true);
                     }
-                    if (ex.Message.IndexOf("ModbusProtocolError") != -1)
+                    if (ex.Message.IndexOf("Modbus ProtocolError") != -1)
                     {
-                        SetTableStringError(list_holdingRegistersTable, (ModbusException)ex, true);
+                        SetTableModbusProtocolError(list_holdingRegistersTable, (ModbusException)ex, true);
                     }
                     if (ex.Message.IndexOf("CRC Error") != -1)
                     {
@@ -3537,17 +3555,17 @@ namespace ModBus_Client
                     {
                         SetTableTimeoutError(list_holdingRegistersTable, true);
                     }
-                    if (ex.Message.IndexOf("ModBus ErrCode") != -1)
+                    if (ex.Message.IndexOf("ModBus Exception") != -1)
                     {
-                        SetTableModBusError(list_holdingRegistersTable, (ModbusException)ex, true);
+                        SetTableModBusException(list_holdingRegistersTable, (ModbusException)ex, true);
                     }
                     if (ex.Message.IndexOf("ModBus InvalidEcho") != -1)
                     {
                         SetTableModBusInvalidEcho(list_holdingRegistersTable, null, true);
                     }
-                    if (ex.Message.IndexOf("ModbusProtocolError") != -1)
+                    if (ex.Message.IndexOf("Modbus ProtocolError") != -1)
                     {
-                        SetTableStringError(list_holdingRegistersTable, (ModbusException)ex, true);
+                        SetTableModbusProtocolError(list_holdingRegistersTable, (ModbusException)ex, true);
                     }
                     if (ex.Message.IndexOf("CRC Error") != -1)
                     {
@@ -3739,17 +3757,17 @@ namespace ModBus_Client
                     {
                         SetTableTimeoutError(list_holdingRegistersTable, true);
                     }
-                    if (ex.Message.IndexOf("ModBus ErrCode") != -1)
+                    if (ex.Message.IndexOf("ModBus Exception") != -1)
                     {
-                        SetTableModBusError(list_holdingRegistersTable, (ModbusException)ex, true);
+                        SetTableModBusException(list_holdingRegistersTable, (ModbusException)ex, true);
                     }
                     if (ex.Message.IndexOf("ModBus InvalidEcho") != -1)
                     {
                         SetTableModBusInvalidEcho(list_holdingRegistersTable, null, true);
                     }
-                    if (ex.Message.IndexOf("ModbusProtocolError") != -1)
+                    if (ex.Message.IndexOf("Modbus ProtocolError") != -1)
                     {
-                        SetTableStringError(list_holdingRegistersTable, (ModbusException)ex, true);
+                        SetTableModbusProtocolError(list_holdingRegistersTable, (ModbusException)ex, true);
                     }
                     if (ex.Message.IndexOf("CRC Error") != -1)
                     {
@@ -3943,13 +3961,13 @@ namespace ModBus_Client
                     {
                         SetTableTimeoutError(list_holdingRegistersTable, false);
                     }
-                    if (ex.Message.IndexOf("ModBus ErrCode") != -1)
+                    if (ex.Message.IndexOf("ModBus Exception") != -1)
                     {
-                        SetTableModBusError(list_holdingRegistersTable, (ModbusException)ex, false);
+                        SetTableModBusException(list_holdingRegistersTable, (ModbusException)ex, false);
                     }
-                    if (ex.Message.IndexOf("ModbusProtocolError") != -1)
+                    if (ex.Message.IndexOf("Modbus ProtocolError") != -1)
                     {
-                        SetTableStringError(list_holdingRegistersTable, (ModbusException)ex, true);
+                        SetTableModbusProtocolError(list_holdingRegistersTable, (ModbusException)ex, true);
                     }
                     if (ex.Message.IndexOf("CRC Error") != -1)
                     {
@@ -4041,7 +4059,7 @@ namespace ModBus_Client
                         {
                             textBoxDiagnosticData.Text = "Timeout";
                         }
-                        if (ex.Message.IndexOf("ModBus ErrCode") != -1)
+                        if (ex.Message.IndexOf("ModBus Exception") != -1)
                         {
                             textBoxDiagnosticResponse.Text = "ErrCode: " + ex.ToString().Split('-')[0].Split(':')[2] + " - " + ex.ToString().Split('-')[1].Split('\n')[0].Replace("\r", "");
                         }
@@ -5046,17 +5064,17 @@ namespace ModBus_Client
                     {
                         SetTableTimeoutError(list_holdingRegistersTable, true);
                     }
-                    if (ex.Message.IndexOf("ModBus ErrCode") != -1)
+                    if (ex.Message.IndexOf("ModBus Exception") != -1)
                     {
-                        SetTableModBusError(list_holdingRegistersTable, (ModbusException)ex, true);
+                        SetTableModBusException(list_holdingRegistersTable, (ModbusException)ex, true);
                     }
                     if (ex.Message.IndexOf("ModBus InvalidEcho") != -1)
                     {
                         SetTableModBusInvalidEcho(list_holdingRegistersTable, null, true);
                     }
-                    if (ex.Message.IndexOf("ModbusProtocolError") != -1)
+                    if (ex.Message.IndexOf("Modbus ProtocolError") != -1)
                     {
-                        SetTableStringError(list_holdingRegistersTable, (ModbusException)ex, true);
+                        SetTableModbusProtocolError(list_holdingRegistersTable, (ModbusException)ex, true);
                     }
                     if (ex.Message.IndexOf("CRC Error") != -1)
                     {
@@ -5287,7 +5305,7 @@ namespace ModBus_Client
         {
             loopCoils01 = !loopCoils01;
             buttonLoopCoils01.Content = loopCoils01 ? "Stop" : "Loop";
-            buttonLoopCoils01.Background = loopCoils01 ? Brushes.LightGreen : new SolidColorBrush(Color.FromArgb(0xFF, 0xDD, 0xDD, 0xDD));
+            buttonLoopCoils01.Background = loopCoils01 ? Brushes.LightGreen : (darkMode ? BackGroundDarkButton : BackGroundLightButton);
             checkLoop();
         }
 
@@ -5295,7 +5313,7 @@ namespace ModBus_Client
         {
             loopCoilsRange = !loopCoilsRange;
             buttonLoopCoilsRange.Content = loopCoilsRange ? "Stop" : "Loop";
-            buttonLoopCoilsRange.Background = loopCoilsRange ? Brushes.LightGreen : new SolidColorBrush(Color.FromArgb(0xFF, 0xDD, 0xDD, 0xDD));
+            buttonLoopCoilsRange.Background = loopCoilsRange ? Brushes.LightGreen : (darkMode ? BackGroundDarkButton : BackGroundLightButton);
             checkLoop();
         }
 
@@ -5303,7 +5321,7 @@ namespace ModBus_Client
         {
             loopInput02 = !loopInput02;
             buttonLoopInput02.Content = loopInput02 ? "Stop" : "Loop";
-            buttonLoopInput02.Background = loopInput02 ? Brushes.LightGreen : new SolidColorBrush(Color.FromArgb(0xFF, 0xDD, 0xDD, 0xDD));
+            buttonLoopInput02.Background = loopInput02 ? Brushes.LightGreen : (darkMode ? BackGroundDarkButton : BackGroundLightButton);
             checkLoop();
         }
 
@@ -5311,7 +5329,7 @@ namespace ModBus_Client
         {
             loopInputRange = !loopInputRange;
             buttonLoopInputRange.Content = loopInputRange ? "Stop" : "Loop";
-            buttonLoopInputRange.Background = loopInputRange ? Brushes.LightGreen : new SolidColorBrush(Color.FromArgb(0xFF, 0xDD, 0xDD, 0xDD));
+            buttonLoopInputRange.Background = loopInputRange ? Brushes.LightGreen : (darkMode ? BackGroundDarkButton : BackGroundLightButton);
             checkLoop();
         }
 
@@ -5319,7 +5337,7 @@ namespace ModBus_Client
         {
             loopInputRegister04 = !loopInputRegister04;
             buttonLoopInputRegister04.Content = loopInputRegister04 ? "Stop" : "Loop";
-            buttonLoopInputRegister04.Background = loopInputRegister04 ? Brushes.LightGreen : new SolidColorBrush(Color.FromArgb(0xFF, 0xDD, 0xDD, 0xDD));
+            buttonLoopInputRegister04.Background = loopInputRegister04 ? Brushes.LightGreen : (darkMode ? BackGroundDarkButton : BackGroundLightButton);
             checkLoop();
         }
 
@@ -5327,7 +5345,7 @@ namespace ModBus_Client
         {
             loopInputRegisterRange = !loopInputRegisterRange;
             buttonLoopInputRegisterRange.Content = loopInputRegisterRange ? "Stop" : "Loop";
-            buttonLoopInputRegisterRange.Background = loopInputRegisterRange ? Brushes.LightGreen : new SolidColorBrush(Color.FromArgb(0xFF, 0xDD, 0xDD, 0xDD));
+            buttonLoopInputRegisterRange.Background = loopInputRegisterRange ? Brushes.LightGreen : (darkMode ? BackGroundDarkButton : BackGroundLightButton);
             checkLoop();
         }
 
@@ -5335,7 +5353,7 @@ namespace ModBus_Client
         {
             loopHolding03 = !loopHolding03;
             buttonLoopHolding03.Content = loopHolding03 ? "Stop" : "Loop";
-            buttonLoopHolding03.Background = loopHolding03 ? Brushes.LightGreen : new SolidColorBrush(Color.FromArgb(0xFF, 0xDD, 0xDD, 0xDD));
+            buttonLoopHolding03.Background = loopHolding03 ? Brushes.LightGreen : (darkMode ? BackGroundDarkButton : BackGroundLightButton);
             checkLoop();
         }
 
@@ -5343,7 +5361,7 @@ namespace ModBus_Client
         {
             loopHoldingRange = !loopHoldingRange;
             buttonLoopHoldingRange.Content = loopHoldingRange ? "Stop" : "Loop";
-            buttonLoopHoldingRange.Background = loopHoldingRange ? Brushes.LightGreen : new SolidColorBrush(Color.FromArgb(0xFF, 0xDD, 0xDD, 0xDD));
+            buttonLoopHoldingRange.Background = loopHoldingRange ? Brushes.LightGreen : (darkMode ? BackGroundDarkButton : BackGroundLightButton);
             checkLoop();
         }
 
@@ -5360,28 +5378,28 @@ namespace ModBus_Client
             loopHoldingRange = false;
 
             buttonLoopCoils01.Content = loopCoils01 ? "Stop" : "Loop";
-            buttonLoopCoils01.Background = loopCoils01 ? Brushes.LightGreen : new SolidColorBrush(Color.FromArgb(0xFF, 0xDD, 0xDD, 0xDD));
+            buttonLoopCoils01.Background = loopCoils01 ? Brushes.LightGreen : (darkMode ? BackGroundDarkButton : BackGroundLightButton);
 
             buttonLoopCoilsRange.Content = loopCoilsRange ? "Stop" : "Loop";
-            buttonLoopCoilsRange.Background = loopCoilsRange ? Brushes.LightGreen : new SolidColorBrush(Color.FromArgb(0xFF, 0xDD, 0xDD, 0xDD));
+            buttonLoopCoilsRange.Background = loopCoilsRange ? Brushes.LightGreen : (darkMode ? BackGroundDarkButton : BackGroundLightButton);
 
             buttonLoopInput02.Content = loopInput02 ? "Stop" : "Loop";
-            buttonLoopInput02.Background = loopInput02 ? Brushes.LightGreen : new SolidColorBrush(Color.FromArgb(0xFF, 0xDD, 0xDD, 0xDD));
+            buttonLoopInput02.Background = loopInput02 ? Brushes.LightGreen : (darkMode ? BackGroundDarkButton : BackGroundLightButton);
 
             buttonLoopInputRange.Content = loopInputRange ? "Stop" : "Loop";
-            buttonLoopInputRange.Background = loopInputRange ? Brushes.LightGreen : new SolidColorBrush(Color.FromArgb(0xFF, 0xDD, 0xDD, 0xDD));
+            buttonLoopInputRange.Background = loopInputRange ? Brushes.LightGreen : (darkMode ? BackGroundDarkButton : BackGroundLightButton);
 
             buttonLoopInputRegister04.Content = loopInputRegister04 ? "Stop" : "Loop";
-            buttonLoopInputRegister04.Background = loopInputRange ? Brushes.LightGreen : new SolidColorBrush(Color.FromArgb(0xFF, 0xDD, 0xDD, 0xDD));
+            buttonLoopInputRegister04.Background = loopInputRange ? Brushes.LightGreen : (darkMode ? BackGroundDarkButton : BackGroundLightButton);
 
             buttonLoopInputRegisterRange.Content = loopInputRegisterRange ? "Stop" : "Loop";
-            buttonLoopInputRegisterRange.Background = loopInputRegisterRange ? Brushes.LightGreen : new SolidColorBrush(Color.FromArgb(0xFF, 0xDD, 0xDD, 0xDD));
+            buttonLoopInputRegisterRange.Background = loopInputRegisterRange ? Brushes.LightGreen : (darkMode ? BackGroundDarkButton : BackGroundLightButton);
 
             buttonLoopHolding03.Content = loopHolding03 ? "Stop" : "Loop";
-            buttonLoopHolding03.Background = loopHolding03 ? Brushes.LightGreen : new SolidColorBrush(Color.FromArgb(0xFF, 0xDD, 0xDD, 0xDD));
+            buttonLoopHolding03.Background = loopHolding03 ? Brushes.LightGreen : (darkMode ? BackGroundDarkButton : BackGroundLightButton);
 
             buttonLoopHoldingRange.Content = loopHoldingRange ? "Stop" : "Loop";
-            buttonLoopHoldingRange.Background = loopHoldingRange ? Brushes.LightGreen : new SolidColorBrush(Color.FromArgb(0xFF, 0xDD, 0xDD, 0xDD));
+            buttonLoopHoldingRange.Background = loopHoldingRange ? Brushes.LightGreen : (darkMode ? BackGroundDarkButton : BackGroundLightButton);
 
             checkLoop();
         }
@@ -5522,7 +5540,7 @@ namespace ModBus_Client
 
             if (int.TryParse(TextBoxPollingInterval.Text, out interval))
             {
-                if (interval >= 500)
+                if (interval >= 0)
                 {
                     pauseLoop = interval;
                 }
@@ -6084,9 +6102,9 @@ namespace ModBus_Client
                     {
                         SetTableTimeoutError(list_holdingRegistersTable, true);
                     }
-                    if (ex.Message.IndexOf("ModBus ErrCode") != -1)
+                    if (ex.Message.IndexOf("ModBus Exception") != -1)
                     {
-                        SetTableModBusError(list_holdingRegistersTable, (ModbusException)ex, true);
+                        SetTableModBusException(list_holdingRegistersTable, (ModbusException)ex, true);
                     }
                     if (ex.Message.IndexOf("ModBus InvalidEcho") != -1)
                     {
@@ -6100,9 +6118,9 @@ namespace ModBus_Client
                             dataGridViewHolding.SelectedItem = lastEditModbusItem;
                         });
                     }
-                    if (ex.Message.IndexOf("ModbusProtocolError") != -1)
+                    if (ex.Message.IndexOf("Modbus ProtocolError") != -1)
                     {
-                        SetTableStringError(list_holdingRegistersTable, (ModbusException)ex, true);
+                        SetTableModbusProtocolError(list_holdingRegistersTable, (ModbusException)ex, true);
                     }
                     if (ex.Message.IndexOf("CRC Error") != -1)
                     {
@@ -6267,9 +6285,9 @@ namespace ModBus_Client
                     {
                         SetTableTimeoutError(list_coilsTable, true);
                     }
-                    if (ex.Message.IndexOf("ModBus ErrCode") != -1)
+                    if (ex.Message.IndexOf("ModBus Exception") != -1)
                     {
-                        SetTableModBusError(list_coilsTable, (ModbusException)ex, true);
+                        SetTableModBusException(list_coilsTable, (ModbusException)ex, true);
                     }
                     if (ex.Message.IndexOf("ModBus InvalidEcho") != -1)
                     {
@@ -6283,9 +6301,9 @@ namespace ModBus_Client
                             dataGridViewCoils.SelectedItem = lastEditModbusItem;
                         });
                     }
-                    if (ex.Message.IndexOf("ModbusProtocolError") != -1)
+                    if (ex.Message.IndexOf("Modbus ProtocolError") != -1)
                     {
-                        SetTableStringError(list_coilsTable, (ModbusException)ex, true);
+                        SetTableModbusProtocolError(list_coilsTable, (ModbusException)ex, true);
                     }
                     if (ex.Message.IndexOf("CRC Error") != -1)
                     {
@@ -8027,8 +8045,15 @@ namespace ModBus_Client
             this.Dispatcher.Invoke((Action)delegate
             {
                 // Sblocco la ComboBox solo se non sono connesso a qualcosa
-                if(pictureBoxRunningAs.Background != Brushes.Lime)
+                if (pictureBoxRunningAs.Background != Brushes.Lime)
+                {
                     comboBoxProfileHome.IsEnabled = true;
+                    buttonEditProfile.IsEnabled = true;
+                    buttonImportZip.IsEnabled = true;
+                    buttonExportZip.IsEnabled = true;
+                    buttonNewProfile.IsEnabled = true;
+                    databaseToolStripMenuItem.IsEnabled = true;
+                }
             });
         }
 
@@ -8130,6 +8155,11 @@ namespace ModBus_Client
             menuItemImportHoldingRegistersClipboard.IsEnabled = enabled;
 
             comboBoxProfileHome.IsEnabled = !enabled;
+            buttonEditProfile.IsEnabled = !enabled;
+            buttonImportZip.IsEnabled = !enabled;
+            buttonExportZip.IsEnabled = !enabled;
+            buttonNewProfile.IsEnabled = !enabled;
+            databaseToolStripMenuItem.IsEnabled = !enabled;
         }
 
         private void comboBoxHoldingAddress03_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -8590,6 +8620,8 @@ namespace ModBus_Client
             buttonTcpActive.Background = darkMode ? BackGroundDarkButton : BackGroundLightButton;
             buttonClearSerialStatus.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
             buttonClearSerialStatus.Background = darkMode ? BackGroundDarkButton : BackGroundLightButton;
+            buttonEditProfile.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
+            buttonEditProfile.Background = darkMode ? BackGroundDarkButton : BackGroundLightButton;
 
             buttonNewProfile.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
             buttonNewProfile.Background = darkMode ? BackGroundDarkButton : BackGroundLightButton;
@@ -8832,6 +8864,8 @@ namespace ModBus_Client
             buttonExportHoldingReg.Background = darkMode ? BackGroundDarkButton : BackGroundLightButton;
             buttonImportHoldingReg.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
             buttonImportHoldingReg.Background = darkMode ? BackGroundDarkButton : BackGroundLightButton;
+            buttonWriteHolding16.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
+            buttonWriteHolding16.Background = darkMode ? BackGroundDarkButton : BackGroundLightButton;
 
             // Diagnostic
             GridDiagnostic.Background = darkMode ? BackGroundDark : BackGroundLight;
@@ -8913,6 +8947,12 @@ namespace ModBus_Client
             textBoxReadTimeout.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
             TextBoxPollingInterval.Background = darkMode ? BackGroundDark : BackGroundLight2;
             TextBoxPollingInterval.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
+
+            CheckBoxSendCellEditOnlyOnChange.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
+            CheckBoxPreviewimportWriteMultipleRegisters.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
+            CheckBoxPreviewImportCloseWindowAfterWrite.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
+            CheckBoxPreviewImportAbortOnError.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
+            labelSettings_2_Copy.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
 
             // Menu
             menuStrip.Foreground = darkMode ? ForeGroundDark : ForeGroundLight;
@@ -9197,13 +9237,13 @@ namespace ModBus_Client
                             {
                                 SetTableTimeoutError(list_holdingRegistersTable, false);
                             }
-                            if (ex.Message.IndexOf("ModBus ErrCode") != -1)
+                            if (ex.Message.IndexOf("ModBus Exception") != -1)
                             {
-                                SetTableModBusError(list_holdingRegistersTable, (ModbusException)ex, false);
+                                SetTableModBusException(list_holdingRegistersTable, (ModbusException)ex, false);
                             }
-                            if (ex.Message.IndexOf("ModbusProtocolError") != -1)
+                            if (ex.Message.IndexOf("Modbus ProtocolError") != -1)
                             {
-                                SetTableStringError(list_holdingRegistersTable, (ModbusException)ex, true);
+                                SetTableModbusProtocolError(list_holdingRegistersTable, (ModbusException)ex, true);
                             }
                             if (ex.Message.IndexOf("CRC Error") != -1)
                             {
@@ -9386,13 +9426,13 @@ namespace ModBus_Client
                         {
                             SetTableTimeoutError(list_holdingRegistersTable, false);
                         }
-                        if (ex.Message.IndexOf("ModBus ErrCode") != -1)
+                        if (ex.Message.IndexOf("ModBus Exception") != -1)
                         {
-                            SetTableModBusError(list_holdingRegistersTable, (ModbusException)ex, false);
+                            SetTableModBusException(list_holdingRegistersTable, (ModbusException)ex, false);
                         }
-                        if (ex.Message.IndexOf("ModbusProtocolError") != -1)
+                        if (ex.Message.IndexOf("Modbus ProtocolError") != -1)
                         {
-                            SetTableStringError(list_holdingRegistersTable, (ModbusException)ex, true);
+                            SetTableModbusProtocolError(list_holdingRegistersTable, (ModbusException)ex, true);
                         }
                         if (ex.Message.IndexOf("CRC Error") != -1)
                         {
@@ -9598,13 +9638,13 @@ namespace ModBus_Client
                             {
                                 SetTableTimeoutError(list_holdingRegistersTable, false);
                             }
-                            if (ex.Message.IndexOf("ModBus ErrCode") != -1)
+                            if (ex.Message.IndexOf("ModBus Exception") != -1)
                             {
-                                SetTableModBusError(list_holdingRegistersTable, (ModbusException)ex, false);
+                                SetTableModBusException(list_holdingRegistersTable, (ModbusException)ex, false);
                             }
-                            if (ex.Message.IndexOf("ModbusProtocolError") != -1)
+                            if (ex.Message.IndexOf("Modbus ProtocolError") != -1)
                             {
-                                SetTableStringError(list_holdingRegistersTable, (ModbusException)ex, true);
+                                SetTableModbusProtocolError(list_holdingRegistersTable, (ModbusException)ex, true);
                             }
                             if (ex.Message.IndexOf("CRC Error") != -1)
                             {
@@ -9786,13 +9826,13 @@ namespace ModBus_Client
                         {
                             SetTableTimeoutError(list_holdingRegistersTable, false);
                         }
-                        if (ex.Message.IndexOf("ModBus ErrCode") != -1)
+                        if (ex.Message.IndexOf("ModBus Exception") != -1)
                         {
-                            SetTableModBusError(list_holdingRegistersTable, (ModbusException)ex, false);
+                            SetTableModBusException(list_holdingRegistersTable, (ModbusException)ex, false);
                         }
-                        if (ex.Message.IndexOf("ModbusProtocolError") != -1)
+                        if (ex.Message.IndexOf("Modbus ProtocolError") != -1)
                         {
-                            SetTableStringError(list_holdingRegistersTable, (ModbusException)ex, true);
+                            SetTableModbusProtocolError(list_holdingRegistersTable, (ModbusException)ex, true);
                         }
                         if (ex.Message.IndexOf("CRC Error") != -1)
                         {
@@ -9967,13 +10007,13 @@ namespace ModBus_Client
                             {
                                 SetTableTimeoutError(list_inputRegistersTable, false);
                             }
-                            if (ex.Message.IndexOf("ModBus ErrCode") != -1)
+                            if (ex.Message.IndexOf("ModBus Exception") != -1)
                             {
-                                SetTableModBusError(list_inputRegistersTable, (ModbusException)ex, false);
+                                SetTableModBusException(list_inputRegistersTable, (ModbusException)ex, false);
                             }
-                            if (ex.Message.IndexOf("ModbusProtocolError") != -1)
+                            if (ex.Message.IndexOf("Modbus ProtocolError") != -1)
                             {
-                                SetTableStringError(list_inputRegistersTable, (ModbusException)ex, true);
+                                SetTableModbusProtocolError(list_inputRegistersTable, (ModbusException)ex, true);
                             }
                             if (ex.Message.IndexOf("CRC Error") != -1)
                             {
@@ -10159,13 +10199,13 @@ namespace ModBus_Client
                         {
                             SetTableTimeoutError(list_inputRegistersTable, false);
                         }
-                        if (ex.Message.IndexOf("ModBus ErrCode") != -1)
+                        if (ex.Message.IndexOf("ModBus Exception") != -1)
                         {
-                            SetTableModBusError(list_inputRegistersTable, (ModbusException)ex, false);
+                            SetTableModBusException(list_inputRegistersTable, (ModbusException)ex, false);
                         }
-                        if (ex.Message.IndexOf("ModbusProtocolError") != -1)
+                        if (ex.Message.IndexOf("Modbus ProtocolError") != -1)
                         {
-                            SetTableStringError(list_inputRegistersTable, (ModbusException)ex, true);
+                            SetTableModbusProtocolError(list_inputRegistersTable, (ModbusException)ex, true);
                         }
                         if (ex.Message.IndexOf("CRC Error") != -1)
                         {
@@ -10371,13 +10411,13 @@ namespace ModBus_Client
                             {
                                 SetTableTimeoutError(list_inputRegistersTable, false);
                             }
-                            if (ex.Message.IndexOf("ModBus ErrCode") != -1)
+                            if (ex.Message.IndexOf("ModBus Exception") != -1)
                             {
-                                SetTableModBusError(list_inputRegistersTable, (ModbusException)ex, false);
+                                SetTableModBusException(list_inputRegistersTable, (ModbusException)ex, false);
                             }
-                            if (ex.Message.IndexOf("ModbusProtocolError") != -1)
+                            if (ex.Message.IndexOf("Modbus ProtocolError") != -1)
                             {
-                                SetTableStringError(list_inputRegistersTable, (ModbusException)ex, true);
+                                SetTableModbusProtocolError(list_inputRegistersTable, (ModbusException)ex, true);
                             }
                             if (ex.Message.IndexOf("CRC Error") != -1)
                             {
@@ -10565,13 +10605,13 @@ namespace ModBus_Client
                         {
                             SetTableTimeoutError(list_inputRegistersTable, false);
                         }
-                        if (ex.Message.IndexOf("ModBus ErrCode") != -1)
+                        if (ex.Message.IndexOf("ModBus Exception") != -1)
                         {
-                            SetTableModBusError(list_inputRegistersTable, (ModbusException)ex, false);
+                            SetTableModBusException(list_inputRegistersTable, (ModbusException)ex, false);
                         }
-                        if (ex.Message.IndexOf("ModbusProtocolError") != -1)
+                        if (ex.Message.IndexOf("Modbus ProtocolError") != -1)
                         {
-                            SetTableStringError(list_inputRegistersTable, (ModbusException)ex, true);
+                            SetTableModbusProtocolError(list_inputRegistersTable, (ModbusException)ex, true);
                         }
                         if (ex.Message.IndexOf("CRC Error") != -1)
                         {
@@ -10705,13 +10745,13 @@ namespace ModBus_Client
                             {
                                 SetTableTimeoutError(list_inputsTable, false);
                             }
-                            if (ex.Message.IndexOf("ModBus ErrCode") != -1)
+                            if (ex.Message.IndexOf("ModBus Exception") != -1)
                             {
-                                SetTableModBusError(list_inputsTable, (ModbusException)ex, false);
+                                SetTableModBusException(list_inputsTable, (ModbusException)ex, false);
                             }
-                            if (ex.Message.IndexOf("ModbusProtocolError") != -1)
+                            if (ex.Message.IndexOf("Modbus ProtocolError") != -1)
                             {
-                                SetTableStringError(list_inputsTable, (ModbusException)ex, true);
+                                SetTableModbusProtocolError(list_inputsTable, (ModbusException)ex, true);
                             }
                             if (ex.Message.IndexOf("CRC Error") != -1)
                             {
@@ -10851,13 +10891,13 @@ namespace ModBus_Client
                         {
                             SetTableTimeoutError(list_inputsTable, false);
                         }
-                        if (ex.Message.IndexOf("ModBus ErrCode") != -1)
+                        if (ex.Message.IndexOf("ModBus Exception") != -1)
                         {
-                            SetTableModBusError(list_inputsTable, (ModbusException)ex, false);
+                            SetTableModBusException(list_inputsTable, (ModbusException)ex, false);
                         }
-                        if (ex.Message.IndexOf("ModbusProtocolError") != -1)
+                        if (ex.Message.IndexOf("Modbus ProtocolError") != -1)
                         {
-                            SetTableStringError(list_inputsTable, (ModbusException)ex, true);
+                            SetTableModbusProtocolError(list_inputsTable, (ModbusException)ex, true);
                         }
                         if (ex.Message.IndexOf("CRC Error") != -1)
                         {
@@ -11023,13 +11063,13 @@ namespace ModBus_Client
                             {
                                 SetTableTimeoutError(list_inputsTable, false);
                             }
-                            if (ex.Message.IndexOf("ModBus ErrCode") != -1)
+                            if (ex.Message.IndexOf("ModBus Exception") != -1)
                             {
-                                SetTableModBusError(list_inputsTable, (ModbusException)ex, false);
+                                SetTableModBusException(list_inputsTable, (ModbusException)ex, false);
                             }
-                            if (ex.Message.IndexOf("ModbusProtocolError") != -1)
+                            if (ex.Message.IndexOf("Modbus ProtocolError") != -1)
                             {
-                                SetTableStringError(list_inputsTable, (ModbusException)ex, true);
+                                SetTableModbusProtocolError(list_inputsTable, (ModbusException)ex, true);
                             }
                             if (ex.Message.IndexOf("CRC Error") != -1)
                             {
@@ -11165,13 +11205,13 @@ namespace ModBus_Client
                         {
                             SetTableTimeoutError(list_inputsTable, false);
                         }
-                        if (ex.Message.IndexOf("ModBus ErrCode") != -1)
+                        if (ex.Message.IndexOf("ModBus Exception") != -1)
                         {
-                            SetTableModBusError(list_inputsTable, (ModbusException)ex, false);
+                            SetTableModBusException(list_inputsTable, (ModbusException)ex, false);
                         }
-                        if (ex.Message.IndexOf("ModbusProtocolError") != -1)
+                        if (ex.Message.IndexOf("Modbus ProtocolError") != -1)
                         {
-                            SetTableStringError(list_inputsTable, (ModbusException)ex, true);
+                            SetTableModbusProtocolError(list_inputsTable, (ModbusException)ex, true);
                         }
                         if (ex.Message.IndexOf("CRC Error") != -1)
                         {
@@ -11314,13 +11354,13 @@ namespace ModBus_Client
                                 {
                                     SetTableTimeoutError(list_coilsTable, false);
                                 }
-                                if (ex.Message.IndexOf("ModBus ErrCode") != -1)
+                                if (ex.Message.IndexOf("ModBus Exception") != -1)
                                 {
-                                    SetTableModBusError(list_coilsTable, (ModbusException)ex, false);
+                                    SetTableModBusException(list_coilsTable, (ModbusException)ex, false);
                                 }
-                                if (ex.Message.IndexOf("ModbusProtocolError") != -1)
+                                if (ex.Message.IndexOf("Modbus ProtocolError") != -1)
                                 {
-                                    SetTableStringError(list_coilsTable, (ModbusException)ex, true);
+                                    SetTableModbusProtocolError(list_coilsTable, (ModbusException)ex, true);
                                 }
                                 if (ex.Message.IndexOf("CRC Error") != -1)
                                 {
@@ -11467,13 +11507,13 @@ namespace ModBus_Client
                             {
                                 SetTableTimeoutError(list_coilsTable, false);
                             }
-                            if (ex.Message.IndexOf("ModBus ErrCode") != -1)
+                            if (ex.Message.IndexOf("ModBus Exception") != -1)
                             {
-                                SetTableModBusError(list_coilsTable, (ModbusException)ex, false);
+                                SetTableModBusException(list_coilsTable, (ModbusException)ex, false);
                             }
-                            if (ex.Message.IndexOf("ModbusProtocolError") != -1)
+                            if (ex.Message.IndexOf("Modbus ProtocolError") != -1)
                             {
-                                SetTableStringError(list_coilsTable, (ModbusException)ex, true);
+                                SetTableModbusProtocolError(list_coilsTable, (ModbusException)ex, true);
                             }
                             if (ex.Message.IndexOf("CRC Error") != -1)
                             {
@@ -11652,13 +11692,13 @@ namespace ModBus_Client
                             {
                                 SetTableTimeoutError(list_coilsTable, false);
                             }
-                            if (ex.Message.IndexOf("ModBus ErrCode") != -1)
+                            if (ex.Message.IndexOf("ModBus Exception") != -1)
                             {
-                                SetTableModBusError(list_coilsTable, (ModbusException)ex, false);
+                                SetTableModBusException(list_coilsTable, (ModbusException)ex, false);
                             }
-                            if (ex.Message.IndexOf("ModbusProtocolError") != -1)
+                            if (ex.Message.IndexOf("Modbus ProtocolError") != -1)
                             {
-                                SetTableStringError(list_coilsTable, (ModbusException)ex, true);
+                                SetTableModbusProtocolError(list_coilsTable, (ModbusException)ex, true);
                             }
                             if (ex.Message.IndexOf("CRC Error") != -1)
                             {
@@ -11798,13 +11838,13 @@ namespace ModBus_Client
                         {
                             SetTableTimeoutError(list_coilsTable, false);
                         }
-                        if (ex.Message.IndexOf("ModBus ErrCode") != -1)
+                        if (ex.Message.IndexOf("ModBus Exception") != -1)
                         {
-                            SetTableModBusError(list_coilsTable, (ModbusException)ex, false);
+                            SetTableModBusException(list_coilsTable, (ModbusException)ex, false);
                         }
-                        if (ex.Message.IndexOf("ModbusProtocolError") != -1)
+                        if (ex.Message.IndexOf("Modbus ProtocolError") != -1)
                         {
-                            SetTableStringError(list_coilsTable, (ModbusException)ex, true);
+                            SetTableModbusProtocolError(list_coilsTable, (ModbusException)ex, true);
                         }
                         if (ex.Message.IndexOf("CRC Error") != -1)
                         {
@@ -11880,6 +11920,12 @@ namespace ModBus_Client
                 if (comboBoxProfileHome.SelectedItem != null)
                 {
                     comboBoxProfileHome.IsEnabled = false;
+                    buttonEditProfile.IsEnabled = false;
+                    buttonImportZip.IsEnabled = false;
+                    buttonExportZip.IsEnabled = false;
+                    buttonNewProfile.IsEnabled = false;
+                    databaseToolStripMenuItem.IsEnabled = false;
+
                     LoadProfile(comboBoxProfileHome.SelectedItem.ToString());
                 }
             }

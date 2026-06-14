@@ -610,9 +610,13 @@ namespace ModBus_Client
                                 {
                                     main.SetTableTimeoutError(main.list_coilsTable, false);
                                 }
-                                if (err.Message.IndexOf("ModBus ErrCode") != -1)
+                                if (err.Message.IndexOf("ModBus Exception") != -1)
                                 {
-                                    main.SetTableModBusError(main.list_coilsTable, err, false);
+                                    main.SetTableModBusException(main.list_coilsTable, err, false);
+                                }
+                                if (err.Message.IndexOf("Modbus ProtocolError") != -1)
+                                {
+                                    main.SetTableModbusProtocolError(main.list_coilsTable, (ModbusException)err, true);
                                 }
                                 if (err.Message.IndexOf("CRC Error") != -1)
                                 {
@@ -775,9 +779,13 @@ namespace ModBus_Client
                                     {
                                         main.SetTableTimeoutError(main.list_coilsTable, false);
                                     }
-                                    if (err.Message.IndexOf("ModBus ErrCode") != -1)
+                                    if (err.Message.IndexOf("ModBus Exception") != -1)
                                     {
-                                        main.SetTableModBusError(main.list_coilsTable, err, false);
+                                        main.SetTableModBusException(main.list_coilsTable, err, false);
+                                    }
+                                    if (err.Message.IndexOf("Modbus ProtocolError") != -1)
+                                    {
+                                        main.SetTableModbusProtocolError(main.list_coilsTable, (ModbusException)err, true);
                                     }
                                     if (err.Message.IndexOf("CRC Error") != -1)
                                     {
@@ -880,7 +888,7 @@ namespace ModBus_Client
                             {
                                 if (err.Message.IndexOf("non-connected socket") != -1)
                                 {
-                                    main.SetTableDisconnectError(main.list_coilsTable, true);
+                                    main.SetTableDisconnectError(main.list_holdingRegistersTable, true);
                                     
                                     if (main.ModBus.type == main.ModBus_Def.TYPE_RTU || main.ModBus.type == main.ModBus_Def.TYPE_ASCII)
                                     {
@@ -906,9 +914,13 @@ namespace ModBus_Client
                                 {
                                     main.SetTableTimeoutError(main.list_holdingRegistersTable, false);
                                 }
-                                if (err.Message.IndexOf("ModBus ErrCode") != -1)
+                                if (err.Message.IndexOf("ModBus Exception") != -1)
                                 {
-                                    main.SetTableModBusError(main.list_holdingRegistersTable, err, false);
+                                    main.SetTableModBusException(main.list_holdingRegistersTable, err, false);
+                                }
+                                if (err.Message.IndexOf("Modbus ProtocolError") != -1)
+                                {
+                                    main.SetTableModbusProtocolError(main.list_holdingRegistersTable, (ModbusException)err, true);
                                 }
                                 if (err.Message.IndexOf("CRC Error") != -1)
                                 {
@@ -1038,7 +1050,7 @@ namespace ModBus_Client
                                 {
                                     if (err.Message.IndexOf("non-connected socket") != -1)
                                     {
-                                        main.SetTableDisconnectError(main.list_coilsTable, true);
+                                        main.SetTableDisconnectError(main.list_holdingRegistersTable, true);
 
                                         if (main.ModBus.type == main.ModBus_Def.TYPE_RTU || main.ModBus.type == main.ModBus_Def.TYPE_ASCII)
                                         {
@@ -1064,9 +1076,13 @@ namespace ModBus_Client
                                     {
                                         main.SetTableTimeoutError(main.list_holdingRegistersTable, false);
                                     }
-                                    if (err.Message.IndexOf("ModBus ErrCode") != -1)
+                                    if (err.Message.IndexOf("ModBus Exception") != -1)
                                     {
-                                        main.SetTableModBusError(main.list_holdingRegistersTable, err, false);
+                                        main.SetTableModBusException(main.list_holdingRegistersTable, err, false);
+                                    }
+                                    if (err.Message.IndexOf("Modbus ProtocolError") != -1)
+                                    {
+                                        main.SetTableModbusProtocolError(main.list_holdingRegistersTable, (ModbusException)err, true);
                                     }
                                     if (err.Message.IndexOf("CRC Error") != -1)
                                     {
