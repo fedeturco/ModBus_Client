@@ -258,6 +258,8 @@
                     <Label x:Name="labelStopBits" Content="Stop bits:" HorizontalAlignment="Left" Margin="10,169,0,0" VerticalAlignment="Top" FontSize="14" Grid.Column="0" Height="29" Width="121" />
                     <ComboBox x:Name="comboBoxSerialPort" HorizontalAlignment="Left" Margin="136,64,0,0" VerticalAlignment="Top" Width="120" FontSize="14" Height="30" Grid.Column="0"/>
                     <ComboBox x:Name="comboBoxSerialSpeed" HorizontalAlignment="Left" Margin="136,99,0,0" VerticalAlignment="Top" Width="120" FontSize="14" Height="29" Grid.Column="0">
+                        <ComboBoxItem Content="1200"/>
+                        <ComboBoxItem Content="2400"/>
                         <ComboBoxItem Content="4800"/>
                         <ComboBoxItem Content="9600"/>
                         <ComboBoxItem Content="19200"/>

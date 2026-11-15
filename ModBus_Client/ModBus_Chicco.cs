@@ -412,14 +412,12 @@ namespace ModBusMaster_Chicco
             // Custom function to force reading an expected number of bytes
             // or timeout elapse
             //
-            // Ho visto che con alcuni convertitori USB/2323/485 in alcuni casi serial.readTimeout per
-            // qualche motivo sembra non essere gestito e scadere prima del valore che vado a impostare
-            // per cui gestisco anche monte il timeout
+            // I've seen on some USB232/485 converters that serial.readTimeout does not properly
+            // handle timeout right, so I decided to handle it also manually
 
             byte[] output = new byte[256];
 
             int Length = 0;
-            //byte[] output = new byte[256];
 
             serialPort.ReadTimeout = timeout;
 
@@ -451,11 +449,16 @@ namespace ModBusMaster_Chicco
                             Length += len_tmp;
                         }
 
+                        // Modbus Exception
+                        if ((output[1] & 0x80) > 0 && Length == 5)
+                        {
+                            Array.Resize(ref output, Length);
+                            return output;
+                        }
 
                         // Timeout elapsed
                         DateTimeOffset now = DateTimeOffset.UtcNow;
                         long epochNow = now.ToUnixTimeMilliseconds();
-
                         if ((epochNow - epoch) > timeout)
                         {
                             return new byte[0];
@@ -464,6 +467,7 @@ namespace ModBusMaster_Chicco
 
                     Array.Resize(ref output, Length);
                 }
+
                 return output;
             }
             catch (Exception err)
@@ -1158,11 +1162,6 @@ namespace ModBusMaster_Chicco
                 Console_printByte("Rx: ", response, response.Length);
                 Console_print(" Rx <- ", response, response.Length);
 
-                for (int i = 3; i < response.Length - 2; i += 2)
-                {
-                    result[(i - 3) / 2] = (UInt16)((UInt16)(response[i] << 8) + (UInt16)(response[i + 1]));
-                }
-
                 // Check CRC
                 if (!Check_CRC(response, response.Length))
                 {
@@ -1176,6 +1175,12 @@ namespace ModBusMaster_Chicco
 
                     Console_print(" ModBus Exception: " + errCode.ToString() + " - " + ModbusErrorCodes[errCode], null, 0);
                     throw new ModbusException("ModBus Exception: " + errCode.ToString() + " - " + ModbusErrorCodes[errCode]);
+                }
+
+                // Parsing result
+                for (int i = 3; i < response.Length - 2; i += 2)
+                {
+                    result[(i - 3) / 2] = (UInt16)((UInt16)(response[i] << 8) + (UInt16)(response[i + 1]));
                 }
 
                 return result;
